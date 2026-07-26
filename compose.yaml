@@ -7,7 +7,9 @@ services:
     environment:
       NODE_ENV: production
       DATABASE_PATH: /app/data/visitpng.db
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
     volumes:
       - visitpng_data:/app/data
 volumes:
   visitpng_data:
+
