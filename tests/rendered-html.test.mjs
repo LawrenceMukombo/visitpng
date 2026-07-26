@@ -35,3 +35,5 @@ test("Customer text stays clear and readable",async()=>{const ui=await read("app
 
 
 
+
+test("Header brand name stays visible",async()=>{const css=await read("app/globals.css");assert.match(css,/\.app>header \.brand\{color:var\(--text-on-dark\)\}/);assert.match(css,/\.app>header \.brand span\{[^}]*display:block;[^}]*color:var\(--text-on-dark\)/)});
