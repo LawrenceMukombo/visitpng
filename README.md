@@ -30,7 +30,7 @@ cd visitpng
 docker compose up -d --build
 ```
 
-The app listens on port 3000. Point the website address in Hostinger to port 3000 and enable HTTPS. The database is kept in the `visitpng-data` volume, so it remains available when the app is updated.
+The app listens on port 3001 by default. Point the website address in Hostinger to port 3001 and enable HTTPS. Set `APP_PORT` if you need a different port. The database is kept in the `visitpng-data` volume, so it remains available when the app is updated.
 
 Without Docker, install Node.js 22.13 or newer, then run:
 
