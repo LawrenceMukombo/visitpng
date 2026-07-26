@@ -37,3 +37,4 @@ test("Customer text stays clear and readable",async()=>{const ui=await read("app
 
 
 test("Header brand name stays visible",async()=>{const css=await read("app/globals.css");assert.match(css,/\.app>header \.brand\{color:var\(--text-on-dark\)\}/);assert.match(css,/\.app>header \.brand span\{[^}]*display:block;[^}]*color:var\(--text-on-dark\)/)});
+test("Account creation confirms success and HTTP sign-in can persist",async()=>{const auth=await read("app/auth.ts");const signup=await read("app/api/auth/signup/route.ts");const signin=await read("app/api/auth/signin/route.ts");const form=await read("app/signin/SignInForm.tsx");assert.match(auth,/createSession\(accountId:number,secure=false\)/);assert.match(signup,/x-forwarded-proto/);assert.match(signin,/x-forwarded-proto/);assert.match(form,/Account created successfully/);assert.match(form,/Sign-in successful/)});
