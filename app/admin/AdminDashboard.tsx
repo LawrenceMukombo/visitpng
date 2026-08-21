@@ -1,6 +1,8 @@
 "use client";
 import {useEffect,useState} from "react";
 import Link from "next/link";
+import SmartLocationCascade, {CascadeSelection} from "../components/SmartLocationCascade";
+import {PNG_REGIONS, PNG_PROVINCES} from "../../db/pngGeography";
 
 type Choice={id:number;name:string;sourceUrl?:string};
 type Province={id:number;code:string;name:string;region:string};
@@ -81,10 +83,11 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const [destForm,setDestForm]=useState({...blankDestination});
   const [provForm,setProvForm]=useState({...blankProvince});
   const [status,setStatus]=useState("Loading information…");
-  const [section,setSection]=useState<"places"|"locations"|"provinces"|"api"|"activity">("places");
+  const [section,setSection]=useState<"places"|"locations"|"provinces"|"hierarchy"|"api"|"activity">("places");
   const [search,setSearch]=useState("");
   const [apiPreview,setApiPreview]=useState<string>("Click 'Test API' below to see live JSON response.");
   const [apiLoading,setApiLoading]=useState(false);
+  const [expandedRegion,setExpandedRegion]=useState<string>("Southern");
 
   const load=()=>fetch("/api/admin/listings").then(async r=>{
     const x=await r.json();
@@ -198,6 +201,22 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
     }
   };
 
+  const handleCascadeSelectForFacility=(sel:CascadeSelection)=>{
+    if(sel.destinationId){
+      setListingForm(prev=>({...prev,destinationId:sel.destinationId||0}));
+    }
+  };
+
+  const handleCascadeSelectForDestination=(sel:CascadeSelection)=>{
+    if(sel.provinceId){
+      setDestForm(prev=>({
+        ...prev,
+        provinceId:sel.provinceId||prev.provinceId,
+        district:sel.district||prev.district
+      }));
+    }
+  };
+
   const testEndpoint=async(endpoint:string)=>{
     setApiLoading(true);
     setApiPreview(`Fetching ${endpoint}…`);
@@ -240,6 +259,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
       <button className={section==="places"?"active":""} onClick={()=>setSection("places")}>Facilities & Places</button>
       <button className={section==="locations"?"active":""} onClick={()=>setSection("locations")}>Locations & Districts</button>
       <button className={section==="provinces"?"active":""} onClick={()=>setSection("provinces")}>Provinces</button>
+      <button className={section==="hierarchy"?"active":""} onClick={()=>setSection("hierarchy")}>Smart Cascade Hierarchy</button>
       <button className={section==="api"?"active":""} onClick={()=>setSection("api")}>API Explorer</button>
       <button className={section==="activity"?"active":""} onClick={()=>setSection("activity")}>Recent changes</button>
       <Link href="/">View app</Link>
@@ -260,9 +280,21 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
               <input required value={listingForm.slug} onChange={e=>setListingForm({...listingForm,slug:e.target.value})}/>
             </label>
             <label>Description / Overview
-              <textarea required rows={4} value={listingForm.summary} onChange={e=>setListingForm({...listingForm,summary:e.target.value})}/>
+              <textarea required rows={3} value={listingForm.summary} onChange={e=>setListingForm({...listingForm,summary:e.target.value})}/>
             </label>
             
+            {/* Smart Cascade Location Selector */}
+            <div className="adminSectionBox">
+              <p className="adminSectionBoxTitle">⚡ Smart Location Cascade (Region › Province › District › Destination)</p>
+              <SmartLocationCascade
+                destinations={data.destinations}
+                provinces={data.provinces}
+                selectedDestinationId={listingForm.destinationId}
+                onSelect={handleCascadeSelectForFacility}
+                mode="destination-picker"
+              />
+            </div>
+
             <label>Photo URL / Image address
               <input placeholder="https://..." value={listingForm.imageUrl} onChange={e=>setListingForm({...listingForm,imageUrl:e.target.value})}/>
             </label>
@@ -293,12 +325,6 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
               </label>
               <label>Member price (PGK)
                 <input type="number" min="0" value={listingForm.memberPrice} onChange={e=>setListingForm({...listingForm,memberPrice:e.target.value})}/>
-              </label>
-              <label>Location / Destination
-                <select required value={listingForm.destinationId} onChange={e=>setListingForm({...listingForm,destinationId:Number(e.target.value)})}>
-                  <option value="0">Choose Location</option>
-                  {data.destinations.map(x=><option key={x.id} value={x.id}>{x.name} ({x.provinceName}{x.district?` · ${x.district}`:""})</option>)}
-                </select>
               </label>
               <label>Category
                 <select required value={listingForm.categoryId} onChange={e=>setListingForm({...listingForm,categoryId:Number(e.target.value)})}>
@@ -376,6 +402,18 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
             <label>Short web address (slug)
               <input required value={destForm.slug} onChange={e=>setDestForm({...destForm,slug:e.target.value})}/>
             </label>
+
+            {/* Smart Cascade for Location Creator */}
+            <div className="adminSectionBox">
+              <p className="adminSectionBoxTitle">⚡ Smart Cascade: Pick Region & Province</p>
+              <SmartLocationCascade
+                destinations={data.destinations}
+                provinces={data.provinces}
+                onSelect={handleCascadeSelectForDestination}
+                mode="location-manager"
+              />
+            </div>
+
             <label>Province
               <select required value={destForm.provinceId} onChange={e=>setDestForm({...destForm,provinceId:Number(e.target.value)})}>
                 <option value="0">Choose Province</option>
@@ -494,6 +532,54 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
       </div>
     )}
 
+    {section==="hierarchy"&&(
+      <section className="adminHierarchySection">
+        <p className="eyebrow">PAPUA NEW GUINEA GEOGRAPHY EXPLORER</p>
+        <h1>Smart Cascade Location Tree (4 Regions · 22 Provinces · Districts)</h1>
+        <p>Explore the complete administrative and tourism geographic hierarchy of Papua New Guinea:</p>
+
+        <div className="hierarchyRegionTabs">
+          {PNG_REGIONS.map(r=>(
+            <button
+              key={r.name}
+              className={expandedRegion===r.name?"active":""}
+              onClick={()=>setExpandedRegion(r.name)}
+            >
+              <b>{r.label}</b>
+              <small>{PNG_PROVINCES.filter(p=>p.region===r.name).length} Provinces</small>
+            </button>
+          ))}
+        </div>
+
+        <div className="hierarchyProvinceList">
+          {PNG_PROVINCES.filter(p=>p.region===expandedRegion).map(prov=>(
+            <article key={prov.code} className="hierarchyProvinceCard">
+              <header>
+                <div>
+                  <span className="provBadge">{prov.code}</span>
+                  <h2>{prov.name}</h2>
+                  <small>Provincial Capital: <b>{prov.capital}</b> · Region: {prov.region}</small>
+                </div>
+              </header>
+
+              <div className="hierarchyDistrictsGrid">
+                {prov.districts.map((dist,dIdx)=>(
+                  <div key={dIdx} className="hierarchyDistrictBox">
+                    <strong>📍 {dist.name}</strong>
+                    <ul>
+                      {dist.keyDestinations.map((dest,kIdx)=>(
+                        <li key={kIdx}>• {dest}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
     {section==="api"&&(
       <section className="adminApiSection">
         <p className="eyebrow">VISIT PNG API & DATA INTEGRATION</p>
@@ -504,9 +590,9 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
           <div className="apiCard">
             <span className="methodGet">GET</span>
             <code>/api/locations</code>
-            <p>Pulls all provinces, districts, and locations/destinations with coordinate data and facility counts.</p>
+            <p>Pulls all provinces, districts, and locations/destinations with coordinate data, facility counts, and full cascade hierarchy.</p>
             <div className="apiParams">
-              <small>Parameters: <code>?q=kokoda</code>, <code>?province=ORO</code>, <code>?region=Southern</code></small>
+              <small>Parameters: <code>?q=kokoda</code>, <code>?province=ORO</code>, <code>?region=Southern</code>, <code>?format=smart</code></small>
             </div>
             <button onClick={()=>testEndpoint("/api/locations")}>Test /api/locations ⚡</button>
           </div>

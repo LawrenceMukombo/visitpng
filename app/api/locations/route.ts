@@ -1,5 +1,6 @@
 import {env} from "../../../db/runtime";
 import {ensureCatalogue} from "../../../db/catalogue";
+import {PNG_REGIONS, PNG_PROVINCES, findLocationSmartHierarchy} from "../../../db/pngGeography";
 
 export const dynamic="force-dynamic";
 
@@ -9,6 +10,12 @@ export async function GET(request:Request){
   const q=url.searchParams.get("q")?.trim().toLowerCase()||"";
   const province=url.searchParams.get("province")?.trim().toLowerCase()||"";
   const region=url.searchParams.get("region")?.trim().toLowerCase()||"";
+  const format=url.searchParams.get("format")?.trim().toLowerCase()||"";
+
+  if (q && format === "smart") {
+    const match = findLocationSmartHierarchy(q);
+    return Response.json({ success: true, match });
+  }
 
   const likeQ=`%${q}%`;
   const likeProv=`%${province}%`;
@@ -48,12 +55,30 @@ export async function GET(request:Request){
     ORDER BY pv.region, pv.name
   `).all();
 
+  const cascadeTree = PNG_REGIONS.map(reg => ({
+    region: reg.name,
+    label: reg.label,
+    description: reg.description,
+    provinces: PNG_PROVINCES.filter(p => p.region === reg.name).map(prov => {
+      const dbDestinations = (rows.results as { provinceCode: string; name: string; slug: string; district: string | null }[])
+        .filter(r => r.provinceCode === prov.code);
+      return {
+        code: prov.code,
+        name: prov.name,
+        capital: prov.capital,
+        districts: prov.districts,
+        registeredDestinations: dbDestinations
+      };
+    })
+  }));
+
   return Response.json({
     success: true,
     data: {
       total: rows.results.length,
       locations: rows.results,
-      provinces: provinces.results
+      provinces: provinces.results,
+      cascade: cascadeTree
     }
   });
 }
