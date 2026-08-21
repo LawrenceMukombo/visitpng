@@ -3,7 +3,7 @@ const schemaStatements=[
 `CREATE TABLE IF NOT EXISTS provinces (id INTEGER PRIMARY KEY AUTOINCREMENT,code TEXT NOT NULL UNIQUE,name TEXT NOT NULL,region TEXT NOT NULL)`,
 `CREATE TABLE IF NOT EXISTS destinations (id INTEGER PRIMARY KEY AUTOINCREMENT,province_id INTEGER NOT NULL REFERENCES provinces(id),district TEXT,slug TEXT NOT NULL UNIQUE,name TEXT NOT NULL,summary TEXT NOT NULL,latitude REAL,longitude REAL,cover_image_url TEXT,source_url TEXT,is_test_data INTEGER NOT NULL DEFAULT 1)`,
 `CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY AUTOINCREMENT,slug TEXT NOT NULL UNIQUE,name TEXT NOT NULL,icon TEXT NOT NULL,display_order INTEGER NOT NULL DEFAULT 0,is_active INTEGER NOT NULL DEFAULT 1)`,
-`CREATE TABLE IF NOT EXISTS providers (id INTEGER PRIMARY KEY AUTOINCREMENT,slug TEXT NOT NULL UNIQUE,trading_name TEXT NOT NULL,verification_status TEXT NOT NULL DEFAULT 'seeded_unverified',source_name TEXT,source_url TEXT,is_test_data INTEGER NOT NULL DEFAULT 1)`,
+`CREATE TABLE IF NOT EXISTS providers (id INTEGER PRIMARY KEY AUTOINCREMENT,slug TEXT NOT NULL UNIQUE,trading_name TEXT NOT NULL,legal_name TEXT,license_number TEXT,verification_status TEXT NOT NULL DEFAULT 'seeded_unverified',source_name TEXT,source_url TEXT,is_test_data INTEGER NOT NULL DEFAULT 1)`,
 `CREATE TABLE IF NOT EXISTS listings (id INTEGER PRIMARY KEY AUTOINCREMENT,provider_id INTEGER NOT NULL REFERENCES providers(id),destination_id INTEGER NOT NULL REFERENCES destinations(id),category_id INTEGER NOT NULL REFERENCES categories(id),slug TEXT NOT NULL UNIQUE,name TEXT NOT NULL,summary TEXT NOT NULL,image_url TEXT NOT NULL,photo_credit TEXT,deep_link_url TEXT,tag TEXT NOT NULL,currency TEXT NOT NULL DEFAULT 'PGK',base_price INTEGER NOT NULL,member_price INTEGER,rating REAL NOT NULL DEFAULT 0,review_count INTEGER NOT NULL DEFAULT 0,publication_status TEXT NOT NULL DEFAULT 'published',verification_status TEXT NOT NULL DEFAULT 'seeded_unverified',is_test_data INTEGER NOT NULL DEFAULT 1,last_reviewed_at TEXT)`,
 `CREATE TABLE IF NOT EXISTS destination_photos (id INTEGER PRIMARY KEY AUTOINCREMENT,destination_id INTEGER REFERENCES destinations(id),listing_id INTEGER REFERENCES listings(id),image_url TEXT NOT NULL,caption TEXT,credit TEXT,source_url TEXT,display_order INTEGER NOT NULL DEFAULT 0,created_at TEXT NOT NULL)`,
 `CREATE INDEX IF NOT EXISTS listings_destination_idx ON listings(destination_id)`,`CREATE INDEX IF NOT EXISTS listings_category_idx ON listings(category_id)`,`CREATE INDEX IF NOT EXISTS listings_publication_idx ON listings(publication_status)`];
@@ -63,6 +63,8 @@ export async function ensureCatalogue(){
   await safeAlter("ALTER TABLE destinations ADD COLUMN source_url TEXT");
   await safeAlter("ALTER TABLE listings ADD COLUMN photo_credit TEXT");
   await safeAlter("ALTER TABLE listings ADD COLUMN deep_link_url TEXT");
+  await safeAlter("ALTER TABLE providers ADD COLUMN legal_name TEXT");
+  await safeAlter("ALTER TABLE providers ADD COLUMN license_number TEXT");
   await d1.batch(categorySeed.map(x=>d1.prepare("INSERT OR IGNORE INTO categories (slug,name,icon,display_order) VALUES (?,?,?,?)").bind(...x)));
   await d1.batch(provinceSeed.map(x=>d1.prepare("INSERT OR IGNORE INTO provinces (code,name,region) VALUES (?,?,?)").bind(...x)));
   await d1.batch(destinationSeed.map(x=>d1.prepare("INSERT OR IGNORE INTO destinations (slug,name,summary,province_id,district,latitude,longitude,cover_image_url,source_url,is_test_data) SELECT ?,?,?,id,?,?,?,?,?,1 FROM provinces WHERE code=?").bind(x[0],x[1],x[2],x[4],x[5],x[6],x[7],x[8],x[3])));
@@ -77,6 +79,3 @@ export async function getCatalogue(query="",category="all"){
   const cats=await d1.prepare("SELECT slug,name,icon,display_order AS displayOrder FROM categories WHERE is_active=1 ORDER BY display_order").all();
   return{categories:cats.results,listings:result.results,meta:{count:result.results.length,seededTestData:true}};
 }
-
-
-
