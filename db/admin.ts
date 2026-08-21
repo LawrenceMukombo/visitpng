@@ -16,24 +16,91 @@ export async function requireAdministrator(identity:VisitPngUser){
 }
 
 export async function getAdminCatalogue(identity:VisitPngUser){
-  const admin=await requireAdministrator(identity);await ensureCatalogue();
-  const listings=await env.DB.prepare(`SELECT l.id,l.slug,l.name,l.summary,l.image_url AS imageUrl,l.tag,l.base_price AS basePrice,l.member_price AS memberPrice,l.publication_status AS publicationStatus,l.verification_status AS verificationStatus,l.last_reviewed_at AS lastReviewedAt,d.id AS destinationId,d.name AS destination,c.id AS categoryId,c.name AS category,p.id AS providerId,p.trading_name AS provider FROM listings l JOIN destinations d ON d.id=l.destination_id JOIN categories c ON c.id=l.category_id JOIN providers p ON p.id=l.provider_id ORDER BY l.name`).all();
-  const destinations=await env.DB.prepare("SELECT id,name FROM destinations ORDER BY name").all();
+  const admin=await requireAdministrator(identity);
+  await ensureCatalogue();
+  const listings=await env.DB.prepare(`SELECT l.id,l.slug,l.name,l.summary,l.image_url AS imageUrl,l.photo_credit AS photoCredit,l.deep_link_url AS deepLinkUrl,l.tag,l.base_price AS basePrice,l.member_price AS memberPrice,l.publication_status AS publicationStatus,l.verification_status AS verificationStatus,l.last_reviewed_at AS lastReviewedAt,d.id AS destinationId,d.name AS destination,d.district AS district,pv.id AS provinceId,pv.name AS province,c.id AS categoryId,c.name AS category,p.id AS providerId,p.trading_name AS provider,p.source_url AS providerSourceUrl FROM listings l JOIN destinations d ON d.id=l.destination_id JOIN provinces pv ON pv.id=d.province_id JOIN categories c ON c.id=l.category_id JOIN providers p ON p.id=l.provider_id ORDER BY l.name`).all();
+  const destinations=await env.DB.prepare(`SELECT d.id,d.province_id AS provinceId,d.district,d.slug,d.name,d.summary,d.latitude,d.longitude,d.cover_image_url AS coverImageUrl,d.source_url AS sourceUrl,pv.name AS provinceName,pv.code AS provinceCode,pv.region AS provinceRegion FROM destinations d JOIN provinces pv ON pv.id=d.province_id ORDER BY pv.name,d.name`).all();
+  const provinces=await env.DB.prepare("SELECT id,code,name,region FROM provinces ORDER BY region,name").all();
   const categories=await env.DB.prepare("SELECT id,name FROM categories WHERE is_active=1 ORDER BY display_order").all();
-  const providers=await env.DB.prepare("SELECT id,trading_name AS name FROM providers ORDER BY trading_name").all();
-  const activity=await env.DB.prepare("SELECT actor_email AS actorEmail,action,entity_id AS entityId,created_at AS createdAt FROM audit_logs WHERE entity_type='listing' ORDER BY created_at DESC LIMIT 20").all();
-  return{admin,listings:listings.results,destinations:destinations.results,categories:categories.results,providers:providers.results,activity:activity.results};
+  const providers=await env.DB.prepare("SELECT id,trading_name AS name,source_url AS sourceUrl FROM providers ORDER BY trading_name").all();
+  const activity=await env.DB.prepare("SELECT actor_email AS actorEmail,action,entity_type AS entityType,entity_id AS entityId,details,created_at AS createdAt FROM audit_logs WHERE entity_type IN ('listing','destination','province') ORDER BY created_at DESC LIMIT 30").all();
+  return{admin,listings:listings.results,destinations:destinations.results,provinces:provinces.results,categories:categories.results,providers:providers.results,activity:activity.results};
 }
 
 const text=(value:unknown,max:number)=>String(value||"").trim().slice(0,max);
+
 export async function saveAdminListing(identity:VisitPngUser,input:Record<string,unknown>){
-  const admin=await requireAdministrator(identity);await ensureCatalogue();
+  const admin=await requireAdministrator(identity);
+  await ensureCatalogue();
   const id=Number(input.id||0),now=new Date().toISOString();
-  const values={name:text(input.name,120),summary:text(input.summary,1000),imageUrl:text(input.imageUrl,1000),tag:text(input.tag,80),slug:text(input.slug,120).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),basePrice:Math.max(0,Number(input.basePrice)||0),memberPrice:input.memberPrice===""||input.memberPrice==null?null:Math.max(0,Number(input.memberPrice)||0),destinationId:Number(input.destinationId),categoryId:Number(input.categoryId),providerId:Number(input.providerId),publicationStatus:["draft","published","hidden"].includes(String(input.publicationStatus))?String(input.publicationStatus):"draft"};
+  const values={
+    name:text(input.name,120),
+    summary:text(input.summary,1000),
+    imageUrl:text(input.imageUrl,1000),
+    photoCredit:text(input.photoCredit,200)||null,
+    deepLinkUrl:text(input.deepLinkUrl,1000)||null,
+    tag:text(input.tag,80),
+    slug:text(input.slug,120).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),
+    basePrice:Math.max(0,Number(input.basePrice)||0),
+    memberPrice:input.memberPrice===""||input.memberPrice==null?null:Math.max(0,Number(input.memberPrice)||0),
+    destinationId:Number(input.destinationId),
+    categoryId:Number(input.categoryId),
+    providerId:Number(input.providerId),
+    publicationStatus:["draft","published","hidden"].includes(String(input.publicationStatus))?String(input.publicationStatus):"draft"
+  };
   if(!values.name||!values.summary||!values.slug||!values.destinationId||!values.categoryId||!values.providerId)throw new Error("Complete all required fields");
-  if(id){await env.DB.prepare(`UPDATE listings SET name=?,summary=?,image_url=?,tag=?,slug=?,base_price=?,member_price=?,destination_id=?,category_id=?,provider_id=?,publication_status=?,verification_status='administrator_reviewed',last_reviewed_at=? WHERE id=?`).bind(values.name,values.summary,values.imageUrl,values.tag,values.slug,values.basePrice,values.memberPrice,values.destinationId,values.categoryId,values.providerId,values.publicationStatus,now,id).run();}
-  else{await env.DB.prepare(`INSERT INTO listings (provider_id,destination_id,category_id,slug,name,summary,image_url,tag,base_price,member_price,publication_status,verification_status,is_test_data,last_reviewed_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,'administrator_reviewed',0,?)`).bind(values.providerId,values.destinationId,values.categoryId,values.slug,values.name,values.summary,values.imageUrl,values.tag,values.basePrice,values.memberPrice,values.publicationStatus,now).run();}
+  if(id){
+    await env.DB.prepare(`UPDATE listings SET name=?,summary=?,image_url=?,photo_credit=?,deep_link_url=?,tag=?,slug=?,base_price=?,member_price=?,destination_id=?,category_id=?,provider_id=?,publication_status=?,verification_status='administrator_reviewed',last_reviewed_at=? WHERE id=?`).bind(values.name,values.summary,values.imageUrl,values.photoCredit,values.deepLinkUrl,values.tag,values.slug,values.basePrice,values.memberPrice,values.destinationId,values.categoryId,values.providerId,values.publicationStatus,now,id).run();
+  } else {
+    await env.DB.prepare(`INSERT INTO listings (provider_id,destination_id,category_id,slug,name,summary,image_url,photo_credit,deep_link_url,tag,base_price,member_price,publication_status,verification_status,is_test_data,last_reviewed_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,'administrator_reviewed',0,?)`).bind(values.providerId,values.destinationId,values.categoryId,values.slug,values.name,values.summary,values.imageUrl,values.photoCredit,values.deepLinkUrl,values.tag,values.basePrice,values.memberPrice,values.publicationStatus,now).run();
+  }
   const saved=await env.DB.prepare("SELECT id FROM listings WHERE slug=?").bind(values.slug).first<{id:number}>();
   await env.DB.prepare("INSERT INTO audit_logs (user_id,actor_email,action,entity_type,entity_id,details,created_at) VALUES (?,?,?,?,?,?,?)").bind(admin.id,identity.email,id?"listing_updated":"listing_created","listing",String(saved?.id||id),JSON.stringify({name:values.name,status:values.publicationStatus}),now).run();
+  return getAdminCatalogue(identity);
+}
+
+export async function saveAdminDestination(identity:VisitPngUser,input:Record<string,unknown>){
+  const admin=await requireAdministrator(identity);
+  await ensureCatalogue();
+  const id=Number(input.id||0),now=new Date().toISOString();
+  const name=text(input.name,120);
+  const slug=text(input.slug||name,120).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+  const summary=text(input.summary,1000);
+  const provinceId=Number(input.provinceId);
+  const district=text(input.district,100)||null;
+  const latitude=input.latitude===""||input.latitude==null?null:Number(input.latitude);
+  const longitude=input.longitude===""||input.longitude==null?null:Number(input.longitude);
+  const coverImageUrl=text(input.coverImageUrl,1000)||null;
+  const sourceUrl=text(input.sourceUrl,1000)||null;
+
+  if(!name||!slug||!summary||!provinceId)throw new Error("Location name, slug, province, and summary are required");
+
+  if(id){
+    await env.DB.prepare(`UPDATE destinations SET province_id=?,district=?,slug=?,name=?,summary=?,latitude=?,longitude=?,cover_image_url=?,source_url=? WHERE id=?`).bind(provinceId,district,slug,name,summary,latitude,longitude,coverImageUrl,sourceUrl,id).run();
+  } else {
+    await env.DB.prepare(`INSERT INTO destinations (province_id,district,slug,name,summary,latitude,longitude,cover_image_url,source_url,is_test_data) VALUES (?,?,?,?,?,?,?,?,?,0)`).bind(provinceId,district,slug,name,summary,latitude,longitude,coverImageUrl,sourceUrl).run();
+  }
+  const saved=await env.DB.prepare("SELECT id FROM destinations WHERE slug=?").bind(slug).first<{id:number}>();
+  await env.DB.prepare("INSERT INTO audit_logs (user_id,actor_email,action,entity_type,entity_id,details,created_at) VALUES (?,?,?,?,?,?,?)").bind(admin.id,identity.email,id?"destination_updated":"destination_created","destination",String(saved?.id||id),JSON.stringify({name,district,provinceId}),now).run();
+  return getAdminCatalogue(identity);
+}
+
+export async function saveAdminProvince(identity:VisitPngUser,input:Record<string,unknown>){
+  const admin=await requireAdministrator(identity);
+  await ensureCatalogue();
+  const id=Number(input.id||0),now=new Date().toISOString();
+  const code=text(input.code,10).toUpperCase().replace(/[^A-Z0-9]/g,"");
+  const name=text(input.name,100);
+  const region=text(input.region,50);
+
+  if(!code||!name||!region)throw new Error("Province code, name, and region are required");
+
+  if(id){
+    await env.DB.prepare(`UPDATE provinces SET code=?,name=?,region=? WHERE id=?`).bind(code,name,region,id).run();
+  } else {
+    await env.DB.prepare(`INSERT INTO provinces (code,name,region) VALUES (?,?,?)`).bind(code,name,region).run();
+  }
+  const saved=await env.DB.prepare("SELECT id FROM provinces WHERE code=?").bind(code).first<{id:number}>();
+  await env.DB.prepare("INSERT INTO audit_logs (user_id,actor_email,action,entity_type,entity_id,details,created_at) VALUES (?,?,?,?,?,?,?)").bind(admin.id,identity.email,id?"province_updated":"province_created","province",String(saved?.id||id),JSON.stringify({code,name,region}),now).run();
   return getAdminCatalogue(identity);
 }
