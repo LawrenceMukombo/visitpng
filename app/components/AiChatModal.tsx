@@ -22,6 +22,73 @@ interface AiChatModalProps {
 const WHATSAPP_PHONE = "260573506598";
 const WHATSAPP_DISPLAY = "+260 573 506 598";
 
+// Rich text message formatter for AI responses
+function FormattedAiText({ text }: { text: string }) {
+  // Split into lines
+  const lines = text.split("\n");
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+      {lines.map((line, idx) => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          return <div key={idx} style={{ height: "4px" }} />;
+        }
+
+        // Bullet point line (starts with • or - or *)
+        if (trimmed.startsWith("•") || trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+          const content = trimmed.replace(/^[•\-\*]\s*/, "");
+          return (
+            <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "8px", paddingLeft: "4px" }}>
+              <span style={{ color: "rgba(37, 211, 102, 1)", fontSize: "14px", lineHeight: "1.2" }}>▸</span>
+              <span style={{ flex: 1, fontSize: "13px", lineHeight: "1.5" }}>
+                {renderFormattedInline(content)}
+              </span>
+            </div>
+          );
+        }
+
+        // Numbered item (e.g. "1. Victoria Falls")
+        if (/^\d+\.\s/.test(trimmed)) {
+          return (
+            <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "8px", paddingLeft: "4px" }}>
+              <span style={{ color: "rgba(251, 191, 36, 1)", fontWeight: "bold", fontSize: "12px" }}>
+                {trimmed.match(/^\d+\./)?.[0]}
+              </span>
+              <span style={{ flex: 1, fontSize: "13px", lineHeight: "1.5" }}>
+                {renderFormattedInline(trimmed.replace(/^\d+\.\s*/, ""))}
+              </span>
+            </div>
+          );
+        }
+
+        // Header or regular line
+        return (
+          <div key={idx} style={{ fontSize: "13.5px", lineHeight: "1.5" }}>
+            {renderFormattedInline(line)}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// Parses inline bold **text** and highlights
+function renderFormattedInline(text: string): React.ReactNode {
+  const parts = text.split(/(\*\*.*?\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      const inner = part.slice(2, -2);
+      return (
+        <strong key={i} style={{ color: "rgba(251, 191, 36, 1)", fontWeight: 700 }}>
+          {inner}
+        </strong>
+      );
+    }
+    return part;
+  });
+}
+
 export function AiChatModal({
   isOpen,
   onClose,
@@ -33,7 +100,7 @@ export function AiChatModal({
     {
       id: "welcome-1",
       sender: "ai",
-      text: `Mwapoleni! 👋 I am the ${brandName} AI Safari & Cultural Concierge for ${countryCode === "ZMB" ? "Zambia" : "PNG"}. Ask me anything about national parks, traditional ceremonies (Kuomboka, Nc'wala, Likumbi Lya Mize), Victoria Falls, safari lodges, itineraries, or getting in touch on WhatsApp (${supportPhone})!`,
+      text: `Mwapoleni! 👋 I am the **${brandName} AI Safari & Cultural Concierge** for ${countryCode === "ZMB" ? "Zambia" : "PNG"}.\n\nAsk me anything about:\n• **Traditional Ceremonies**: Kuomboka, Nc'wala, Likumbi Lya Mize, Umutomboko\n• **National Parks**: South Luangwa walking safaris, Lower Zambezi canoe trails, Kafue\n• **Wonders**: Victoria Falls & Livingstone adventure bookings\n• **Passes & Support**: Instant assistance on WhatsApp (${supportPhone})`,
       timestamp: "Just now"
     }
   ]);
@@ -68,107 +135,69 @@ export function AiChatModal({
 
     if (q.includes("whatsapp") || q.includes("human") || q.includes("agent") || q.includes("phone") || q.includes("contact") || q.includes("call")) {
       return {
-        reply: `You can reach our dedicated ZamRoam 24/7 Concierge team directly on WhatsApp at **${WHATSAPP_DISPLAY}** or email **info@zamroam.com**. Click the button below to start a direct chat!`,
+        reply: `You can reach our dedicated ZamRoam 24/7 Concierge team directly on WhatsApp at **${WHATSAPP_DISPLAY}** or email **info@zamroam.com**.\n\nClick the button below to start a live WhatsApp chat!`,
         showWhatsApp: true
       };
     }
 
     if (q.includes("kuomboka") || q.includes("litunga") || q.includes("nalikwanda") || q.includes("mongu") || q.includes("barotse")) {
       return {
-        reply: `👑 **Kuomboka Traditional Ceremony (Western Province / Barotseland)**:
-• **Royal Host**: His Majesty The Litunga & the Barotse Royal Establishment.
-• **When**: Annually between March & April when the Zambezi River floods the plains.
-• **Experience**: The Litunga moves from the summer palace in Lealui to Limulunga in the 100-oarsmen Nalikwanda barge accompanied by the booming Royal Maoma drums.
-• **Dress Code**: Traditional Siziba (men) & Musisi (women).
-• **Access**: Public attendance is free; VIP grandstand tickets start from ZMW 1,800.`,
+        reply: `👑 **Kuomboka Traditional Ceremony (Western Province / Barotseland)**:\n• **Royal Host**: His Majesty The Litunga & the Barotse Royal Establishment.\n• **When**: Annually between March & April when the Zambezi River floods the plains.\n• **Experience**: The Litunga moves from the summer palace in Lealui to Limulunga in the 100-oarsmen Nalikwanda barge accompanied by the booming Royal Maoma drums.\n• **Dress Code**: Traditional Siziba (men) & Musisi (women).\n• **Access**: Public attendance is free; VIP grandstand tickets start from ZMW 1,800.`,
         showWhatsApp: true
       };
     }
 
     if (q.includes("nc'wala") || q.includes("ncwala") || q.includes("mpezeni") || q.includes("ngoni") || q.includes("chipata")) {
       return {
-        reply: `🛡️ **Nc'wala Traditional Ceremony (Eastern Province / Chipata)**:
-• **Royal Host**: Paramount Chief Mpezeni of the Ngoni people.
-• **When**: Last Saturday of February at Mutenguleni arena.
-• **Highlight**: Thousands of warrior impis in leopard skins dancing the thunderous Ingoma dance, followed by the tasting of the fresh harvest maize.
-• **Nearby**: Combine your trip with a walking safari in South Luangwa National Park!`,
+        reply: `🛡️ **Nc'wala Traditional Ceremony (Eastern Province / Chipata)**:\n• **Royal Host**: Paramount Chief Mpezeni of the Ngoni people.\n• **When**: Last Saturday of February at Mutenguleni arena.\n• **Highlight**: Thousands of warrior impis in leopard skins dancing the thunderous Ingoma dance, followed by the tasting of the fresh harvest maize.\n• **Nearby**: Combine your trip with a walking safari in South Luangwa National Park!`,
         showWhatsApp: true
       };
     }
 
     if (q.includes("likumbi") || q.includes("mize") || q.includes("makishi") || q.includes("zambezi") || q.includes("luvale")) {
       return {
-        reply: `🎭 **Likumbi Lya Mize Cultural Festival (North-Western Province)**:
-• **UNESCO Masterpiece**: Inscribed by UNESCO as a Masterpiece of Oral and Intangible Heritage.
-• **When**: Last week of August at Mize Palace across the Zambezi River.
-• **Highlight**: Over 50 sacred Makishi masked spirit dancers (Kayipu, Mwana Pwevo, Chizaluke) celebrating the Mukanda initiation rites.`,
+        reply: `🎭 **Likumbi Lya Mize Cultural Festival (North-Western Province)**:\n• **UNESCO Masterpiece**: Inscribed by UNESCO as a Masterpiece of Oral and Intangible Heritage.\n• **When**: Last week of August at Mize Palace across the Zambezi River.\n• **Highlight**: Over 50 sacred Makishi masked spirit dancers (Kayipu, Mwana Pwevo, Chizaluke) celebrating the Mukanda initiation rites.`,
         showWhatsApp: true
       };
     }
 
     if (q.includes("victoria falls") || q.includes("livingstone") || q.includes("mosi") || q.includes("devil")) {
       return {
-        reply: `🌊 **Victoria Falls & Livingstone (Southern Province)**:
-• **Status**: UNESCO World Heritage Wonder (Mosi-oa-Tunya — "The Smoke that Thunders").
-• **Top Highlights**: Devil's Pool swim on Livingstone Island (Aug–Jan), Helicopter Flight of Angels, Zambezi sunset booze & wildlife cruises, and white-water rafting in Batoka Gorge.
-• **Getting There**: Fly into Harry Mwaanga Nkumbula International Airport (LVI) or 6 hours drive from Lusaka.`,
+        reply: `🌊 **Victoria Falls & Livingstone (Southern Province)**:\n• **Status**: UNESCO World Heritage Wonder (Mosi-oa-Tunya — "The Smoke that Thunders").\n• **Top Highlights**: Devil's Pool swim on Livingstone Island (Aug–Jan), Helicopter Flight of Angels, Zambezi sunset cruises, and white-water rafting in Batoka Gorge.\n• **Getting There**: Fly into Harry Mwaanga Nkumbula International Airport (LVI) or 6 hours drive from Lusaka.`,
         showWhatsApp: true
       };
     }
 
     if (q.includes("south luangwa") || q.includes("luangwa") || q.includes("walking") || q.includes("leopard") || q.includes("mfuwe")) {
       return {
-        reply: `🦁 **South Luangwa National Park & Mfuwe**:
-• **Reputation**: The undisputed birthplace of the African Walking Safari and Africa's top leopard destination.
-• **Best Time to Visit**: Dry season from June to October for exceptional game concentration along the Luangwa river lagoons.
-• **Experiences**: Morning bush walks led by armed Zambia Wildlife Authority (DNPW) scouts, nocturnal spotlight drives, and luxury tented camps.`,
+        reply: `🦁 **South Luangwa National Park & Mfuwe**:\n• **Reputation**: The undisputed birthplace of the African Walking Safari and Africa's top leopard destination.\n• **Best Time to Visit**: Dry season from June to October for exceptional game concentration along the Luangwa river lagoons.\n• **Experiences**: Morning bush walks led by armed scouts, nocturnal spotlight drives, and luxury tented camps.`,
         showWhatsApp: true
       };
     }
 
     if (q.includes("itinerary") || q.includes("plan") || q.includes("5 day") || q.includes("7 day") || q.includes("days")) {
       return {
-        reply: `🧭 **Recommended 5-Day Classic Zambia Highlights Itinerary**:
-• **Day 1**: Arrive in Lusaka (LUN) → Connect to Livingstone → Sunset cruise on the upper Zambezi River.
-• **Day 2**: Guided Victoria Falls rainforest walk + Helicopter Flight of Angels + High tea at Royal Livingstone.
-• **Day 3**: Fly to Mfuwe (South Luangwa) → Check-in to river lodge → Afternoon sunset game drive.
-• **Day 4**: Dawn walking safari with master guide + Evening spotlight leopard drive along Luangwa lagoons.
-• **Day 5**: Morning birding & photography safari → Return flight to Lusaka for international connection.
-
-Would you like our concierge to book or customize this for your dates?`,
+        reply: `🧭 **Recommended 5-Day Classic Zambia Highlights Itinerary**:\n• **Day 1**: Arrive in Lusaka (LUN) → Connect to Livingstone → Sunset cruise on the upper Zambezi River.\n• **Day 2**: Guided Victoria Falls rainforest walk + Helicopter Flight of Angels + High tea at Royal Livingstone.\n• **Day 3**: Fly to Mfuwe (South Luangwa) → Check-in to river lodge → Afternoon sunset game drive.\n• **Day 4**: Dawn walking safari with master guide + Evening spotlight leopard drive along Luangwa lagoons.\n• **Day 5**: Morning birding & photography safari → Return flight to Lusaka for international connection.\n\nWould you like our concierge to customize this for your dates?`,
         showWhatsApp: true
       };
     }
 
     if (q.includes("lower zambezi") || q.includes("canoe") || q.includes("tiger fish")) {
       return {
-        reply: `🛶 **Lower Zambezi National Park**:
-• **Highlights**: Multi-day canoe safaris drifting past elephant herds, catch-and-release tiger fishing, and luxury riverfront lodges.
-• **Access**: 30-minute charter flight from Lusaka or 3-hour transfer via Chirundu / Royal airstrip.`,
+        reply: `🛶 **Lower Zambezi National Park**:\n• **Highlights**: Multi-day canoe safaris drifting past elephant herds, catch-and-release tiger fishing, and luxury riverfront lodges.\n• **Access**: 30-minute charter flight from Lusaka or 3-hour transfer via Chirundu / Royal airstrip.`,
         showWhatsApp: true
       };
     }
 
     if (q.includes("pass") || q.includes("membership") || q.includes("discount") || q.includes("rates") || q.includes("price")) {
       return {
-        reply: `🎟️ **ZamRoam Pass & Membership Privileges**:
-• Unlock up to 25% off verified safari lodges, Victoria Falls helicopter tours, car rentals, and ceremony VIP grandstand seating across Zambia.
-• Digital QR Pass is stored directly in your wallet for instant offline verification!`,
+        reply: `🎟️ **ZamRoam Pass & Membership Privileges**:\n• Unlock up to 25% off verified safari lodges, Victoria Falls helicopter tours, car rentals, and ceremony VIP grandstand seating across Zambia.\n• Digital QR Pass is stored directly in your wallet for instant offline verification!`,
         showWhatsApp: true
       };
     }
 
     return {
-      reply: `Zambia is an extraordinary destination with 10 peaceful provinces, 20 national parks, and over 60 traditional ceremonies!
-
-Whether you are looking for:
-1. **Victoria Falls & Livingstone Adventures**
-2. **South Luangwa & Lower Zambezi Safaris**
-3. **Kuomboka & Royal Traditional Ceremonies**
-4. **Lake Tanganyika & Bangweulu Wetlands**
-5. **Direct assistance on WhatsApp (${WHATSAPP_DISPLAY})**
-
-Feel free to ask a specific question, or chat with our team on WhatsApp for customized booking quotes!`,
+      reply: `Zambia is an extraordinary destination with 10 peaceful provinces, 20 national parks, and over 60 traditional ceremonies!\n\nWhether you are looking for:\n1. **Victoria Falls & Livingstone Adventures**\n2. **South Luangwa & Lower Zambezi Safaris**\n3. **Kuomboka & Royal Traditional Ceremonies**\n4. **Lake Tanganyika & Bangweulu Wetlands**\n5. **Direct assistance on WhatsApp (${WHATSAPP_DISPLAY})**\n\nFeel free to ask a specific question, or chat with our team on WhatsApp!`,
       showWhatsApp: true
     };
   };
@@ -400,11 +429,10 @@ Feel free to ask a specific question, or chat with our team on WhatsApp for cust
                     fontSize: "13.5px",
                     lineHeight: 1.55,
                     border: isAi ? "1px solid rgba(255, 255, 255, 0.12)" : "none",
-                    whiteSpace: "pre-line",
                     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)"
                   }}
                 >
-                  {m.text}
+                  {isAi ? <FormattedAiText text={m.text} /> : m.text}
 
                   {/* WhatsApp escalation button within message */}
                   {m.whatsappPrompt && (

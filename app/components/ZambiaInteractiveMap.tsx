@@ -16,7 +16,6 @@ export interface MapDestinationPin {
   imageUrl: string;
   latitude: number;
   longitude: number;
-  // SVG coordinates projected to [0, 900] x [0, 700]
   x: number;
   y: number;
   royalHost?: string;
@@ -32,15 +31,15 @@ export interface MapDestinationPin {
 // Precise Geographic Projection for Zambia:
 // Longitude: 21.6°E (West) to 34.0°E (East) -> width = 12.4°
 // Latitude: -18.2°S (South) to -8.0°S (North) -> height = 10.2°
-// SVG ViewBox: 900 x 700
+// SVG ViewBox: 960 x 720
 function projectCoords(lat: number, lon: number): { x: number; y: number } {
   const minLon = 21.6;
   const maxLon = 34.0;
-  const minLat = -18.2; // Southern tip (Livingstone / Kazungula)
-  const maxLat = -8.0;  // Northern tip (Lake Tanganyika / Mbala)
+  const minLat = -18.2;
+  const maxLat = -8.0;
 
-  const x = ((lon - minLon) / (maxLon - minLon)) * 790 + 55;
-  const y = ((maxLat - lat) / (maxLat - minLat)) * 590 + 55;
+  const x = ((lon - minLon) / (maxLon - minLon)) * 860 + 50;
+  const y = ((maxLat - lat) / (maxLat - minLat)) * 620 + 50;
   return { x: Math.round(x), y: Math.round(y) };
 }
 
@@ -617,15 +616,12 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
 
   const filteredPins = useMemo(() => {
     return ZAMBIA_TOURISM_PINS.filter((pin) => {
-      // Check if category is enabled in toggles
       const catKey = pin.category as keyof typeof visibleCategories;
       const isCatEnabled = visibleCategories[catKey] ?? true;
       if (!isCatEnabled) return false;
 
-      // Province filter
       const matchProv = selectedProvinceCode === "all" || pin.provinceCode === selectedProvinceCode;
 
-      // Search filter
       const matchSearch =
         !searchTerm.trim() ||
         pin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -664,7 +660,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
             Real Map of Zambia · Safaris & Traditional Ceremonies
           </h2>
           <p style={{ margin: "3px 0 0", fontSize: "12px", color: "rgba(255, 255, 255, 0.75)" }}>
-            Use the interactive toggable legends below to filter royal ceremonies, national parks, lakes, and rivers.
+            Click on any province or toggable legend to filter royal ceremonies, national parks, lakes, and rivers.
           </p>
         </div>
 
@@ -876,18 +872,17 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
           </div>
 
           <svg
-            viewBox="0 0 900 700"
+            viewBox="0 0 960 720"
             style={{
               width: "100%",
               height: "auto",
-              minHeight: "360px",
-              maxHeight: "560px",
+              minHeight: "380px",
+              maxHeight: "600px",
               filter: "drop-shadow(0 14px 28px rgba(0,0,0,0.65))",
               pointerEvents: "auto"
             }}
           >
             <defs>
-              {/* Regional Gradients */}
               <linearGradient id="zambiaLandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                 <stop offset="0%" stopColor="rgba(16, 52, 52, 1)" />
                 <stop offset="50%" stopColor="rgba(10, 36, 36, 1)" />
@@ -899,53 +894,43 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
               </linearGradient>
             </defs>
 
-            {/* REAL AUTHENTIC ZAMBIA BORDER OUTLINE (Full Butterfly Geographic Boundary) */}
+            {/* REAL AUTHENTIC ZAMBIA COUNTRY OUTLINE (True Geographic Border with Congo Pedicle, Lake Tanganyika, Kariba & Barotseland) */}
             <path
               d="
-                M 330 635 
-                L 240 610 
-                L 150 560 
-                L 110 500 
-                L 90 420 
-                L 85 340 
-                L 110 260 
-                L 160 210 
-                L 220 230 
-                L 280 250 
-                L 360 270 
-                L 440 280 
-                L 480 270 
-                L 490 190 
-                L 510 120 
-                L 560 90 
-                L 640 70 
-                L 690 90 
-                L 740 140 
-                L 770 220 
-                L 790 320 
-                L 780 410 
-                L 720 460 
-                L 660 480 
-                L 600 490 
-                L 550 510 
-                L 510 560 
-                L 440 580 
-                L 380 610 
+                M 342 652 
+                C 300 646, 260 635, 238 627 
+                C 200 610, 175 580, 168 555 
+                C 150 515, 130 480, 126 475 
+                C 120 440, 124 425, 126 415 
+                C 135 340, 160 290, 203 263 
+                C 215 245, 225 235, 231 232 
+                C 290 240, 380 260, 481 311 
+                C 510 330, 525 345, 536 354 
+                C 530 310, 520 260, 543 159 
+                C 540 145, 538 135, 543 129 
+                C 570 110, 640 90, 703 80 
+                C 740 90, 780 110, 821 129 
+                C 840 180, 845 220, 848 245 
+                C 850 310, 835 360, 821 391 
+                C 780 430, 720 480, 661 512 
+                C 620 535, 570 555, 543 567 
+                C 500 590, 470 605, 453 609 
+                C 400 635, 370 648, 342 652 
                 Z
               "
               fill="url(#zambiaLandGradient)"
-              stroke="rgba(37, 211, 102, 0.9)"
-              strokeWidth="3"
+              stroke="rgba(37, 211, 102, 0.95)"
+              strokeWidth="3.5"
             />
 
-            {/* 10 AUTHENTIC PROVINCIAL POLYGONS WITH REAL BOUNDARIES */}
+            {/* 10 AUTHENTIC PROVINCIAL POLYGONS WITH REAL GEOGRAPHIC BOUNDARIES */}
             {showBorders && (
-              <g opacity="0.85">
-                {/* Western Province (Barotseland / Mongu) */}
+              <g opacity="0.88">
+                {/* Western Province (Barotseland / Mongu / Liuwa) */}
                 <path
-                  d="M 85 340 L 110 260 L 220 230 L 280 340 L 330 460 L 240 610 L 150 560 L 110 500 L 90 420 Z"
-                  fill={hoveredProvince === "ZM-WES" || selectedProvinceCode === "ZM-WES" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
-                  stroke="rgba(255, 255, 255, 0.18)"
+                  d="M 126 415 C 135 340, 160 290, 203 263 L 290 350 L 340 480 L 300 600 L 238 627 C 200 610, 175 580, 168 555 C 150 515, 130 480, 126 475 Z"
+                  fill={hoveredProvince === "ZM-WES" || selectedProvinceCode === "ZM-WES" ? "rgba(37, 211, 102, 0.25)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.25)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                   onMouseEnter={() => setHoveredProvince("ZM-WES")}
@@ -954,11 +939,11 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   style={{ cursor: "pointer" }}
                 />
 
-                {/* North-Western Province (Solwezi / Zambezi / Mwinilunga) */}
+                {/* North-Western Province (Solwezi / Zambezi / Source of Zambezi) */}
                 <path
-                  d="M 110 260 L 160 210 L 220 230 L 280 250 L 370 250 L 400 320 L 320 370 L 220 230 Z"
-                  fill={hoveredProvince === "ZM-NW" || selectedProvinceCode === "ZM-NW" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
-                  stroke="rgba(255, 255, 255, 0.18)"
+                  d="M 203 263 C 215 245, 225 235, 231 232 C 290 240, 360 250, 420 280 L 400 370 L 290 350 Z"
+                  fill={hoveredProvince === "ZM-NW" || selectedProvinceCode === "ZM-NW" ? "rgba(37, 211, 102, 0.25)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.25)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                   onMouseEnter={() => setHoveredProvince("ZM-NW")}
@@ -967,11 +952,11 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   style={{ cursor: "pointer" }}
                 />
 
-                {/* Copperbelt Province (Ndola / Kitwe) */}
+                {/* Copperbelt Province (Ndola / Kitwe / Sakania border) */}
                 <path
-                  d="M 370 250 L 440 280 L 460 340 L 400 350 L 400 320 Z"
-                  fill={hoveredProvince === "ZM-COP" || selectedProvinceCode === "ZM-COP" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
-                  stroke="rgba(255, 255, 255, 0.18)"
+                  d="M 420 280 C 450 295, 470 305, 481 311 C 510 330, 525 345, 536 354 L 480 390 L 400 370 Z"
+                  fill={hoveredProvince === "ZM-COP" || selectedProvinceCode === "ZM-COP" ? "rgba(37, 211, 102, 0.25)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.25)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                   onMouseEnter={() => setHoveredProvince("ZM-COP")}
@@ -982,9 +967,9 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
 
                 {/* Central Province (Kabwe / Serenje / Kafue NP) */}
                 <path
-                  d="M 280 340 L 400 350 L 460 340 L 520 380 L 510 440 L 440 450 L 330 460 Z"
-                  fill={hoveredProvince === "ZM-CEN" || selectedProvinceCode === "ZM-CEN" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
-                  stroke="rgba(255, 255, 255, 0.18)"
+                  d="M 290 350 L 400 370 L 480 390 L 560 410 L 540 470 L 460 480 L 340 480 Z"
+                  fill={hoveredProvince === "ZM-CEN" || selectedProvinceCode === "ZM-CEN" ? "rgba(37, 211, 102, 0.25)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.25)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                   onMouseEnter={() => setHoveredProvince("ZM-CEN")}
@@ -993,11 +978,11 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   style={{ cursor: "pointer" }}
                 />
 
-                {/* Lusaka Province (Capital & Lower Zambezi Gateway) */}
+                {/* Lusaka Province (Capital & Chongwe) */}
                 <path
-                  d="M 440 450 L 510 440 L 550 510 L 470 520 L 440 470 Z"
-                  fill={hoveredProvince === "ZM-LUS" || selectedProvinceCode === "ZM-LUS" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
-                  stroke="rgba(255, 255, 255, 0.18)"
+                  d="M 460 480 L 540 470 L 590 530 L 510 550 L 460 510 Z"
+                  fill={hoveredProvince === "ZM-LUS" || selectedProvinceCode === "ZM-LUS" ? "rgba(37, 211, 102, 0.25)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.25)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                   onMouseEnter={() => setHoveredProvince("ZM-LUS")}
@@ -1006,11 +991,11 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   style={{ cursor: "pointer" }}
                 />
 
-                {/* Southern Province (Livingstone / Victoria Falls / Kariba) */}
+                {/* Southern Province (Livingstone / Victoria Falls / Lake Kariba / Monze) */}
                 <path
-                  d="M 240 610 L 330 460 L 440 470 L 470 520 L 510 560 L 440 580 L 380 610 L 330 635 Z"
-                  fill={hoveredProvince === "ZM-SOU" || selectedProvinceCode === "ZM-SOU" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
-                  stroke="rgba(255, 255, 255, 0.18)"
+                  d="M 238 627 L 300 600 L 340 480 L 460 510 L 510 550 L 543 567 C 500 590, 470 605, 453 609 C 400 635, 370 648, 342 652 Z"
+                  fill={hoveredProvince === "ZM-SOU" || selectedProvinceCode === "ZM-SOU" ? "rgba(37, 211, 102, 0.25)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.25)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                   onMouseEnter={() => setHoveredProvince("ZM-SOU")}
@@ -1019,11 +1004,11 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   style={{ cursor: "pointer" }}
                 />
 
-                {/* Eastern Province (Chipata / South Luangwa) */}
+                {/* Eastern Province (Chipata / South Luangwa / Petauke) */}
                 <path
-                  d="M 520 380 L 660 320 L 780 410 L 720 460 L 600 490 L 510 440 Z"
-                  fill={hoveredProvince === "ZM-EAS" || selectedProvinceCode === "ZM-EAS" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
-                  stroke="rgba(255, 255, 255, 0.18)"
+                  d="M 560 410 L 720 340 L 821 391 C 780 430, 720 480, 661 512 L 590 530 L 540 470 Z"
+                  fill={hoveredProvince === "ZM-EAS" || selectedProvinceCode === "ZM-EAS" ? "rgba(37, 211, 102, 0.25)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.25)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                   onMouseEnter={() => setHoveredProvince("ZM-EAS")}
@@ -1032,11 +1017,11 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   style={{ cursor: "pointer" }}
                 />
 
-                {/* Luapula Province (Mansabombwe / Lake Bangweulu) */}
+                {/* Luapula Province (Mansabombwe / Mwata Kingdom / Samfya) */}
                 <path
-                  d="M 480 270 L 490 190 L 540 160 L 570 240 L 520 320 L 460 340 Z"
-                  fill={hoveredProvince === "ZM-LUA" || selectedProvinceCode === "ZM-LUA" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
-                  stroke="rgba(255, 255, 255, 0.18)"
+                  d="M 536 354 C 530 310, 520 260, 543 159 C 540 145, 538 135, 543 129 L 600 160 L 610 260 L 560 360 Z"
+                  fill={hoveredProvince === "ZM-LUA" || selectedProvinceCode === "ZM-LUA" ? "rgba(37, 211, 102, 0.25)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.25)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                   onMouseEnter={() => setHoveredProvince("ZM-LUA")}
@@ -1045,11 +1030,11 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   style={{ cursor: "pointer" }}
                 />
 
-                {/* Northern Province (Kasama / Lake Tanganyika / Mbala) */}
+                {/* Northern Province (Kasama / Lake Tanganyika / Mpulungu / Mbala) */}
                 <path
-                  d="M 540 160 L 560 90 L 640 70 L 690 90 L 660 210 L 570 240 Z"
-                  fill={hoveredProvince === "ZM-NOR" || selectedProvinceCode === "ZM-NOR" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
-                  stroke="rgba(255, 255, 255, 0.18)"
+                  d="M 543 129 C 570 110, 640 90, 703 80 L 730 150 L 680 230 L 600 160 Z"
+                  fill={hoveredProvince === "ZM-NOR" || selectedProvinceCode === "ZM-NOR" ? "rgba(37, 211, 102, 0.25)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.25)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                   onMouseEnter={() => setHoveredProvince("ZM-NOR")}
@@ -1058,11 +1043,11 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   style={{ cursor: "pointer" }}
                 />
 
-                {/* Muchinga Province (Mpika / Shiwa Ng'andu) */}
+                {/* Muchinga Province (Mpika / Shiwa Ng'andu / Chama) */}
                 <path
-                  d="M 570 240 L 660 210 L 740 140 L 770 220 L 660 320 L 520 380 L 520 320 Z"
-                  fill={hoveredProvince === "ZM-MUC" || selectedProvinceCode === "ZM-MUC" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
-                  stroke="rgba(255, 255, 255, 0.18)"
+                  d="M 703 80 C 740 90, 780 110, 821 129 C 840 180, 845 220, 848 245 L 720 340 L 560 410 L 610 260 L 680 230 L 730 150 Z"
+                  fill={hoveredProvince === "ZM-MUC" || selectedProvinceCode === "ZM-MUC" ? "rgba(37, 211, 102, 0.25)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.25)"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                   onMouseEnter={() => setHoveredProvince("ZM-MUC")}
@@ -1073,76 +1058,80 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
               </g>
             )}
 
-            {/* REAL RIVERS & LAKES (Zambezi, Kafue, Luangwa, Tanganyika, Kariba, Bangweulu) */}
+            {/* REAL RIVERS & LAKES (Zambezi, Kafue, Luangwa, Tanganyika, Kariba, Bangweulu, Mweru) */}
             {showRivers && (
               <g>
                 {/* Lake Tanganyika (Deep Blue North Horn) */}
                 <path
-                  d="M 630 65 Q 660 75 680 95 L 660 120 Q 640 90 625 70 Z"
+                  d="M 685 70 C 705 78, 730 95, 725 120 C 700 95, 680 80, 685 70 Z"
                   fill="url(#waterGradient)"
                   stroke="rgba(56, 189, 248, 1)"
                   strokeWidth="1.5"
                 />
-                <text x="635" y="60" fill="rgba(56, 189, 248, 1)" fontSize="9" fontWeight="800">LAKE TANGANYIKA</text>
+                <text x="690" y="65" fill="rgba(56, 189, 248, 1)" fontSize="9.5" fontWeight="800">LAKE TANGANYIKA</text>
+
+                {/* Lake Mweru (North Luapula) */}
+                <ellipse cx="550" cy="115" rx="14" ry="24" fill="url(#waterGradient)" stroke="rgba(56, 189, 248, 0.85)" strokeWidth="1" />
+                <text x="525" y="118" fill="rgba(255,255,255,0.85)" fontSize="8" fontWeight="700">L. MWERU</text>
 
                 {/* Lake Bangweulu & Swamps */}
-                <ellipse cx="540" cy="240" rx="28" ry="18" fill="url(#waterGradient)" stroke="rgba(56, 189, 248, 0.8)" strokeWidth="1" />
-                <text x="515" y="243" fill="rgba(255,255,255,0.9)" fontSize="8" fontWeight="700">L. BANGWEULU</text>
+                <ellipse cx="585" cy="245" rx="30" ry="18" fill="url(#waterGradient)" stroke="rgba(56, 189, 248, 0.85)" strokeWidth="1" />
+                <text x="555" y="248" fill="rgba(255,255,255,0.9)" fontSize="8" fontWeight="700">L. BANGWEULU</text>
 
                 {/* Lake Kariba (Southern Blue Reservoir) */}
                 <path
-                  d="M 440 575 Q 480 560 520 545 Q 500 570 440 580 Z"
+                  d="M 453 609 C 485 590, 520 575, 543 567 C 520 595, 480 615, 453 609 Z"
                   fill="url(#waterGradient)"
                   stroke="rgba(56, 189, 248, 1)"
                   strokeWidth="1.5"
                 />
-                <text x="450" y="590" fill="rgba(56, 189, 248, 1)" fontSize="9" fontWeight="800">LAKE KARIBA</text>
+                <text x="470" y="605" fill="rgba(56, 189, 248, 1)" fontSize="9.5" fontWeight="800">LAKE KARIBA</text>
 
                 {/* Zambezi River Course */}
                 <path
-                  d="M 160 210 Q 110 320 150 480 T 240 600 T 330 635 T 440 575 T 600 490"
+                  d="M 231 232 C 160 320, 126 415, 140 490 C 160 560, 238 627, 342 652 C 453 609, 543 567, 661 512"
                   fill="none"
-                  stroke="rgba(14, 165, 233, 0.9)"
+                  stroke="rgba(14, 165, 233, 0.95)"
                   strokeWidth="3.5"
                   strokeLinecap="round"
                 />
-                <text x="175" y="520" fill="rgba(56, 189, 248, 0.9)" fontSize="9" fontWeight="700" transform="rotate(-65 175 520)">ZAMBEZI RIVER</text>
+                <text x="180" y="530" fill="rgba(56, 189, 248, 0.9)" fontSize="9" fontWeight="700" transform="rotate(-65 180 530)">ZAMBEZI RIVER</text>
 
                 {/* Kafue River */}
                 <path
-                  d="M 390 280 Q 320 370 360 480 T 480 500"
+                  d="M 420 300 C 340 380, 360 480, 480 505"
                   fill="none"
-                  stroke="rgba(14, 165, 233, 0.75)"
+                  stroke="rgba(14, 165, 233, 0.8)"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                 />
-                <text x="345" y="420" fill="rgba(56, 189, 248, 0.8)" fontSize="8" fontWeight="700" transform="rotate(75 345 420)">KAFUE RIVER</text>
+                <text x="350" y="430" fill="rgba(56, 189, 248, 0.85)" fontSize="8" fontWeight="700" transform="rotate(75 350 430)">KAFUE RIVER</text>
 
                 {/* Luangwa River */}
                 <path
-                  d="M 740 180 Q 690 310 600 490"
+                  d="M 780 180 C 740 310, 680 430, 661 512"
                   fill="none"
-                  stroke="rgba(14, 165, 233, 0.75)"
+                  stroke="rgba(14, 165, 233, 0.8)"
                   strokeWidth="2.5"
                   strokeLinecap="round"
                 />
-                <text x="670" y="320" fill="rgba(56, 189, 248, 0.8)" fontSize="8" fontWeight="700" transform="rotate(-60 670 320)">LUANGWA RIVER</text>
+                <text x="710" y="340" fill="rgba(56, 189, 248, 0.85)" fontSize="8" fontWeight="700" transform="rotate(-60 710 340)">LUANGWA RIVER</text>
               </g>
             )}
 
             {/* PROVINCE LABELS */}
             {showLabels && (
               <g pointerEvents="none">
-                <text x="170" y="410" fill="rgba(255,255,255,0.45)" fontSize="12" fontWeight="800">WESTERN</text>
-                <text x="240" y="300" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">NORTH-WESTERN</text>
-                <text x="390" y="315" fill="rgba(255,255,255,0.45)" fontSize="10" fontWeight="800">COPPERBELT</text>
-                <text x="360" y="410" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">CENTRAL</text>
-                <text x="460" y="475" fill="rgba(255,255,255,0.5)" fontSize="10" fontWeight="800">LUSAKA</text>
-                <text x="330" y="550" fill="rgba(255,255,255,0.45)" fontSize="12" fontWeight="800">SOUTHERN</text>
-                <text x="670" y="430" fill="rgba(255,255,255,0.45)" fontSize="12" fontWeight="800">EASTERN</text>
-                <text x="495" y="205" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">LUAPULA</text>
-                <text x="590" y="150" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">NORTHERN</text>
-                <text x="640" y="270" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">MUCHINGA</text>
+                <text x="180" y="440" fill="rgba(255,255,255,0.45)" fontSize="12" fontWeight="800">WESTERN</text>
+                <text x="270" y="310" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">NORTH-WESTERN</text>
+                <text x="430" y="340" fill="rgba(255,255,255,0.45)" fontSize="10" fontWeight="800">COPPERBELT</text>
+                <text x="400" y="440" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">CENTRAL</text>
+                <text x="480" y="500" fill="rgba(255,255,255,0.5)" fontSize="10" fontWeight="800">LUSAKA</text>
+                <text x="360" y="570" fill="rgba(255,255,255,0.45)" fontSize="12" fontWeight="800">SOUTHERN</text>
+                <text x="700" y="450" fill="rgba(255,255,255,0.45)" fontSize="12" fontWeight="800">EASTERN</text>
+                <text x="545" y="210" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">LUAPULA</text>
+                <text x="630" y="160" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">NORTHERN</text>
+                <text x="690" y="280" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">MUCHINGA</text>
               </g>
             )}
 
@@ -1167,7 +1156,6 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   }}
                   style={{ cursor: "pointer", pointerEvents: "all" }}
                 >
-                  {/* Large touch target */}
                   <circle r="28" fill="transparent" />
 
                   {/* Pulsing radar ring for selected pin */}
