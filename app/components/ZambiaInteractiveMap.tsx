@@ -6,7 +6,7 @@ import { ZAMBIA_PROVINCES } from "../../db/zambiaGeography";
 export interface MapDestinationPin {
   id: string | number;
   name: string;
-  category: "stays" | "tours" | "nature" | "culture" | "events" | "transport";
+  category: "ceremony" | "stays" | "tours" | "nature" | "culture" | "events" | "transport";
   categoryName: string;
   categoryIcon: string;
   provinceCode: string;
@@ -19,6 +19,10 @@ export interface MapDestinationPin {
   // SVG coordinates projected to [0, 800] x [0, 600]
   x: number;
   y: number;
+  royalHost?: string;
+  season?: string;
+  sacredRegalia?: string;
+  dressCode?: string;
   highlights: string[];
   price?: string;
   rating: number;
@@ -26,8 +30,8 @@ export interface MapDestinationPin {
 }
 
 // Coordinates projection for Zambia:
-// Longitude: 22.0°E to 33.7°E -> map width 800
-// Latitude: -8.2°S to -18.1°S -> map height 600
+// Longitude: 21.8°E to 34.0°E -> map width 800
+// Latitude: -8.0°S to -18.2°S -> map height 600
 function projectCoords(lat: number, lon: number): { x: number; y: number } {
   const minLon = 21.8;
   const maxLon = 34.0;
@@ -40,6 +44,303 @@ function projectCoords(lat: number, lon: number): { x: number; y: number } {
 }
 
 export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
+  // ==========================================
+  // MAJOR TRADITIONAL CEREMONIES (👑)
+  // ==========================================
+  {
+    id: "ceremony-kuomboka",
+    slug: "barotseland-mongu",
+    name: "Kuomboka Traditional Ceremony",
+    category: "ceremony",
+    categoryName: "Traditional Ceremony",
+    categoryIcon: "👑",
+    provinceCode: "ZM-WES",
+    provinceName: "Western Province",
+    region: "Western & Barotseland",
+    royalHost: "His Majesty The Litunga (King of the Lozi) & Barotse Royal Establishment",
+    season: "March / April (End of Rainy Season / Peak Zambezi Flood)",
+    sacredRegalia: "Nalikwanda Royal Barge, Royal Maoma War Drums, Elephant Crest Canopy",
+    dressCode: "Traditional Siziba (Men: kilt, shirt, red beret) & Musisi (Women: tiered silk dresses)",
+    summary: "The world's most spectacular royal water pageant. As floodwaters submerge the Barotse plains, the King sails in the colossal 100-oarsmen Nalikwanda barge from Lealui to the highlands of Limulunga.",
+    imageUrl: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82",
+    latitude: -15.2819,
+    longitude: 23.1311,
+    ...projectCoords(-15.2819, 23.1311),
+    highlights: [
+      "Royal Nalikwanda barge with 100+ singing royal oarsmen",
+      "Thunderous Royal Maoma war drums echoing across the floodwaters",
+      "Queen's Notila barge royal flotilla escort",
+      "Limulunga Royal Palace landing & nocturnal royal victory dance (Lishoma)",
+      "Feast of fresh Barotse bream, sour milk, and royal delicacies"
+    ],
+    price: "VIP Pavilion from ZMW 1,800 · Public Attendance Free",
+    rating: 5.0
+  },
+  {
+    id: "ceremony-likumbi",
+    slug: "solwezi-zambezi-west",
+    name: "Likumbi Lya Mize (Makishi Festival)",
+    category: "ceremony",
+    categoryName: "Traditional Ceremony",
+    categoryIcon: "🎭",
+    provinceCode: "ZM-NW",
+    provinceName: "North-Western Province",
+    region: "North-Western Circuit",
+    royalHost: "His Royal Highness Senior Chief Ndungu & Luvale Royal Council",
+    season: "Last Week of August (UNESCO Masterpiece)",
+    sacredRegalia: "Sacred Makishi Masked Spirits (Kayipu, Chizaluke, Mwana Pwevo, Utenu)",
+    dressCode: "Chitenge fabric attire with respect for sacred arena boundary gates",
+    summary: "UNESCO-inscribed Masterpiece of Oral and Intangible Heritage. Over 50 sacred Makishi masked spirit masquerades emerge from the ancestral graveyard to celebrate the Mukanda initiation graduation at Mize Palace.",
+    imageUrl: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1100&q=82",
+    latitude: -13.5417,
+    longitude: 23.1083,
+    ...projectCoords(-13.5417, 23.1083),
+    highlights: [
+      "Procession of 50+ sacred Makishi masked dancers representing ancestral spirits",
+      "Kayipu (Father of Makishi) grand entrance with royal flywhisk salutes",
+      "Mwana Pwevo graceful female spirit dance acrobatics",
+      "Chilombola guardian songs & traditional silimba xylophone melodies",
+      "Zambezi River canoe crossings into the historic Mize Royal Capital"
+    ],
+    price: "VIP Enclosure from ZMW 750 · Public Attendance Free",
+    rating: 5.0
+  },
+  {
+    id: "ceremony-lunda-lubanza",
+    slug: "solwezi-zambezi-west",
+    name: "Lunda Lubanza Traditional Ceremony",
+    category: "ceremony",
+    categoryName: "Traditional Ceremony",
+    categoryIcon: "⚔️",
+    provinceCode: "ZM-NW",
+    provinceName: "North-Western Province",
+    region: "North-Western Circuit",
+    royalHost: "His Royal Highness Senior Chief Ishindi of the Lunda Kingdom",
+    season: "August / September",
+    sacredRegalia: "Royal Mpok (Lunda Double-Edged Battle Sword) & Royal Palanquin",
+    dressCode: "Formal traditional attire / Lunda royal colors",
+    summary: "Ancient celebration of Lunda royal sovereignty and cultural solidarity at Mukanda Nkambo. Senior Chief Ishindi is borne aloft on the royal palanquin accompanied by royal drummers and ceremonial sword salutes.",
+    imageUrl: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=1100&q=82",
+    latitude: -13.5167,
+    longitude: 23.1500,
+    ...projectCoords(-13.5167, 23.1500),
+    highlights: [
+      "Royal procession of Senior Chief Ishindi on the sacred palanquin",
+      "Mpok sword battle dance honoring legendary warrior kings",
+      "Muyinda traditional praise singing and war drumming",
+      "Presentation of harvest tributes from surrounding chiefdoms",
+      "Cultural banquet featuring wild honey and indigenous game delicacies"
+    ],
+    price: "Guest Seating from ZMW 650",
+    rating: 4.9
+  },
+  {
+    id: "ceremony-umutomboko",
+    slug: "luapula-waterfalls-kingdom",
+    name: "Umutomboko Ceremony (Lunda Kingdom)",
+    category: "ceremony",
+    categoryName: "Traditional Ceremony",
+    categoryIcon: "👑",
+    provinceCode: "ZM-LUA",
+    provinceName: "Luapula Province",
+    region: "Northern & Luapula",
+    royalHost: "His Royal Highness Mwata Kazembe, King of the Eastern Lunda",
+    season: "Last Weekend of July",
+    sacredRegalia: "Mukonzo Skirt, Mpok Sword, Imfukutu & Chinkwisha Royal Drums",
+    dressCode: "Traditional Chitenge or formal dress (respectful at Ng'ona sacred river)",
+    summary: "Spectacular royal victory pageant celebrating the great Lunda conquest of the Luapula valley. King Mwata Kazembe, draped in majestic flowing Mukonzo robes, performs the exhilarating Mutomboko victory sword dance.",
+    imageUrl: "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82",
+    latitude: -9.8167,
+    longitude: 28.7500,
+    ...projectCoords(-9.8167, 28.7500),
+    highlights: [
+      "Mwata Kazembe performing the electrifying Mutomboko victory dance with sword",
+      "Solemn libations and cleansing ritual at the sacred Ng'ona River",
+      "Booming Imfukutu royal drums heard across the entire valley",
+      "Musumbanzala royal court procession with hundreds of court dignitaries",
+      "Traditional feast featuring fresh Luapula Chisense and yellow cassava"
+    ],
+    price: "VIP Grandstand from ZMW 800",
+    rating: 5.0
+  },
+  {
+    id: "ceremony-kusefya",
+    slug: "kasama-chishimba-falls",
+    name: "Ukusefya Pa Ng'wena (Bemba Royal)",
+    category: "ceremony",
+    categoryName: "Traditional Ceremony",
+    categoryIcon: "🐊",
+    provinceCode: "ZM-NOR",
+    provinceName: "Northern Province",
+    region: "Northern & Great Lakes",
+    royalHost: "His Royal Highness Paramount Chief Chitimukulu (Mwine Lubemba)",
+    season: "August",
+    sacredRegalia: "Icipuna ca Ng'wena (Sacred Crocodile Throne) & Royal Spears",
+    dressCode: "Bemba red, white & black royal attire or smart cultural dress",
+    summary: "The grand annual national ceremony of the Bemba people reenacting their historic 17th-century migration from Kola (Congo) to finding the dead crocodile totem at Ng'wena.",
+    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82",
+    latitude: -10.1667,
+    longitude: 31.3667,
+    ...projectCoords(-10.1667, 31.3667),
+    highlights: [
+      "Paramount Chief Chitimukulu carried on the giant crocodile litter by 30 warriors",
+      "Dramatic reenactment of crossing the Chambeshi River into Lubemba",
+      "Abemba praise poets reciting genealogical royal praises (Imilombo)",
+      "Traditional Kalela and Chilili war dances",
+      "Traditional warrior salutes with muzzle-loading flintlock musket volleys"
+    ],
+    price: "VIP Enclosure from ZMW 780",
+    rating: 4.9
+  },
+  {
+    id: "ceremony-ncwala",
+    slug: "chipata-mutenguleni-heritage",
+    name: "Nc'wala Traditional Ceremony (Ngoni)",
+    category: "ceremony",
+    categoryName: "Traditional Ceremony",
+    categoryIcon: "🛡️",
+    provinceCode: "ZM-EAS",
+    provinceName: "Eastern Province",
+    region: "Eastern & Luangwa Valley",
+    royalHost: "His Royal Highness Paramount Chief Mpezeni, King of the Ngoni",
+    season: "Last Saturday of February",
+    sacredRegalia: "Injobo Leopard Skins, Cowhide Shields, Assegai Spears, Headgear",
+    dressCode: "Ngoni animal skins / Chitenge attire",
+    summary: "Ancient first-fruits harvest and warrior thanksgiving celebration. Thousands of Ngoni impis in majestic leopard skins and shields dance the thunderous Ingoma before Paramount Chief Mpezeni.",
+    imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=82",
+    latitude: -13.6333,
+    longitude: 32.6500,
+    ...projectCoords(-13.6333, 32.6500),
+    highlights: [
+      "Massive warrior regiments (Impis) stamping earth in unison in the Ingoma dance",
+      "Paramount Chief Mpezeni tasting the first fresh harvest maize (Mthunzi)",
+      "Sacred black bull ritual offering and warrior blessings",
+      "Ngoni praise poets chanting ancestral Zulu lineage war chronicles",
+      "Vibrant cultural crafts market with authentic beadwork and snuff gourds"
+    ],
+    price: "VIP Arena Seating from ZMW 850",
+    rating: 5.0
+  },
+  {
+    id: "ceremony-shimunenga",
+    slug: "lochinvar-monze-sanctuary",
+    name: "Shimunenga Traditional Cattle Ceremony",
+    category: "ceremony",
+    categoryName: "Traditional Ceremony",
+    categoryIcon: "🐂",
+    provinceCode: "ZM-SOU",
+    provinceName: "Southern Province",
+    region: "Southern Safari & Zambezi",
+    royalHost: "Ba-Ila Royal Elders & Chiefs of Namwala",
+    season: "September / October (Full Moon on the Kafue Flats)",
+    sacredRegalia: "Long Ila Spears, Impandala Feathered Headgear, Ancestral Horns",
+    dressCode: "Light safari or cultural clothing suitable for floodplain heat",
+    summary: "One of Africa's most breathtaking pastoral spectacles. Thousands of prized horned Ila cattle swim across the flooded Kafue River as fearless young warriors dive alongside them singing heroic cattle praises.",
+    imageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82",
+    latitude: -15.7500,
+    longitude: 26.4333,
+    ...projectCoords(-15.7500, 26.4333),
+    highlights: [
+      "Thousands of prized long-horned cattle swimming across the Kafue River channels",
+      "Fearless Ila youth swimming with cattle and demonstrating equestrian skills",
+      "Mock hunting expeditions with traditional spears and impandala headgear",
+      "Kukonkola cattle poetry praises passed down over 300 years",
+      "Traditional Ila warrior parades and village communal feasts"
+    ],
+    price: "Guide & Entry from ZMW 600",
+    rating: 4.9
+  },
+  {
+    id: "ceremony-kulamba",
+    slug: "chipata-mutenguleni-heritage",
+    name: "Kulamba Ceremony (Chewa Kingdom)",
+    category: "ceremony",
+    categoryName: "Traditional Ceremony",
+    categoryIcon: "🎭",
+    provinceCode: "ZM-EAS",
+    provinceName: "Eastern Province",
+    region: "Eastern & Luangwa Valley",
+    royalHost: "His Majesty Kalonga Gawa Undi, King of the Chewa (Zambia, Malawi, Mozambique)",
+    season: "Last Saturday of August",
+    sacredRegalia: "Gule Wamkulu (Great Dance - UNESCO Intangible Masterpiece) Masquerades",
+    dressCode: "Modest cultural clothing; absolute reverence for masked performers",
+    summary: "Tri-national royal convergence where over 130 subordinate Chewa chiefs from Zambia, Malawi, and Mozambique assemble at Mkaika to pay tribute and present governance reports to King Kalonga Gawa Undi.",
+    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82",
+    latitude: -14.0500,
+    longitude: 32.0333,
+    ...projectCoords(-14.0500, 32.0333),
+    highlights: [
+      "Unrivaled showcase of the sacred Gule Wamkulu (The Great Dance)",
+      "Over 130 international Chewa chiefs in full royal court regalia",
+      "Nyau secret brotherhood masquerades displaying spiritual mastery",
+      "King Kalonga Gawa Undi delivering the annual state-of-the-kingdom decree",
+      "Cross-border cultural arts, food, and music exhibition"
+    ],
+    price: "VIP Pavilion from ZMW 820",
+    rating: 5.0
+  },
+  {
+    id: "ceremony-lwiindi",
+    slug: "lochinvar-monze-sanctuary",
+    name: "Lwiindi Gonde Thanksgiving Ceremony",
+    category: "ceremony",
+    categoryName: "Traditional Ceremony",
+    categoryIcon: "🌧️",
+    provinceCode: "ZM-SOU",
+    provinceName: "Southern Province",
+    region: "Southern Safari & Zambezi",
+    royalHost: "Chief Monze, Spiritual Leader of the Tonga People",
+    season: "First Weekend of July",
+    sacredRegalia: "Budima War Drums, Sacred Gonde Shrine Libation Gourds",
+    dressCode: "Chitenge attire / Traditional Tonga beadwork",
+    summary: "Sacred Tonga thanksgiving and rainmaking ceremony held at the ancient Gonde Shrine near Monze, honoring the spiritual lineage of the ancient Chief Monze dynasty.",
+    imageUrl: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1100&q=82",
+    latitude: -16.2833,
+    longitude: 27.4833,
+    ...projectCoords(-16.2833, 27.4833),
+    highlights: [
+      "Sacred ancestral prayers at the ancient Gonde shrine",
+      "Thunderous Budima warrior drumming with giant hollowed tree drums",
+      "Traditional Tonga harvest displays and prize bull showcases",
+      "Communal tasting of traditional fermented seven-day sweet brew",
+      "Tonga folklore storytelling and spiritual cleansing rites"
+    ],
+    price: "Guest Entry from ZMW 400",
+    rating: 4.8
+  },
+  {
+    id: "ceremony-chibwela",
+    slug: "muchinga-shiwa-ngandu",
+    name: "Chibwela Kumushi Ceremony (Lala/Swaka)",
+    category: "ceremony",
+    categoryName: "Traditional Ceremony",
+    categoryIcon: "🌾",
+    provinceCode: "ZM-CEN",
+    provinceName: "Central Province",
+    region: "Central & Northern Circuit",
+    royalHost: "Council of Chiefs of the Bisa, Swaka, and Lala Peoples",
+    season: "September",
+    sacredRegalia: "Traditional Seed Baskets, Bows & Arrows, Akalela Drums",
+    dressCode: "Traditional African wear / comfortable outdoor clothing",
+    summary: "'Returning from the fields' harvest celebration marking the successful end of the crop season, blessing seeds for the coming rains across Mkushi and the Luano Valley.",
+    imageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1100&q=82",
+    latitude: -13.9167,
+    longitude: 29.4000,
+    ...projectCoords(-13.9167, 29.4000),
+    highlights: [
+      "Blessing of agricultural seeds by royal elders",
+      "Lala & Swaka traditional harvest dances and archery contests",
+      "Akalela and Chilili royal court drumming ensembles",
+      "Traditional exhibition of indigenous crops and medicinal plants",
+      "Communal feast with traditional roasted game and honey beer"
+    ],
+    price: "Guest Access from ZMW 350",
+    rating: 4.7
+  },
+
+  // ==========================================
+  // NATURE & SAFARI DESTINATIONS (◇, ◒, ⌂)
+  // ==========================================
   {
     id: "vic-falls",
     slug: "victoria-falls-livingstone",
@@ -196,9 +497,9 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     id: "kasanka-bat",
     slug: "kasanka-national-park",
     name: "Kasanka National Park (Bat Migration)",
-    category: "events",
+    category: "nature",
     categoryName: "Nature Events",
-    categoryIcon: "♨",
+    categoryIcon: "◇",
     provinceCode: "ZM-CEN",
     provinceName: "Central Province",
     region: "Central & Northern Circuit",
@@ -280,6 +581,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [selectedProvinceCode, setSelectedProvinceCode] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [copiedGps, setCopiedGps] = useState<boolean>(false);
 
   const filteredPins = useMemo(() => {
     return ZAMBIA_TOURISM_PINS.filter((pin) => {
@@ -290,22 +592,40 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         pin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         pin.provinceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         pin.region.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (pin.royalHost && pin.royalHost.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (pin.sacredRegalia && pin.sacredRegalia.toLowerCase().includes(searchTerm.toLowerCase())) ||
         pin.highlights.some((h) => h.toLowerCase().includes(searchTerm.toLowerCase()));
       return matchCat && matchProv && matchSearch;
     });
   }, [selectedCategory, selectedProvinceCode, searchTerm]);
+
+  const handleCopyGps = (lat: number, lon: number) => {
+    const text = `${lat.toFixed(4)}°, ${lon.toFixed(4)}°`;
+    try {
+      navigator.clipboard.writeText(text);
+      setCopiedGps(true);
+      setTimeout(() => setCopiedGps(false), 2000);
+    } catch {}
+  };
+
+  const ceremonyCount = useMemo(() => {
+    return ZAMBIA_TOURISM_PINS.filter(p => p.category === "ceremony").length;
+  }, []);
 
   return (
     <div className="zambiaMapWrapper">
       {/* Map Header */}
       <div className="zambiaMapHeader">
         <div>
-          <span style={{ fontSize: "11px", fontWeight: 800, letterSpacing: "0.1em", color: "#25d366", textTransform: "uppercase" }}>
-            🗺️ GEOGRAPHIC TOURISM EXPLORER
+          <span style={{ fontSize: "11px", fontWeight: 800, letterSpacing: "0.1em", color: "rgba(37, 211, 102, 1)", textTransform: "uppercase" }}>
+            🗺️ GEOGRAPHIC TOURISM & CULTURAL EXPLORER
           </span>
-          <h2 style={{ fontSize: "20px", margin: "4px 0 0", color: "#ffffff", fontWeight: 700 }}>
-            Interactive Zambia Tourism & Safari Map
+          <h2 style={{ fontSize: "20px", margin: "4px 0 0", color: "var(--brand-white)", fontWeight: 700 }}>
+            Interactive Zambia Tourism, Safari & Traditional Ceremonies Map
           </h2>
+          <p style={{ margin: "3px 0 0", fontSize: "12px", color: "rgba(255, 255, 255, 0.75)" }}>
+            Click any GPS point on the map or select from the tray to inspect royal ceremonies, sacred regalia, wildlife parks, and coordinates.
+          </p>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
           <div style={{ display: "flex", alignItems: "center", background: "rgba(255,255,255,0.08)", borderRadius: "8px", padding: "6px 12px", border: "1px solid rgba(255,255,255,0.15)" }}>
@@ -314,13 +634,13 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search Victoria Falls, Mfuwe, Kafue..."
-              style={{ background: "transparent", border: "none", color: "#fff", outline: "none", fontSize: "13px", width: "190px" }}
+              placeholder="Search Kuomboka, Nc'wala, Falls, Kafue..."
+              style={{ background: "transparent", border: "none", color: "var(--brand-white)", outline: "none", fontSize: "13px", width: "210px" }}
             />
-            {searchTerm && <button onClick={() => setSearchTerm("")} style={{ background: "none", border: "none", color: "#aaa", cursor: "pointer" }}>×</button>}
+            {searchTerm && <button onClick={() => setSearchTerm("")} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.6)", cursor: "pointer" }}>×</button>}
           </div>
           {onClose && (
-            <button onClick={onClose} style={{ background: "rgba(255,255,255,0.1)", border: "none", color: "#fff", padding: "8px 14px", borderRadius: "8px", cursor: "pointer", fontWeight: 600 }}>
+            <button onClick={onClose} style={{ background: "rgba(255,255,255,0.1)", border: "none", color: "var(--brand-white)", padding: "8px 14px", borderRadius: "8px", cursor: "pointer", fontWeight: 600 }}>
               Close ×
             </button>
           )}
@@ -332,33 +652,39 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", fontWeight: 600 }}>Filters:</span>
         <button
           onClick={() => setSelectedCategory("all")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "all" ? "#25d366" : "rgba(255,255,255,0.1)", color: selectedCategory === "all" ? "#000" : "#fff" }}
+          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "all" ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.1)", color: selectedCategory === "all" ? "rgba(0,0,0,1)" : "var(--brand-white)" }}
         >
-          All Categories ({ZAMBIA_TOURISM_PINS.length})
+          All Locations ({ZAMBIA_TOURISM_PINS.length})
+        </button>
+        <button
+          onClick={() => setSelectedCategory("ceremony")}
+          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 700, border: selectedCategory === "ceremony" ? "none" : "1px solid rgba(245, 158, 11, 0.4)", cursor: "pointer", background: selectedCategory === "ceremony" ? "rgba(245, 158, 11, 1)" : "rgba(245, 158, 11, 0.15)", color: selectedCategory === "ceremony" ? "rgba(0,0,0,1)" : "rgba(251, 191, 36, 1)" }}
+        >
+          👑 Traditional Ceremonies ({ceremonyCount})
         </button>
         <button
           onClick={() => setSelectedCategory("nature")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "nature" ? "#25d366" : "rgba(255,255,255,0.1)", color: selectedCategory === "nature" ? "#000" : "#fff" }}
+          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "nature" ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.1)", color: selectedCategory === "nature" ? "rgba(0,0,0,1)" : "var(--brand-white)" }}
         >
           ◇ Nature & Falls
         </button>
         <button
           onClick={() => setSelectedCategory("tours")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "tours" ? "#25d366" : "rgba(255,255,255,0.1)", color: selectedCategory === "tours" ? "#000" : "#fff" }}
+          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "tours" ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.1)", color: selectedCategory === "tours" ? "rgba(0,0,0,1)" : "var(--brand-white)" }}
         >
           ◒ Safari Tours
         </button>
         <button
           onClick={() => setSelectedCategory("stays")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "stays" ? "#25d366" : "rgba(255,255,255,0.1)", color: selectedCategory === "stays" ? "#000" : "#fff" }}
+          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "stays" ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.1)", color: selectedCategory === "stays" ? "rgba(0,0,0,1)" : "var(--brand-white)" }}
         >
-          ⌂ Luxury Stays & Lodges
+          ⌂ Luxury Stays
         </button>
         <button
           onClick={() => setSelectedCategory("culture")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "culture" ? "#25d366" : "rgba(255,255,255,0.1)", color: selectedCategory === "culture" ? "#000" : "#fff" }}
+          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "culture" ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.1)", color: selectedCategory === "culture" ? "rgba(0,0,0,1)" : "var(--brand-white)" }}
         >
-          ♨ Culture & Heritage
+          ♨ Cultural Sites
         </button>
 
         <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
@@ -366,7 +692,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
           <select
             value={selectedProvinceCode}
             onChange={(e) => setSelectedProvinceCode(e.target.value)}
-            style={{ background: "#103333", color: "#fff", border: "1px solid rgba(255,255,255,0.2)", padding: "4px 10px", borderRadius: "6px", fontSize: "12px", outline: "none" }}
+            style={{ background: "rgba(16, 51, 51, 1)", color: "var(--brand-white)", border: "1px solid rgba(255,255,255,0.2)", padding: "4px 10px", borderRadius: "6px", fontSize: "12px", outline: "none" }}
           >
             <option value="all">All 10 Provinces</option>
             {ZAMBIA_PROVINCES.map((p) => (
@@ -383,12 +709,22 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         {/* SVG Map Canvas */}
         <div className="zambiaMapCanvasWrapper">
           {/* Compass Rose */}
-          <div style={{ position: "absolute", top: "14px", left: "16px", opacity: 0.8, pointerEvents: "none", textAlign: "center", fontSize: "11px", fontWeight: 700, color: "#25d366", zIndex: 5 }}>
+          <div style={{ position: "absolute", top: "14px", left: "16px", opacity: 0.85, pointerEvents: "none", textAlign: "center", fontSize: "11px", fontWeight: 700, color: "rgba(37, 211, 102, 1)", zIndex: 5 }}>
             <span style={{ fontSize: "18px", display: "block" }}>🧭</span>
             <span>N</span>
           </div>
 
-          <svg viewBox="0 0 800 600" style={{ width: "100%", height: "auto", maxHeight: "480px", minHeight: "300px", filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.6))" }}>
+          <svg
+            viewBox="0 0 800 600"
+            style={{
+              width: "100%",
+              height: "auto",
+              maxHeight: "520px",
+              minHeight: "320px",
+              filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.6))",
+              pointerEvents: "auto"
+            }}
+          >
             {/* Outline shape of Zambia with national boundaries & rivers */}
             <path
               d="M 120 220 
@@ -414,82 +750,91 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                  L 140 450 
                  L 90 380 
                  L 80 290 Z"
-              fill="#0d2828"
-              stroke="#25d366"
-              strokeWidth="2"
+              fill="rgba(13, 40, 40, 1)"
+              stroke="rgba(37, 211, 102, 0.8)"
+              strokeWidth="2.5"
               strokeDasharray="4 2"
-              opacity="0.9"
             />
 
             {/* Major Rivers (Zambezi, Luangwa, Kafue, Luapula) */}
-            {/* Zambezi River from West to South to East */}
+            {/* Zambezi River */}
             <path
               d="M 80 300 Q 140 420 210 510 T 330 540 T 480 480 T 640 390"
               fill="none"
-              stroke="#0ea5e9"
+              stroke="rgba(14, 165, 233, 0.7)"
               strokeWidth="3"
-              opacity="0.6"
             />
             {/* Kafue River */}
             <path
               d="M 370 170 Q 320 260 350 360 T 460 480"
               fill="none"
-              stroke="#0ea5e9"
-              strokeWidth="2"
-              opacity="0.4"
+              stroke="rgba(14, 165, 233, 0.5)"
+              strokeWidth="2.5"
             />
             {/* Luangwa River */}
             <path
               d="M 680 140 Q 640 250 560 380 T 520 440"
               fill="none"
-              stroke="#0ea5e9"
-              strokeWidth="2"
-              opacity="0.4"
+              stroke="rgba(14, 165, 233, 0.5)"
+              strokeWidth="2.5"
             />
 
             {/* Provincial Regional Overlays */}
-            <text x="240" y="525" fill="rgba(255,255,255,0.4)" fontSize="12" fontWeight="700">SOUTHERN</text>
-            <text x="440" y="440" fill="rgba(255,255,255,0.4)" fontSize="12" fontWeight="700">LUSAKA</text>
-            <text x="630" y="270" fill="rgba(255,255,255,0.4)" fontSize="12" fontWeight="700">EASTERN (LUANGWA)</text>
-            <text x="320" y="320" fill="rgba(255,255,255,0.4)" fontSize="12" fontWeight="700">CENTRAL (KAFUE)</text>
-            <text x="130" y="340" fill="rgba(255,255,255,0.4)" fontSize="12" fontWeight="700">WESTERN (LIUWA)</text>
-            <text x="460" y="190" fill="rgba(255,255,255,0.4)" fontSize="12" fontWeight="700">LUAPULA</text>
-            <text x="560" y="120" fill="rgba(255,255,255,0.4)" fontSize="12" fontWeight="700">NORTHERN (TANGANYIKA)</text>
-            <text x="590" y="200" fill="rgba(255,255,255,0.4)" fontSize="12" fontWeight="700">MUCHINGA</text>
-            <text x="360" y="210" fill="rgba(255,255,255,0.4)" fontSize="12" fontWeight="700">COPPERBELT</text>
-            <text x="180" y="230" fill="rgba(255,255,255,0.4)" fontSize="12" fontWeight="700">NORTH-WESTERN</text>
+            <text x="240" y="525" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">SOUTHERN</text>
+            <text x="440" y="440" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">LUSAKA</text>
+            <text x="630" y="270" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">EASTERN (LUANGWA)</text>
+            <text x="320" y="320" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">CENTRAL (KAFUE)</text>
+            <text x="130" y="340" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">WESTERN (BAROTSELAND)</text>
+            <text x="460" y="190" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">LUAPULA</text>
+            <text x="560" y="120" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">NORTHERN (TANGANYIKA)</text>
+            <text x="590" y="200" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">MUCHINGA</text>
+            <text x="360" y="210" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">COPPERBELT</text>
+            <text x="180" y="230" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">NORTH-WESTERN</text>
 
             {/* Interactive Pins */}
             {filteredPins.map((pin) => {
               const isSelected = selectedPin?.id === pin.id;
+              const isCeremony = pin.category === "ceremony";
               const pinColor =
-                pin.category === "stays" ? "#f59e0b" :
-                pin.category === "tours" ? "#10b981" :
-                pin.category === "nature" ? "#06b6d4" :
-                pin.category === "culture" ? "#ec4899" : "#a855f7";
+                pin.category === "ceremony" ? "rgba(245, 158, 11, 1)" :
+                pin.category === "stays" ? "rgba(234, 88, 12, 1)" :
+                pin.category === "tours" ? "rgba(16, 185, 129, 1)" :
+                pin.category === "nature" ? "rgba(6, 182, 212, 1)" :
+                pin.category === "culture" ? "rgba(236, 72, 153, 1)" : "rgba(168, 85, 247, 1)";
 
               return (
                 <g
                   key={pin.id}
                   transform={`translate(${pin.x}, ${pin.y})`}
-                  onClick={() => setSelectedPin(pin)}
-                  style={{ cursor: "pointer", transition: "transform 0.2s ease" }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedPin(pin);
+                  }}
+                  style={{ cursor: "pointer", pointerEvents: "all" }}
                 >
+                  {/* Large invisible hit area for easy touch / clicking */}
+                  <circle r="30" fill="transparent" />
+
                   {/* Pulse ring if selected */}
                   {isSelected && (
-                    <circle r="22" fill="none" stroke="#25d366" strokeWidth="2" opacity="0.8">
-                      <animate attributeName="r" values="16;26;16" dur="2s" repeatCount="indefinite" />
-                      <animate attributeName="opacity" values="0.9;0.2;0.9" dur="2s" repeatCount="indefinite" />
+                    <circle r="24" fill="none" stroke={isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)"} strokeWidth="2.5" opacity="0.9">
+                      <animate attributeName="r" values="18;28;18" dur="1.8s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.8s" repeatCount="indefinite" />
                     </circle>
+                  )}
+
+                  {/* Ceremony special aura ring */}
+                  {isCeremony && !isSelected && (
+                    <circle r="16" fill="none" stroke="rgba(245, 158, 11, 0.4)" strokeWidth="1.5" strokeDasharray="3 2" />
                   )}
 
                   {/* Pin Background Bubble */}
                   <circle
-                    r={isSelected ? "14" : "11"}
-                    fill={isSelected ? "#25d366" : pinColor}
-                    stroke="#ffffff"
+                    r={isSelected ? "15" : isCeremony ? "13" : "11"}
+                    fill={isSelected ? (isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)") : pinColor}
+                    stroke="rgba(255, 255, 255, 1)"
                     strokeWidth={isSelected ? "2.5" : "1.5"}
-                    filter="drop-shadow(0 2px 4px rgba(0,0,0,0.5))"
+                    filter="drop-shadow(0 3px 6px rgba(0,0,0,0.6))"
                   />
 
                   {/* Pin Icon */}
@@ -497,93 +842,148 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                     x="0"
                     y="4"
                     textAnchor="middle"
-                    fill={isSelected ? "#000000" : "#ffffff"}
+                    fill={isSelected ? "rgba(0,0,0,1)" : "rgba(255,255,255,1)"}
                     fontSize={isSelected ? "11" : "9"}
                     fontWeight="bold"
+                    pointerEvents="none"
                   >
                     {pin.categoryIcon}
                   </text>
 
                   {/* Pin Label */}
                   <rect
-                    x="-45"
-                    y={isSelected ? "-32" : "-26"}
-                    width="90"
-                    height="16"
-                    rx="4"
-                    fill="rgba(0,0,0,0.85)"
-                    stroke={isSelected ? "#25d366" : "rgba(255,255,255,0.2)"}
-                    strokeWidth="1"
+                    x="-50"
+                    y={isSelected ? "-34" : "-26"}
+                    width="100"
+                    height="17"
+                    rx="5"
+                    fill="rgba(0, 0, 0, 0.88)"
+                    stroke={isSelected ? (isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)") : "rgba(255,255,255,0.25)"}
+                    strokeWidth={isSelected ? "1.5" : "1"}
+                    pointerEvents="none"
                   />
                   <text
                     x="0"
-                    y={isSelected ? "-20" : "-14"}
+                    y={isSelected ? "-22" : "-14"}
                     textAnchor="middle"
-                    fill="#ffffff"
-                    fontSize="9"
-                    fontWeight={isSelected ? "bold" : "normal"}
+                    fill={isCeremony ? "rgba(251, 191, 36, 1)" : "rgba(255,255,255,1)"}
+                    fontSize="9.5"
+                    fontWeight={isSelected ? "800" : "600"}
+                    pointerEvents="none"
                   >
-                    {pin.name.length > 15 ? pin.name.slice(0, 14) + "…" : pin.name}
+                    {pin.name.length > 16 ? pin.name.slice(0, 15) + "…" : pin.name}
                   </text>
                 </g>
               );
             })}
           </svg>
 
-          {/* Region Legend Placed Cleanly as a Strip Below Map */}
+          {/* Safari & Cultural Circuits Bar */}
           <div className="zambiaMapCircuitsBar">
-            <span style={{ fontWeight: 700, color: "#25d366", marginRight: "4px" }}>Safaris Circuits:</span>
+            <span style={{ fontWeight: 700, color: "rgba(37, 211, 102, 1)", marginRight: "4px" }}>Safaris & Royal Circuits:</span>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "#10b981", display: "inline-block" }} />
+              <span style={{ width: "10px", height: "10px", borderRadius: "2px", background: "rgba(245, 158, 11, 1)", display: "inline-block" }} />
+              <span>👑 Traditional Ceremonies</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "rgba(16, 185, 129, 1)", display: "inline-block" }} />
               <span>Southern (Livingstone / Kariba)</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "#f59e0b", display: "inline-block" }} />
+              <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "rgba(6, 182, 212, 1)", display: "inline-block" }} />
               <span>Luangwa Valley (Mfuwe)</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "#3b82f6", display: "inline-block" }} />
-              <span>Northern Lakes (Tanganyika)</span>
+              <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "rgba(59, 130, 246, 1)", display: "inline-block" }} />
+              <span>Northern Lakes (Tanganyika / Bangweulu)</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "#8b5cf6", display: "inline-block" }} />
-              <span>Greater Kafue & Liuwa Plain</span>
+              <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "rgba(139, 92, 246, 1)", display: "inline-block" }} />
+              <span>Greater Kafue & Barotseland</span>
             </div>
           </div>
         </div>
 
-        {/* Selected Destination Preview Drawer */}
+        {/* Selected Destination Preview Drawer with FULL GPS Details */}
         <div className="zambiaMapDetailPanel">
           {selectedPin ? (
             <div>
-              <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", marginBottom: "14px", height: "160px", background: "#000" }}>
+              <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", marginBottom: "14px", height: "175px", background: "rgba(0,0,0,1)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={selectedPin.imageUrl}
                   alt={selectedPin.name}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
-                <span style={{ position: "absolute", top: "10px", left: "10px", background: "rgba(0,0,0,0.75)", color: "#25d366", fontSize: "11px", fontWeight: 700, padding: "3px 8px", borderRadius: "6px" }}>
+                <span style={{ position: "absolute", top: "10px", left: "10px", background: "rgba(0,0,0,0.85)", color: selectedPin.category === "ceremony" ? "rgba(251, 191, 36, 1)" : "rgba(37, 211, 102, 1)", fontSize: "11px", fontWeight: 800, padding: "4px 9px", borderRadius: "6px", border: "1px solid rgba(255,255,255,0.2)" }}>
                   {selectedPin.categoryIcon} {selectedPin.categoryName}
                 </span>
-                <span style={{ position: "absolute", bottom: "10px", right: "10px", background: "rgba(0,0,0,0.75)", color: "#facc15", fontSize: "12px", fontWeight: 700, padding: "2px 6px", borderRadius: "4px" }}>
+                <span style={{ position: "absolute", bottom: "10px", right: "10px", background: "rgba(0,0,0,0.85)", color: "rgba(250, 204, 21, 1)", fontSize: "12px", fontWeight: 700, padding: "3px 8px", borderRadius: "6px" }}>
                   ★ {selectedPin.rating.toFixed(1)}
                 </span>
               </div>
 
-              <span style={{ fontSize: "11px", fontWeight: 700, color: "#25d366", textTransform: "uppercase" }}>
-                {selectedPin.provinceName} · {selectedPin.region}
-              </span>
-              <h3 style={{ fontSize: "18px", margin: "4px 0 8px", color: "#fff", fontWeight: 700, lineHeight: 1.3 }}>
+              {/* Province & Region */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "6px" }}>
+                <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(37, 211, 102, 1)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  {selectedPin.provinceName} · {selectedPin.region}
+                </span>
+              </div>
+
+              {/* Exact GPS Coordinates Bar */}
+              <div className="zambiaGpsBadge">
+                <span>📍 GPS: {selectedPin.latitude.toFixed(4)}° S, {selectedPin.longitude.toFixed(4)}° E</span>
+                <button
+                  type="button"
+                  onClick={() => handleCopyGps(selectedPin.latitude, selectedPin.longitude)}
+                  style={{ background: "none", border: "none", color: "var(--brand-white)", cursor: "pointer", fontSize: "10px", textDecoration: "underline", padding: "0 2px" }}
+                >
+                  {copiedGps ? "✓ Copied" : "Copy"}
+                </button>
+              </div>
+
+              <h3 style={{ fontSize: "19px", margin: "10px 0 6px", color: "var(--brand-white)", fontWeight: 700, lineHeight: 1.3 }}>
                 {selectedPin.name}
               </h3>
-              <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.8)", lineHeight: 1.5, margin: "0 0 14px" }}>
+
+              {/* Royal Host / Lineage if ceremony */}
+              {selectedPin.royalHost && (
+                <div style={{ background: "rgba(245, 158, 11, 0.12)", border: "1px solid rgba(245, 158, 11, 0.3)", borderRadius: "8px", padding: "8px 12px", margin: "10px 0", fontSize: "12px" }}>
+                  <strong style={{ color: "rgba(251, 191, 36, 1)", display: "block", marginBottom: "2px" }}>👑 Royal Host & Palace:</strong>
+                  <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>{selectedPin.royalHost}</span>
+                </div>
+              )}
+
+              {/* Ceremony Season / Timing */}
+              {selectedPin.season && (
+                <div style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.8)", marginBottom: "8px" }}>
+                  <strong style={{ color: "rgba(37, 211, 102, 1)" }}>📅 Best Season / Month:</strong> {selectedPin.season}
+                </div>
+              )}
+
+              {/* Sacred Regalia */}
+              {selectedPin.sacredRegalia && (
+                <div style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.8)", marginBottom: "8px" }}>
+                  <strong style={{ color: "rgba(251, 191, 36, 1)" }}>🛡️ Sacred Regalia:</strong> {selectedPin.sacredRegalia}
+                </div>
+              )}
+
+              {/* Dress Code */}
+              {selectedPin.dressCode && (
+                <div style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.8)", marginBottom: "10px" }}>
+                  <strong style={{ color: "rgba(37, 211, 102, 1)" }}>👗 Visitor Dress Code:</strong> {selectedPin.dressCode}
+                </div>
+              )}
+
+              <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.85)", lineHeight: 1.55, margin: "0 0 14px" }}>
                 {selectedPin.summary}
               </p>
 
               <div style={{ marginBottom: "14px" }}>
-                <strong style={{ fontSize: "12px", color: "#fff", display: "block", marginBottom: "6px" }}>Key Highlights:</strong>
-                <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12px", color: "rgba(255,255,255,0.75)", lineHeight: 1.6 }}>
+                <strong style={{ fontSize: "12px", color: "var(--brand-white)", display: "block", marginBottom: "6px" }}>
+                  {selectedPin.category === "ceremony" ? "Ceremonial Highlights & Rituals:" : "Key Highlights & Activities:"}
+                </strong>
+                <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12px", color: "rgba(255,255,255,0.8)", lineHeight: 1.65 }}>
                   {selectedPin.highlights.map((h, i) => (
                     <li key={i}>{h}</li>
                   ))}
@@ -592,15 +992,15 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
 
               {selectedPin.price && (
                 <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: "8px", padding: "10px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-                  <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)" }}>Estimated Rate:</span>
-                  <strong style={{ fontSize: "15px", color: "#25d366" }}>{selectedPin.price}</strong>
+                  <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)" }}>Visitor Access & Rates:</span>
+                  <strong style={{ fontSize: "14px", color: selectedPin.category === "ceremony" ? "rgba(251, 191, 36, 1)" : "rgba(37, 211, 102, 1)" }}>{selectedPin.price}</strong>
                 </div>
               )}
             </div>
           ) : (
             <div style={{ textAlign: "center", padding: "40px 10px", color: "rgba(255,255,255,0.5)" }}>
               <span style={{ fontSize: "36px", display: "block", marginBottom: "10px" }}>📍</span>
-              <p>Click on any pin on the map to inspect safari details, highlights, and lodge bookings.</p>
+              <p>Click on any pin on the map to inspect safari details, royal ceremonies, GPS points, and bookings.</p>
             </div>
           )}
 
@@ -614,11 +1014,77 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   window.location.href = `/?q=${encodeURIComponent(selectedPin.name)}`;
                 }
               }}
-              style={{ width: "100%", background: "linear-gradient(135deg, #10b981 0%, #059669 100%)", color: "#fff", border: "none", padding: "12px 20px", borderRadius: "10px", fontSize: "14px", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 4px 12px rgba(16,185,129,0.3)" }}
+              style={{
+                width: "100%",
+                background: selectedPin.category === "ceremony"
+                  ? "linear-gradient(135deg, rgba(245, 158, 11, 1) 0%, rgba(217, 119, 6, 1) 100%)"
+                  : "linear-gradient(135deg, rgba(16, 185, 129, 1) 0%, rgba(5, 150, 105, 1) 100%)",
+                color: selectedPin.category === "ceremony" ? "rgba(0,0,0,1)" : "var(--brand-white)",
+                border: "none",
+                padding: "13px 20px",
+                borderRadius: "10px",
+                fontSize: "14px",
+                fontWeight: 800,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                boxShadow: "0 4px 14px rgba(0,0,0,0.3)"
+              }}
             >
-              Explore {selectedPin.name.split(" ")[0]} Listings →
+              Explore {selectedPin.name.split(" ")[0]} Listings & Passes →
             </button>
           )}
+        </div>
+      </div>
+
+      {/* Quick Selection Tray: All Ceremonies & Safari Destinations */}
+      <div className="zambiaMapCardsTray">
+        <div className="zambiaMapCardsHeader">
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "16px" }}>📍</span>
+            <strong style={{ fontSize: "13px", color: "var(--brand-white)" }}>
+              Select Any Point on Map ({filteredPins.length} Locations Available):
+            </strong>
+          </div>
+          <span style={{ fontSize: "11px", color: "rgba(255, 255, 255, 0.6)" }}>
+            Click to center and view full ceremony details
+          </span>
+        </div>
+
+        <div className="zambiaMapCardsScroll">
+          {filteredPins.map((pin) => {
+            const isSelected = selectedPin?.id === pin.id;
+            return (
+              <div
+                key={pin.id}
+                className={`zambiaMiniCard ${isSelected ? "active" : ""}`}
+                onClick={() => setSelectedPin(pin)}
+              >
+                <div style={{ height: "90px", width: "100%", position: "relative", overflow: "hidden", background: "rgba(0,0,0,0.5)" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={pin.imageUrl}
+                    alt={pin.name}
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                  <span style={{ position: "absolute", top: "6px", left: "6px", background: "rgba(0,0,0,0.8)", fontSize: "9px", fontWeight: 700, padding: "2px 6px", borderRadius: "4px", color: pin.category === "ceremony" ? "rgba(251, 191, 36, 1)" : "rgba(37, 211, 102, 1)" }}>
+                    {pin.categoryIcon} {pin.category === "ceremony" ? "Ceremony" : pin.categoryName.split(" ")[0]}
+                  </span>
+                </div>
+                <div style={{ padding: "8px 10px", flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ fontWeight: 700, fontSize: "11.5px", color: isSelected ? "rgba(37, 211, 102, 1)" : "var(--brand-white)", lineHeight: 1.3, marginBottom: "4px" }}>
+                    {pin.name}
+                  </div>
+                  <div style={{ fontSize: "9.5px", color: "rgba(255,255,255,0.6)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span>{pin.provinceName.split(" ")[0]}</span>
+                    <span>📍 {pin.latitude.toFixed(1)}°, {pin.longitude.toFixed(1)}°</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

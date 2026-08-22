@@ -1158,6 +1158,86 @@ small{font-size:11px!important;line-height:1.4}.eyebrow{font-size:11px}.bottom b
   }
 }
 
+.zambiaMapCardsTray {
+  padding: 16px 20px;
+  background: rgba(6, 18, 18, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.zambiaMapCardsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.zambiaMapCardsScroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-behavior: smooth;
+}
+
+.zambiaMapCardsScroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.zambiaMapCardsScroll::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.zambiaMapCardsScroll::-webkit-scrollbar-thumb {
+  background: rgba(37, 211, 102, 0.4);
+  border-radius: 3px;
+}
+
+.zambiaMiniCard {
+  flex: 0 0 200px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+  text-align: left;
+  padding: 0;
+  color: var(--brand-white);
+  display: flex;
+  flex-direction: column;
+}
+
+.zambiaMiniCard:hover {
+  transform: translateY(-2px);
+  border-color: rgba(37, 211, 102, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.zambiaMiniCard.active {
+  border-color: rgba(37, 211, 102, 1);
+  background: rgba(27, 105, 96, 0.35);
+  box-shadow: 0 0 12px rgba(37, 211, 102, 0.3);
+}
+
+.zambiaGpsBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 11px;
+  color: rgba(37, 211, 102, 1);
+  margin-top: 6px;
+}
+
 
 
 
