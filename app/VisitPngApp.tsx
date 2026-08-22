@@ -6,6 +6,7 @@ import FestivalCalendar from "./components/FestivalCalendar";
 import DigitalPermitPass from "./components/DigitalPermitPass";
 import WantokConcierge from "./components/WantokConcierge";
 import TokPisinPhrasebook from "./components/TokPisinPhrasebook";
+import ProviderRegistrationModal from "./components/ProviderRegistrationModal";
 import { CountryIntroBanner } from "./components/CountryIntroBanner";
 import { SecurityAdvisory } from "./components/SecurityAdvisory";
 import {CurrencyCode, formatPrice} from "../db/currency";
@@ -43,6 +44,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   const[tab,setTab]=useState<"Explore"|"Bookings"|"Reviews"|"Saved"|"Trips"|"Membership"|"Profile">("Explore");
   const[currency,setCurrency]=useState<CurrencyCode>("PGK");
   const[exploreMode,setExploreMode]=useState<"places"|"wantok"|"phrasebook"|"security"|"festivals"|"permits"|"trails">("places");
+  const[showProviderModal,setShowProviderModal]=useState(false);
 
   useEffect(()=>{
     if(new URLSearchParams(window.location.search).has("wishlist"))setTab("Saved");
@@ -88,6 +90,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       <button className={exploreMode==="festivals"?"active":""} onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
       <button className={exploreMode==="permits"?"active":""} onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
       <button className={exploreMode==="trails"?"active":""} onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>
+      <button className="partnerRegisterPill" onClick={()=>setShowProviderModal(true)}>🤝 Partner / Register Service</button>
     </div>
   );
 
@@ -172,6 +175,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
     {reviewListing&&viewer.signedIn&&<ReviewSheet listing={reviewListing} close={()=>setReviewListing(null)} done={()=>{setReviewListing(null);setTab("Reviews")}}/>}
     {bookingListing&&viewer.signedIn&&<BookingSheet listing={bookingListing} currency={currency} close={()=>setBookingListing(null)} openBookings={()=>{setBookingListing(null);setTab("Bookings")}}/>}
     {saveListing&&viewer.signedIn&&<SaveSheet listing={saveListing} close={()=>setSaveListing(null)}/>}
+    {showProviderModal&&<ProviderRegistrationModal onClose={()=>setShowProviderModal(false)}/>}
   </main>;
 }
 

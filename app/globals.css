@@ -450,6 +450,147 @@ small{font-size:11px!important;line-height:1.4}.eyebrow{font-size:11px}.bottom b
 .exploreModeSwitcher button{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;padding:6px 12px;border-radius:99px;border:1px solid var(--border-default);background:var(--surface-card);color:var(--text-primary);font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;min-height:unset;height:auto;line-height:1.2;box-shadow:0 1px 2px var(--shadow-color);transition:all 0.15s ease}
 .exploreModeSwitcher button:hover{background:var(--surface-selected);border-color:var(--brand-deep-teal);color:var(--brand-deep-teal)}
 .exploreModeSwitcher button.active{background:var(--brand-deep-teal)!important;color:var(--text-on-dark)!important;border-color:var(--brand-deep-teal)!important;box-shadow:0 2px 6px var(--shadow-color-strong)}
+.exploreModeSwitcher button.partnerRegisterPill{background:var(--surface-selected);color:var(--brand-deep-teal);border-color:var(--brand-deep-teal);font-weight:800}
+
+/* Provider Self-Registration & Onboarding Modal */
+.providerRegSheet{padding:26px 22px;max-width:540px}
+.wizardStepHeader{margin-bottom:20px}
+.wizardStepHeader h2{margin:6px 0 8px;font-size:22px;color:var(--brand-deep-teal)}
+.wizardLead{margin:0;font-size:12px;color:var(--text-secondary);line-height:1.5}
+.wizardStepper{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:18px}
+.stepItem{text-align:center;padding:8px 4px;border-radius:10px;background:var(--surface-subtle);border:1px solid var(--border-default)}
+.stepItem.active{background:var(--surface-selected);border-color:var(--brand-deep-teal)}
+.stepItem.completed{background:var(--status-success-soft);border-color:var(--status-success)}
+.stepItem span{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--surface-card);font-size:10px;font-weight:800;margin-bottom:4px;color:var(--text-primary)}
+.stepItem.active span{background:var(--brand-deep-teal);color:var(--text-on-dark)}
+.stepItem.completed span{background:var(--status-success);color:var(--text-on-dark)}
+.stepItem small{display:block;font-size:9px;color:var(--text-secondary);font-weight:700}
+.wizardStepContent h3{margin:0 0 4px;font-size:16px;color:var(--brand-deep-teal)}
+.stepDesc{margin:0 0 16px;font-size:11px;color:var(--text-secondary)}
+.providerCategorySelector{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.categoryOptionCard{text-align:left;padding:10px 12px;border-radius:12px;background:var(--surface-card);border:1px solid var(--border-default);cursor:pointer;transition:all 0.15s ease}
+.categoryOptionCard:hover{background:var(--surface-selected);border-color:var(--brand-deep-teal)}
+.categoryOptionCard.selected{background:var(--surface-selected);border:2px solid var(--brand-deep-teal)}
+.categoryOptionCard strong{display:block;font-size:11px;color:var(--brand-deep-teal);margin-bottom:3px}
+.categoryOptionCard small{display:block;font-size:9px;color:var(--text-secondary);line-height:1.35}
+.formRowGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wizardNavBtns{display:flex;justify-content:space-between;gap:10px;margin-top:20px}
+.prevStepBtn{padding:11px 18px;border-radius:10px;background:var(--surface-subtle);color:var(--text-primary);border:1px solid var(--border-default);font-weight:700;font-size:11px;cursor:pointer}
+.nextStepBtn{flex:1;padding:11px 18px;border-radius:10px;background:var(--action-primary);color:var(--brand-charcoal);font-weight:800;font-size:12px;border:0;cursor:pointer}
+.nextStepBtn:disabled{opacity:0.6;cursor:not-allowed}
+.antiScamNotice{padding:12px 14px;border-radius:12px;background:var(--surface-warning);border:1px solid var(--status-warning);margin-bottom:16px}
+.antiScamNotice strong{font-size:11px;color:var(--text-warning);display:block;margin-bottom:4px}
+.antiScamNotice ul{margin:0;padding-left:16px;font-size:10px;line-height:1.45;color:var(--text-warning)}
+.commissionExplainerCard{padding:16px;border-radius:14px;background:var(--surface-subtle);border:1px solid var(--border-default);margin-bottom:16px}
+.commissionCardHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.commissionCardHeader strong{font-size:13px;color:var(--brand-deep-teal)}
+.rateBadge{padding:3px 8px;border-radius:6px;background:var(--brand-deep-teal);color:var(--text-on-dark);font-size:10px;font-weight:800}
+.commissionText{margin:0 0 14px;font-size:11px;line-height:1.45;color:var(--text-secondary)}
+.interactiveCalc{padding:12px;background:var(--surface-card);border-radius:10px;border:1px solid var(--border-default)}
+.calcInputRow{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:11px;font-weight:700}
+.calcInputRow input{width:90px;padding:4px 8px;border-radius:6px;border:1px solid var(--border-default);font-size:11px;text-align:right}
+.calcLedger{display:grid;gap:6px;font-size:10px}
+.ledgerRow{display:flex;justify-content:space-between;align-items:center;color:var(--text-secondary)}
+.ledgerRow .fee{color:var(--status-danger);font-weight:700}
+.ledgerRow.totalRow{padding-top:8px;border-top:1px dashed var(--border-default);font-size:11px;color:var(--text-primary);font-weight:700}
+.ledgerRow.totalRow .netPayout{font-size:14px;color:var(--status-success);font-weight:800}
+.agreementCheckbox{display:flex;gap:10px;align-items:flex-start;font-size:10px;line-height:1.45;color:var(--text-secondary);margin:14px 0}
+.agreementCheckbox input{margin-top:2px}
+.submitApplicationBtn{width:100%;padding:14px;border-radius:12px;background:var(--action-primary);color:var(--brand-charcoal);font-weight:800;font-size:12px;border:0;cursor:pointer}
+.submitApplicationBtn:disabled{opacity:0.6;cursor:not-allowed}
+.wizardSuccessContent{text-align:center;padding:20px 10px}
+.successIconBadge{width:56px;height:56px;display:grid;place-items:center;margin:0 auto 16px;border-radius:50%;background:var(--status-success-soft);color:var(--status-success);font-size:28px;font-weight:800}
+.wizardSuccessContent h2{margin:0 0 8px;font-size:24px;color:var(--brand-deep-teal)}
+.successMessage{font-size:12px;line-height:1.5;color:var(--text-secondary);margin-bottom:18px}
+.appRefBox{padding:14px;border-radius:12px;background:var(--surface-selected);border:1px solid var(--brand-deep-teal);margin-bottom:20px}
+.appRefBox small{display:block;font-size:10px;color:var(--brand-deep-teal);text-transform:uppercase;font-weight:700}
+.appRefBox strong{font-size:16px;color:var(--brand-deep-teal);letter-spacing:0.05em}
+.nextStepsTimeline{text-align:left;padding:16px;background:var(--surface-subtle);border-radius:12px;margin-bottom:20px;border:1px solid var(--border-default)}
+.nextStepsTimeline h4{margin:0 0 10px;font-size:12px;color:var(--brand-deep-teal)}
+.nextStepsTimeline ol{margin:0;padding-left:18px;font-size:11px;line-height:1.5;color:var(--text-secondary)}
+.nextStepsTimeline li{margin-bottom:8px}
+.doneBtn{width:100%;padding:13px;border-radius:12px;background:var(--action-primary);color:var(--brand-charcoal);font-weight:800;font-size:12px;border:0;cursor:pointer}
+
+/* Admin Provider Vetting Console Styles */
+.adminProviderVettingSection{max-width:1400px;margin:24px auto;padding:0 24px}
+.sectionHeaderRow{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;flex-wrap:wrap;gap:12px}
+.sectionHeaderRow h2{margin:0 0 4px;font-size:22px;color:var(--brand-deep-teal)}
+.sectionHeaderRow .subtext{margin:0;font-size:12px;color:var(--text-secondary)}
+.refreshBtn{padding:8px 14px;border-radius:8px;background:var(--surface-card);border:1px solid var(--border-default);color:var(--text-primary);font-size:11px;font-weight:700;cursor:pointer}
+.tableControlsBar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.searchBoxWrapper{position:relative;display:flex;align-items:center;min-width:280px}
+.searchBoxWrapper span{position:absolute;left:10px;font-size:13px;color:var(--text-secondary)}
+.searchBoxWrapper input{width:100%;padding:8px 30px 8px 30px;border-radius:8px;border:1px solid var(--border-default);background:var(--surface-card);font-size:11px}
+.searchBoxWrapper .clearBtn{position:absolute;right:8px;border:0;background:none;color:var(--text-secondary);cursor:pointer;font-size:14px}
+.filterPillsRow{display:flex;gap:6px;flex-wrap:wrap}
+.filterPill{padding:6px 12px;border-radius:99px;border:1px solid var(--border-default);background:var(--surface-card);color:var(--text-primary);font-size:11px;font-weight:700;cursor:pointer}
+.filterPill.active{background:var(--brand-deep-teal);color:var(--text-on-dark);border-color:var(--brand-deep-teal)}
+.vettingGrid{display:grid;grid-template-columns:1.2fr 1fr;gap:20px;align-items:start}
+.applicationsTableCard{background:var(--surface-card);border-radius:16px;border:1px solid var(--border-default);padding:18px;box-shadow:var(--shadow-card)}
+.tableMetaRow{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:11px;color:var(--text-secondary)}
+.pageSizeSelector select{padding:3px 6px;border-radius:6px;border:1px solid var(--border-default);margin-left:4px;font-size:11px}
+.tableResponsiveWrapper{overflow-x:auto}
+.enterpriseDataTable{width:100%;border-collapse:collapse;font-size:11px}
+.enterpriseDataTable th{text-align:left;padding:10px 8px;border-bottom:2px solid var(--border-default);color:var(--text-secondary);font-size:10px;text-transform:uppercase;cursor:pointer}
+.enterpriseDataTable td{padding:10px 8px;border-bottom:1px solid var(--border-default);vertical-align:top}
+.enterpriseDataTable tr:hover{background:var(--surface-selected);cursor:pointer}
+.enterpriseDataTable tr.selectedRow{background:var(--surface-selected);border-left:3px solid var(--brand-deep-teal)}
+.appSlug{display:block;font-size:9px;color:var(--text-secondary);font-family:monospace}
+.catPill{display:inline-block;padding:2px 6px;border-radius:4px;background:var(--surface-subtle);font-size:9px;font-weight:700;text-transform:capitalize}
+.statusBadge{display:inline-block;padding:3px 8px;border-radius:99px;font-size:9px;font-weight:800;white-space:nowrap}
+.statusBadge.approved{background:var(--status-success-soft);color:var(--status-success)}
+.statusBadge.interview{background:var(--derived-teal-soft);color:var(--brand-deep-teal)}
+.statusBadge.checking{background:var(--surface-warning);color:var(--text-warning)}
+.statusBadge.rejected{background:var(--status-danger-soft);color:var(--status-danger)}
+.statusBadge.pending{background:var(--surface-subtle);color:var(--text-secondary)}
+.inspectBtn{padding:4px 8px;border-radius:6px;background:var(--action-primary);color:var(--brand-charcoal);font-size:10px;font-weight:800;border:0;cursor:pointer;white-space:nowrap}
+.emptyTableState{text-align:center;padding:30px;color:var(--text-secondary)}
+.paginationControls{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:10px;border-top:1px solid var(--border-default);font-size:11px}
+.paginationControls button{padding:5px 12px;border-radius:6px;border:1px solid var(--border-default);background:var(--surface-card);cursor:pointer;font-size:11px}
+.paginationControls button:disabled{opacity:0.5;cursor:not-allowed}
+.vettingInspectorCard{background:var(--surface-card);border-radius:16px;border:1px solid var(--border-strong);padding:20px;box-shadow:var(--shadow-card);position:sticky;top:90px;max-height:88vh;overflow-y:auto}
+.inspectorHeader{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;border-bottom:1px solid var(--border-default);padding-bottom:12px}
+.inspectorTag{font-size:9px;font-weight:800;color:var(--brand-deep-teal);letter-spacing:0.08em;display:block;margin-bottom:2px}
+.inspectorHeader h3{margin:0 0 2px;font-size:18px;color:var(--brand-deep-teal)}
+.appMeta{margin:0;font-size:10px;color:var(--text-secondary)}
+.closeInspectorBtn{border:0;background:none;font-size:20px;cursor:pointer;color:var(--text-secondary)}
+.actionStatusBanner{padding:8px 12px;border-radius:8px;font-size:11px;font-weight:700;margin-bottom:14px;text-align:center}
+.actionStatusBanner.success{background:var(--status-success-soft);color:var(--status-success)}
+.actionStatusBanner.error{background:var(--status-danger-soft);color:var(--status-danger)}
+.inspectorSection{padding:12px 14px;border-radius:12px;background:var(--surface-subtle);border:1px solid var(--border-default);margin-bottom:14px}
+.inspectorSection h4{margin:0 0 8px;font-size:12px;color:var(--brand-deep-teal)}
+.descText{margin:0 0 10px;font-size:11px;line-height:1.45;color:var(--text-secondary)}
+.metaGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:10px}
+.metaGrid label{color:var(--text-secondary);display:block;font-weight:700}
+.metaGrid span{color:var(--text-primary);font-weight:700}
+.checklistLead{margin:0 0 10px;font-size:10px;color:var(--text-secondary)}
+.checklistGrid{display:grid;gap:6px}
+.checkItem{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-primary);cursor:pointer}
+.checkItem input{cursor:pointer}
+.commissionConfigRow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.liveCalcCard{padding:10px;background:var(--surface-card);border-radius:8px;border:1px solid var(--border-default);margin-bottom:8px}
+.calcTop{display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:700;color:var(--text-secondary);margin-bottom:6px}
+.quickTestInput{width:70px;padding:3px 6px;border-radius:4px;border:1px solid var(--border-default);font-size:10px;text-align:right}
+.calcBreakdownRow{display:flex;justify-content:space-between;font-size:10px;color:var(--text-secondary);align-items:center}
+.calcBreakdownRow strong{color:var(--status-success);font-size:11px}
+.payoutMeta{font-size:10px;color:var(--text-secondary)}
+.payoutMeta span{color:var(--text-primary);font-weight:700;margin-left:4px}
+.vettingDecisionBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+.saveProgressBtn,.markCheckingBtn,.approveProviderBtn,.rejectProviderBtn{padding:10px;border-radius:8px;font-size:11px;font-weight:800;border:0;cursor:pointer}
+.saveProgressBtn{background:var(--surface-selected);color:var(--brand-deep-teal);border:1px solid var(--brand-deep-teal)}
+.markCheckingBtn{background:var(--surface-warning);color:var(--text-warning);border:1px solid var(--status-warning)}
+.approveProviderBtn{background:var(--status-success);color:var(--text-on-dark);grid-column:1/-1}
+.rejectProviderBtn{background:var(--status-danger-soft);color:var(--status-danger);grid-column:1/-1;border:1px solid var(--status-danger)}
+.noAppSelectedPrompt{background:var(--surface-subtle);border-radius:16px;border:1px dashed var(--border-strong);padding:40px 20px;text-align:center}
+.promptIcon{font-size:36px;margin-bottom:10px}
+.noAppSelectedPrompt h4{margin:0 0 6px;font-size:16px;color:var(--brand-deep-teal)}
+.noAppSelectedPrompt p{margin:0;font-size:11px;color:var(--text-secondary);line-height:1.5;max-width:300px;margin:0 auto}
+
+@media(max-width:900px){
+  .vettingGrid{grid-template-columns:1fr}
+  .providerCategorySelector{grid-template-columns:1fr}
+}
+
 
 
 

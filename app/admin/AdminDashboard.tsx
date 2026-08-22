@@ -2,6 +2,8 @@
 import {useEffect,useState,useRef} from "react";
 import Link from "next/link";
 import SmartLocationCascade, {CascadeSelection} from "../components/SmartLocationCascade";
+import AdminProviderVetting from "../components/AdminProviderVetting";
+import type { ProviderApplicationRecord } from "../../db/providers";
 import {PNG_REGIONS, PNG_PROVINCES} from "../../db/pngGeography";
 
 type Choice={id:number;name:string;displayOrder?:number;sourceUrl?:string;licenseNumber?:string};
@@ -101,7 +103,8 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const [providerForm,setProviderForm]=useState({...blankProvider});
 
   const [status,setStatus]=useState("Loading information…");
-  const [section,setSection]=useState<"places"|"locations"|"provinces"|"hierarchy"|"categories"|"api"|"activity">("places");
+  const [section,setSection]=useState<"places"|"locations"|"provinces"|"hierarchy"|"categories"|"providers_vetting"|"api"|"activity">("places");
+  const [providerApps,setProviderApps]=useState<ProviderApplicationRecord[]>([]);
   const [search,setSearch]=useState("");
   const [categoryFilter,setCategoryFilter]=useState<string>("all");
   const [apiPreview,setApiPreview]=useState<string>("Click 'Test API' below to see live JSON response.");
@@ -112,12 +115,19 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const placeFileInputRef=useRef<HTMLInputElement|null>(null);
   const destFileInputRef=useRef<HTMLInputElement|null>(null);
 
-  const load=()=>fetch("/api/admin/listings").then(async r=>{
-    const x=await r.json();
-    if(!r.ok)throw new Error(x.error);
-    setData(x);
-    setStatus("");
-  }).catch(e=>setStatus(e.message||"The administration page is unavailable."));
+  const load=()=>{
+    fetch("/api/admin/listings").then(async r=>{
+      const x=await r.json();
+      if(!r.ok)throw new Error(x.error);
+      setData(x);
+      setStatus("");
+    }).catch(e=>setStatus(e.message||"The administration page is unavailable."));
+
+    fetch("/api/admin/providers").then(async r=>{
+      const x=await r.json();
+      if(r.ok && x.applications) setProviderApps(x.applications);
+    }).catch(()=>{});
+  };
 
   useEffect(()=>{load()},[]);
 
@@ -408,6 +418,9 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
       <button className={section==="locations"?"active":""} onClick={()=>setSection("locations")}>Locations & Districts</button>
       <button className={section==="provinces"?"active":""} onClick={()=>setSection("provinces")}>Provinces</button>
       <button className={section==="hierarchy"?"active":""} onClick={()=>setSection("hierarchy")}>Smart Cascade Hierarchy</button>
+      <button className={section==="providers_vetting"?"active":""} onClick={()=>setSection("providers_vetting")}>
+        🏢 Provider Vetting (Anti-Scam) {providerApps.filter(a=>a.status==="pending_review").length ? `(${providerApps.filter(a=>a.status==="pending_review").length} New)` : ""}
+      </button>
       <button className={section==="categories"?"active":""} onClick={()=>setSection("categories")}>Categories & Providers</button>
       <button className={section==="api"?"active":""} onClick={()=>setSection("api")}>API Explorer</button>
       <button className={section==="activity"?"active":""} onClick={()=>setSection("activity")}>Recent changes</button>
@@ -892,6 +905,19 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
           </div>
         </section>
       </div>
+    )}
+
+    {section==="providers_vetting"&&(
+      <AdminProviderVetting
+        applications={providerApps}
+        onRefresh={()=>{
+          fetch("/api/admin/providers").then(async r=>{
+            const x=await r.json();
+            if(r.ok && x.applications) setProviderApps(x.applications);
+          }).catch(()=>{});
+          load();
+        }}
+      />
     )}
 
     {section==="api"&&(
