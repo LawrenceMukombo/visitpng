@@ -18,6 +18,7 @@ import { Footer } from "./components/Footer";
 import { PassLanding } from "./components/PassLanding";
 import { PartnerLanding } from "./components/PartnerLanding";
 import { AboutPage } from "./components/AboutPage";
+import { AiChatModal, FloatingConciergeWidget } from "./components/AiChatModal";
 import {CurrencyCode, formatPrice} from "../db/currency";
 import {PNG_TRAIL_PACKS, ZAMBIA_TRAIL_PACKS} from "../db/trailPacks";
 import {PNG_FESTIVALS, ZAMBIA_FESTIVALS} from "../db/festivals";
@@ -61,6 +62,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   const[showPassModal,setShowPassModal]=useState(false);
   const[showPartnerModal,setShowPartnerModal]=useState(false);
   const[showAboutModal,setShowAboutModal]=useState(false);
+  const[showAiChatModal,setShowAiChatModal]=useState(false);
 
   useEffect(()=>{
     if(new URLSearchParams(window.location.search).has("wishlist"))setTab("Saved");
@@ -293,6 +295,14 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
     {showPassModal&&<div className="overlay" onClick={()=>setShowPassModal(false)}><div className="sheet" style={{maxWidth:"1100px",width:"95vw",maxHeight:"90vh",overflowY:"auto",padding:0}} onClick={e=>e.stopPropagation()}><PassLanding countryCode={countryCode} currency={currency} onClose={()=>setShowPassModal(false)}/></div></div>}
     {showPartnerModal&&<div className="overlay" onClick={()=>setShowPartnerModal(false)}><div className="sheet" style={{maxWidth:"1100px",width:"95vw",maxHeight:"90vh",overflowY:"auto",padding:0}} onClick={e=>e.stopPropagation()}><PartnerLanding countryCode={countryCode} currency={currency} onOpenRegister={()=>{setShowPartnerModal(false);setShowProviderModal(true);}} onClose={()=>setShowPartnerModal(false)}/></div></div>}
     {showAboutModal&&<div className="overlay" onClick={()=>setShowAboutModal(false)}><div className="sheet" style={{maxWidth:"900px",width:"95vw",maxHeight:"90vh",overflowY:"auto",padding:0}} onClick={e=>e.stopPropagation()}><AboutPage countryCode={countryCode} onClose={()=>setShowAboutModal(false)}/></div></div>}
+    <FloatingConciergeWidget onOpenAiChat={()=>setShowAiChatModal(true)}/>
+    <AiChatModal
+      isOpen={showAiChatModal}
+      onClose={()=>setShowAiChatModal(false)}
+      countryCode={countryCode}
+      brandName={countryCode === "ZMB" ? "ZamRoam" : "VisitPNG"}
+      supportPhone="+260 573 506 598"
+    />
   </main>;
 }
 
