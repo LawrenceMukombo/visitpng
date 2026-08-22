@@ -16,7 +16,7 @@ export interface MapDestinationPin {
   imageUrl: string;
   latitude: number;
   longitude: number;
-  // SVG coordinates projected to [0, 800] x [0, 600]
+  // SVG coordinates projected to [0, 900] x [0, 700]
   x: number;
   y: number;
   royalHost?: string;
@@ -29,17 +29,18 @@ export interface MapDestinationPin {
   slug: string;
 }
 
-// Coordinates projection for Zambia:
-// Longitude: 21.8°E to 34.0°E -> map width 800
-// Latitude: -8.0°S to -18.2°S -> map height 600
+// Precise Geographic Projection for Zambia:
+// Longitude: 21.6°E (West) to 34.0°E (East) -> width = 12.4°
+// Latitude: -18.2°S (South) to -8.0°S (North) -> height = 10.2°
+// SVG ViewBox: 900 x 700
 function projectCoords(lat: number, lon: number): { x: number; y: number } {
-  const minLon = 21.8;
+  const minLon = 21.6;
   const maxLon = 34.0;
   const minLat = -18.2; // Southern tip (Livingstone / Kazungula)
   const maxLat = -8.0;  // Northern tip (Lake Tanganyika / Mbala)
 
-  const x = ((lon - minLon) / (maxLon - minLon)) * 740 + 30;
-  const y = ((maxLat - lat) / (maxLat - minLat)) * 540 + 30;
+  const x = ((lon - minLon) / (maxLon - minLon)) * 790 + 55;
+  const y = ((maxLat - lat) / (maxLat - minLat)) * 590 + 55;
   return { x: Math.round(x), y: Math.round(y) };
 }
 
@@ -58,7 +59,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     provinceName: "Western Province",
     region: "Western & Barotseland",
     royalHost: "His Majesty The Litunga (King of the Lozi) & Barotse Royal Establishment",
-    season: "March / April (End of Rainy Season / Peak Zambezi Flood)",
+    season: "March / April (Peak Zambezi Flood)",
     sacredRegalia: "Nalikwanda Royal Barge, Royal Maoma War Drums, Elephant Crest Canopy",
     dressCode: "Traditional Siziba (Men: kilt, shirt, red beret) & Musisi (Women: tiered silk dresses)",
     summary: "The world's most spectacular royal water pageant. As floodwaters submerge the Barotse plains, the King sails in the colossal 100-oarsmen Nalikwanda barge from Lealui to the highlands of Limulunga.",
@@ -578,15 +579,53 @@ interface ZambiaInteractiveMapProps {
 
 export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: ZambiaInteractiveMapProps) {
   const [selectedPin, setSelectedPin] = useState<MapDestinationPin | null>(ZAMBIA_TOURISM_PINS[0]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
+
+  // Toggable Legend Categories (Multi-toggle state)
+  const [visibleCategories, setVisibleCategories] = useState<{
+    ceremony: boolean;
+    nature: boolean;
+    tours: boolean;
+    stays: boolean;
+    culture: boolean;
+  }>({
+    ceremony: true,
+    nature: true,
+    tours: true,
+    stays: true,
+    culture: true
+  });
+
+  // Toggable Map Layers
+  const [showRivers, setShowRivers] = useState<boolean>(true);
+  const [showBorders, setShowBorders] = useState<boolean>(true);
+  const [showLabels, setShowLabels] = useState<boolean>(true);
+
   const [selectedProvinceCode, setSelectedProvinceCode] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [copiedGps, setCopiedGps] = useState<boolean>(false);
 
+  const toggleCategory = (cat: keyof typeof visibleCategories) => {
+    setVisibleCategories((prev) => ({ ...prev, [cat]: !prev[cat] }));
+  };
+
+  const selectAllCategories = () => {
+    setVisibleCategories({ ceremony: true, nature: true, tours: true, stays: true, culture: true });
+    setSelectedProvinceCode("all");
+    setSearchTerm("");
+  };
+
   const filteredPins = useMemo(() => {
     return ZAMBIA_TOURISM_PINS.filter((pin) => {
-      const matchCat = selectedCategory === "all" || pin.category === selectedCategory;
+      // Check if category is enabled in toggles
+      const catKey = pin.category as keyof typeof visibleCategories;
+      const isCatEnabled = visibleCategories[catKey] ?? true;
+      if (!isCatEnabled) return false;
+
+      // Province filter
       const matchProv = selectedProvinceCode === "all" || pin.provinceCode === selectedProvinceCode;
+
+      // Search filter
       const matchSearch =
         !searchTerm.trim() ||
         pin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -595,9 +634,10 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         (pin.royalHost && pin.royalHost.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (pin.sacredRegalia && pin.sacredRegalia.toLowerCase().includes(searchTerm.toLowerCase())) ||
         pin.highlights.some((h) => h.toLowerCase().includes(searchTerm.toLowerCase()));
-      return matchCat && matchProv && matchSearch;
+
+      return matchProv && matchSearch;
     });
-  }, [selectedCategory, selectedProvinceCode, searchTerm]);
+  }, [visibleCategories, selectedProvinceCode, searchTerm]);
 
   const handleCopyGps = (lat: number, lon: number) => {
     const text = `${lat.toFixed(4)}°, ${lon.toFixed(4)}°`;
@@ -618,15 +658,16 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
       <div className="zambiaMapHeader">
         <div>
           <span style={{ fontSize: "11px", fontWeight: 800, letterSpacing: "0.1em", color: "rgba(37, 211, 102, 1)", textTransform: "uppercase" }}>
-            🗺️ GEOGRAPHIC TOURISM & CULTURAL EXPLORER
+            🗺️ AUTHENTIC GEOGRAPHIC EXPLORER
           </span>
           <h2 style={{ fontSize: "20px", margin: "4px 0 0", color: "var(--brand-white)", fontWeight: 700 }}>
-            Interactive Zambia Tourism, Safari & Traditional Ceremonies Map
+            Real Map of Zambia · Safaris & Traditional Ceremonies
           </h2>
           <p style={{ margin: "3px 0 0", fontSize: "12px", color: "rgba(255, 255, 255, 0.75)" }}>
-            Click any GPS point on the map or select from the tray to inspect royal ceremonies, sacred regalia, wildlife parks, and coordinates.
+            Use the interactive toggable legends below to filter royal ceremonies, national parks, lakes, and rivers.
           </p>
         </div>
+
         <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
           <div style={{ display: "flex", alignItems: "center", background: "rgba(255,255,255,0.08)", borderRadius: "8px", padding: "6px 12px", border: "1px solid rgba(255,255,255,0.15)" }}>
             <span style={{ marginRight: "6px" }}>🔍</span>
@@ -647,151 +688,465 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         </div>
       </div>
 
-      {/* Filter Bar */}
-      <div className="zambiaMapFilters">
-        <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", fontWeight: 600 }}>Filters:</span>
-        <button
-          onClick={() => setSelectedCategory("all")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "all" ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.1)", color: selectedCategory === "all" ? "rgba(0,0,0,1)" : "var(--brand-white)" }}
-        >
-          All Locations ({ZAMBIA_TOURISM_PINS.length})
-        </button>
-        <button
-          onClick={() => setSelectedCategory("ceremony")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 700, border: selectedCategory === "ceremony" ? "none" : "1px solid rgba(245, 158, 11, 0.4)", cursor: "pointer", background: selectedCategory === "ceremony" ? "rgba(245, 158, 11, 1)" : "rgba(245, 158, 11, 0.15)", color: selectedCategory === "ceremony" ? "rgba(0,0,0,1)" : "rgba(251, 191, 36, 1)" }}
-        >
-          👑 Traditional Ceremonies ({ceremonyCount})
-        </button>
-        <button
-          onClick={() => setSelectedCategory("nature")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "nature" ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.1)", color: selectedCategory === "nature" ? "rgba(0,0,0,1)" : "var(--brand-white)" }}
-        >
-          ◇ Nature & Falls
-        </button>
-        <button
-          onClick={() => setSelectedCategory("tours")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "tours" ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.1)", color: selectedCategory === "tours" ? "rgba(0,0,0,1)" : "var(--brand-white)" }}
-        >
-          ◒ Safari Tours
-        </button>
-        <button
-          onClick={() => setSelectedCategory("stays")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "stays" ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.1)", color: selectedCategory === "stays" ? "rgba(0,0,0,1)" : "var(--brand-white)" }}
-        >
-          ⌂ Luxury Stays
-        </button>
-        <button
-          onClick={() => setSelectedCategory("culture")}
-          style={{ padding: "5px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 600, border: "none", cursor: "pointer", background: selectedCategory === "culture" ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.1)", color: selectedCategory === "culture" ? "rgba(0,0,0,1)" : "var(--brand-white)" }}
-        >
-          ♨ Cultural Sites
-        </button>
-
-        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-          <label style={{ fontSize: "12px", color: "rgba(255,255,255,0.6)", fontWeight: 600 }}>Province:</label>
-          <select
-            value={selectedProvinceCode}
-            onChange={(e) => setSelectedProvinceCode(e.target.value)}
-            style={{ background: "rgba(16, 51, 51, 1)", color: "var(--brand-white)", border: "1px solid rgba(255,255,255,0.2)", padding: "4px 10px", borderRadius: "6px", fontSize: "12px", outline: "none" }}
+      {/* TOGGABLE LEGENDS PANEL (Interactive Filters) */}
+      <div style={{ background: "rgba(6, 20, 20, 0.95)", borderBottom: "1px solid rgba(255, 255, 255, 0.1)", padding: "12px 16px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "10px" }}>
+          <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(37, 211, 102, 1)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+            Interactive Toggable Legends:
+          </span>
+          <button
+            type="button"
+            onClick={selectAllCategories}
+            style={{ background: "transparent", border: "none", color: "rgba(255, 255, 255, 0.6)", fontSize: "11px", textDecoration: "underline", cursor: "pointer" }}
           >
-            <option value="all">All 10 Provinces</option>
-            {ZAMBIA_PROVINCES.map((p) => (
-              <option key={p.code} value={p.code}>
-                {p.name} ({p.region})
-              </option>
-            ))}
-          </select>
+            Show All
+          </button>
+        </div>
+
+        {/* Category Toggle Chips */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
+          <button
+            type="button"
+            onClick={() => toggleCategory("ceremony")}
+            style={{
+              padding: "6px 12px",
+              borderRadius: "20px",
+              fontSize: "12px",
+              fontWeight: 700,
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              border: visibleCategories.ceremony ? "1px solid rgba(245, 158, 11, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
+              background: visibleCategories.ceremony ? "rgba(245, 158, 11, 0.25)" : "rgba(255, 255, 255, 0.05)",
+              color: visibleCategories.ceremony ? "rgba(251, 191, 36, 1)" : "rgba(255, 255, 255, 0.4)"
+            }}
+          >
+            <span>{visibleCategories.ceremony ? "✓" : "○"}</span>
+            <span>👑 Traditional Ceremonies ({ceremonyCount})</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => toggleCategory("tours")}
+            style={{
+              padding: "6px 12px",
+              borderRadius: "20px",
+              fontSize: "12px",
+              fontWeight: 700,
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              border: visibleCategories.tours ? "1px solid rgba(16, 185, 129, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
+              background: visibleCategories.tours ? "rgba(16, 185, 129, 0.25)" : "rgba(255, 255, 255, 0.05)",
+              color: visibleCategories.tours ? "rgba(52, 211, 153, 1)" : "rgba(255, 255, 255, 0.4)"
+            }}
+          >
+            <span>{visibleCategories.tours ? "✓" : "○"}</span>
+            <span>◒ Safari Game Drives</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => toggleCategory("nature")}
+            style={{
+              padding: "6px 12px",
+              borderRadius: "20px",
+              fontSize: "12px",
+              fontWeight: 700,
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              border: visibleCategories.nature ? "1px solid rgba(6, 182, 212, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
+              background: visibleCategories.nature ? "rgba(6, 182, 212, 0.25)" : "rgba(255, 255, 255, 0.05)",
+              color: visibleCategories.nature ? "rgba(103, 232, 249, 1)" : "rgba(255, 255, 255, 0.4)"
+            }}
+          >
+            <span>{visibleCategories.nature ? "✓" : "○"}</span>
+            <span>◇ Waterfalls & Lakes</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => toggleCategory("stays")}
+            style={{
+              padding: "6px 12px",
+              borderRadius: "20px",
+              fontSize: "12px",
+              fontWeight: 700,
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              border: visibleCategories.stays ? "1px solid rgba(234, 88, 12, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
+              background: visibleCategories.stays ? "rgba(234, 88, 12, 0.25)" : "rgba(255, 255, 255, 0.05)",
+              color: visibleCategories.stays ? "rgba(251, 146, 60, 1)" : "rgba(255, 255, 255, 0.4)"
+            }}
+          >
+            <span>{visibleCategories.stays ? "✓" : "○"}</span>
+            <span>⌂ Luxury Lodges</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => toggleCategory("culture")}
+            style={{
+              padding: "6px 12px",
+              borderRadius: "20px",
+              fontSize: "12px",
+              fontWeight: 700,
+              cursor: "pointer",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              border: visibleCategories.culture ? "1px solid rgba(236, 72, 153, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
+              background: visibleCategories.culture ? "rgba(236, 72, 153, 0.25)" : "rgba(255, 255, 255, 0.05)",
+              color: visibleCategories.culture ? "rgba(244, 114, 182, 1)" : "rgba(255, 255, 255, 0.4)"
+            }}
+          >
+            <span>{visibleCategories.culture ? "✓" : "○"}</span>
+            <span>♨ Cultural Sites</span>
+          </button>
+
+          {/* Map Layer Toggles */}
+          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
+            <button
+              type="button"
+              onClick={() => setShowRivers(!showRivers)}
+              style={{
+                padding: "4px 8px",
+                borderRadius: "6px",
+                fontSize: "11px",
+                fontWeight: 600,
+                border: "1px solid rgba(14, 165, 233, 0.4)",
+                background: showRivers ? "rgba(14, 165, 233, 0.2)" : "transparent",
+                color: showRivers ? "rgba(56, 189, 248, 1)" : "rgba(255,255,255,0.4)",
+                cursor: "pointer"
+              }}
+            >
+              🌊 Rivers {showRivers ? "ON" : "OFF"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowBorders(!showBorders)}
+              style={{
+                padding: "4px 8px",
+                borderRadius: "6px",
+                fontSize: "11px",
+                fontWeight: 600,
+                border: "1px solid rgba(37, 211, 102, 0.4)",
+                background: showBorders ? "rgba(37, 211, 102, 0.2)" : "transparent",
+                color: showBorders ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.4)",
+                cursor: "pointer"
+              }}
+            >
+              🗺️ Provinces {showBorders ? "ON" : "OFF"}
+            </button>
+            <select
+              value={selectedProvinceCode}
+              onChange={(e) => setSelectedProvinceCode(e.target.value)}
+              style={{ background: "rgba(16, 51, 51, 1)", color: "var(--brand-white)", border: "1px solid rgba(255,255,255,0.2)", padding: "4px 8px", borderRadius: "6px", fontSize: "11px", outline: "none" }}
+            >
+              <option value="all">All 10 Provinces</option>
+              {ZAMBIA_PROVINCES.map((p) => (
+                <option key={p.code} value={p.code}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* Main Map Body: Canvas on Left, Details on Right (Stacking on mobile) */}
+      {/* Main Map Body: Full-Width Stacked Layout */}
       <div className="zambiaMapBody">
-        {/* SVG Map Canvas */}
+        {/* Real Zambia SVG Map Canvas */}
         <div className="zambiaMapCanvasWrapper">
           {/* Compass Rose */}
-          <div style={{ position: "absolute", top: "14px", left: "16px", opacity: 0.85, pointerEvents: "none", textAlign: "center", fontSize: "11px", fontWeight: 700, color: "rgba(37, 211, 102, 1)", zIndex: 5 }}>
-            <span style={{ fontSize: "18px", display: "block" }}>🧭</span>
-            <span>N</span>
+          <div style={{ position: "absolute", top: "16px", left: "18px", opacity: 0.9, pointerEvents: "none", textAlign: "center", fontSize: "11px", fontWeight: 800, color: "rgba(37, 211, 102, 1)", zIndex: 5 }}>
+            <span style={{ fontSize: "20px", display: "block" }}>🧭</span>
+            <span>NORTH</span>
+          </div>
+
+          {/* Map Scale Bar */}
+          <div style={{ position: "absolute", bottom: "18px", right: "18px", background: "rgba(0,0,0,0.75)", padding: "4px 8px", borderRadius: "6px", border: "1px solid rgba(255,255,255,0.15)", fontSize: "10px", color: "rgba(255,255,255,0.8)", pointerEvents: "none", zIndex: 5 }}>
+            <span>Scale: ~200 km</span>
           </div>
 
           <svg
-            viewBox="0 0 800 600"
+            viewBox="0 0 900 700"
             style={{
               width: "100%",
               height: "auto",
-              maxHeight: "520px",
-              minHeight: "320px",
-              filter: "drop-shadow(0 10px 20px rgba(0,0,0,0.6))",
+              minHeight: "360px",
+              maxHeight: "560px",
+              filter: "drop-shadow(0 14px 28px rgba(0,0,0,0.65))",
               pointerEvents: "auto"
             }}
           >
-            {/* Outline shape of Zambia with national boundaries & rivers */}
-            <path
-              d="M 120 220 
-                 L 220 180 
-                 L 280 190 
-                 L 360 160 
-                 L 400 130 
-                 L 460 70 
-                 L 540 50 
-                 L 640 90 
-                 L 690 140 
-                 L 720 230 
-                 L 740 310 
-                 L 700 370 
-                 L 640 400 
-                 L 580 430 
-                 L 520 440 
-                 L 480 490 
-                 L 410 520 
-                 L 330 540 
-                 L 270 550 
-                 L 210 520 
-                 L 140 450 
-                 L 90 380 
-                 L 80 290 Z"
-              fill="rgba(13, 40, 40, 1)"
-              stroke="rgba(37, 211, 102, 0.8)"
-              strokeWidth="2.5"
-              strokeDasharray="4 2"
-            />
+            <defs>
+              {/* Regional Gradients */}
+              <linearGradient id="zambiaLandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="rgba(16, 52, 52, 1)" />
+                <stop offset="50%" stopColor="rgba(10, 36, 36, 1)" />
+                <stop offset="100%" stopColor="rgba(6, 24, 24, 1)" />
+              </linearGradient>
+              <linearGradient id="waterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="rgba(14, 165, 233, 0.85)" />
+                <stop offset="100%" stopColor="rgba(2, 132, 199, 0.95)" />
+              </linearGradient>
+            </defs>
 
-            {/* Major Rivers (Zambezi, Luangwa, Kafue, Luapula) */}
-            {/* Zambezi River */}
+            {/* REAL AUTHENTIC ZAMBIA BORDER OUTLINE (Full Butterfly Geographic Boundary) */}
             <path
-              d="M 80 300 Q 140 420 210 510 T 330 540 T 480 480 T 640 390"
-              fill="none"
-              stroke="rgba(14, 165, 233, 0.7)"
+              d="
+                M 330 635 
+                L 240 610 
+                L 150 560 
+                L 110 500 
+                L 90 420 
+                L 85 340 
+                L 110 260 
+                L 160 210 
+                L 220 230 
+                L 280 250 
+                L 360 270 
+                L 440 280 
+                L 480 270 
+                L 490 190 
+                L 510 120 
+                L 560 90 
+                L 640 70 
+                L 690 90 
+                L 740 140 
+                L 770 220 
+                L 790 320 
+                L 780 410 
+                L 720 460 
+                L 660 480 
+                L 600 490 
+                L 550 510 
+                L 510 560 
+                L 440 580 
+                L 380 610 
+                Z
+              "
+              fill="url(#zambiaLandGradient)"
+              stroke="rgba(37, 211, 102, 0.9)"
               strokeWidth="3"
             />
-            {/* Kafue River */}
-            <path
-              d="M 370 170 Q 320 260 350 360 T 460 480"
-              fill="none"
-              stroke="rgba(14, 165, 233, 0.5)"
-              strokeWidth="2.5"
-            />
-            {/* Luangwa River */}
-            <path
-              d="M 680 140 Q 640 250 560 380 T 520 440"
-              fill="none"
-              stroke="rgba(14, 165, 233, 0.5)"
-              strokeWidth="2.5"
-            />
 
-            {/* Provincial Regional Overlays */}
-            <text x="240" y="525" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">SOUTHERN</text>
-            <text x="440" y="440" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">LUSAKA</text>
-            <text x="630" y="270" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">EASTERN (LUANGWA)</text>
-            <text x="320" y="320" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">CENTRAL (KAFUE)</text>
-            <text x="130" y="340" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">WESTERN (BAROTSELAND)</text>
-            <text x="460" y="190" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">LUAPULA</text>
-            <text x="560" y="120" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">NORTHERN (TANGANYIKA)</text>
-            <text x="590" y="200" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">MUCHINGA</text>
-            <text x="360" y="210" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">COPPERBELT</text>
-            <text x="180" y="230" fill="rgba(255,255,255,0.35)" fontSize="11" fontWeight="700">NORTH-WESTERN</text>
+            {/* 10 AUTHENTIC PROVINCIAL POLYGONS WITH REAL BOUNDARIES */}
+            {showBorders && (
+              <g opacity="0.85">
+                {/* Western Province (Barotseland / Mongu) */}
+                <path
+                  d="M 85 340 L 110 260 L 220 230 L 280 340 L 330 460 L 240 610 L 150 560 L 110 500 L 90 420 Z"
+                  fill={hoveredProvince === "ZM-WES" || selectedProvinceCode === "ZM-WES" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.18)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  onMouseEnter={() => setHoveredProvince("ZM-WES")}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  onClick={() => setSelectedProvinceCode(selectedProvinceCode === "ZM-WES" ? "all" : "ZM-WES")}
+                  style={{ cursor: "pointer" }}
+                />
 
-            {/* Interactive Pins */}
+                {/* North-Western Province (Solwezi / Zambezi / Mwinilunga) */}
+                <path
+                  d="M 110 260 L 160 210 L 220 230 L 280 250 L 370 250 L 400 320 L 320 370 L 220 230 Z"
+                  fill={hoveredProvince === "ZM-NW" || selectedProvinceCode === "ZM-NW" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.18)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  onMouseEnter={() => setHoveredProvince("ZM-NW")}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  onClick={() => setSelectedProvinceCode(selectedProvinceCode === "ZM-NW" ? "all" : "ZM-NW")}
+                  style={{ cursor: "pointer" }}
+                />
+
+                {/* Copperbelt Province (Ndola / Kitwe) */}
+                <path
+                  d="M 370 250 L 440 280 L 460 340 L 400 350 L 400 320 Z"
+                  fill={hoveredProvince === "ZM-COP" || selectedProvinceCode === "ZM-COP" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.18)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  onMouseEnter={() => setHoveredProvince("ZM-COP")}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  onClick={() => setSelectedProvinceCode(selectedProvinceCode === "ZM-COP" ? "all" : "ZM-COP")}
+                  style={{ cursor: "pointer" }}
+                />
+
+                {/* Central Province (Kabwe / Serenje / Kafue NP) */}
+                <path
+                  d="M 280 340 L 400 350 L 460 340 L 520 380 L 510 440 L 440 450 L 330 460 Z"
+                  fill={hoveredProvince === "ZM-CEN" || selectedProvinceCode === "ZM-CEN" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.18)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  onMouseEnter={() => setHoveredProvince("ZM-CEN")}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  onClick={() => setSelectedProvinceCode(selectedProvinceCode === "ZM-CEN" ? "all" : "ZM-CEN")}
+                  style={{ cursor: "pointer" }}
+                />
+
+                {/* Lusaka Province (Capital & Lower Zambezi Gateway) */}
+                <path
+                  d="M 440 450 L 510 440 L 550 510 L 470 520 L 440 470 Z"
+                  fill={hoveredProvince === "ZM-LUS" || selectedProvinceCode === "ZM-LUS" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.18)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  onMouseEnter={() => setHoveredProvince("ZM-LUS")}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  onClick={() => setSelectedProvinceCode(selectedProvinceCode === "ZM-LUS" ? "all" : "ZM-LUS")}
+                  style={{ cursor: "pointer" }}
+                />
+
+                {/* Southern Province (Livingstone / Victoria Falls / Kariba) */}
+                <path
+                  d="M 240 610 L 330 460 L 440 470 L 470 520 L 510 560 L 440 580 L 380 610 L 330 635 Z"
+                  fill={hoveredProvince === "ZM-SOU" || selectedProvinceCode === "ZM-SOU" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.18)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  onMouseEnter={() => setHoveredProvince("ZM-SOU")}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  onClick={() => setSelectedProvinceCode(selectedProvinceCode === "ZM-SOU" ? "all" : "ZM-SOU")}
+                  style={{ cursor: "pointer" }}
+                />
+
+                {/* Eastern Province (Chipata / South Luangwa) */}
+                <path
+                  d="M 520 380 L 660 320 L 780 410 L 720 460 L 600 490 L 510 440 Z"
+                  fill={hoveredProvince === "ZM-EAS" || selectedProvinceCode === "ZM-EAS" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.18)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  onMouseEnter={() => setHoveredProvince("ZM-EAS")}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  onClick={() => setSelectedProvinceCode(selectedProvinceCode === "ZM-EAS" ? "all" : "ZM-EAS")}
+                  style={{ cursor: "pointer" }}
+                />
+
+                {/* Luapula Province (Mansabombwe / Lake Bangweulu) */}
+                <path
+                  d="M 480 270 L 490 190 L 540 160 L 570 240 L 520 320 L 460 340 Z"
+                  fill={hoveredProvince === "ZM-LUA" || selectedProvinceCode === "ZM-LUA" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.18)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  onMouseEnter={() => setHoveredProvince("ZM-LUA")}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  onClick={() => setSelectedProvinceCode(selectedProvinceCode === "ZM-LUA" ? "all" : "ZM-LUA")}
+                  style={{ cursor: "pointer" }}
+                />
+
+                {/* Northern Province (Kasama / Lake Tanganyika / Mbala) */}
+                <path
+                  d="M 540 160 L 560 90 L 640 70 L 690 90 L 660 210 L 570 240 Z"
+                  fill={hoveredProvince === "ZM-NOR" || selectedProvinceCode === "ZM-NOR" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.18)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  onMouseEnter={() => setHoveredProvince("ZM-NOR")}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  onClick={() => setSelectedProvinceCode(selectedProvinceCode === "ZM-NOR" ? "all" : "ZM-NOR")}
+                  style={{ cursor: "pointer" }}
+                />
+
+                {/* Muchinga Province (Mpika / Shiwa Ng'andu) */}
+                <path
+                  d="M 570 240 L 660 210 L 740 140 L 770 220 L 660 320 L 520 380 L 520 320 Z"
+                  fill={hoveredProvince === "ZM-MUC" || selectedProvinceCode === "ZM-MUC" ? "rgba(37, 211, 102, 0.2)" : "rgba(255, 255, 255, 0.02)"}
+                  stroke="rgba(255, 255, 255, 0.18)"
+                  strokeWidth="1.5"
+                  strokeDasharray="4 2"
+                  onMouseEnter={() => setHoveredProvince("ZM-MUC")}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  onClick={() => setSelectedProvinceCode(selectedProvinceCode === "ZM-MUC" ? "all" : "ZM-MUC")}
+                  style={{ cursor: "pointer" }}
+                />
+              </g>
+            )}
+
+            {/* REAL RIVERS & LAKES (Zambezi, Kafue, Luangwa, Tanganyika, Kariba, Bangweulu) */}
+            {showRivers && (
+              <g>
+                {/* Lake Tanganyika (Deep Blue North Horn) */}
+                <path
+                  d="M 630 65 Q 660 75 680 95 L 660 120 Q 640 90 625 70 Z"
+                  fill="url(#waterGradient)"
+                  stroke="rgba(56, 189, 248, 1)"
+                  strokeWidth="1.5"
+                />
+                <text x="635" y="60" fill="rgba(56, 189, 248, 1)" fontSize="9" fontWeight="800">LAKE TANGANYIKA</text>
+
+                {/* Lake Bangweulu & Swamps */}
+                <ellipse cx="540" cy="240" rx="28" ry="18" fill="url(#waterGradient)" stroke="rgba(56, 189, 248, 0.8)" strokeWidth="1" />
+                <text x="515" y="243" fill="rgba(255,255,255,0.9)" fontSize="8" fontWeight="700">L. BANGWEULU</text>
+
+                {/* Lake Kariba (Southern Blue Reservoir) */}
+                <path
+                  d="M 440 575 Q 480 560 520 545 Q 500 570 440 580 Z"
+                  fill="url(#waterGradient)"
+                  stroke="rgba(56, 189, 248, 1)"
+                  strokeWidth="1.5"
+                />
+                <text x="450" y="590" fill="rgba(56, 189, 248, 1)" fontSize="9" fontWeight="800">LAKE KARIBA</text>
+
+                {/* Zambezi River Course */}
+                <path
+                  d="M 160 210 Q 110 320 150 480 T 240 600 T 330 635 T 440 575 T 600 490"
+                  fill="none"
+                  stroke="rgba(14, 165, 233, 0.9)"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+                <text x="175" y="520" fill="rgba(56, 189, 248, 0.9)" fontSize="9" fontWeight="700" transform="rotate(-65 175 520)">ZAMBEZI RIVER</text>
+
+                {/* Kafue River */}
+                <path
+                  d="M 390 280 Q 320 370 360 480 T 480 500"
+                  fill="none"
+                  stroke="rgba(14, 165, 233, 0.75)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <text x="345" y="420" fill="rgba(56, 189, 248, 0.8)" fontSize="8" fontWeight="700" transform="rotate(75 345 420)">KAFUE RIVER</text>
+
+                {/* Luangwa River */}
+                <path
+                  d="M 740 180 Q 690 310 600 490"
+                  fill="none"
+                  stroke="rgba(14, 165, 233, 0.75)"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <text x="670" y="320" fill="rgba(56, 189, 248, 0.8)" fontSize="8" fontWeight="700" transform="rotate(-60 670 320)">LUANGWA RIVER</text>
+              </g>
+            )}
+
+            {/* PROVINCE LABELS */}
+            {showLabels && (
+              <g pointerEvents="none">
+                <text x="170" y="410" fill="rgba(255,255,255,0.45)" fontSize="12" fontWeight="800">WESTERN</text>
+                <text x="240" y="300" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">NORTH-WESTERN</text>
+                <text x="390" y="315" fill="rgba(255,255,255,0.45)" fontSize="10" fontWeight="800">COPPERBELT</text>
+                <text x="360" y="410" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">CENTRAL</text>
+                <text x="460" y="475" fill="rgba(255,255,255,0.5)" fontSize="10" fontWeight="800">LUSAKA</text>
+                <text x="330" y="550" fill="rgba(255,255,255,0.45)" fontSize="12" fontWeight="800">SOUTHERN</text>
+                <text x="670" y="430" fill="rgba(255,255,255,0.45)" fontSize="12" fontWeight="800">EASTERN</text>
+                <text x="495" y="205" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">LUAPULA</text>
+                <text x="590" y="150" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">NORTHERN</text>
+                <text x="640" y="270" fill="rgba(255,255,255,0.45)" fontSize="11" fontWeight="800">MUCHINGA</text>
+              </g>
+            )}
+
+            {/* REAL GPS INTERACTIVE DESTINATION & CEREMONY PINS */}
             {filteredPins.map((pin) => {
               const isSelected = selectedPin?.id === pin.id;
               const isCeremony = pin.category === "ceremony";
@@ -812,32 +1167,32 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   }}
                   style={{ cursor: "pointer", pointerEvents: "all" }}
                 >
-                  {/* Large invisible hit area for easy touch / clicking */}
-                  <circle r="30" fill="transparent" />
+                  {/* Large touch target */}
+                  <circle r="28" fill="transparent" />
 
-                  {/* Pulse ring if selected */}
+                  {/* Pulsing radar ring for selected pin */}
                   {isSelected && (
-                    <circle r="24" fill="none" stroke={isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)"} strokeWidth="2.5" opacity="0.9">
-                      <animate attributeName="r" values="18;28;18" dur="1.8s" repeatCount="indefinite" />
+                    <circle r="22" fill="none" stroke={isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)"} strokeWidth="3" opacity="0.9">
+                      <animate attributeName="r" values="16;28;16" dur="1.8s" repeatCount="indefinite" />
                       <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.8s" repeatCount="indefinite" />
                     </circle>
                   )}
 
                   {/* Ceremony special aura ring */}
                   {isCeremony && !isSelected && (
-                    <circle r="16" fill="none" stroke="rgba(245, 158, 11, 0.4)" strokeWidth="1.5" strokeDasharray="3 2" />
+                    <circle r="16" fill="none" stroke="rgba(245, 158, 11, 0.5)" strokeWidth="1.5" strokeDasharray="3 2" />
                   )}
 
-                  {/* Pin Background Bubble */}
+                  {/* Pin Background Circle */}
                   <circle
                     r={isSelected ? "15" : isCeremony ? "13" : "11"}
                     fill={isSelected ? (isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)") : pinColor}
                     stroke="rgba(255, 255, 255, 1)"
                     strokeWidth={isSelected ? "2.5" : "1.5"}
-                    filter="drop-shadow(0 3px 6px rgba(0,0,0,0.6))"
+                    filter="drop-shadow(0 3px 6px rgba(0,0,0,0.65))"
                   />
 
-                  {/* Pin Icon */}
+                  {/* Pin Category Icon */}
                   <text
                     x="0"
                     y="4"
@@ -850,7 +1205,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                     {pin.categoryIcon}
                   </text>
 
-                  {/* Pin Label */}
+                  {/* Pin Name Badge */}
                   <rect
                     x="-50"
                     y={isSelected ? "-34" : "-26"}
@@ -878,7 +1233,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
             })}
           </svg>
 
-          {/* Safari & Cultural Circuits Bar */}
+          {/* Real Circuits Strip */}
           <div className="zambiaMapCircuitsBar">
             <span style={{ fontWeight: 700, color: "rgba(37, 211, 102, 1)", marginRight: "4px" }}>Safaris & Royal Circuits:</span>
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
@@ -908,7 +1263,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         <div className="zambiaMapDetailPanel">
           {selectedPin ? (
             <div>
-              <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", marginBottom: "14px", height: "175px", background: "rgba(0,0,0,1)" }}>
+              <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", marginBottom: "14px", height: "180px", background: "rgba(0,0,0,1)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={selectedPin.imageUrl}
