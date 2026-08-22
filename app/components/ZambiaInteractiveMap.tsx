@@ -11,6 +11,7 @@ import {
   ZAMBIA_WATERBODIES_GIS,
   ZAMBIA_HIGHWAYS_GIS
 } from "../../db/zambiaShapefilesData";
+import { ZamRoamLionCompass } from "./ZamRoamEmblem";
 
 export interface MapDestinationPin {
   id: string | number;
@@ -1233,10 +1234,9 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
       <div className="zambiaMapBody">
         {/* Real Zambia SVG Map Canvas */}
         <div className="zambiaMapCanvasWrapper">
-          {/* Compass Rose */}
-          <div style={{ position: "absolute", top: "16px", left: "18px", opacity: 0.9, pointerEvents: "none", textAlign: "center", fontSize: "11px", fontWeight: 800, color: "rgba(37, 211, 102, 1)", zIndex: 5 }}>
-            <span style={{ fontSize: "20px", display: "block" }}>🧭</span>
-            <span>NORTH</span>
+          {/* Golden Vintage Lion Compass Rose */}
+          <div style={{ position: "absolute", top: "16px", left: "18px", opacity: 0.95, pointerEvents: "none", zIndex: 5 }}>
+            <ZamRoamLionCompass size={68} />
           </div>
 
           {/* Zoom & Reset Controls */}

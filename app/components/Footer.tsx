@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { ZamRoamLogo, ZamRoamLionCompass } from "./ZamRoamEmblem";
 
 export interface FooterProps {
   countryCode?: string;
@@ -148,20 +149,22 @@ export function Footer({
         }}>
           {/* Brand & Corporate Column */}
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
-              <span style={{ fontSize: "1.5rem" }}>🇿🇲</span>
-              <span style={{ fontSize: "1.4rem", fontWeight: "800", letterSpacing: "-0.02em", color: "#ffffff" }}>
-                {brandName}
-              </span>
+            <div style={{ marginBottom: "1rem" }}>
+              <ZamRoamLogo size="medium" showTagline={true} />
             </div>
-            <p style={{ fontSize: "0.95rem", color: "#a3cfc9", lineHeight: "1.5", marginBottom: "1.25rem" }}>
+            <p style={{ fontSize: "0.95rem", color: "#a3cfc9", lineHeight: "1.5", marginBottom: "1rem" }}>
               {tagline}
             </p>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.85rem", color: "#c2e2dc", marginBottom: "1.25rem" }}>
+              <span>🌐 <strong>zamroam.com</strong></span>
+              <span>✉️ <strong>info@zamroam.com</strong></span>
+              <span>💬 WhatsApp: <strong>+260 573 506 598</strong></span>
+            </div>
             <div style={{
               background: "rgba(255, 255, 255, 0.05)",
               padding: "0.75rem 1rem",
               borderRadius: "8px",
-              borderLeft: "3px solid #DE7739",
+              borderLeft: "3px solid #EA580C",
               fontSize: "0.85rem",
               color: "#c2e2dc",
               lineHeight: "1.4"

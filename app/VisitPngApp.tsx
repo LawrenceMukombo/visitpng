@@ -19,6 +19,7 @@ import { PassLanding } from "./components/PassLanding";
 import { PartnerLanding } from "./components/PartnerLanding";
 import { AboutPage } from "./components/AboutPage";
 import { AiChatModal, FloatingConciergeWidget } from "./components/AiChatModal";
+import { ZamRoamLogo, ZamRoamHeroBanner, ZamRoamTrustRibbon } from "./components/ZamRoamEmblem";
 import {CurrencyCode, formatPrice} from "../db/currency";
 import {PNG_TRAIL_PACKS, ZAMBIA_TRAIL_PACKS} from "../db/trailPacks";
 import {PNG_FESTIVALS, ZAMBIA_FESTIVALS} from "../db/festivals";
@@ -188,6 +189,11 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
 
       {exploreMode==="places"?<section className="content">
         {switcherNav}
+        <ZamRoamHeroBanner
+          onSelectCategory={(slug)=>setCategory(slug)}
+          onOpenMap={()=>setExploreMode("map")}
+          onOpenPass={()=>setShowPassModal(true)}
+        />
         <CountryIntroBanner countryCode={countryCode}/>
         <div className="cats">
           {data?.categories.map(c=><button key={c.slug} className={category===c.slug?"active":""} onClick={()=>setCategory(category===c.slug?"all":c.slug)}><span>{c.icon}</span>{c.name}</button>)}
@@ -304,9 +310,8 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
 function Header({viewer,profile,currency,onCurrencyChange,countryCode}:{viewer:Viewer;profile:()=>void;currency:CurrencyCode;onCurrencyChange:(c:CurrencyCode)=>void;countryCode:string;onCountryChange?:(c:string)=>void}){
   const initials=viewer.signedIn?viewer.displayName.split(/\s|@/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase():"GU";
   return <header>
-    <button className="brand" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-      <i>🇿🇲</i>
-      <span>VISIT<br/><b>ZAMBIA</b></span>
+    <button className="brand" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center" }}>
+      <ZamRoamLogo size="small" showTagline={false} />
     </button>
     {viewer.signedIn&&<div className="headerWelcome"><small>Welcome</small><strong>{viewer.displayName}</strong></div>}
     <nav>
