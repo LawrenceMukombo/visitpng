@@ -20,7 +20,7 @@ export default function CurrencySelector({currentCurrency, onChange}: CurrencySe
         border: "1px solid rgba(255, 255, 255, 0.25)",
         borderRadius: "99px",
         padding: "0 10px",
-        height: "32px",
+        height: "34px",
         boxSizing: "border-box"
       }}
     >
@@ -39,8 +39,8 @@ export default function CurrencySelector({currentCurrency, onChange}: CurrencySe
           fontWeight: 700,
           padding: 0,
           cursor: "pointer",
-          lineHeight: "32px",
-          height: "32px",
+          lineHeight: "34px",
+          height: "34px",
           display: "inline-flex",
           alignItems: "center"
         }}

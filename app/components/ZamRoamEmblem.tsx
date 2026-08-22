@@ -86,10 +86,10 @@ export function ZamRoamLogo({
       </svg>
 
       {/* Typography */}
-      <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.05 }}>
-        <div style={{ fontSize, fontWeight: 900, letterSpacing: "-0.03em" }}>
-          <span style={{ color: variant === "dark" ? "#0F3E36" : "#FFFFFF" }}>Zam</span>
-          <span style={{ color: "#F97316" }}>Roam</span>
+      <div style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.05, whiteSpace: "nowrap", flexShrink: 0 }}>
+        <div style={{ fontSize, fontWeight: 900, letterSpacing: "-0.03em", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center" }}>
+          <span style={{ color: variant === "dark" ? "#0F3E36" : "#FFFFFF", display: "inline !important" as any }}>Zam</span>
+          <span style={{ color: "#F97316", display: "inline !important" as any }}>Roam</span>
         </div>
         {showTagline && (
           <div
