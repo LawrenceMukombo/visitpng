@@ -17,7 +17,6 @@ export interface FooterProps {
 }
 
 export function Footer({
-  countryCode = "ZMB",
   brandName = "ZamRoam",
   tagline = "Roam Zambia. Experience More.",
   legalOwner = "Lamton Investments Ltd",
@@ -30,10 +29,9 @@ export function Footer({
   onOpenMap,
   onOpenMembershipHub
 }: FooterProps) {
-  const isZambia = countryCode.toUpperCase() === "ZMB";
-  const passLabel = isZambia ? "ZamRoam Pass" : "VisitPNG Pass";
-  const partnerLabel = isZambia ? "ZamRoam Partners" : "VisitPNG Partners";
-  const dealsLabel = isZambia ? "ZamRoam Deals" : "Member Deals";
+  const passLabel = "ZamRoam Pass";
+  const partnerLabel = "ZamRoam Partners";
+  const dealsLabel = "ZamRoam Deals";
 
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
@@ -151,7 +149,7 @@ export function Footer({
           {/* Brand & Corporate Column */}
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.75rem" }}>
-              <span style={{ fontSize: "1.5rem" }}>{isZambia ? "🇿🇲" : "🇵🇬"}</span>
+              <span style={{ fontSize: "1.5rem" }}>🇿🇲</span>
               <span style={{ fontSize: "1.4rem", fontWeight: "800", letterSpacing: "-0.02em", color: "#ffffff" }}>
                 {brandName}
               </span>
@@ -176,7 +174,7 @@ export function Footer({
           {/* Explore Column */}
           <div>
             <h4 style={{ fontSize: "1.05rem", fontWeight: "700", color: "#ffffff", marginBottom: "1rem" }}>
-              Explore
+              Explore Zambia
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               <li>
@@ -185,7 +183,7 @@ export function Footer({
                   onClick={handleDestinationsClick}
                   style={linkStyle}
                 >
-                  Top Destinations
+                  Top Destinations & Parks
                 </button>
               </li>
               <li>
@@ -194,7 +192,7 @@ export function Footer({
                   onClick={() => handleCategoryClick("stays")}
                   style={linkStyle}
                 >
-                  Places to Stay
+                  Safari Lodges & Stays
                 </button>
               </li>
               <li>
@@ -203,7 +201,7 @@ export function Footer({
                   onClick={() => handleCategoryClick("tours")}
                   style={linkStyle}
                 >
-                  Safaris & Experiences
+                  Walking Safaris & Experiences
                 </button>
               </li>
               <li>
@@ -221,7 +219,7 @@ export function Footer({
                   onClick={handleMapClick}
                   style={linkStyle}
                 >
-                  Interactive Tourism Map
+                  Interactive Zambian Map
                 </button>
               </li>
             </ul>
@@ -230,7 +228,7 @@ export function Footer({
           {/* Membership Column */}
           <div>
             <h4 style={{ fontSize: "1.05rem", fontWeight: "700", color: "#ffffff", marginBottom: "1rem" }}>
-              Membership
+              Membership & Pass
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               <li>
@@ -293,7 +291,7 @@ export function Footer({
                   onClick={handlePartnerClick}
                   style={linkStyle}
                 >
-                  {isZambia ? "100 Founding Partners Campaign" : partnerLabel}
+                  100 Founding ZamRoam Partners
                 </button>
               </li>
               <li>
@@ -345,7 +343,7 @@ export function Footer({
             © {new Date().getFullYear()} {brandName}. Owned and operated by <strong>{legalOwner}</strong>. All rights reserved.
           </div>
           <div style={{ display: "flex", gap: "1.5rem" }}>
-            <span>{isZambia ? "Lusaka • Livingstone • Ndola" : "Port Moresby • Lae • Kokopo"}</span>
+            <span>Lusaka • Livingstone • Ndola • Mfuwe</span>
             <span>Commercial Tourism Technology</span>
           </div>
         </div>
@@ -366,7 +364,7 @@ export function Footer({
               <h4 style={{ margin: 0, color: "#1B6960" }}>2. Membership Pass & Digital QR Codes</h4>
               <p>All issued {passLabel} memberships provide authenticated benefits across verified partner lodges, safaris, and transport operators. Dynamic QR code tokens refresh periodically for anti-fraud security and are non-transferable.</p>
               <h4 style={{ margin: 0, color: "#1B6960" }}>3. Invoicing, Payments & Settlement</h4>
-              <p>Commercial transactions and invoices (ZV-INV-...) are administered under {legalOwner}. Refunds and cancellations are governed by individual partner policies and statutory consumer rights.</p>
+              <p>Commercial transactions and invoices (ZR-INV-...) are administered under {legalOwner}. Refunds and cancellations are governed by individual partner policies and statutory consumer rights.</p>
             </div>
             <div style={{ marginTop: "2rem", textAlign: "right" }}>
               <button onClick={() => setShowTermsModal(false)} style={{ background: "#1B6960", color: "#ffffff", border: "none", padding: "0.6rem 1.4rem", borderRadius: "8px", fontWeight: "700", cursor: "pointer" }}>I Understand & Agree</button>

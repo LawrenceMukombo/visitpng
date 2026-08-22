@@ -126,21 +126,13 @@ export async function ensureBrands() {
   const org = await d1.prepare("SELECT id FROM organizations WHERE legal_name='Lamton Investments Ltd' LIMIT 1").first<{ id: number }>();
   const orgId = org?.id || 1;
 
-  // 2. Seed Brands: ZamRoam (Zambia) and VisitPNG (Papua New Guinea)
+  // 2. Seed Brand: ZamRoam (Zambia)
   await d1.prepare(`
     INSERT INTO brands (
       organization_id, code, name, tagline, short_description, country_code, primary_domain, support_email, support_phone, pass_name, partner_program_name, verified_badge_name, deals_name, experiences_name, legal_notice, invoice_header, created_at, updated_at
     ) VALUES (
       ?, 'zamroam', 'ZamRoam', 'Roam Zambia. Experience More.', 'A premier tourism discovery, membership, deals, experiences and provider marketplace connecting travellers with the best of Zambia.', 'ZMB', 'zamroam.com', 'info@zamroam.com', '+260573506598', 'ZamRoam Pass', 'ZamRoam Partners', 'ZamRoam Verified', 'ZamRoam Deals', 'ZamRoam Experiences', 'ZamRoam is a tourism technology platform owned and operated by Lamton Investments Ltd.', 'LAMTON INVESTMENTS LTD — Operating ZamRoam', ?, ?
     ) ON CONFLICT(code) DO UPDATE SET name=excluded.name, tagline=excluded.tagline, primary_domain=excluded.primary_domain, support_email=excluded.support_email, support_phone=excluded.support_phone, legal_notice=excluded.legal_notice, updated_at=excluded.updated_at
-  `).bind(orgId, now, now).run();
-
-  await d1.prepare(`
-    INSERT INTO brands (
-      organization_id, code, name, tagline, short_description, country_code, primary_domain, support_email, support_phone, pass_name, partner_program_name, verified_badge_name, deals_name, experiences_name, legal_notice, invoice_header, created_at, updated_at
-    ) VALUES (
-      ?, 'visitpng', 'VisitPNG', 'The Land of a Million Journeys', 'Discover verified places, tribal cultures, and pristine wilderness across Papua New Guinea.', 'PNG', 'visitpng.lamtoninvestments.com', 'support@visitpng.com', '+675 325 1234', 'VisitPNG Pass', 'VisitPNG Tourism Partners', 'VisitPNG Verified', 'Member Privileges', 'PNG Adventures', 'VisitPNG is a tourism technology platform operated by Lamton Investments Ltd.', 'LAMTON INVESTMENTS LTD — Operating VisitPNG', ?, ?
-    ) ON CONFLICT(code) DO UPDATE SET name=excluded.name, tagline=excluded.tagline, legal_notice=excluded.legal_notice, updated_at=excluded.updated_at
   `).bind(orgId, now, now).run();
 
   // 3. Seed Founding Partner Campaign for Zambia (100 Slots)
@@ -163,9 +155,10 @@ export async function getBrandConfig(countryCode: string = "ZMB") {
            b.invoice_header AS invoiceHeader, o.legal_name AS legalOwner
     FROM brands b
     JOIN organizations o ON o.id = b.organization_id
-    WHERE b.country_code = ?
+    WHERE b.country_code = ? OR b.code = 'zamroam'
+    ORDER BY CASE WHEN b.country_code = ? THEN 0 ELSE 1 END
     LIMIT 1
-  `).bind(countryCode.toUpperCase()).first<{
+  `).bind(countryCode.toUpperCase(), countryCode.toUpperCase()).first<{
     id: number;
     code: string;
     name: string;
@@ -190,21 +183,21 @@ export async function getBrandConfig(countryCode: string = "ZMB") {
   // Fallback defaults
   return {
     id: 1,
-    code: countryCode.toUpperCase() === "PNG" ? "visitpng" : "zamroam",
-    name: countryCode.toUpperCase() === "PNG" ? "VisitPNG" : "ZamRoam",
-    tagline: countryCode.toUpperCase() === "PNG" ? "The Land of a Million Journeys" : "Roam Zambia. Experience More.",
-    shortDescription: "Tourism discovery, pass memberships, and provider marketplace.",
-    countryCode: countryCode.toUpperCase(),
-    primaryDomain: countryCode.toUpperCase() === "PNG" ? "visitpng.lamtoninvestments.com" : "zamroam.com",
-    supportEmail: countryCode.toUpperCase() === "PNG" ? "support@visitpng.com" : "info@zamroam.com",
-    supportPhone: countryCode.toUpperCase() === "PNG" ? "+675 325 1234" : "+260573506598",
-    passName: countryCode.toUpperCase() === "PNG" ? "VisitPNG Pass" : "ZamRoam Pass",
-    partnerProgramName: countryCode.toUpperCase() === "PNG" ? "VisitPNG Tourism Partners" : "ZamRoam Partners",
-    verifiedBadgeName: countryCode.toUpperCase() === "PNG" ? "VisitPNG Verified" : "ZamRoam Verified",
-    dealsName: countryCode.toUpperCase() === "PNG" ? "Member Privileges" : "ZamRoam Deals",
-    experiencesName: countryCode.toUpperCase() === "PNG" ? "PNG Adventures" : "ZamRoam Experiences",
-    legalNotice: `${countryCode.toUpperCase() === "PNG" ? "VisitPNG" : "ZamRoam"} is a tourism technology platform owned and operated by Lamton Investments Ltd.`,
-    invoiceHeader: `LAMTON INVESTMENTS LTD — Operating ${countryCode.toUpperCase() === "PNG" ? "VisitPNG" : "ZamRoam"}`,
+    code: "zamroam",
+    name: "ZamRoam",
+    tagline: "Roam Zambia. Experience More.",
+    shortDescription: "Tourism discovery, pass memberships, and provider marketplace across Zambia.",
+    countryCode: "ZMB",
+    primaryDomain: "zamroam.com",
+    supportEmail: "info@zamroam.com",
+    supportPhone: "+260573506598",
+    passName: "ZamRoam Pass",
+    partnerProgramName: "ZamRoam Partners",
+    verifiedBadgeName: "ZamRoam Verified",
+    dealsName: "ZamRoam Deals",
+    experiencesName: "ZamRoam Experiences",
+    legalNotice: "ZamRoam is a tourism technology platform owned and operated by Lamton Investments Ltd.",
+    invoiceHeader: "LAMTON INVESTMENTS LTD — Operating ZamRoam",
     legalOwner: "Lamton Investments Ltd"
   };
 }
@@ -216,7 +209,7 @@ export async function getFoundingPartnerCampaign(countryCode: string = "ZMB"): P
            promotional_price AS promotionalPrice, regular_price AS regularPrice, currency,
            badge_label AS badgeLabel, priority_months AS priorityMonths, is_active AS isActive, deadline_date AS deadlineDate
     FROM founding_partner_campaigns
-    WHERE country_code = ? AND is_active = 1
+    WHERE (country_code = ? OR country_code = 'ZMB') AND is_active = 1
     LIMIT 1
   `).bind(countryCode.toUpperCase()).first<FoundingPartnerCampaign>();
   return row ?? null;

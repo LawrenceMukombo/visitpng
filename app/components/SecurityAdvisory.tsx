@@ -2,23 +2,19 @@
 
 import React, { useState } from "react";
 import {
-  EMERGENCY_CONTACTS,
-  REGIONAL_ADVISORIES,
-  SAFETY_GUIDELINES,
   ZAMBIA_EMERGENCY_CONTACTS,
   ZAMBIA_REGIONAL_ADVISORIES,
   ZAMBIA_SAFETY_GUIDELINES
 } from "@/db/securityAdvisory";
 
-export function SecurityAdvisory({ countryCode = "ZMB" }: { countryCode?: string }) {
+export function SecurityAdvisory({ countryCode = "ZMB" }: { countryCode?: string } = {}) {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [copiedPhone, setCopiedPhone] = useState<string | null>(null);
 
-  const isZambia = countryCode.toUpperCase() === "ZMB";
-  const contacts = isZambia ? ZAMBIA_EMERGENCY_CONTACTS : EMERGENCY_CONTACTS;
-  const advisories = isZambia ? ZAMBIA_REGIONAL_ADVISORIES : REGIONAL_ADVISORIES;
-  const guidelines = isZambia ? ZAMBIA_SAFETY_GUIDELINES : SAFETY_GUIDELINES;
+  const contacts = ZAMBIA_EMERGENCY_CONTACTS;
+  const advisories = ZAMBIA_REGIONAL_ADVISORIES;
+  const guidelines = ZAMBIA_SAFETY_GUIDELINES;
 
   const filteredAdvisories =
     selectedRegion === "all"
@@ -36,29 +32,22 @@ export function SecurityAdvisory({ countryCode = "ZMB" }: { countryCode?: string
     setTimeout(() => setCopiedPhone(null), 2500);
   };
 
-  const primaryAmbulance = isZambia ? { label: "🚑 National Ambulance Service", phone: "991" } : { label: "🚑 National Ambulance (St. John)", phone: "111" };
-  const primaryPolice = isZambia ? { label: "🚓 Zambia Police Emergency", phone: "999" } : { label: "🚓 Police Emergency (RPNGC)", phone: "112" };
-  const primaryMedevac = isZambia
-    ? { label: "🏥 SES Zambia Medevac", phone: "+260962740300", display: "+260 962 740300" }
-    : { label: "🏥 PIH Trauma & Medevac", phone: "+67579988000", display: "+675 7998 8000" };
-
-  const primaryTourism = isZambia
-    ? { label: "🌴 Zambia Tourism Agency (ZTA)", phone: "+260211229087", display: "+260 211 229087" }
-    : { label: "🌴 Tourism Safety Unit (TPA)", phone: "+6753214188", display: "+675 321 4188" };
+  const primaryAmbulance = { label: "🚑 National Ambulance Service", phone: "991" };
+  const primaryPolice = { label: "🚓 Zambia Police Emergency", phone: "999" };
+  const primaryMedevac = { label: "🏥 SES Zambia Medevac", phone: "+260962740300", display: "+260 962 740300" };
+  const primaryTourism = { label: "🌴 Zambia Tourism Agency (ZTA)", phone: "+260211229087", display: "+260 211 229087" };
 
   return (
     <section className="securityAdvisorySection">
       {/* Hero Header */}
       <div className="securityHero">
         <div className="securityBadgeRow">
-          <span className="securityStatusPill">🛡️ {isZambia ? "Zambia SafeTravel Advisory Matrix" : "PNG SafeTravel Advisory Matrix"}</span>
+          <span className="securityStatusPill">🛡️ Zambia SafeTravel Advisory Matrix</span>
           <span className="lastUpdatedBadge">Verified August 2026</span>
         </div>
-        <h2>{isZambia ? "Travel With Confidence in Zambia" : "Travel With Confidence in Papua New Guinea"}</h2>
+        <h2>Travel With Confidence in Zambia</h2>
         <p>
-          {isZambia
-            ? "Zambia is renowned as one of Africa's most peaceful, welcoming, and secure safari destinations. Professional guiding standards, armed wildlife scouts, and well-maintained tourism infrastructure ensure a safe, world-class journey."
-            : "Papua New Guinea is one of the most rewarding and culturally rich destinations on Earth. Like all adventurous frontiers, informed planning, certified local guides, and respecting customary clan protocols ensure a safe, memorable expedition."}
+          Zambia is renowned as one of Africa&apos;s most peaceful, welcoming, and secure safari destinations. Professional guiding standards, armed wildlife scouts, and well-maintained tourism infrastructure ensure a safe, world-class journey.
         </p>
       </div>
 
@@ -100,7 +89,7 @@ export function SecurityAdvisory({ countryCode = "ZMB" }: { countryCode?: string
       {/* Regional Advisories Breakdown */}
       <div className="advisorySectionBlock">
         <div className="blockHeader">
-          <h3>🗺️ {isZambia ? "Zambia Regional Safety Assessments" : "PNG Regional Safety Assessments"}</h3>
+          <h3>🗺️ Zambia Regional Safety Assessments</h3>
           <p>Select a region to view specific security tips, transport guidelines, and village protocols.</p>
         </div>
 
@@ -186,11 +175,9 @@ export function SecurityAdvisory({ countryCode = "ZMB" }: { countryCode?: string
       {/* Practical Travel Safety Guidelines */}
       <div className="advisorySectionBlock">
         <div className="blockHeader">
-          <h3>🧭 {isZambia ? "Golden Rules for Zambia Safari Travelers" : "Golden Rules for PNG Travelers"}</h3>
+          <h3>🧭 Golden Rules for Zambia Safari Travelers</h3>
           <p>
-            {isZambia
-              ? "Practical advice for unforgettable game drives, walking safaris, and city exploration."
-              : "Practical steps every traveler should take for a smooth, enriching PNG journey."}
+            Practical advice for unforgettable game drives, walking safaris, and city exploration.
           </p>
         </div>
 
@@ -248,10 +235,10 @@ export function SecurityAdvisory({ countryCode = "ZMB" }: { countryCode?: string
             🌴 Tourism Support
           </button>
           <button
-            className={selectedCategory === "diplomatic" ? "active" : ""}
-            onClick={() => setSelectedCategory("diplomatic")}
+            className={selectedCategory === "rescue" ? "active" : ""}
+            onClick={() => setSelectedCategory("rescue")}
           >
-            🏛️ Consular
+            🚒 Parks & Rescue
           </button>
         </div>
 

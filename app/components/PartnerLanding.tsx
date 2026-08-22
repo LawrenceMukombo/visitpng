@@ -9,30 +9,28 @@ export interface PartnerLandingProps {
 }
 
 export function PartnerLanding({
-  countryCode = "ZMB",
   currency = "ZMW",
   onOpenRegister,
   onClose
 }: PartnerLandingProps) {
-  const isZambia = countryCode.toUpperCase() === "ZMB";
-  const brandName = isZambia ? "ZamRoam" : "VisitPNG";
-  const partnerProgram = isZambia ? "ZamRoam Partners" : "VisitPNG Partners";
-  const verifiedBadge = isZambia ? "ZamRoam Verified" : "VisitPNG Verified";
-  const dealsName = isZambia ? "ZamRoam Deals" : "Member Privileges";
-  const currencySymbol = isZambia ? "ZK" : "K";
+  const brandName = "ZamRoam";
+  const partnerProgram = "ZamRoam Partners";
+  const verifiedBadge = "ZamRoam Verified";
+  const dealsName = "ZamRoam Deals";
+  const currencySymbol = "ZK";
 
   const [campaignSlots] = useState({
     total: 100,
     allocated: 63,
     remaining: 37,
-    promoPrice: isZambia ? 1499 : 799,
-    regularPrice: isZambia ? 2999 : 1499
+    promoPrice: 1499,
+    regularPrice: 2999
   });
 
   const tiers = [
     {
       name: "Starter Partner",
-      price: isZambia ? 0 : 0,
+      price: 0,
       period: "Free",
       features: [
         "Basic Directory Listing",
@@ -45,7 +43,7 @@ export function PartnerLanding({
     },
     {
       name: "Verified Partner",
-      price: isZambia ? 899 : 450,
+      price: 899,
       period: "/ year",
       features: [
         `Official ${verifiedBadge} Trust Badge`,
@@ -59,7 +57,7 @@ export function PartnerLanding({
     },
     {
       name: "Premium Safari Partner",
-      price: isZambia ? 1899 : 950,
+      price: 1899,
       period: "/ year",
       features: [
         "All Verified Partner Features",
@@ -84,7 +82,7 @@ export function PartnerLanding({
       {/* Header Bar */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <span style={{ fontSize: "2rem" }}>{isZambia ? "🇿🇲" : "🇵🇬"}</span>
+          <span style={{ fontSize: "2rem" }}>🇿🇲</span>
           <div>
             <h1 style={{ margin: 0, fontSize: "1.8rem", fontWeight: "800", color: "#1B6960" }}>
               {partnerProgram}
@@ -114,76 +112,74 @@ export function PartnerLanding({
       </div>
 
       {/* 100 Founding Partners Launch Campaign Widget */}
-      {isZambia && (
-        <div style={{
-          background: "linear-gradient(135deg, #DE7739 0%, #B8591E 100%)",
-          color: "#ffffff",
-          padding: "2rem",
-          borderRadius: "16px",
-          marginBottom: "2.5rem",
-          boxShadow: "0 8px 24px rgba(222, 119, 57, 0.25)",
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: "1.5rem"
-        }}>
-          <div style={{ maxWidth: "600px" }}>
-            <div style={{
-              display: "inline-block",
-              background: "rgba(0,0,0,0.2)",
-              color: "#fff",
-              padding: "0.25rem 0.75rem",
-              borderRadius: "20px",
-              fontSize: "0.75rem",
-              fontWeight: "800",
-              letterSpacing: "0.05em",
-              marginBottom: "0.75rem"
-            }}>
-              ⭐ LIMITED LAUNCH CAMPAIGN
-            </div>
-            <h2 style={{ margin: "0 0 0.5rem 0", fontSize: "1.8rem", fontWeight: "800" }}>
-              Become One of the First 100 Founding Partners
-            </h2>
-            <p style={{ margin: 0, fontSize: "0.95rem", lineHeight: "1.5", color: "#ffe8dc" }}>
-              Join the launch cohort to receive a permanent <strong>Founding Partner Badge</strong>, 12 months top-tier search priority, and 50% lifetime subscription discount.
-            </p>
-          </div>
-
+      <div style={{
+        background: "linear-gradient(135deg, #DE7739 0%, #B8591E 100%)",
+        color: "#ffffff",
+        padding: "2rem",
+        borderRadius: "16px",
+        marginBottom: "2.5rem",
+        boxShadow: "0 8px 24px rgba(222, 119, 57, 0.25)",
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        alignItems: "center",
+        gap: "1.5rem"
+      }}>
+        <div style={{ maxWidth: "600px" }}>
           <div style={{
-            background: "#ffffff",
-            color: "#1a2e2b",
-            padding: "1.25rem 1.5rem",
-            borderRadius: "12px",
-            textAlign: "center",
-            minWidth: "220px"
+            display: "inline-block",
+            background: "rgba(0,0,0,0.2)",
+            color: "#fff",
+            padding: "0.25rem 0.75rem",
+            borderRadius: "20px",
+            fontSize: "0.75rem",
+            fontWeight: "800",
+            letterSpacing: "0.05em",
+            marginBottom: "0.75rem"
           }}>
-            <div style={{ fontSize: "0.85rem", color: "#666", fontWeight: "600" }}>SLOTS REMAINING</div>
-            <div style={{ fontSize: "2rem", fontWeight: "900", color: "#DE7739", margin: "0.25rem 0" }}>
-              {campaignSlots.remaining} / {campaignSlots.total}
-            </div>
-            <div style={{ fontSize: "0.85rem", color: "#333", marginBottom: "0.75rem" }}>
-              <strong>{currencySymbol}{campaignSlots.promoPrice}</strong> <span style={{ textDecoration: "line-through", color: "#999" }}>{currencySymbol}{campaignSlots.regularPrice}</span>
-            </div>
-            <button
-              onClick={onOpenRegister}
-              style={{
-                background: "#1B6960",
-                color: "#ffffff",
-                border: "none",
-                padding: "0.6rem 1rem",
-                borderRadius: "6px",
-                fontWeight: "700",
-                fontSize: "0.85rem",
-                cursor: "pointer",
-                width: "100%"
-              }}
-            >
-              Claim Founding Slot
-            </button>
+            ⭐ LIMITED LAUNCH CAMPAIGN
           </div>
+          <h2 style={{ margin: "0 0 0.5rem 0", fontSize: "1.8rem", fontWeight: "800" }}>
+            Become One of the First 100 Founding Partners
+          </h2>
+          <p style={{ margin: 0, fontSize: "0.95rem", lineHeight: "1.5", color: "#ffe8dc" }}>
+            Join the launch cohort to receive a permanent <strong>Founding Partner Badge</strong>, 12 months top-tier search priority, and 50% lifetime subscription discount.
+          </p>
         </div>
-      )}
+
+        <div style={{
+          background: "#ffffff",
+          color: "#1a2e2b",
+          padding: "1.25rem 1.5rem",
+          borderRadius: "12px",
+          textAlign: "center",
+          minWidth: "220px"
+        }}>
+          <div style={{ fontSize: "0.85rem", color: "#666", fontWeight: "600" }}>SLOTS REMAINING</div>
+          <div style={{ fontSize: "2rem", fontWeight: "900", color: "#DE7739", margin: "0.25rem 0" }}>
+            {campaignSlots.remaining} / {campaignSlots.total}
+          </div>
+          <div style={{ fontSize: "0.85rem", color: "#333", marginBottom: "0.75rem" }}>
+            <strong>{currencySymbol}{campaignSlots.promoPrice}</strong> <span style={{ textDecoration: "line-through", color: "#999" }}>{currencySymbol}{campaignSlots.regularPrice}</span>
+          </div>
+          <button
+            onClick={onOpenRegister}
+            style={{
+              background: "#1B6960",
+              color: "#ffffff",
+              border: "none",
+              padding: "0.6rem 1rem",
+              borderRadius: "6px",
+              fontWeight: "700",
+              fontSize: "0.85rem",
+              cursor: "pointer",
+              width: "100%"
+            }}
+          >
+            Claim Founding Slot
+          </button>
+        </div>
+      </div>
 
       {/* Subscription Plans Grid */}
       <h2 style={{ fontSize: "1.5rem", fontWeight: "800", color: "#1B6960", marginBottom: "1.5rem" }}>

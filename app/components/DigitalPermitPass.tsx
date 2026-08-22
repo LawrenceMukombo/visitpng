@@ -1,6 +1,6 @@
 "use client";
 import {useState, useSyncExternalStore} from "react";
-import {PNG_PERMIT_TYPES, ZAMBIA_PERMIT_TYPES, IssuedPermit, createPermit} from "../../db/permits";
+import {ZAMBIA_PERMIT_TYPES, IssuedPermit, createPermit} from "../../db/permits";
 import {CurrencyCode, formatPrice} from "../../db/currency";
 
 interface DigitalPermitPassProps {
@@ -15,23 +15,22 @@ function subscribe(callback: () => void) {
 
 function getOfflinePermitsSnapshot(): string {
   if (typeof window === "undefined") return "[]";
-  return localStorage.getItem("visitpng_digital_permits") || "[]";
+  return localStorage.getItem("zamroam_digital_permits") || "[]";
 }
 
 function getServerSnapshot(): string {
   return "[]";
 }
 
-export default function DigitalPermitPass({currency, countryCode = "ZMB"}: DigitalPermitPassProps) {
-  const isZambia = countryCode.toUpperCase() === "ZMB";
-  const permitTypes = isZambia ? ZAMBIA_PERMIT_TYPES : PNG_PERMIT_TYPES;
+export default function DigitalPermitPass({currency}: DigitalPermitPassProps) {
+  const permitTypes = ZAMBIA_PERMIT_TYPES;
   const [selectedTypeId, setSelectedTypeId] = useState<string>("");
   const selectedType = permitTypes.find(p => p.id === selectedTypeId) || permitTypes[0];
   const [showIssueModal, setShowIssueModal] = useState(false);
   const [holderName, setHolderName] = useState("");
   const [passportOrId, setPassportOrId] = useState("");
   const [countryOfOrigin, setCountryOfOrigin] = useState("");
-  const activeCountryOfOrigin = countryOfOrigin || (isZambia ? "Zambia" : "Papua New Guinea");
+  const activeCountryOfOrigin = countryOfOrigin || "Zambia";
   const [startDate, setStartDate] = useState(new Date().toISOString().slice(0, 10));
   const [activePermitView, setActivePermitView] = useState<IssuedPermit | null>(null);
   const [statusMessage, setStatusMessage] = useState("");
@@ -57,7 +56,7 @@ export default function DigitalPermitPass({currency, countryCode = "ZMB"}: Digit
 
     const updated = [newPermit, ...issuedPermits];
     try {
-      localStorage.setItem("visitpng_digital_permits", JSON.stringify(updated));
+      localStorage.setItem("zamroam_digital_permits", JSON.stringify(updated));
       window.dispatchEvent(new Event("storage"));
     } catch {}
 
@@ -112,11 +111,9 @@ export default function DigitalPermitPass({currency, countryCode = "ZMB"}: Digit
       <div className="permitsHeader">
         <div>
           <p className="eyebrow lime">OFFICIAL DIGITAL ACCESS PASSES</p>
-          <h2>{isZambia ? "National Park & Wildlife Permits" : "Trekking Permits & Marine Tags"}</h2>
+          <h2>National Park & Wildlife Permits</h2>
           <p>
-            {isZambia
-              ? "Issue and carry authorized Zambian Department of National Parks & Wildlife (DNPW) conservation passes with instant offline QR validation."
-              : "Issue and carry authorized Papua New Guinea park permits and conservation tags with instant offline QR validation."}
+            Issue and carry authorized Zambian Department of National Parks & Wildlife (DNPW) conservation passes with instant offline QR validation.
           </p>
         </div>
         <button
@@ -205,7 +202,7 @@ export default function DigitalPermitPass({currency, countryCode = "ZMB"}: Digit
             <div className="permitCardFooter">
               <div className="permitCost">
                 <small>Official Fee ({p.validityDays} days)</small>
-                <strong>{formatPrice(p.feePgk, currency)}</strong>
+                <strong>{formatPrice(p.feeZmw, currency)}</strong>
               </div>
               <button
                 type="button"
@@ -243,7 +240,7 @@ export default function DigitalPermitPass({currency, countryCode = "ZMB"}: Digit
                 >
                   {permitTypes.map(t => (
                     <option key={t.id} value={t.id}>
-                      {t.name} ({formatPrice(t.feePgk, currency)})
+                      {t.name} ({formatPrice(t.feeZmw, currency)})
                     </option>
                   ))}
                 </select>
@@ -261,11 +258,11 @@ export default function DigitalPermitPass({currency, countryCode = "ZMB"}: Digit
               </label>
 
               <label>
-                Passport Number or PNG National ID
+                Passport Number or NRC / National ID
                 <input
                   type="text"
                   required
-                  placeholder="e.g. N1234567 or PNG-ID"
+                  placeholder="e.g. N1234567 or 123456/10/1"
                   value={passportOrId}
                   onChange={e => setPassportOrId(e.target.value)}
                 />
@@ -294,7 +291,7 @@ export default function DigitalPermitPass({currency, countryCode = "ZMB"}: Digit
 
               <div className="permitFeeSummary">
                 <span>Conservation / Permit Fee</span>
-                <strong>{formatPrice(selectedType.feePgk, currency)}</strong>
+                <strong>{formatPrice(selectedType.feeZmw, currency)}</strong>
               </div>
 
               <button type="submit" className="issuePermitSubmitBtn">
@@ -311,7 +308,7 @@ export default function DigitalPermitPass({currency, countryCode = "ZMB"}: Digit
           <article className="sheet permitQrModal" onClick={e => e.stopPropagation()}>
             <button className="close" onClick={() => setActivePermitView(null)}>×</button>
             <div className="permitPassHeader">
-              <span className="permitPassWatermark">PAPUA NEW GUINEA</span>
+              <span className="permitPassWatermark">REPUBLIC OF ZAMBIA</span>
               <p className="eyebrow lime">OFFICIAL ENTRY PASS</p>
               <h2>{activePermitView.permitName}</h2>
               <strong className="permitRefHighlight">{activePermitView.reference}</strong>

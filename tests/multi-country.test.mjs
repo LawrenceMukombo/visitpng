@@ -64,13 +64,11 @@ test("Phase 1: Country-Scoped Catalogue Engine & Tenant Isolation", async () => 
     read("app/api/catalogue/route.ts")
   ]);
 
-  // PNG and Zambia Seed Listings
-  assert.match(catalogueSource, /pngListingSeed/);
+  // Zambia Seed Listings
   assert.match(catalogueSource, /zambiaListingSeed/);
   assert.match(catalogueSource, /victoria-falls-livingstone/);
   assert.match(catalogueSource, /south-luangwa-mfuwe/);
   assert.match(catalogueSource, /The Royal Livingstone/);
-  assert.match(catalogueSource, /Kokoda Trail/);
 
   // Country scoped query parameter
   assert.match(catalogueApi, /url\.searchParams\.get\("country"\)/);
@@ -97,7 +95,7 @@ test("Phase 1: Frontend Dynamic Country Switching & Header Brand", async () => {
   assert.match(selectorUi, /currentCountry/);
   assert.match(selectorUi, /onCountryChange/);
   assert.match(selectorUi, /Zambia/);
-  assert.match(selectorUi, /Papua New Guinea/);
+  assert.match(selectorUi, /ZamRoam/);
 });
 
 test("Phase 1: Country-Scoped Administrator Authorization & Tenant Security", async () => {

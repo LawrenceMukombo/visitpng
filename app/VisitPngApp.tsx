@@ -68,12 +68,12 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
     if(new URLSearchParams(window.location.search).has("wishlist"))setTab("Saved");
     try{
       setCountryCode("ZMB");
-      const savedCurr=localStorage.getItem("visitpng_currency")as CurrencyCode|null;
-      if(savedCurr&&["ZMW","USD","EUR","GBP","AUD","JPY","PGK"].includes(savedCurr)) {
+      const savedCurr=localStorage.getItem("zamroam_currency")as CurrencyCode|null;
+      if(savedCurr&&["ZMW","USD","EUR","GBP","AUD","JPY"].includes(savedCurr)) {
         setCurrency(savedCurr);
       } else {
         setCurrency("ZMW");
-        try{localStorage.setItem("visitpng_currency","ZMW")}catch{}
+        try{localStorage.setItem("zamroam_currency","ZMW")}catch{}
       }
     }catch{}
   },[]);
@@ -91,18 +91,13 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
     const normalized=newCountry.toUpperCase();
     setCountryCode(normalized);
     try{localStorage.setItem("visit_country",normalized)}catch{}
-    if(normalized==="ZMB"){
-      setCurrency("ZMW" as CurrencyCode);
-      try{localStorage.setItem("visitpng_currency","ZMW")}catch{}
-    } else {
-      setCurrency("PGK");
-      try{localStorage.setItem("visitpng_currency","PGK")}catch{}
-    }
+    setCurrency("ZMW" as CurrencyCode);
+    try{localStorage.setItem("zamroam_currency","ZMW")}catch{}
   };
 
   const handleCurrencyChange=(newCurr:CurrencyCode)=>{
     setCurrency(newCurr);
-    try{localStorage.setItem("visitpng_currency",newCurr)}catch{}
+    try{localStorage.setItem("zamroam_currency",newCurr)}catch{}
   };
 
   const load=useCallback(async(signal?:AbortSignal)=>{

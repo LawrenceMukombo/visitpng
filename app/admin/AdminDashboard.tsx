@@ -573,10 +573,10 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
               <label>Label / Badge
                 <input value={listingForm.tag} placeholder="e.g. Safari camp, Luxury stay, Historic trek" onChange={e=>setListingForm({...listingForm,tag:e.target.value})}/>
               </label>
-              <label>Standard price ({listingForm.countryId === 2 || selectedCountry === "ZMB" ? "ZMW" : "PGK"})
+              <label>Standard price (ZMW)
                 <input type="number" min="0" value={listingForm.basePrice} onChange={e=>setListingForm({...listingForm,basePrice:Number(e.target.value)})}/>
               </label>
-              <label>Member price ({listingForm.countryId === 2 || selectedCountry === "ZMB" ? "ZMW" : "PGK"})
+              <label>Member price (ZMW)
                 <input type="number" min="0" value={listingForm.memberPrice} onChange={e=>setListingForm({...listingForm,memberPrice:e.target.value})}/>
               </label>
               <label>Category
@@ -637,7 +637,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
           </header>
           <div>
             {filteredListings.map(x=>{
-              const itemCurrency = x.currency || (x.province?.includes("ZM") || x.countryId === 2 ? "ZMW" : "PGK");
+              const itemCurrency = x.currency || "ZMW";
               const isExpanded = expandedCardIds.has(x.id);
               return (
                 <article key={x.id} className={`adminListingCard ${isExpanded ? "expanded" : "collapsed"}`}>

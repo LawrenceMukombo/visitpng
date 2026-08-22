@@ -7,7 +7,7 @@ interface CurrencySelectorProps {
 }
 
 export default function CurrencySelector({currentCurrency, onChange}: CurrencySelectorProps) {
-  const selected = CURRENCIES[currentCurrency] || CURRENCIES.ZMW || CURRENCIES.PGK;
+  const selected = CURRENCIES[currentCurrency] || CURRENCIES.ZMW;
 
   return (
     <div

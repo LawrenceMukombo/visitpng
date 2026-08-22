@@ -39,18 +39,17 @@ export default function CountrySelector({ currentCountry, onCountryChange }: Cou
   }, [isOpen]);
 
   const current = countries.find(c => c.code.toUpperCase() === currentCountry.toUpperCase()) || {
-    code: currentCountry,
-    name: currentCountry === "ZMB" ? "Zambia" : "Papua New Guinea",
-    currencyCode: currentCountry === "ZMB" ? "ZMW" : "PGK"
+    code: "ZMB",
+    name: "Zambia (ZamRoam)",
+    currencyCode: "ZMW"
   };
 
   const getCountryFlag = (code: string) => {
     if (code.toUpperCase() === "ZMB") return "🇿🇲";
-    if (code.toUpperCase() === "PNG") return "🇵🇬";
-    return "🌐";
+    return "🇿🇲";
   };
 
-  const isZambia = currentCountry.toUpperCase() === "ZMB";
+  const isZambia = true;
 
   return (
     <div ref={containerRef} className="countrySelectorDropdown">
@@ -62,7 +61,7 @@ export default function CountrySelector({ currentCountry, onCountryChange }: Cou
         aria-expanded={isOpen}
       >
         <span style={{ fontSize: "12px", lineHeight: 1 }}>{getCountryFlag(current.code)}</span>
-        <span>{isZambia ? "Zambia" : "PNG"}</span>
+        <span>Zambia</span>
         <span style={{ fontSize: "7px", opacity: 0.8, marginLeft: "1px" }}>▼</span>
       </button>
 
@@ -72,7 +71,6 @@ export default function CountrySelector({ currentCountry, onCountryChange }: Cou
             Select Tourism Portal
           </div>
           {(countries.length ? countries : [
-            { code: "PNG", name: "Papua New Guinea", currencyCode: "PGK" },
             { code: "ZMB", name: "Zambia (ZamRoam)", currencyCode: "ZMW" }
           ]).map(c => {
             const isSelected = c.code.toUpperCase() === currentCountry.toUpperCase();

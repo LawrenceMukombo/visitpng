@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { CURATED_ITINERARIES, ZAMBIA_CURATED_ITINERARIES, GeneratedItinerary, ItineraryDay, generateCustomItinerary } from "../../db/wantokAi";
+import { ZAMBIA_CURATED_ITINERARIES, GeneratedItinerary, ItineraryDay, generateCustomItinerary } from "../../db/wantokAi";
 import { CurrencyCode, formatPrice } from "../../db/currency";
 
 interface WantokConciergeProps {
@@ -9,35 +9,26 @@ interface WantokConciergeProps {
   onOpenTrips?: () => void;
 }
 
-export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenTrips }: WantokConciergeProps) {
-  const isZambia = countryCode.toUpperCase() === "ZMB";
-  const initialItinerary = isZambia ? ZAMBIA_CURATED_ITINERARIES[0] : CURATED_ITINERARIES[0];
+export default function WantokConcierge({ currency, onOpenTrips }: WantokConciergeProps) {
+  const initialItinerary = ZAMBIA_CURATED_ITINERARIES[0];
 
-  const [selectedStyle, setSelectedStyle] = useState<string>(isZambia ? "Wilderness Expedition" : "Cultural Immersion");
+  const [selectedStyle, setSelectedStyle] = useState<string>("Wilderness Expedition");
   const [durationDays, setDurationDays] = useState<number>(7);
   const [fitnessLevel, setFitnessLevel] = useState<string>("Moderate");
-  const [selectedInterests, setSelectedInterests] = useState<string[]>(
-    isZambia ? ["Victoria Falls Mosi-oa-Tunya", "Luangwa Walking Safari"] : ["Tribal Singsing", "Bird of Paradise"]
-  );
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([
+    "Victoria Falls Mosi-oa-Tunya",
+    "Luangwa Walking Safari"
+  ]);
   const [customPrompt, setCustomPrompt] = useState("");
   const [activeItinerary, setActiveItinerary] = useState<GeneratedItinerary>(initialItinerary);
   const [isGenerating, setIsGenerating] = useState(false);
   const [saveNotice, setSaveNotice] = useState("");
   const [isCustomizing, setIsCustomizing] = useState(false);
 
-  const [prevCountry, setPrevCountry] = useState(countryCode);
-  if (prevCountry !== countryCode) {
-    setPrevCountry(countryCode);
-    const list = isZambia ? ZAMBIA_CURATED_ITINERARIES : CURATED_ITINERARIES;
-    setActiveItinerary(list[0]);
-    setSelectedInterests(isZambia ? ["Victoria Falls Mosi-oa-Tunya", "Luangwa Walking Safari"] : ["Tribal Singsing", "Bird of Paradise"]);
-    setSelectedStyle(isZambia ? "Wilderness Expedition" : "Cultural Immersion");
-  }
-
   // New activity input states per day
   const [newActivityInputs, setNewActivityInputs] = useState<Record<number, string>>({});
 
-  const availableInterests = isZambia ? [
+  const availableInterests = [
     "Victoria Falls Mosi-oa-Tunya",
     "Luangwa Walking Safari",
     "Lower Zambezi Canoeing",
@@ -46,15 +37,6 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
     "Kuomboka Royal Ceremony",
     "Lake Kariba Houseboats",
     "Tribal Textiles & Craft"
-  ] : [
-    "Tribal Singsing",
-    "Bird of Paradise",
-    "WWII History",
-    "Scuba Diving & Coral",
-    "Volcano Trekking",
-    "Sepik River Canoeing",
-    "Village Homestay",
-    "Highlands Coffee"
   ];
 
   const toggleInterest = (int: string) => {
@@ -70,11 +52,11 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
     setIsGenerating(true);
     setTimeout(() => {
       const it = generateCustomItinerary(
-        selectedInterests.length ? selectedInterests : [customPrompt || (isZambia ? "Safari" : "Culture")],
+        selectedInterests.length ? selectedInterests : [customPrompt || "Safari"],
         durationDays,
         selectedStyle,
         fitnessLevel,
-        countryCode
+        "ZMB"
       );
       setActiveItinerary(it);
       setIsGenerating(false);
@@ -93,18 +75,18 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
         return {
           ...day,
           activities: [...day.activities, text],
-          estimatedCostPgk: day.estimatedCostPgk + 80 // slight cost adjustment for new activity
+          estimatedCostZmw: (day.estimatedCostZmw || 800) + 150
         };
       }
       return day;
     });
 
-    const newTotal = updatedDays.reduce((acc, d) => acc + d.estimatedCostPgk, 0);
+    const newTotal = updatedDays.reduce((acc, d) => acc + (d.estimatedCostZmw || 0), 0);
 
     setActiveItinerary({
       ...activeItinerary,
       days: updatedDays,
-      totalEstimatedCostPgk: newTotal
+      totalEstimatedCostZmw: newTotal
     });
 
     setNewActivityInputs({ ...newActivityInputs, [dayNumber]: "" });
@@ -119,18 +101,18 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
         return {
           ...day,
           activities: newActs,
-          estimatedCostPgk: Math.max(150, day.estimatedCostPgk - 60)
+          estimatedCostZmw: Math.max(300, (day.estimatedCostZmw || 800) - 150)
         };
       }
       return day;
     });
 
-    const newTotal = updatedDays.reduce((acc, d) => acc + d.estimatedCostPgk, 0);
+    const newTotal = updatedDays.reduce((acc, d) => acc + (d.estimatedCostZmw || 0), 0);
 
     setActiveItinerary({
       ...activeItinerary,
       days: updatedDays,
-      totalEstimatedCostPgk: newTotal
+      totalEstimatedCostZmw: newTotal
     });
 
     setSaveNotice(`🗑️ Removed activity from Day ${dayNumber}`);
@@ -151,13 +133,13 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
       dayNumber: index + 1
     }));
 
-    const newTotal = renumbered.reduce((acc, d) => acc + d.estimatedCostPgk, 0);
+    const newTotal = renumbered.reduce((acc, d) => acc + (d.estimatedCostZmw || 0), 0);
 
     setActiveItinerary({
       ...activeItinerary,
       durationDays: renumbered.length,
       days: renumbered,
-      totalEstimatedCostPgk: newTotal
+      totalEstimatedCostZmw: newTotal
     });
 
     setSaveNotice(`🗑️ Removed Day ${dayNumber}. Itinerary updated to ${renumbered.length} days.`);
@@ -170,28 +152,28 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
 
     const newDay: ItineraryDay = {
       dayNumber: nextNum,
-      title: `Exploration & Community Encounter - Day ${nextNum}`,
-      province: lastDay ? lastDay.province : "National Capital District",
-      location: lastDay ? lastDay.location : "Port Moresby",
-      summary: "Custom explorer day: village interaction, artisanal craft markets, or coastal nature walks.",
+      title: `Exploration & Wildlife Encounter - Day ${nextNum}`,
+      province: lastDay ? lastDay.province : "Southern",
+      location: lastDay ? lastDay.location : "Livingstone",
+      summary: "Custom safari day: game drives, walking trails, and cultural craft markets.",
       activities: [
-        "Visit local morning produce & bilum handicraft market",
-        "Community walking tour with local landowner guide",
-        "Traditional twilight mumu feast and storytelling"
+        "Morning walking safari with DNPW scout",
+        "Community craft village visit",
+        "Sunset Zambezi river cruise"
       ],
-      recommendedStay: lastDay ? lastDay.recommendedStay : "Local Eco-Lodge or Homestay",
-      estimatedCostPgk: 450,
-      logisticsNotes: "Arrange local private van or river canoe liaison ahead of time."
+      recommendedStay: lastDay ? lastDay.recommendedStay : "Safari Eco-Lodge",
+      estimatedCostZmw: 1200,
+      logisticsNotes: "Arrange 4x4 safari vehicle with lodge guide."
     };
 
     const updatedDays = [...activeItinerary.days, newDay];
-    const newTotal = updatedDays.reduce((acc, d) => acc + d.estimatedCostPgk, 0);
+    const newTotal = updatedDays.reduce((acc, d) => acc + (d.estimatedCostZmw || 0), 0);
 
     setActiveItinerary({
       ...activeItinerary,
       durationDays: updatedDays.length,
       days: updatedDays,
-      totalEstimatedCostPgk: newTotal
+      totalEstimatedCostZmw: newTotal
     });
 
     setSaveNotice(`➕ Added Day ${nextNum} to your customized itinerary!`);
@@ -214,56 +196,31 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
 
   const handleSaveToTrips = async () => {
     try {
-      const today = new Date().toISOString().slice(0, 10);
-      const endDate = new Date(Date.now() + activeItinerary.durationDays * 86400000).toISOString().slice(0, 10);
-
-      const tripPayload = {
-        name: activeItinerary.title,
-        destination: activeItinerary.provincesCovered.join(", "),
-        startDate: today,
-        endDate: endDate,
-        travellerCount: 2,
-        budget: activeItinerary.totalEstimatedCostPgk,
-        interests: selectedInterests.join(", ")
-      };
-
-      const res = await fetch("/api/trips", {
+      const response = await fetch("/api/trips", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "create", ...tripPayload })
+        body: JSON.stringify({
+          title: activeItinerary.title,
+          destination: activeItinerary.subtitle,
+          startDate: new Date().toISOString().slice(0, 10),
+          budgetZmw: activeItinerary.totalEstimatedCostZmw || 10000,
+          currency: "ZMW"
+        })
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        const createdTrip = data.trips?.[0];
-        if (createdTrip) {
-          // Add day-by-day items
-          for (const day of activeItinerary.days) {
-            const dayDate = new Date(Date.now() + (day.dayNumber - 1) * 86400000).toISOString().slice(0, 10);
-            await fetch("/api/trips", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                action: "addItem",
-                tripId: createdTrip.id,
-                title: day.title,
-                itemType: "activity",
-                scheduledDate: dayDate,
-                cost: day.estimatedCostPgk,
-                notes: `${day.summary} (Activities: ${day.activities.join(" | ")}) (Stay: ${day.recommendedStay})`
-              })
-            });
-          }
-        }
-        setSaveNotice("🎉 Customized itinerary successfully added to your interactive Trips Planner!");
-        if (onOpenTrips) {
-          setTimeout(onOpenTrips, 1200);
-        }
+      if (response.ok) {
+        setSaveNotice("🎉 Itinerary successfully saved to My Trips planner!");
+        if (onOpenTrips) onOpenTrips();
       } else {
-        // Fallback to local storage for guests
-        const localSaved = JSON.parse(localStorage.getItem("visitpng_offline_custom_trips") || "[]");
-        localStorage.setItem("visitpng_offline_custom_trips", JSON.stringify([activeItinerary, ...localSaved]));
-        setSaveNotice("✅ Itinerary saved to your offline trip guides!");
+        const stored = JSON.parse(localStorage.getItem("zamroam_offline_trips") || "[]");
+        stored.push({
+          id: `custom-ai-${Date.now()}`,
+          title: activeItinerary.title,
+          itinerary: activeItinerary,
+          savedAt: new Date().toISOString()
+        });
+        localStorage.setItem("zamroam_offline_trips", JSON.stringify(stored));
+        setSaveNotice("📦 Saved to your local offline Trips collection.");
       }
     } catch {
       setSaveNotice("Saved to offline cache.");
@@ -286,16 +243,14 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
     <div className="wantokConciergeSection">
       <div className="wantokHeroHeader">
         <div className="wantokTagline">
-          <span className="wantokAvatar">{isZambia ? "🦁" : "🤖"}</span>
+          <span className="wantokAvatar">🦁</span>
           <div>
-            <p className="eyebrow lime">{isZambia ? "ZAMROAM SAFARI & TRIP ARCHITECT" : "WANTOK AI TRIP ARCHITECT & CUSTOMIZER"}</p>
-            <h2>{isZambia ? "Your Zambia Safari & Expedition Concierge" : "Your Papua New Guinea Travel Concierge"}</h2>
+            <p className="eyebrow lime">ZAMROAM SAFARI & TRIP ARCHITECT</p>
+            <h2>Your Zambia Safari & Expedition Concierge</h2>
           </div>
         </div>
         <p className="wantokDesc">
-          {isZambia
-            ? "Plan seamless African safaris, Victoria Falls helicopter tours, Luangwa walking trails, and Zambezi river expeditions with intelligent AI planning. Customize any day, lodge, or activity to fit your exact dream adventure."
-            : "Tackle PNG travel logistics with intelligent planning. Wantok AI accounts for domestic flight connection hubs, mountain weather, trek acclimatization, and cultural village protocols. Customize any day or activity to fit your exact dream expedition."}
+          Plan seamless African safaris, Victoria Falls helicopter tours, Luangwa walking trails, and Zambezi river expeditions with intelligent AI planning. Customize any day, lodge, or activity to fit your exact dream adventure.
         </p>
       </div>
 
@@ -308,11 +263,11 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
               value={selectedStyle}
               onChange={e => setSelectedStyle(e.target.value)}
             >
-              <option value="Cultural Immersion">🎭 Cultural Immersion & Singsings</option>
-              <option value="Wilderness Expedition">🥾 Wilderness & Mountain Trekking</option>
-              <option value="Diving & Islands">🤿 Scuba Diving & Island Fjords</option>
-              <option value="WWII History">🎖️ WWII History & Relic Trails</option>
-              <option value="Family & Nature">🌿 Nature, Birds & Wildlife</option>
+              <option value="Cultural Immersion">🎭 Cultural Ceremonies & Royal Palaces</option>
+              <option value="Wilderness Expedition">🦁 Walking Safaris & Big 5 Game Drives</option>
+              <option value="Waterfalls & Rivers">🌊 Victoria Falls & Zambezi River Trails</option>
+              <option value="Lakes & Fishing">🎣 Lake Tanganyika & Kariba Cruising</option>
+              <option value="Family & Nature">🌿 Nature, Birds & Bat Migration</option>
             </select>
           </div>
 
@@ -333,9 +288,9 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
               value={fitnessLevel}
               onChange={e => setFitnessLevel(e.target.value)}
             >
-              <option value="Relaxed">Relaxed (Scenic drives & resort stays)</option>
-              <option value="Moderate">Moderate (Day hikes & village walks)</option>
-              <option value="Challenging">Challenging (Rugged mountain trekking)</option>
+              <option value="Relaxed">Relaxed (Scenic drives & lodge pools)</option>
+              <option value="Moderate">Moderate (Morning walking safaris & nature trails)</option>
+              <option value="Challenging">Challenging (Rugged multi-day wilderness backpacking)</option>
             </select>
           </div>
         </div>
@@ -360,14 +315,14 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
           <label>Custom Wish or Note (Optional):</label>
           <input
             type="text"
-            placeholder="e.g. Include Asaro mudmen, Betty's lodge and scenic flight over Owen Stanley range..."
+            placeholder="e.g. Include Devil's Pool, South Luangwa walking safari, and Kuomboka ceremony..."
             value={customPrompt}
             onChange={e => setCustomPrompt(e.target.value)}
           />
         </div>
 
         <button type="submit" className="generateAiBtn" disabled={isGenerating}>
-          {isGenerating ? "⚡ Generating PNG Itinerary…" : "✨ Generate Custom Itinerary"}
+          {isGenerating ? "⚡ Generating Zambian Itinerary…" : "✨ Generate Custom Itinerary"}
         </button>
       </form>
 
@@ -399,8 +354,8 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
 
           <div className="itineraryBudgetBanner">
             <div>
-              <small>Estimated Budget (Ground + Stays + Local Transport)</small>
-              <strong>{formatPrice(activeItinerary.totalEstimatedCostPgk, currency)}</strong>
+              <small>Estimated Budget (Ground + Safari Stays + Local Transport)</small>
+              <strong>{formatPrice(activeItinerary.totalEstimatedCostZmw || 12000, currency)}</strong>
             </div>
             <div className="itineraryTopActions">
               <button
@@ -435,7 +390,7 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
             <article key={day.dayNumber} className="itineraryDayCard">
               <div className="dayBadgeCol">
                 <span className="dayNumBadge">Day {day.dayNumber}</span>
-                <small className="dayCostTag">{formatPrice(day.estimatedCostPgk, currency)}</small>
+                <small className="dayCostTag">{formatPrice(day.estimatedCostZmw || 1200, currency)}</small>
                 {isCustomizing && (
                   <button
                     type="button"
@@ -501,7 +456,7 @@ export default function WantokConcierge({ currency, countryCode = "ZMB", onOpenT
                     <div className="addActivityRow">
                       <input
                         type="text"
-                        placeholder="Add custom activity (e.g. Sunrise birdwatching, village sing-sing...)"
+                        placeholder="Add custom activity (e.g. Sunrise birdwatching, village craft market...)"
                         value={newActivityInputs[day.dayNumber] || ""}
                         onChange={(e) =>
                           setNewActivityInputs({

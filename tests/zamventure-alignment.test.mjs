@@ -116,7 +116,6 @@ test("Tenant Isolation: Tight Gates Guarantee Zero Cross-Country Resource Spilla
   assert.doesNotMatch(catalogueDb, /OR l\.country_id IS NULL/);
 
   // 2. Banner dynamic country support
-  assert.match(bannerComp, /isZambia/);
   assert.match(bannerComp, /Welcome to Zambia — The Real Africa/);
 
   // 3. Security Advisory dynamic country support

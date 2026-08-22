@@ -1,7 +1,7 @@
 "use client";
-import {useState, useSyncExternalStore} from "react";
-import {FestivalEvent, PNG_FESTIVALS, ZAMBIA_FESTIVALS} from "../../db/festivals";
-import {CurrencyCode, formatPrice} from "../../db/currency";
+import { useState, useSyncExternalStore } from "react";
+import { FestivalEvent, ZAMBIA_FESTIVALS } from "../../db/festivals";
+import { CurrencyCode, formatPrice } from "../../db/currency";
 
 interface FestivalCalendarProps {
   currency: CurrencyCode;
@@ -15,16 +15,15 @@ function subscribe(callback: () => void) {
 
 function getOfflineFestivalsSnapshot(): string {
   if (typeof window === "undefined") return "[]";
-  return localStorage.getItem("visitpng_offline_festivals") || "[]";
+  return localStorage.getItem("zamroam_offline_festivals") || "[]";
 }
 
 function getServerSnapshot(): string {
   return "[]";
 }
 
-export default function FestivalCalendar({currency, countryCode = "ZMB"}: FestivalCalendarProps) {
-  const isZambia = countryCode.toUpperCase() === "ZMB";
-  const festivalsList = isZambia ? ZAMBIA_FESTIVALS : PNG_FESTIVALS;
+export default function FestivalCalendar({ currency }: FestivalCalendarProps) {
+  const festivalsList = ZAMBIA_FESTIVALS;
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
   const [activeBookingFestival, setActiveBookingFestival] = useState<FestivalEvent | null>(null);
@@ -43,18 +42,18 @@ export default function FestivalCalendar({currency, countryCode = "ZMB"}: Festiv
 
   const toggleSaveOffline = (fest: FestivalEvent) => {
     try {
-      const saved: string[] = JSON.parse(localStorage.getItem("visitpng_offline_festivals") || "[]");
+      const saved: string[] = JSON.parse(localStorage.getItem("zamroam_offline_festivals") || "[]");
       let next: string[];
       if (saved.includes(fest.id)) {
         next = saved.filter(id => id !== fest.id);
-        localStorage.setItem(`visitpng_fest_${fest.id}`, "");
+        localStorage.setItem(`zamroam_fest_${fest.id}`, "");
         setNotice(`Removed "${fest.name}" from offline guide storage.`);
       } else {
         next = [...saved, fest.id];
-        localStorage.setItem(`visitpng_fest_${fest.id}`, JSON.stringify(fest));
+        localStorage.setItem(`zamroam_fest_${fest.id}`, JSON.stringify(fest));
         setNotice(`✅ "${fest.name}" complete schedule & etiquette guide saved for offline access!`);
       }
-      localStorage.setItem("visitpng_offline_festivals", JSON.stringify(next));
+      localStorage.setItem("zamroam_offline_festivals", JSON.stringify(next));
       window.dispatchEvent(new Event("storage"));
     } catch {
       setNotice("Could not save to offline storage.");
@@ -66,9 +65,9 @@ export default function FestivalCalendar({currency, countryCode = "ZMB"}: Festiv
     e.preventDefault();
     if (!activeBookingFestival) return;
     const pricePerTicket = bookingType === "vip" 
-      ? activeBookingFestival.vipPackagePricePgk 
-      : activeBookingFestival.ticketPricePgk;
-    const totalPgk = pricePerTicket * Number(ticketQuantity || 1);
+      ? activeBookingFestival.vipPackagePriceZmw 
+      : activeBookingFestival.ticketPriceZmw;
+    const totalZmw = pricePerTicket * Number(ticketQuantity || 1);
 
     const bookingRef = `FEST-${activeBookingFestival.id.slice(0, 3).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
@@ -80,14 +79,14 @@ export default function FestivalCalendar({currency, countryCode = "ZMB"}: Festiv
       holderName: visitorName || "Cultural Explorer",
       quantity: Number(ticketQuantity),
       tier: bookingType.toUpperCase(),
-      totalPaid: totalPgk,
+      totalPaid: totalZmw,
       currency,
       bookedAt: new Date().toISOString()
     };
 
     try {
-      const existing = JSON.parse(localStorage.getItem("visitpng_festival_passes") || "[]");
-      localStorage.setItem("visitpng_festival_passes", JSON.stringify([festivalPass, ...existing]));
+      const existing = JSON.parse(localStorage.getItem("zamroam_festival_passes") || "[]");
+      localStorage.setItem("zamroam_festival_passes", JSON.stringify([festivalPass, ...existing]));
     } catch {}
 
     setNotice(`🎉 Pass Confirmed! Ref: ${bookingRef}. Saved to your offline festival passes.`);
@@ -180,7 +179,7 @@ export default function FestivalCalendar({currency, countryCode = "ZMB"}: Festiv
                 <p className="festDescription">{fest.description}</p>
 
                 <div className="tribesSection">
-                  <strong>Featured Singsing Groups & Tribes:</strong>
+                  <strong>Featured Traditional Groups & Tribes:</strong>
                   <div className="tribeTags">
                     {fest.featuredTribes.map((t, i) => (
                       <span key={i} className="tribeTag">🎭 {t}</span>
@@ -189,7 +188,7 @@ export default function FestivalCalendar({currency, countryCode = "ZMB"}: Festiv
                 </div>
 
                 <div className="scheduleTimeline">
-                  <strong>Festival Schedule Highlights:</strong>
+                  <strong>Ceremony Schedule Highlights:</strong>
                   <ul>
                     {fest.scheduleHighlights.map((s, idx) => (
                       <li key={idx}>
@@ -211,8 +210,8 @@ export default function FestivalCalendar({currency, countryCode = "ZMB"}: Festiv
                 <div className="festivalFooter">
                   <div className="pricingColumn">
                     <small>Standard Entry</small>
-                    <strong>{formatPrice(fest.ticketPricePgk, currency)}</strong>
-                    <span className="vipPrice">VIP Arena: {formatPrice(fest.vipPackagePricePgk, currency)}</span>
+                    <strong>{formatPrice(fest.ticketPriceZmw, currency)}</strong>
+                    <span className="vipPrice">VIP Arena: {formatPrice(fest.vipPackagePriceZmw, currency)}</span>
                   </div>
 
                   <div className="festActionButtons">
@@ -243,7 +242,7 @@ export default function FestivalCalendar({currency, countryCode = "ZMB"}: Festiv
         <div className="overlay" onClick={() => setActiveBookingFestival(null)}>
           <article className="sheet festBookingModal" onClick={e => e.stopPropagation()}>
             <button className="close" onClick={() => setActiveBookingFestival(null)}>×</button>
-            <p className="eyebrow lime">OFFICIAL TICKET RESERVATION</p>
+            <p className="eyebrow lime">OFFICIAL CEREMONY RESERVATION</p>
             <h2>{activeBookingFestival.name}</h2>
             <p className="festModalDate">📅 {activeBookingFestival.dates}, {activeBookingFestival.year} · {activeBookingFestival.location}</p>
 
@@ -255,10 +254,10 @@ export default function FestivalCalendar({currency, countryCode = "ZMB"}: Festiv
                   onChange={e => setBookingType(e.target.value as "standard" | "vip")}
                 >
                   <option value="standard">
-                    Standard Entry Pass — {formatPrice(activeBookingFestival.ticketPricePgk, currency)}
+                    Standard Entry Pass — {formatPrice(activeBookingFestival.ticketPriceZmw, currency)}
                   </option>
                   <option value="vip">
-                    VIP Arena & Photographer Pass — {formatPrice(activeBookingFestival.vipPackagePricePgk, currency)}
+                    VIP Arena & Photographer Pass — {formatPrice(activeBookingFestival.vipPackagePriceZmw, currency)}
                   </option>
                 </select>
               </label>
@@ -280,7 +279,7 @@ export default function FestivalCalendar({currency, countryCode = "ZMB"}: Festiv
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Johnathan Smith"
+                  placeholder="e.g. Mukombo Chileshe"
                   value={visitorName}
                   onChange={e => setVisitorName(e.target.value)}
                 />
@@ -290,7 +289,7 @@ export default function FestivalCalendar({currency, countryCode = "ZMB"}: Festiv
                 <span>Total Pass Cost</span>
                 <strong>
                   {formatPrice(
-                    (bookingType === "vip" ? activeBookingFestival.vipPackagePricePgk : activeBookingFestival.ticketPricePgk) *
+                    (bookingType === "vip" ? activeBookingFestival.vipPackagePriceZmw : activeBookingFestival.ticketPriceZmw) *
                     Number(ticketQuantity || 1),
                     currency
                   )}

@@ -37,15 +37,14 @@ export interface PassLandingProps {
 }
 
 export function PassLanding({
-  countryCode = "ZMB",
   currency = "ZMW",
   onSelectPlan,
   onClose
 }: PassLandingProps) {
-  const isZambia = countryCode.toUpperCase() === "ZMB";
-  const brandName = isZambia ? "ZamRoam" : "VisitPNG";
-  const passName = isZambia ? "ZamRoam Pass" : "VisitPNG Pass";
-  const currencySymbol = isZambia ? "ZK" : "K";
+  const brandName = "ZamRoam";
+  const passName = "ZamRoam Pass";
+  const currencySymbol = "ZK";
+  const isZambia = true;
 
   const [activeTab, setActiveTab] = useState<"plans" | "card" | "faq">("plans");
   const [selectedPlanForCheckout, setSelectedPlanForCheckout] = useState<PassPlan | null>(null);

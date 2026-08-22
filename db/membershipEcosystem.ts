@@ -127,7 +127,7 @@ const ecosystemSchemaStatements = [
     audience TEXT NOT NULL,
     billing_period TEXT NOT NULL,
     price INTEGER NOT NULL,
-    currency TEXT NOT NULL DEFAULT 'PGK',
+    currency TEXT NOT NULL DEFAULT 'ZMW',
     description TEXT NOT NULL,
     is_complimentary INTEGER NOT NULL DEFAULT 0,
     tier_level INTEGER NOT NULL DEFAULT 1,
@@ -173,7 +173,7 @@ const ecosystemSchemaStatements = [
     name TEXT NOT NULL,
     tier_level INTEGER NOT NULL,
     annual_fee INTEGER NOT NULL,
-    currency TEXT NOT NULL DEFAULT 'PGK',
+    currency TEXT NOT NULL DEFAULT 'ZMW',
     discount_expectation_pct INTEGER NOT NULL,
     max_active_offers INTEGER NOT NULL DEFAULT 3,
     badge_title TEXT NOT NULL,
@@ -319,8 +319,8 @@ const defaultTouristPlans = [
     audience: "individual",
     billingPeriod: "lifetime",
     price: 0,
-    currency: "PGK",
-    description: "Digital visitor profile, PNG tourism directory access, save favourite destinations, and selected free-member offers.",
+    currency: "ZMW",
+    description: "Digital visitor profile, Zambian tourism directory access, save favourite destinations, and selected free-member offers.",
     isComplimentary: 1,
     tierLevel: 1,
     badgeColor: "gray",
@@ -331,11 +331,11 @@ const defaultTouristPlans = [
   },
   {
     code: "explorer-annual",
-    name: "VisitPNG Explorer",
+    name: "ZamRoam Explorer",
     audience: "individual",
     billingPeriod: "annual",
-    price: 199,
-    currency: "PGK",
+    price: 499,
+    currency: "ZMW",
     description: "Standard national paid membership. Digital QR card, member-only discounts, savings ledger, and optional physical card.",
     isComplimentary: 0,
     tierLevel: 2,
@@ -347,12 +347,12 @@ const defaultTouristPlans = [
   },
   {
     code: "adventurer-annual",
-    name: "VisitPNG Adventurer",
+    name: "ZamRoam Adventurer",
     audience: "individual",
     billingPeriod: "annual",
-    price: 499,
-    currency: "PGK",
-    description: "Premium membership for frequent travellers. Higher-value offers, hotel room upgrades, priority tour bookings, and collectible physical card.",
+    price: 1199,
+    currency: "ZMW",
+    description: "Premium membership for frequent travellers. Higher-value offers, safari lodge upgrades, priority tour bookings, and collectible physical card.",
     isComplimentary: 0,
     tierLevel: 3,
     badgeColor: "gold",
@@ -363,11 +363,11 @@ const defaultTouristPlans = [
   },
   {
     code: "elite-annual",
-    name: "VisitPNG Elite",
+    name: "ZamRoam Elite",
     audience: "executive",
     billingPeriod: "annual",
-    price: 1250,
-    currency: "PGK",
+    price: 2850,
+    currency: "ZMW",
     description: "VIP tier for executives & luxury travellers. VIP partner offers, airport benefits, private concierge assistance, and bespoke physical card.",
     isComplimentary: 0,
     tierLevel: 4,
@@ -379,11 +379,11 @@ const defaultTouristPlans = [
   },
   {
     code: "family-annual",
-    name: "VisitPNG Family Pass",
+    name: "ZamRoam Family Pass",
     audience: "family",
     billingPeriod: "annual",
-    price: 699,
-    currency: "PGK",
+    price: 1699,
+    currency: "ZMW",
     description: "Shared membership for 1 primary traveller plus up to 4 dependants/family members with individual digital cards.",
     isComplimentary: 0,
     tierLevel: 3,
@@ -395,12 +395,12 @@ const defaultTouristPlans = [
   },
   {
     code: "pass-7day",
-    name: "7-Day PNG Visitor Pass",
+    name: "7-Day ZamRoam Visitor Pass",
     audience: "visitor",
     billingPeriod: "7-days",
-    price: 49,
-    currency: "PGK",
-    description: "Short-term pass for conference attendees, cruise visitors, and week-long holidaymakers.",
+    price: 149,
+    currency: "ZMW",
+    description: "Short-term pass for conference attendees, safari visitors, and holidaymakers.",
     isComplimentary: 0,
     tierLevel: 2,
     badgeColor: "blue",
@@ -420,7 +420,7 @@ const defaultProviderPlans = [
     annualFee: 0,
     discountExpectationPct: 5,
     maxActiveOffers: 2,
-    badgeTitle: "VisitPNG Listed Partner",
+    badgeTitle: "ZamRoam Listed Partner",
     description: "Entry-level provider profile with verified badge, searchable directory listing, and basic redemption reporting.",
     featuresJson: JSON.stringify(["Official Partner Badge", "Searchable Listing", "Up to 2 Active Member Offers", "Basic Redemption Dashboard"])
   },
@@ -428,10 +428,10 @@ const defaultProviderPlans = [
     code: "silver-partner",
     name: "Silver Partner",
     tierLevel: 2,
-    annualFee: 500,
+    annualFee: 899,
     discountExpectationPct: 8,
     maxActiveOffers: 4,
-    badgeTitle: "VisitPNG Silver Partner",
+    badgeTitle: "ZamRoam Silver Partner",
     description: "Enhanced directory ranking, 4 simultaneous member offers, seasonal campaign participation, and customer analytics.",
     featuresJson: JSON.stringify(["Silver Partner Badge", "Enhanced Search Placement", "4 Simultaneous Member Offers", "Redemption Analytics", "Campaign Participation"])
   },
@@ -439,10 +439,10 @@ const defaultProviderPlans = [
     code: "gold-partner",
     name: "Gold Partner",
     tierLevel: 3,
-    annualFee: 1200,
+    annualFee: 1899,
     discountExpectationPct: 12,
     maxActiveOffers: 8,
-    badgeTitle: "VisitPNG Gold Partner",
+    badgeTitle: "ZamRoam Gold Partner",
     description: "Priority search discovery, destination campaign eligibility, geographic & member tier targeting, and multi-branch support.",
     featuresJson: JSON.stringify(["Gold Partner Badge", "Priority Search Discovery", "8 Active Member Offers", "Geographic & Tier Targeting", "Promotional Push Notifications", "Multi-Branch Support"])
   },
@@ -450,25 +450,25 @@ const defaultProviderPlans = [
     code: "platinum-partner",
     name: "Platinum Partner",
     tierLevel: 4,
-    annualFee: 3000,
+    annualFee: 4500,
     discountExpectationPct: 15,
     maxActiveOffers: 20,
-    badgeTitle: "VisitPNG Platinum Partner",
+    badgeTitle: "ZamRoam Platinum Partner",
     description: "Top-tier premium visibility, homepage spotlight campaigns, member segmentation insights, priority marketing support, and POS API readiness.",
     featuresJson: JSON.stringify(["Platinum Partner Status", "Homepage Feature & Top Discovery", "Unlimited Member Offers", "Advanced Customer Segment Analytics", "VIP Concierge Integration", "POS / PMS Integration Ready"])
   }
 ];
 
-// Initial High-Value Seed Offers across PNG
+// Initial High-Value Seed Offers across Zambia
 const seedProviderOffers = [
   {
     providerId: 1,
-    title: "15% Off Luxury Chalet Stays & Reef Dives",
-    shortSummary: "Enjoy 15% discount on all deluxe bungalow accommodation and guided coral reef scuba dives.",
+    title: "15% Off Luxury Safari Chalet Stays & Game Drives",
+    shortSummary: "Enjoy 15% discount on all deluxe riverfront chalet accommodation and guided walking safaris.",
     benefitType: "percentage_discount",
     discountPct: 15,
-    normalPrice: 650,
-    memberPrice: 552.5,
+    normalPrice: 3500,
+    memberPrice: 2975,
     applicableTiers: "explorer,adventurer,elite,family,pass",
     termsConditions: "Valid on bookings of 2 nights or more. Advance booking recommended.",
     imageUrl: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800&auto=format&fit=crop&q=80",
@@ -476,32 +476,32 @@ const seedProviderOffers = [
   },
   {
     providerId: 2,
-    title: "Free Airport Transfer & Complimentary Trekking Pole Pack",
-    shortSummary: "Receive complimentary private 4WD airport transfers and premium carbon trekking poles for Kokoda expeditions.",
+    title: "Free Airport Transfer & Victoria Falls Rainforest Guide",
+    shortSummary: "Receive complimentary private 4WD airport transfers from Livingstone Airport and guided rainforest walking tour.",
     benefitType: "complimentary_service",
-    complimentaryItem: "Private 4WD Airport Transfer + Trekking Poles",
+    complimentaryItem: "Private 4WD Airport Transfer + Guided Tour",
     applicableTiers: "adventurer,elite,family",
-    termsConditions: "Applicable upon booking standard Kokoda 8-day or 10-day trekking package.",
+    termsConditions: "Applicable upon booking standard Victoria Falls 3-day or 5-day safari package.",
     imageUrl: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&auto=format&fit=crop&q=80",
     isFeatured: 1
   },
   {
     providerId: 3,
-    title: "PGK 100 Off Authentic Sepik River Cultural Homestays",
-    shortSummary: "Special fixed member rebate on 3-day Sepik customary village canoe and artisan carving experiences.",
+    title: "K 500 Off South Luangwa Walking Safari Expeditions",
+    shortSummary: "Special fixed member rebate on 3-day South Luangwa walking safari and luxury bush camp stays.",
     benefitType: "fixed_discount",
-    discountAmount: 100,
-    normalPrice: 900,
-    memberPrice: 800,
+    discountAmount: 500,
+    normalPrice: 4200,
+    memberPrice: 3700,
     applicableTiers: "all",
-    termsConditions: "Valid on all direct cultural expedition bookings throughout the year.",
+    termsConditions: "Valid on all direct safari bookings throughout the year.",
     imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=800&auto=format&fit=crop&q=80",
     isFeatured: 1
   },
   {
     providerId: 4,
-    title: "Complimentary Harbour View Room Upgrade & Welcome Cocktail",
-    shortSummary: "Free upgrade to Deluxe Sea View Suite and welcome Highlands organic coffee cocktail upon check-in.",
+    title: "Complimentary Zambezi River Suite Upgrade & Welcome Drink",
+    shortSummary: "Free upgrade to Deluxe Riverfront Suite and welcome Mosi-oa-Tunya cocktail upon check-in.",
     benefitType: "upgrade",
     complimentaryItem: "Deluxe Suite Upgrade + Welcome Drink",
     applicableTiers: "adventurer,elite",
@@ -511,11 +511,11 @@ const seedProviderOffers = [
   },
   {
     providerId: 5,
-    title: "Buy 1 Cultural Banquet, Get 1 Traditional Mumu Free",
-    shortSummary: "Experience authentic earth-oven roasted pork, taro, and local greens with 2-for-1 member privilege.",
+    title: "Buy 1 Traditional Zambian Boma Dinner, Get 1 Free",
+    shortSummary: "Experience authentic African braai, village game stews, and traditional drumming with 2-for-1 member privilege.",
     benefitType: "buy_x_get_y",
-    normalPrice: 160,
-    memberPrice: 80,
+    normalPrice: 650,
+    memberPrice: 325,
     applicableTiers: "all",
     termsConditions: "Valid on Friday & Saturday cultural feast nights. Reservation required 24 hours in advance.",
     imageUrl: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&auto=format&fit=crop&q=80",
@@ -565,7 +565,7 @@ export async function ensureMembershipEcosystem() {
     await d1.prepare(`
       INSERT OR IGNORE INTO provider_subscription_plans
       (code, name, tier_level, annual_fee, currency, discount_expectation_pct, max_active_offers, badge_title, description, features_json, is_active)
-      VALUES (?, ?, ?, ?, 'PGK', ?, ?, ?, ?, ?, 1)
+      VALUES (?, ?, ?, ?, 'ZMW', ?, ?, ?, ?, ?, 1)
     `).bind(
       pp.code, pp.name, pp.tierLevel, pp.annualFee, pp.discountExpectationPct, pp.maxActiveOffers, pp.badgeTitle, pp.description, pp.featuresJson
     ).run();
@@ -756,8 +756,8 @@ export async function getTouristMembershipHub(identity: VisitPngUser) {
       roiMultiplier,
       redemptionsCount: redemptions.results.length,
       valuableMessage: netSavings > 0 
-        ? `You have saved PGK ${Math.round(netSavings)} more than your membership cost!`
-        : `Use your card at participating partners to unlock great discounts across PNG.`
+        ? `You have saved K ${Math.round(netSavings)} more than your membership cost!`
+        : `Use your card at participating partners to unlock great discounts across Zambia.`
     },
     passportStamps: stamps.results,
     pointsBalance: Number(points?.balance || 0),
@@ -918,10 +918,10 @@ export async function processProviderRedemption(input: {
     summary = `${offer.discountPct}% Member Discount`;
   } else if (offer.benefitType === "fixed_discount" && offer.discountAmount) {
     discount = Math.min(original, Number(offer.discountAmount));
-    summary = `PGK ${offer.discountAmount} Member Rebate`;
+    summary = `K ${offer.discountAmount} Member Rebate`;
   } else if (offer.benefitType === "member_price" && offer.normalPrice && offer.memberPrice) {
     discount = Math.max(0, Number(offer.normalPrice) - Number(offer.memberPrice));
-    summary = `Member Exclusive Rate (Saved PGK ${discount})`;
+    summary = `Member Exclusive Rate (Saved K ${discount})`;
   } else {
     discount = 0;
     summary = (offer.complimentaryItem as string) || (offer.title as string);
@@ -931,7 +931,7 @@ export async function processProviderRedemption(input: {
   const now = new Date();
   const dateStr = now.toISOString().slice(0, 10).replace(/-/g, "");
   const randCode = Math.floor(100000 + Math.random() * 900000);
-  const redemptionRef = `VPNG-RDM-${dateStr}-${randCode}`;
+  const redemptionRef = `ZR-RDM-${dateStr}-${randCode}`;
 
   await d1.prepare(`
     INSERT INTO partner_redemptions

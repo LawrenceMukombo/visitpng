@@ -33,7 +33,7 @@ interface ProviderRedemptionTerminalProps {
   currency?: CurrencyCode;
 }
 
-export default function ProviderRedemptionTerminal({ countryCode = "PNG", onClose, currency = "PGK" }: ProviderRedemptionTerminalProps) {
+export default function ProviderRedemptionTerminal({ countryCode = "ZMB", onClose, currency = "ZMW" }: ProviderRedemptionTerminalProps) {
   const isZambia = (countryCode || "").toUpperCase() === "ZMB" || (countryCode || "").toUpperCase() === "ZM";
   const [tokenInput, setTokenInput] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);

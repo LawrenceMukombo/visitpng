@@ -36,17 +36,6 @@ interface TouristMembershipHubProps {
   onOpenRedemptionTerminal?: () => void;
 }
 
-const PNG_PASSPORT_STAMPS = [
-  { name: "Port Moresby", prov: "NCD", icon: "🏛️", desc: "Capital Gateway & National Museum" },
-  { name: "Kokopo & Rabaul", prov: "East New Britain", icon: "🌋", desc: "Volcanoes, Mask Festival & Wrecks" },
-  { name: "Mount Hagen", prov: "Western Highlands", icon: "🎭", desc: "Highlands Cultural Singsing & Coffee" },
-  { name: "Madang", prov: "Madang", icon: "🤿", desc: "Flying Foxes & Coral Triangle Dives" },
-  { name: "Sepik River", prov: "East Sepik", icon: "🛶", desc: "Crocodile Clan Spirit Houses & Carvings" },
-  { name: "Kokoda Trail", prov: "Oro / Central", icon: "🥾", desc: "96km Historic Wilderness Pilgrimage" },
-  { name: "Alotau & Milne Bay", prov: "Milne Bay", icon: "⛵", desc: "Kenu & Kundu Canoe Festival" },
-  { name: "Goroka", prov: "Eastern Highlands", icon: "🪶", desc: "Asaro Mudmen & Bird of Paradise Sanctuaries" }
-];
-
 const ZAMBIA_PASSPORT_STAMPS = [
   { name: "Victoria Falls", prov: "Southern", icon: "🌊", desc: "Mosi-oa-Tunya & Devil's Pool Wonder" },
   { name: "South Luangwa", prov: "Eastern", icon: "🦁", desc: "Birthplace of the African Walking Safari" },
@@ -280,8 +269,8 @@ export default function TouristMembershipHub({ countryCode = "ZMB", viewer, curr
 
   const isUsable = sub && ["active", "complimentary"].includes(sub.status as string);
   const currentTier = (sub?.planCode as string) || "visitor-free";
-  const passportList = isZambia ? ZAMBIA_PASSPORT_STAMPS : PNG_PASSPORT_STAMPS;
-  const currencySymbol = isZambia ? "ZMW" : "PGK";
+  const passportList = ZAMBIA_PASSPORT_STAMPS;
+  const currencySymbol = "ZK";
 
   const getTierGradient = (code: string) => {
     if (code.includes("elite")) return "linear-gradient(135deg, var(--brand-deep-teal), var(--brand-charcoal))";

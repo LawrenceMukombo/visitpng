@@ -7,11 +7,9 @@ export interface AboutPageProps {
 }
 
 export function AboutPage({
-  countryCode = "ZMB",
   onClose
 }: AboutPageProps) {
-  const isZambia = countryCode.toUpperCase() === "ZMB";
-  const brandName = isZambia ? "ZamRoam" : "VisitPNG";
+  const brandName = "ZamRoam";
   const legalOwner = "Lamton Investments Ltd";
 
   return (
@@ -25,13 +23,13 @@ export function AboutPage({
       {/* Header Bar */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2.5rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <span style={{ fontSize: "2rem" }}>{isZambia ? "🇿🇲" : "🇵🇬"}</span>
+          <span style={{ fontSize: "2rem" }}>🇿🇲</span>
           <div>
             <h1 style={{ margin: 0, fontSize: "1.8rem", fontWeight: "800", color: "#1B6960" }}>
               About {brandName}
             </h1>
             <p style={{ margin: 0, fontSize: "0.95rem", color: "#52796F" }}>
-              {isZambia ? "Roam Zambia. Experience More." : "The Land of a Million Journeys"}
+              Roam Zambia. Experience More.
             </p>
           </div>
         </div>
@@ -68,12 +66,10 @@ export function AboutPage({
           Our Mission & Tourism Vision
         </h2>
         <p style={{ fontSize: "1.05rem", color: "#333", marginBottom: "1.5rem" }}>
-          <strong>{brandName}</strong> is a digital tourism platform designed to help travellers discover, experience and enjoy {isZambia ? "Zambia" : "Papua New Guinea"} while connecting verified local tourism businesses with new global and domestic customers.
+          <strong>{brandName}</strong> is Zambia's dedicated digital tourism platform designed to help travellers discover, experience, and book the finest of Zambia while connecting verified local lodges, safari guides, and transport providers directly with global and domestic travelers.
         </p>
         <p style={{ fontSize: "0.95rem", color: "#555" }}>
-          {isZambia
-            ? `From the roaring mist of Victoria Falls in Livingstone to world-renowned walking safaris in South Luangwa, canoe trails on the Lower Zambezi, and the rich cultural heritage across 10 provinces, ${brandName} brings the best of Zambia directly to your smartphone.`
-            : `From the historic Owen Stanley mountains of the Kokoda Track to Mount Wilhelm in Simbu, volcanic fjords in Tufi, and vibrant tribal singsings across 22 provinces, ${brandName} brings the best of Papua New Guinea directly to your smartphone.`}
+          From the roaring thunder of Victoria Falls in Livingstone to world-renowned walking safaris in South Luangwa, canoe expeditions on the Lower Zambezi, and celebrated traditional ceremonies across all 10 provinces, {brandName} brings the authentic warmth and splendour of Zambia directly to your smartphone.
         </p>
       </div>
 
@@ -95,7 +91,7 @@ export function AboutPage({
             Authentic Discovery
           </h3>
           <p style={{ fontSize: "0.9rem", color: "#444", margin: 0, lineHeight: "1.5" }}>
-            Curated destinations, GPS trails, offline maps, and verified listings with zero fake reviews.
+            Curated national parks, GPS trails, offline maps, and verified listings with zero fake reviews.
           </p>
         </div>
 
@@ -110,7 +106,7 @@ export function AboutPage({
             Member Privileges
           </h3>
           <p style={{ fontSize: "0.9rem", color: "#444", margin: 0, lineHeight: "1.5" }}>
-            The {isZambia ? "ZamRoam Pass" : "VisitPNG Pass"} unlocks exclusive rates and instant dynamic QR discounts across verified lodges and operators.
+            The ZamRoam Pass unlocks exclusive rates and instant dynamic QR discounts across verified Zambian lodges and operators.
           </p>
         </div>
 
@@ -149,7 +145,7 @@ export function AboutPage({
         <div style={{ fontSize: "0.85rem", color: "#a3cfc9", borderTop: "1px solid rgba(255,255,255,0.15)", paddingTop: "0.75rem", display: "flex", flexWrap: "wrap", gap: "0.75rem 1.5rem", alignItems: "center" }}>
           <span>Headquarters: Plot 10444, Great East Road, Rhodes Park, Lusaka, Zambia</span>
           <span>Phone: +260573506598</span>
-          <span>Email: <a href="mailto:info@lamtoninvestments.com" style={{ color: "#ffffff", textDecoration: "underline", fontWeight: "600" }}>info@lamtoninvestments.com</a></span>
+          <span>Email: <a href="mailto:info@zamroam.com" style={{ color: "#ffffff", textDecoration: "underline", fontWeight: "600" }}>info@zamroam.com</a></span>
         </div>
       </div>
     </div>
