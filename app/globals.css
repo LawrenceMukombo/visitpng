@@ -444,6 +444,14 @@ small{font-size:11px!important;line-height:1.4}.eyebrow{font-size:11px}.bottom b
 .formStatus.successStatus{color:var(--status-success);background:var(--status-success-soft);padding:10px;border-radius:8px;text-align:center;font-size:12px;font-weight:700}
 .formStatus.errorStatus{color:var(--status-danger);background:var(--status-danger-soft);padding:10px;border-radius:8px;text-align:center;font-size:12px;font-weight:700}
 
+/* Compact Explore Mode Switcher Tabs */
+.exploreModeSwitcher{display:flex;gap:6px;overflow-x:auto;padding:2px 2px 14px;margin-bottom:12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.exploreModeSwitcher::-webkit-scrollbar{display:none}
+.exploreModeSwitcher button{display:inline-flex;align-items:center;gap:5px;white-space:nowrap;padding:6px 12px;border-radius:99px;border:1px solid var(--border-default);background:var(--surface-card);color:var(--text-primary);font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0;min-height:unset;height:auto;line-height:1.2;box-shadow:0 1px 2px var(--shadow-color);transition:all 0.15s ease}
+.exploreModeSwitcher button:hover{background:var(--surface-selected);border-color:var(--brand-deep-teal);color:var(--brand-deep-teal)}
+.exploreModeSwitcher button.active{background:var(--brand-deep-teal)!important;color:var(--text-on-dark)!important;border-color:var(--brand-deep-teal)!important;box-shadow:0 2px 6px var(--shadow-color-strong)}
+
+
 
 
 
