@@ -1,5 +1,9 @@
 "use client";
 import {useCallback,useEffect,useState} from "react";
+import CurrencySelector from "./components/CurrencySelector";
+import TrailMapViewer from "./components/TrailMapViewer";
+import {CurrencyCode, formatPrice} from "../db/currency";
+import {PNG_TRAIL_PACKS} from "../db/trailPacks";
 
 type Viewer={signedIn:true;displayName:string;email:string;signOutPath:string}|{signedIn:false;signInPath:string};
 type Category={slug:string;name:string;icon:string};
@@ -30,10 +34,21 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   const[bookingListing,setBookingListing]=useState<Listing|null>(null);
   const[reviewListing,setReviewListing]=useState<Listing|null>(null);
   const[tab,setTab]=useState<"Explore"|"Bookings"|"Reviews"|"Saved"|"Trips"|"Membership"|"Profile">("Explore");
+  const[currency,setCurrency]=useState<CurrencyCode>("PGK");
+  const[exploreMode,setExploreMode]=useState<"places"|"trails">("places");
 
   useEffect(()=>{
     if(new URLSearchParams(window.location.search).has("wishlist"))setTab("Saved");
+    try{
+      const savedCurr=localStorage.getItem("visitpng_currency")as CurrencyCode|null;
+      if(savedCurr&&["PGK","AUD","USD","EUR","GBP","JPY"].includes(savedCurr))setCurrency(savedCurr);
+    }catch{}
   },[]);
+
+  const handleCurrencyChange=(newCurr:CurrencyCode)=>{
+    setCurrency(newCurr);
+    try{localStorage.setItem("visitpng_currency",newCurr)}catch{}
+  };
 
   const load=useCallback(async(signal?:AbortSignal)=>{
     setLoading(true);
@@ -59,7 +74,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   },[load]);
 
   return <main className="app">
-    <Header viewer={viewer} profile={()=>setTab("Profile")}/>
+    <Header viewer={viewer} profile={()=>setTab("Profile")} currency={currency} onCurrencyChange={handleCurrencyChange}/>
     {tab==="Explore"?<>
       <section className="hero">
         <p className="eyebrow lime">THE LAND OF A MILLION JOURNEYS</p>
@@ -77,12 +92,18 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
             {!loading&&data.listings.length===0&&<p>No matching suggestions yet</p>}
           </div>}
           <nav>
-            <button className={category==="all"?"selectedFilter":""} onClick={()=>setCategory("all")}>All places</button>
+            <button className={category==="all"&&exploreMode==="places"?"selectedFilter":""} onClick={()=>{setCategory("all");setExploreMode("places")}}>All places</button>
+            <button className={exploreMode==="trails"?"selectedFilter":""} onClick={()=>setExploreMode("trails")}>🗺️ Offline Expedition Packs</button>
             <button onClick={()=>setTab("Bookings")}>My bookings</button>
           </nav>
         </div>
       </section>
-      <section className="content">
+
+      {exploreMode==="places"?<section className="content">
+        <div className="exploreModeSwitcher">
+          <button className="active" onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
+          <button onClick={()=>setExploreMode("trails")}>🗺️ Offline Expedition Packs ({PNG_TRAIL_PACKS.length})</button>
+        </div>
         <div className="cats">
           {data?.categories.map(c=><button key={c.slug} className={category===c.slug?"active":""} onClick={()=>setCategory(category===c.slug?"all":c.slug)}><span>{c.icon}</span>{c.name}</button>)}
         </div>
@@ -91,25 +112,39 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
           {data&&<span className="resultCount">{data.meta.count} found</span>}
         </div>
         {loading?<Loading/>:error?<ErrorState message={error} retry={()=>load()}/>:data&&data.listings.length?<div className="cards">
-          {data.listings.map(p=><Card key={p.id} listing={p} open={setSelected} save={()=>viewer.signedIn?setSaveListing(p):setTab("Profile")}/>)}
+          {data.listings.map(p=><Card key={p.id} listing={p} currency={currency} open={setSelected} save={()=>viewer.signedIn?setSaveListing(p):setTab("Profile")}/>)}
         </div>:<Empty clear={()=>{setQ("");setCategory("all")}}/>}
         <ModuleStatus openReviews={()=>setTab("Reviews")}/>
-      </section>
-    </>:tab==="Bookings"?<BookingsScreen viewer={viewer}/>:tab==="Reviews"?<ReviewsScreen viewer={viewer}/>:tab==="Saved"?<SavedScreen viewer={viewer}/>:tab==="Trips"?<TripsScreen viewer={viewer}/>:tab==="Membership"?<MembershipScreen viewer={viewer}/>:<ProfileScreen viewer={viewer}/>}
+      </section>:<section className="content trailsContentSection">
+        <div className="exploreModeSwitcher">
+          <button onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
+          <button className="active" onClick={()=>setExploreMode("trails")}>🗺️ Offline Expedition Packs ({PNG_TRAIL_PACKS.length})</button>
+        </div>
+        <div className="title">
+          <div><p className="eyebrow lime">WILDERNESS & ADVENTURE MAPS</p><h2>Expedition & Trail Packs</h2></div>
+          <span className="resultCount">{PNG_TRAIL_PACKS.length} ready</span>
+        </div>
+        <p className="trailsIntro">Download topographic trail packs, elevation profiles, campsite waypoints, and GPX coordinates to navigate safely in Papua New Guinea without cellular reception.</p>
+        <div className="trailPacksGrid">
+          {PNG_TRAIL_PACKS.map(trail=><TrailMapViewer key={trail.id} trail={trail}/>)}
+        </div>
+      </section>}
+    </>:tab==="Bookings"?<BookingsScreen viewer={viewer} currency={currency}/>:tab==="Reviews"?<ReviewsScreen viewer={viewer}/>:tab==="Saved"?<SavedScreen viewer={viewer}/>:tab==="Trips"?<TripsScreen viewer={viewer} currency={currency}/>:tab==="Membership"?<MembershipScreen viewer={viewer} currency={currency}/>:<ProfileScreen viewer={viewer}/>}
     <Bottom tab={tab} setTab={setTab}/>
-    {selected&&<Details listing={selected} close={()=>setSelected(null)} book={()=>{setSelected(null);viewer.signedIn?setBookingListing(selected):setTab("Profile")}} review={()=>{setSelected(null);viewer.signedIn?setReviewListing(selected):setTab("Profile")}}/>}
+    {selected&&<Details listing={selected} currency={currency} close={()=>setSelected(null)} book={()=>{setSelected(null);viewer.signedIn?setBookingListing(selected):setTab("Profile")}} review={()=>{setSelected(null);viewer.signedIn?setReviewListing(selected):setTab("Profile")}}/>}
     {reviewListing&&viewer.signedIn&&<ReviewSheet listing={reviewListing} close={()=>setReviewListing(null)} done={()=>{setReviewListing(null);setTab("Reviews")}}/>}
-    {bookingListing&&viewer.signedIn&&<BookingSheet listing={bookingListing} close={()=>setBookingListing(null)} openBookings={()=>{setBookingListing(null);setTab("Bookings")}}/>}
+    {bookingListing&&viewer.signedIn&&<BookingSheet listing={bookingListing} currency={currency} close={()=>setBookingListing(null)} openBookings={()=>{setBookingListing(null);setTab("Bookings")}}/>}
     {saveListing&&viewer.signedIn&&<SaveSheet listing={saveListing} close={()=>setSaveListing(null)}/>}
   </main>;
 }
 
-function Header({viewer,profile}:{viewer:Viewer;profile:()=>void}){
+function Header({viewer,profile,currency,onCurrencyChange}:{viewer:Viewer;profile:()=>void;currency:CurrencyCode;onCurrencyChange:(c:CurrencyCode)=>void}){
   const initials=viewer.signedIn?viewer.displayName.split(/\s|@/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase():"GU";
   return <header>
     <button className="brand"><i>V</i><span>VISIT<br/><b>PAPUA NEW GUINEA</b></span></button>
     {viewer.signedIn&&<div className="headerWelcome"><small>Welcome</small><strong>{viewer.displayName}</strong></div>}
     <nav>
+      <CurrencySelector currentCurrency={currency} onChange={onCurrencyChange}/>
       <button aria-label="Signed-in connection">●</button>
       {viewer.signedIn?<button className="avatar" onClick={profile}>{initials}</button>:<a className="signInMini" href={viewer.signInPath}>Sign in</a>}
     </nav>
@@ -128,7 +163,7 @@ function ProfileScreen({viewer}:{viewer:Viewer}){
   return <AccountForm viewer={viewer}/>;
 }
 
-function MembershipScreen({viewer}:{viewer:Viewer}){
+function MembershipScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode}){
   const[data,setData]=useState<MembershipData|null>(null);
   const[status,setStatus]=useState("Loading membership…");
   const load=useCallback(()=>{
@@ -177,7 +212,7 @@ function MembershipScreen({viewer}:{viewer:Viewer}){
     <div className="plans">
       <div className="title"><div><p className="eyebrow">MEMBERSHIP OPTIONS</p><h2>Choose your membership</h2></div></div>
       {data?.plans.map(plan=><article className={`planCard ${data.subscription?.planId===plan.id?"current":""}`} key={plan.id}>
-        <header><div><small>{plan.audience} · {plan.billingPeriod}</small><h2>{plan.name}</h2></div><strong>{plan.price?`K${plan.price}`:"Free"}<small>{plan.price?`/${plan.billingPeriod}`:""}</small></strong></header>
+        <header><div><small>{plan.audience} · {plan.billingPeriod}</small><h2>{plan.name}</h2></div><strong>{plan.price?formatPrice(plan.price, currency):"Free"}<small>{plan.price?`/${plan.billingPeriod}`:""}</small></strong></header>
         <p>{plan.description}</p>
         <ul>{plan.benefits.map(b=><li key={b.id}><span>✓</span><div><b>{b.name}</b><small>{b.description}</small></div></li>)}</ul>
         <button disabled={data.subscription?.planId===plan.id&&data.subscription.status!=="cancelled"} onClick={()=>confirm(plan.price?"Choose this membership? It will wait for a practice payment, and no real money will be taken.":"Start this free membership?")&&act({action:"select",planId:plan.id})}>{data.subscription?.planId===plan.id?"Current plan":plan.price?"Select plan":"Activate free plan"}</button>
@@ -193,7 +228,7 @@ function MembershipScreen({viewer}:{viewer:Viewer}){
   </section>;
 }
 
-function TripsScreen({viewer}:{viewer:Viewer}){
+function TripsScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode}){
   const[trips,setTrips]=useState<Trip[]>([]);
   const[active,setActive]=useState(0);
   const[status,setStatus]=useState("Loading trips…");
@@ -251,7 +286,7 @@ function TripsScreen({viewer}:{viewer:Viewer}){
     {current?<><div className="tripHero">
       <p className="eyebrow">{current.status.toUpperCase()} · {current.destination}</p>
       <h2>{current.name}</h2>
-      <div className="tripStats"><span><b>{current.travellerCount}</b> travellers</span><span><b>{current.items.length}</b> plans</span><span><b>K{spent}</b> of K{current.budget}</span></div>
+      <div className="tripStats"><span><b>{current.travellerCount}</b> travellers</span><span><b>{current.items.length}</b> plans</span><span><b>{formatPrice(spent, currency)}</b> of {formatPrice(current.budget, currency)}</span></div>
       <progress value={spent} max={Math.max(current.budget,spent,1)}/>
       <div className="tripTools">
         <button onClick={()=>{const value=prompt("Update trip budget (K)",String(current.budget));if(value!==null)mutate("PATCH",{tripId:current.id,budget:Number(value)})}}>Budget</button>
@@ -286,7 +321,7 @@ function TripsScreen({viewer}:{viewer:Viewer}){
                 <div>
                   <h3>{p.title}</h3>
                   {p.endTime&&<small>Until {p.endTime}</small>}
-                  {p.cost>0&&<small>K{p.cost}</small>}
+                  {p.cost>0&&<small>{formatPrice(p.cost, currency)}</small>}
                   {p.bookingReference&&<small>Ref: {p.bookingReference}</small>}
                   {p.notes&&<p>{p.notes}</p>}
                   {conflict&&<em>Schedule conflict</em>}
@@ -479,7 +514,7 @@ function AccountForm({viewer}:{viewer:Extract<Viewer,{signedIn:true}>}){
   </section>;
 }
 
-function Card({listing:p,open,save}:{listing:Listing;open:(p:Listing)=>void;save:()=>void}){
+function Card({listing:p,open,save,currency}:{listing:Listing;open:(p:Listing)=>void;save:()=>void;currency:CurrencyCode}){
   return <article className="card" onClick={()=>open(p)}>
     <div className="pic" style={{backgroundImage:`url(${p.imageUrl})`}}>
       <span>{p.tag}</span>
@@ -490,14 +525,18 @@ function Card({listing:p,open,save}:{listing:Listing;open:(p:Listing)=>void;save
       <h3>{p.name}</h3>
       <p>{p.summary}</p>
       <footer>
-        <div><small>Sample member price</small><strong>K{p.memberPrice??p.basePrice}</strong> <del>K{p.basePrice}</del></div>
+        <div>
+          <small>Sample member price</small>
+          <strong>{formatPrice(p.memberPrice??p.basePrice, currency)}</strong>{" "}
+          {p.memberPrice&&<del>{formatPrice(p.basePrice, currency)}</del>}
+        </div>
         <em>Sample listing</em>
       </footer>
     </div>
   </article>;
 }
 
-function BookingSheet({listing,close,openBookings}:{listing:Listing;close:()=>void;openBookings:()=>void}){
+function BookingSheet({listing,close,openBookings,currency}:{listing:Listing;close:()=>void;openBookings:()=>void;currency:CurrencyCode}){
   const today=new Date().toISOString().slice(0,10);
   const tomorrow=new Date(Date.now()+86400000).toISOString().slice(0,10);
   const[form,setForm]=useState({startDate:today,endDate:tomorrow,guestCount:"1",contactName:"",contactMobile:""});
@@ -527,7 +566,7 @@ function BookingSheet({listing,close,openBookings}:{listing:Listing;close:()=>vo
         <label>Guests<input required type="number" min="1" max="12" value={form.guestCount} onChange={e=>setForm({...form,guestCount:e.target.value})}/></label>
         <label>Contact name<input required maxLength={100} value={form.contactName} onChange={e=>setForm({...form,contactName:e.target.value})}/></label>
         <label>Mobile (optional)<input inputMode="tel" maxLength={30} value={form.contactMobile} onChange={e=>setForm({...form,contactMobile:e.target.value})}/></label>
-        <div className="bookingEstimate"><span>Seeded rate, per day</span><strong>K{listing.memberPrice??listing.basePrice}</strong></div>
+        <div className="bookingEstimate"><span>Seeded rate, per day</span><strong>{formatPrice(listing.memberPrice??listing.basePrice, currency)}</strong></div>
         <button>Check availability & hold</button>
       </form>
       {status&&<p className="formStatus" aria-live="polite">{status}</p>}
@@ -535,7 +574,7 @@ function BookingSheet({listing,close,openBookings}:{listing:Listing;close:()=>vo
   </div>;
 }
 
-function BookingsScreen({viewer}:{viewer:Viewer}){
+function BookingsScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode}){
   const[bookings,setBookings]=useState<Booking[]>([]);
   const[status,setStatus]=useState("Loading bookings…");
   const load=useCallback(()=>{
@@ -558,95 +597,101 @@ function BookingsScreen({viewer}:{viewer:Viewer}){
   if(!viewer.signedIn)return <section className="accountGuest"><div className="accountMark">▤</div><p className="eyebrow">YOUR BOOKINGS</p><h1>Your reservations, safely together.</h1><p>Sign in to hold dated inventory and manage booking confirmations.</p><a href={viewer.signInPath}>Sign in to view bookings</a></section>;
   return <section className="saved bookingsPage">
     <p className="eyebrow">YOUR BOOKINGS & PAYMENTS</p>
-    <h1>Your PNG bookings.</h1>
-    <p>Your dates, booking hold and payment result are saved. All current places and payments are for practice only.</p>
-    <aside className="testGateway">
-      <b>Practice bookings</b>
-      <p>“Confirm practice payment” shows how payment works. It never asks for card details or uses real money.</p>
-    </aside>
+    <h1>Your travel bookings.</h1>
+    <p>Practice payments confirm your bookings without real charges.</p>
     {status&&<p className="formStatus" aria-live="polite">{status}</p>}
     {bookings.length?<div className="bookingList">
       {bookings.map(b=><article className="bookingCard" key={b.id}>
-        <div className="bookingImage" style={{backgroundImage:`url(${b.imageUrl})`}}/>
+        <div className="bookingThumb" style={{backgroundImage:`url(${b.imageUrl})`}}/>
         <div>
-          <header><span className={`bookingStatus ${b.status}`}>{b.status}</span>{b.isTestData?<em>TEST DATA</em>:null}</header>
-          <small>{b.destination}</small>
+          <header><span className={`status ${b.status}`}>{b.status}</span><small>Ref: {b.reference}</small></header>
           <h2>{b.listingName}</h2>
-          <b>{b.startDate} → {b.endDate} · {b.guestCount} guest{b.guestCount===1?"":"s"}</b>
-          <p>Reference {b.reference}</p>
-          <div className="bookingTotal">
-            <span>{b.paymentStatus?`Payment: ${b.paymentStatus}`:b.status==="held"?`Hold expires ${new Date(b.holdExpiresAt||"").toLocaleTimeString()}`:"No payment"}</span>
-            <strong>K{b.total} {b.currency}</strong>
+          <p>⌖ {b.destination} · {b.startDate} to {b.endDate}</p>
+          <div className="bookingFinancials">
+            <span>{b.guestCount} guests</span>
+            <strong>{formatPrice(b.total, currency)}</strong>
           </div>
-          <footer>
-            {b.status==="held"&&b.isTestData?<button onClick={()=>confirm("Try the practice payment? No real money will be charged.")&&act("testConfirm",b.id)}>Confirm practice payment</button>:null}
-            {["held","confirmed"].includes(b.status)?<button className="secondary" onClick={()=>confirm("Cancel this booking?")&&act("cancel",b.id)}>Cancel booking</button>:null}
-          </footer>
+          <div className="bookingActions">
+            {b.status==="held"&&<button onClick={()=>act("testConfirm",b.id)}>Confirm practice payment</button>}
+            {b.status==="held"&&<button className="cancelBtn" onClick={()=>act("cancel",b.id)}>Cancel hold</button>}
+          </div>
         </div>
       </article>)}
-    </div>:<div className="empty compact"><h2>No bookings yet</h2><p>Open a catalogue listing and choose “Check dates & book” to begin.</p></div>}
+    </div>:<div className="empty compact"><h2>No bookings yet</h2><p>Find a place and click “Check dates & book” to hold a sample booking.</p></div>}
   </section>;
 }
 
-function Stars({value,onChange,label="Rating"}:{value:number;onChange?:(n:number)=>void;label?:string}){
-  return <div className="stars" aria-label={`${label}: ${value} out of 5`}>
-    {[1,2,3,4,5].map(n=><button type="button" key={n} aria-label={`${n} ${n===1?"star":"stars"}`} className={n<=value?"filled":""} disabled={!onChange} onClick={()=>onChange?.(n)}>★</button>)}
-  </div>;
+function Stars({value}:{value:number}){
+  return <span className="stars" aria-label={`${value} out of 5 stars`}>
+    {[1,2,3,4,5].map(n=><i key={n} className={n<=Math.round(value)?"star filled":"star"}>★</i>)}
+  </span>;
 }
 
 function ReviewSummary({listingId}:{listingId:number}){
-  const[data,setData]=useState<{reviews:PublicReview[];summary:{count:number;average:number}}|null>(null);
+  const[data,setData]=useState<{count:number;averageRating:number;verifiedCount:number;aspects:{safety:number|null;service:number|null;value:number|null;accessibility:number|null};reviews:PublicReview[]}|null>(null);
+  const[status,setStatus]=useState("Loading reviews…");
   useEffect(()=>{
-    fetch(`/api/reviews?listingId=${listingId}`).then(r=>r.json()).then(setData).catch(()=>{});
+    fetch(`/api/reviews?listingId=${listingId}`)
+      .then(r=>{if(!r.ok)throw new Error();return r.json()})
+      .then(x=>{setData(x);setStatus("")})
+      .catch(()=>setStatus("Reviews could not be loaded."));
   },[listingId]);
-  if(!data)return <div className="reviewSummary">Loading traveller reviews…</div>;
-  return <section className="reviewSummary">
-    <div className="reviewScore">
-      <strong>{data.summary.average||"New"}</strong>
-      <div>
-        {data.summary.count?<Stars value={Math.round(data.summary.average)}/>:<span>No published reviews yet</span>}
-        <small>{data.summary.count} traveller review{data.summary.count===1?"":"s"}</small>
+  if(status)return <div className="reviewSummary loading"><small>{status}</small></div>;
+  if(!data||data.count===0)return <div className="reviewSummary empty"><small>No traveller reviews yet. Be the first to share an honest review.</small></div>;
+  return <div className="reviewSummary">
+    <div className="ratingOverview">
+      <div className="ratingBig"><strong>{data.averageRating.toFixed(1)}</strong><Stars value={data.averageRating}/><small>{data.count} {data.count===1?"review":"reviews"} · {data.verifiedCount} verified</small></div>
+      <div className="aspects">
+        {data.aspects.safety!==null&&<div><span>Safety</span><b>★ {data.aspects.safety.toFixed(1)}</b></div>}
+        {data.aspects.service!==null&&<div><span>Service</span><b>★ {data.aspects.service.toFixed(1)}</b></div>}
+        {data.aspects.value!==null&&<div><span>Value</span><b>★ {data.aspects.value.toFixed(1)}</b></div>}
+        {data.aspects.accessibility!==null&&<div><span>Accessibility</span><b>★ {data.aspects.accessibility.toFixed(1)}</b></div>}
       </div>
     </div>
-    {data.reviews.slice(0,3).map(r=><article key={r.id}>
-      <header><b>{r.author}</b><span>{r.verificationType==="verified_booking"?"✓ Verified booking":"Unverified visit"}</span></header>
-      <Stars value={r.overallRating}/>
-      <h3>{r.title}</h3>
-      <p>{r.body}</p>
-      {r.providerResponse&&<aside><b>Business reply</b><p>{r.providerResponse}</p></aside>}
-    </article>)}
-  </section>;
+    <div className="publicReviews">
+      {data.reviews.map(r=><article className="reviewCard" key={r.id}>
+        <header>
+          <div><strong>{r.author}</strong><small>{new Date(r.createdAt).toLocaleDateString()}</small></div>
+          <span className={`badge ${r.verificationType}`}>{r.verificationType==="verified_booking"?"✓ Verified booking":"Unverified visit"}</span>
+        </header>
+        <Stars value={r.overallRating}/>
+        <h4>{r.title}</h4>
+        <p>{r.body}</p>
+        {r.providerResponse&&<div className="providerResponse"><b>Business reply ({r.providerRespondedAt?new Date(r.providerRespondedAt).toLocaleDateString():"Recently"})</b><p>{r.providerResponse}</p></div>}
+      </article>)}
+    </div>
+  </div>;
 }
 
 function ReviewSheet({listing,close,done}:{listing:Listing;close:()=>void;done:()=>void}){
-  const[form,setForm]=useState({overallRating:5,valueRating:5,serviceRating:5,safetyRating:5,accessibilityRating:5,title:"",body:"",travelType:"solo",dateOfExperience:""});
+  const[form,setForm]=useState({overallRating:5,valueRating:"5",serviceRating:"5",safetyRating:"5",accessibilityRating:"5",title:"",body:"",travelType:"solo",dateOfExperience:new Date().toISOString().slice(0,10)});
   const[status,setStatus]=useState("");
   const submit=async(e:React.FormEvent)=>{
     e.preventDefault();
-    setStatus("Checking and saving your review…");
-    const r=await fetch("/api/reviews",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({listingId:listing.id,...form})});
+    setStatus("Submitting review…");
+    const r=await fetch("/api/reviews",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({listingId:listing.id,overallRating:Number(form.overallRating),valueRating:Number(form.valueRating),serviceRating:Number(form.serviceRating),safetyRating:Number(form.safetyRating),accessibilityRating:Number(form.accessibilityRating),title:form.title,body:form.body,travelType:form.travelType,dateOfExperience:form.dateOfExperience})});
     const x=await r.json();
     if(r.ok){
-      setStatus(x.status==="published"?(x.verified?"Published with a verified-booking badge.":"Published as an unverified visit."):"Saved for a careful review.");
-      setTimeout(done,1000);
-    } else setStatus(x.error||"Review could not be submitted.");
+      setStatus("Thank you! Your review was submitted.");
+      setTimeout(done,800);
+    } else setStatus(x.error||"Could not submit review.");
   };
   return <div className="overlay" onClick={close}>
     <article className="sheet reviewSheet" onClick={e=>e.stopPropagation()}>
       <button className="close" onClick={close}>×</button>
-      <p className="eyebrow">WRITE A REVIEW</p>
-      <h2>{listing.name}</h2>
+      <p className="eyebrow">SHARE YOUR EXPERIENCE</p>
+      <h2>Write a review for {listing.name}</h2>
       <aside className="reviewPolicy">
-        <b>Truthful reviews build trust</b>
-        <p>A completed eligible booking earns a verified badge. Other visits are published as unverified. Personal information, abusive content, spam and threats are held or rejected.</p>
+        <b>Fair review checks</b>
+        <p>Honest negative feedback is welcome. We check for personal information, spam and offensive words before publishing.</p>
       </aside>
       <form onSubmit={submit}>
-        <label>Overall experience<Stars value={form.overallRating} onChange={overallRating=>setForm({...form,overallRating})}/></label>
+        <label>Overall rating (1-5)<input type="range" min="1" max="5" value={form.overallRating} onChange={e=>setForm({...form,overallRating:Number(e.target.value)})}/><strong>{form.overallRating} stars</strong></label>
         <div className="ratingGrid">
-          <label>Value<Stars value={form.valueRating} onChange={valueRating=>setForm({...form,valueRating})}/></label>
-          <label>Service<Stars value={form.serviceRating} onChange={serviceRating=>setForm({...form,serviceRating})}/></label>
-          <label>Safety<Stars value={form.safetyRating} onChange={safetyRating=>setForm({...form,safetyRating})}/></label>
-          <label>Accessibility<Stars value={form.accessibilityRating} onChange={accessibilityRating=>setForm({...form,accessibilityRating})}/></label>
+          <label>Value<select value={form.valueRating} onChange={e=>setForm({...form,valueRating:e.target.value})}><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fair</option><option value="2">2 - Poor</option><option value="1">1 - Terrible</option></select></label>
+          <label>Service<select value={form.serviceRating} onChange={e=>setForm({...form,serviceRating:e.target.value})}><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fair</option><option value="2">2 - Poor</option><option value="1">1 - Terrible</option></select></label>
+          <label>Safety<select value={form.safetyRating} onChange={e=>setForm({...form,safetyRating:e.target.value})}><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fair</option><option value="2">2 - Poor</option><option value="1">1 - Terrible</option></select></label>
+          <label>Accessibility<select value={form.accessibilityRating} onChange={e=>setForm({...form,accessibilityRating:e.target.value})}><option value="5">5 - Excellent</option><option value="4">4 - Good</option><option value="3">3 - Fair</option><option value="2">2 - Poor</option><option value="1">1 - Terrible</option></select></label>
         </div>
         <label>Review title<input required minLength={3} maxLength={100} value={form.title} onChange={e=>setForm({...form,title:e.target.value})}/></label>
         <label>Your experience<textarea required minLength={10} maxLength={1500} rows={5} value={form.body} onChange={e=>setForm({...form,body:e.target.value})}/></label>
@@ -707,7 +752,7 @@ function ReviewsScreen({viewer}:{viewer:Viewer}){
   </section>;
 }
 
-function Details({listing:p,close,book,review}:{listing:Listing;close:()=>void;book:()=>void;review:()=>void}){
+function Details({listing:p,close,book,review,currency}:{listing:Listing;close:()=>void;book:()=>void;review:()=>void;currency:CurrencyCode}){
   return <div className="overlay" onClick={close}>
     <article className="sheet" onClick={e=>e.stopPropagation()}>
       <button className="close" onClick={close}>×</button>
@@ -725,7 +770,7 @@ function Details({listing:p,close,book,review}:{listing:Listing;close:()=>void;b
         <ReviewSummary listingId={p.id}/>
         {p.sourceUrl&&<a href={p.sourceUrl} target="_blank" rel="noreferrer">Visit the business website ↗</a>}
         <footer>
-          <div><small>Sample price</small><strong>K{p.memberPrice??p.basePrice}</strong></div>
+          <div><small>Sample price</small><strong>{formatPrice(p.memberPrice??p.basePrice, currency)}</strong></div>
           <div className="detailActions">
             <button className="secondary" onClick={review}>Write a review</button>
             <button onClick={book}>Check dates & book</button>
