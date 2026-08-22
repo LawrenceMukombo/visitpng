@@ -188,6 +188,32 @@ export const ZAMBIA_TRAIL_PACKS: TrailPack[] = [
       { name: "Batoka Gorge Boiling Pot Descent (Finish)", elevationMeters: 780, distanceKm: 12, latitude: -17.9300, longitude: 25.8670, description: "Descent to the base of the gorge where whitewater rafters launch.", isCampsite: false, waterAvailable: true }
     ],
     packingList: ["Waterproof poncho or rain jacket", "Waterproof drybag for phone & camera", "Grippy water-resistant sandals or light shoes", "UV sunglasses"]
+  },
+  {
+    id: "source-of-the-zambezi-trail",
+    name: "Source of the Zambezi National Heritage Trail",
+    subtitle: "Sacred rainforest pilgrimage to the exact birthplace of Africa's mighty Zambezi River in Ikelenge",
+    region: "North-Western Circuit",
+    province: "North-Western Province",
+    difficulty: "Easy",
+    totalDistanceKm: 6,
+    durationDays: "1 Day",
+    highestPointMeters: 1460,
+    lowestPointMeters: 1420,
+    elevationGainMeters: 60,
+    coverImage: "/destinations/zambezi_source/zambezi_source_spring.jpg",
+    overview: "A deeply spiritual and tranquil botanical pilgrimage nestled inside a pristine mushitu rainforest reserve in Ikelenge. Follow the carved heritage boardwalks to the exact bubbling forest spring where Africa's 2,574km river begins, tasting pure water directly from beneath sacred tree roots.",
+    requiredPermits: "National Heritage Conservation Commission (NHCC) Entry Pass (ZMW 300 / Included with ZamRoam Pass)",
+    emergencyFrequencies: "NHCC Ikelenge Station: +260 218 821045 · Mwinilunga District Command",
+    waypoints: [
+      { name: "NHCC Heritage Gate & Reception (Start)", elevationMeters: 1455, distanceKm: 0, latitude: -11.3685, longitude: 24.3140, description: "National monument reception, botanical orientation center, and ranger briefing." },
+      { name: "Mushitu Rainforest Boardwalk Trail", elevationMeters: 1445, distanceKm: 1.5, latitude: -11.3675, longitude: 24.3155, description: "Dense equatorial canopy walkway amidst endemic orchids, ferns, and rare birds.", waterAvailable: false },
+      { name: "Carved Hand Pointer 'SOURCE' Marker", elevationMeters: 1435, distanceKm: 2.8, latitude: -11.3670, longitude: 24.3160, description: "Historic hand-carved wooden pointer and NHCC conservation emblem post." },
+      { name: "Sacred Zambezi Springhead (Zero Km Point)", elevationMeters: 1430, distanceKm: 3.5, latitude: -11.3667, longitude: 24.3167, description: "The exact bubbling spring pool beneath the roots of a giant tree with the carved wooden Zambia map sign. Visitors drink crystal pure spring water here.", waterAvailable: true },
+      { name: "1964 Independence Monument & Memorial Grove", elevationMeters: 1440, distanceKm: 4.8, latitude: -11.3660, longitude: 24.3175, description: "Commemorative stone monument erected on 24 October 1964 celebrating Zambia's sovereignty." },
+      { name: "Ikelenge Botanical Viewpoint (Finish)", elevationMeters: 1460, distanceKm: 6.0, latitude: -11.3650, longitude: 24.3190, description: "Panoramic plateau overlook across the Zambezi-Congo watershed basin.", isCampsite: false, waterAvailable: true }
+    ],
+    packingList: ["Comfortable forest walking shoes", "Insect repellent & botanical guidebook", "Refillable pure water canteen", "Camera / Phone for monument photos"]
   }
 ];
 

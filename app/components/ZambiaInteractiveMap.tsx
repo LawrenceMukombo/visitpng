@@ -518,7 +518,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     districtName: "Ikelenge",
     region: "North-Western Circuit",
     summary: "The sacred, forested birthplace where Africa's fourth-longest river begins its journey to the Indian Ocean.",
-    imageUrl: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=1100&q=82",
+    imageUrl: "/destinations/zambezi_source/zambezi_source_spring.jpg",
     latitude: -11.3667,
     longitude: 24.3167,
     highlights: ["Sacred Springhead Botanical Reserve", "Zambezi River Wooden Footbridge", "Lunda Royal Heritage", "Pineapple Farmlands"],
