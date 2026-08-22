@@ -20,7 +20,7 @@ export default function CurrencySelector({currentCurrency, onChange}: CurrencySe
       >
         {Object.values(CURRENCIES).map(curr => (
           <option key={curr.code} value={curr.code}>
-            {curr.code} ({curr.symbol}) — {curr.name}
+            {curr.code} ({curr.symbol})
           </option>
         ))}
       </select>

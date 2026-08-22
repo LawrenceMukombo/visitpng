@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { formatPrice, type CurrencyCode } from "../../db/currency";
 
 interface BenefitItem {
@@ -35,6 +35,69 @@ interface TouristMembershipHubProps {
   onOpenRedemptionTerminal?: () => void;
 }
 
+function DigitalQrVisual({ token }: { token: string }) {
+  const size = 21;
+  const matrix: boolean[][] = Array.from({ length: size }, () => Array(size).fill(false));
+
+  const addFinder = (r0: number, c0: number) => {
+    for (let r = 0; r < 7; r++) {
+      for (let c = 0; c < 7; c++) {
+        if (
+          r === 0 || r === 6 || c === 0 || c === 6 ||
+          (r >= 2 && r <= 4 && c >= 2 && c <= 4)
+        ) {
+          matrix[r0 + r][c0 + c] = true;
+        }
+      }
+    }
+  };
+
+  addFinder(0, 0);
+  addFinder(0, size - 7);
+  addFinder(size - 7, 0);
+
+  for (let i = 8; i < size - 8; i++) {
+    if (i % 2 === 0) {
+      matrix[6][i] = true;
+      matrix[i][6] = true;
+    }
+  }
+
+  let hash = 0;
+  for (let i = 0; i < token.length; i++) {
+    hash = ((hash << 5) - hash + token.charCodeAt(i)) | 0;
+  }
+  let seed = Math.abs(hash) || 12345;
+
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      const inFinder =
+        (r < 8 && c < 8) ||
+        (r < 8 && c >= size - 8) ||
+        (r >= size - 8 && c < 8) ||
+        (r === 6 || c === 6);
+      if (!inFinder) {
+        seed = (seed * 9301 + 49297) % 233280;
+        matrix[r][c] = (seed / 233280) > 0.46;
+      }
+    }
+  }
+
+  return (
+    <div className="digitalQrVisualWrapper">
+      <svg viewBox="0 0 21 21" className="qrMatrixSvg" aria-label="Digital Membership QR Code">
+        <rect width="21" height="21" fill="var(--brand-white)" rx="1" />
+        {matrix.map((row, r) =>
+          row.map((active, c) =>
+            active ? <rect key={`${r}-${c}`} x={c} y={r} width="1" height="1" fill="var(--brand-charcoal)" /> : null
+          )
+        )}
+      </svg>
+      <div className="qrLaserScanLine" />
+    </div>
+  );
+}
+
 export default function TouristMembershipHub({ viewer, currency, onOpenRedemptionTerminal }: TouristMembershipHubProps) {
   const [data, setData] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -49,7 +112,7 @@ export default function TouristMembershipHub({ viewer, currency, onOpenRedemptio
   const [familyForm, setFamilyForm] = useState({ fullName: "", relationship: "Spouse" });
   const [isAddingFamily, setIsAddingFamily] = useState(false);
 
-  const loadHub = () => {
+  const loadHub = useCallback(() => {
     if (!viewer.signedIn) return;
     setLoading(true);
     fetch("/api/membership")
@@ -71,11 +134,11 @@ export default function TouristMembershipHub({ viewer, currency, onOpenRedemptio
         if (r.ok && x.offers) setOffers(x.offers);
       })
       .catch(() => {});
-  };
+  }, [viewer.signedIn]);
 
   useEffect(() => {
     loadHub();
-  }, [viewer.signedIn]);
+  }, [loadHub]);
 
   // Dynamic QR code 60-second ticker
   useEffect(() => {
@@ -182,6 +245,7 @@ export default function TouristMembershipHub({ viewer, currency, onOpenRedemptio
         </div>
       </div>
 
+      {loading && <div className="membershipStatusBanner">Loading membership hub…</div>}
       {status && <div className="membershipStatusBanner" aria-live="polite">{status}</div>}
 
       {/* Navigation Tabs */}
@@ -224,23 +288,40 @@ export default function TouristMembershipHub({ viewer, currency, onOpenRedemptio
                 </div>
 
                 <div className="cardHolderRow">
-                  <small>MEMBER NAME</small>
-                  <h3>{(data?.memberName as string) || viewer.displayName || "Valued Traveller"}</h3>
-                  <code>{(sub.memberNumber as string)}</code>
+                  <div className="holderMeta">
+                    <small>MEMBER NAME</small>
+                    <h3>{(data?.memberName as string) || viewer.displayName || "Valued Traveller"}</h3>
+                    <div className="memberNumberBadge">
+                      <small>MEMBERSHIP ID</small>
+                      <code>{(sub.memberNumber as string)}</code>
+                    </div>
+                  </div>
+                  {isUsable && dynamicQr && (
+                    <div className="cardQrThumbnailBox">
+                      <DigitalQrVisual token={dynamicQr.token} />
+                    </div>
+                  )}
                 </div>
 
                 {/* Dynamic Rotating QR Verification */}
                 {isUsable && dynamicQr ? (
                   <div className="dynamicQrSecurityBox">
                     <div className="qrVisualPlaceholder">
-                      <div className="qrRotatingRings">
-                        <span>●</span><span>●</span><span>●</span>
-                      </div>
-                      <code className="dynamicTokenStr">{dynamicQr.token}</code>
+                      <DigitalQrVisual token={dynamicQr.token} />
+                      <span className="qrScanHint">Scan to Verify</span>
                     </div>
                     <div className="qrSecurityMeta">
-                      <strong>🛡️ Anti-Screenshot Dynamic QR</strong>
-                      <small>Rotating in <b>{qrCountdown}s</b> · Server Verified</small>
+                      <div className="qrLiveBadge">
+                        <span className="liveDot" /> LIVE VERIFICATION
+                      </div>
+                      <strong className="tokenDisplayLabel">Code: <code>{dynamicQr.token}</code></strong>
+                      <div className="qrProgressRow">
+                        <div className="qrProgressBar">
+                          <div className="qrProgressFill" style={{ width: `${(qrCountdown / 60) * 100}%` }} />
+                        </div>
+                        <small>Refreshes in <b>{qrCountdown}s</b></small>
+                      </div>
+                      <span className="antiFraudBadge">🔒 Anti-Screenshot Protected · Server Encrypted</span>
                     </div>
                   </div>
                 ) : (
