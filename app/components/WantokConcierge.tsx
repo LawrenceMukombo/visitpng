@@ -1,14 +1,14 @@
 "use client";
-import {useState} from "react";
-import {CURATED_ITINERARIES, GeneratedItinerary, generateCustomItinerary} from "../../db/wantokAi";
-import {CurrencyCode, formatPrice} from "../../db/currency";
+import { useState } from "react";
+import { CURATED_ITINERARIES, GeneratedItinerary, ItineraryDay, generateCustomItinerary } from "../../db/wantokAi";
+import { CurrencyCode, formatPrice } from "../../db/currency";
 
 interface WantokConciergeProps {
   currency: CurrencyCode;
   onOpenTrips?: () => void;
 }
 
-export default function WantokConcierge({currency, onOpenTrips}: WantokConciergeProps) {
+export default function WantokConcierge({ currency, onOpenTrips }: WantokConciergeProps) {
   const [selectedStyle, setSelectedStyle] = useState<string>("Cultural Immersion");
   const [durationDays, setDurationDays] = useState<number>(7);
   const [fitnessLevel, setFitnessLevel] = useState<string>("Moderate");
@@ -17,6 +17,10 @@ export default function WantokConcierge({currency, onOpenTrips}: WantokConcierge
   const [activeItinerary, setActiveItinerary] = useState<GeneratedItinerary>(CURATED_ITINERARIES[0]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [saveNotice, setSaveNotice] = useState("");
+  const [isCustomizing, setIsCustomizing] = useState(false);
+
+  // New activity input states per day
+  const [newActivityInputs, setNewActivityInputs] = useState<Record<number, string>>({});
 
   const availableInterests = [
     "Tribal Singsing",
@@ -54,6 +58,135 @@ export default function WantokConcierge({currency, onOpenTrips}: WantokConcierge
     }, 400);
   };
 
+  // Customizer Actions:
+  const handleAddActivity = (dayNumber: number) => {
+    const text = newActivityInputs[dayNumber]?.trim();
+    if (!text) return;
+
+    const updatedDays = activeItinerary.days.map((day) => {
+      if (day.dayNumber === dayNumber) {
+        return {
+          ...day,
+          activities: [...day.activities, text],
+          estimatedCostPgk: day.estimatedCostPgk + 80 // slight cost adjustment for new activity
+        };
+      }
+      return day;
+    });
+
+    const newTotal = updatedDays.reduce((acc, d) => acc + d.estimatedCostPgk, 0);
+
+    setActiveItinerary({
+      ...activeItinerary,
+      days: updatedDays,
+      totalEstimatedCostPgk: newTotal
+    });
+
+    setNewActivityInputs({ ...newActivityInputs, [dayNumber]: "" });
+    setSaveNotice(`➕ Added activity to Day ${dayNumber}`);
+    setTimeout(() => setSaveNotice(""), 2500);
+  };
+
+  const handleRemoveActivity = (dayNumber: number, actIndex: number) => {
+    const updatedDays = activeItinerary.days.map((day) => {
+      if (day.dayNumber === dayNumber) {
+        const newActs = day.activities.filter((_, idx) => idx !== actIndex);
+        return {
+          ...day,
+          activities: newActs,
+          estimatedCostPgk: Math.max(150, day.estimatedCostPgk - 60)
+        };
+      }
+      return day;
+    });
+
+    const newTotal = updatedDays.reduce((acc, d) => acc + d.estimatedCostPgk, 0);
+
+    setActiveItinerary({
+      ...activeItinerary,
+      days: updatedDays,
+      totalEstimatedCostPgk: newTotal
+    });
+
+    setSaveNotice(`🗑️ Removed activity from Day ${dayNumber}`);
+    setTimeout(() => setSaveNotice(""), 2500);
+  };
+
+  const handleRemoveDay = (dayNumber: number) => {
+    if (activeItinerary.days.length <= 1) {
+      setSaveNotice("⚠️ An itinerary must have at least 1 day.");
+      setTimeout(() => setSaveNotice(""), 2500);
+      return;
+    }
+
+    const filtered = activeItinerary.days.filter((d) => d.dayNumber !== dayNumber);
+    // Renumber remaining days
+    const renumbered: ItineraryDay[] = filtered.map((d, index) => ({
+      ...d,
+      dayNumber: index + 1
+    }));
+
+    const newTotal = renumbered.reduce((acc, d) => acc + d.estimatedCostPgk, 0);
+
+    setActiveItinerary({
+      ...activeItinerary,
+      durationDays: renumbered.length,
+      days: renumbered,
+      totalEstimatedCostPgk: newTotal
+    });
+
+    setSaveNotice(`🗑️ Removed Day ${dayNumber}. Itinerary updated to ${renumbered.length} days.`);
+    setTimeout(() => setSaveNotice(""), 3000);
+  };
+
+  const handleAddDay = () => {
+    const nextNum = activeItinerary.days.length + 1;
+    const lastDay = activeItinerary.days[activeItinerary.days.length - 1];
+
+    const newDay: ItineraryDay = {
+      dayNumber: nextNum,
+      title: `Exploration & Community Encounter - Day ${nextNum}`,
+      province: lastDay ? lastDay.province : "National Capital District",
+      location: lastDay ? lastDay.location : "Port Moresby",
+      summary: "Custom explorer day: village interaction, artisanal craft markets, or coastal nature walks.",
+      activities: [
+        "Visit local morning produce & bilum handicraft market",
+        "Community walking tour with local landowner guide",
+        "Traditional twilight mumu feast and storytelling"
+      ],
+      recommendedStay: lastDay ? lastDay.recommendedStay : "Local Eco-Lodge or Homestay",
+      estimatedCostPgk: 450,
+      logisticsNotes: "Arrange local private van or river canoe liaison ahead of time."
+    };
+
+    const updatedDays = [...activeItinerary.days, newDay];
+    const newTotal = updatedDays.reduce((acc, d) => acc + d.estimatedCostPgk, 0);
+
+    setActiveItinerary({
+      ...activeItinerary,
+      durationDays: updatedDays.length,
+      days: updatedDays,
+      totalEstimatedCostPgk: newTotal
+    });
+
+    setSaveNotice(`➕ Added Day ${nextNum} to your customized itinerary!`);
+    setTimeout(() => setSaveNotice(""), 3000);
+  };
+
+  const handleUpdateDayField = (dayNumber: number, field: keyof ItineraryDay, value: string) => {
+    const updatedDays = activeItinerary.days.map((day) => {
+      if (day.dayNumber === dayNumber) {
+        return { ...day, [field]: value };
+      }
+      return day;
+    });
+
+    setActiveItinerary({
+      ...activeItinerary,
+      days: updatedDays
+    });
+  };
+
   const handleSaveToTrips = async () => {
     try {
       const today = new Date().toISOString().slice(0, 10);
@@ -71,8 +204,8 @@ export default function WantokConcierge({currency, onOpenTrips}: WantokConcierge
 
       const res = await fetch("/api/trips", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({action: "create", ...tripPayload})
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "create", ...tripPayload })
       });
 
       if (res.ok) {
@@ -84,7 +217,7 @@ export default function WantokConcierge({currency, onOpenTrips}: WantokConcierge
             const dayDate = new Date(Date.now() + (day.dayNumber - 1) * 86400000).toISOString().slice(0, 10);
             await fetch("/api/trips", {
               method: "POST",
-              headers: {"Content-Type": "application/json"},
+              headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
                 action: "addItem",
                 tripId: createdTrip.id,
@@ -92,12 +225,12 @@ export default function WantokConcierge({currency, onOpenTrips}: WantokConcierge
                 itemType: "activity",
                 scheduledDate: dayDate,
                 cost: day.estimatedCostPgk,
-                notes: `${day.summary} (Stay: ${day.recommendedStay})`
+                notes: `${day.summary} (Activities: ${day.activities.join(" | ")}) (Stay: ${day.recommendedStay})`
               })
             });
           }
         }
-        setSaveNotice("🎉 Itinerary successfully added to your interactive Trips Planner!");
+        setSaveNotice("🎉 Customized itinerary successfully added to your interactive Trips Planner!");
         if (onOpenTrips) {
           setTimeout(onOpenTrips, 1200);
         }
@@ -114,13 +247,13 @@ export default function WantokConcierge({currency, onOpenTrips}: WantokConcierge
   };
 
   const handleExportJson = () => {
-    const blob = new Blob([JSON.stringify({generatedAt: new Date().toISOString(), itinerary: activeItinerary}, null, 2)], {type: "application/json"});
+    const blob = new Blob([JSON.stringify({ generatedAt: new Date().toISOString(), itinerary: activeItinerary }, null, 2)], { type: "application/json" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = `${activeItinerary.id}.json`;
     a.click();
     URL.revokeObjectURL(a.href);
-    setSaveNotice("📥 Itinerary file downloaded.");
+    setSaveNotice("📥 Custom itinerary file downloaded.");
     setTimeout(() => setSaveNotice(""), 3000);
   };
 
@@ -130,12 +263,12 @@ export default function WantokConcierge({currency, onOpenTrips}: WantokConcierge
         <div className="wantokTagline">
           <span className="wantokAvatar">🤖</span>
           <div>
-            <p className="eyebrow lime">WANTOK AI TRIP ARCHITECT</p>
+            <p className="eyebrow lime">WANTOK AI TRIP ARCHITECT & CUSTOMIZER</p>
             <h2>Your Papua New Guinea Travel Concierge</h2>
           </div>
         </div>
         <p className="wantokDesc">
-          Tackle PNG travel logistics with intelligent planning. Wantok AI accounts for domestic flight connection hubs, mountain weather, trek acclimatization, and cultural village protocols.
+          Tackle PNG travel logistics with intelligent planning. Wantok AI accounts for domestic flight connection hubs, mountain weather, trek acclimatization, and cultural village protocols. Customize any day or activity to fit your exact dream expedition.
         </p>
       </div>
 
@@ -243,8 +376,15 @@ export default function WantokConcierge({currency, onOpenTrips}: WantokConcierge
               <strong>{formatPrice(activeItinerary.totalEstimatedCostPgk, currency)}</strong>
             </div>
             <div className="itineraryTopActions">
+              <button
+                type="button"
+                className={`customizeToggleBtn ${isCustomizing ? "active" : ""}`}
+                onClick={() => setIsCustomizing(!isCustomizing)}
+              >
+                {isCustomizing ? "✓ Done Customizing" : "✏️ Customize Days & Activities"}
+              </button>
               <button type="button" className="saveToTripsBtn" onClick={handleSaveToTrips}>
-                ➕ Add Directly to My Trips
+                ➕ Save to My Trips Planner
               </button>
               <button type="button" className="exportJsonBtn" onClick={handleExportJson}>
                 📥 Export JSON
@@ -255,32 +395,124 @@ export default function WantokConcierge({currency, onOpenTrips}: WantokConcierge
 
         {/* Day-by-day Itinerary Timeline */}
         <div className="itineraryDaysList">
-          <h3>📅 Day-by-Day Journey Breakdown:</h3>
-          {activeItinerary.days.map(day => (
+          <div className="itineraryDaysHeader">
+            <h3>📅 Day-by-Day Journey Breakdown ({activeItinerary.days.length} Days):</h3>
+            {isCustomizing && (
+              <span className="customizingNoticeBadge">
+                ✏️ Customizing Mode Active: Add or remove activities & days below
+              </span>
+            )}
+          </div>
+
+          {activeItinerary.days.map((day) => (
             <article key={day.dayNumber} className="itineraryDayCard">
               <div className="dayBadgeCol">
                 <span className="dayNumBadge">Day {day.dayNumber}</span>
                 <small className="dayCostTag">{formatPrice(day.estimatedCostPgk, currency)}</small>
+                {isCustomizing && (
+                  <button
+                    type="button"
+                    className="deleteDayBtn"
+                    title={`Delete Day ${day.dayNumber}`}
+                    onClick={() => handleRemoveDay(day.dayNumber)}
+                  >
+                    🗑️ Remove Day
+                  </button>
+                )}
               </div>
 
               <div className="dayContentCol">
-                <h4>{day.title}</h4>
-                <p className="dayLocation">📍 <b>{day.location}</b> ({day.province})</p>
+                {isCustomizing ? (
+                  <div className="editableDayHeader">
+                    <input
+                      type="text"
+                      className="editableDayTitleInput"
+                      value={day.title}
+                      onChange={(e) => handleUpdateDayField(day.dayNumber, "title", e.target.value)}
+                    />
+                    <div className="editableLocationRow">
+                      <span>📍 Location: </span>
+                      <input
+                        type="text"
+                        value={day.location}
+                        onChange={(e) => handleUpdateDayField(day.dayNumber, "location", e.target.value)}
+                      />
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    <h4>{day.title}</h4>
+                    <p className="dayLocation">📍 <b>{day.location}</b> ({day.province})</p>
+                  </>
+                )}
+
                 <p className="daySummary">{day.summary}</p>
 
+                {/* Activities List */}
                 <div className="dayActivities">
                   <strong>Planned Highlights:</strong>
-                  <ul>
+                  <ul className="activitiesList">
                     {day.activities.map((act, idx) => (
-                      <li key={idx}>✓ {act}</li>
+                      <li key={idx} className="activityItem">
+                        <span>✓ {act}</span>
+                        {isCustomizing && (
+                          <button
+                            type="button"
+                            className="removeActBtn"
+                            title="Remove this activity"
+                            onClick={() => handleRemoveActivity(day.dayNumber, idx)}
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </li>
                     ))}
                   </ul>
+
+                  {/* Add New Activity Form */}
+                  {isCustomizing && (
+                    <div className="addActivityRow">
+                      <input
+                        type="text"
+                        placeholder="Add custom activity (e.g. Sunrise birdwatching, village sing-sing...)"
+                        value={newActivityInputs[day.dayNumber] || ""}
+                        onChange={(e) =>
+                          setNewActivityInputs({
+                            ...newActivityInputs,
+                            [day.dayNumber]: e.target.value
+                          })
+                        }
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            handleAddActivity(day.dayNumber);
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="addActSubmitBtn"
+                        onClick={() => handleAddActivity(day.dayNumber)}
+                      >
+                        + Add
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="dayStayAndLogistics">
                   <div>
                     <small>Recommended Stay:</small>
-                    <b>🏨 {day.recommendedStay}</b>
+                    {isCustomizing ? (
+                      <input
+                        type="text"
+                        className="editableStayInput"
+                        value={day.recommendedStay}
+                        onChange={(e) => handleUpdateDayField(day.dayNumber, "recommendedStay", e.target.value)}
+                      />
+                    ) : (
+                      <b>🏨 {day.recommendedStay}</b>
+                    )}
                   </div>
                   <div>
                     <small>Logistics & Transport Advice:</small>
@@ -290,6 +522,15 @@ export default function WantokConcierge({currency, onOpenTrips}: WantokConcierge
               </div>
             </article>
           ))}
+
+          {/* Add Day Button in Customizing Mode */}
+          {isCustomizing && (
+            <div className="addDayActionBox">
+              <button type="button" className="addDayBtn" onClick={handleAddDay}>
+                ➕ Add Another Day to Expedition
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Packing & Health Advisories */}
