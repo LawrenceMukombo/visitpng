@@ -938,38 +938,13 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         </div>
       </div>
 
-      {/* Main Map Body: Interactive Split View (Map Canvas + Full Info Drawer) */}
-      <div
-        className="zambiaMapBody"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 340px",
-          gap: "16px",
-          padding: "16px",
-          minHeight: isFullscreen ? "calc(100vh - 160px)" : "680px",
-          alignItems: "start"
-        }}
-      >
+      {/* Main Map Body: Full-Width Stacked Responsive Layout */}
+      <div className="zambiaMapBody">
         {/* Real Zambia SVG Map Canvas */}
-        <div
-          className="zambiaMapCanvasWrapper"
-          style={{
-            position: "relative",
-            background: "radial-gradient(ellipse at center, rgba(12, 38, 38, 1) 0%, rgba(4, 14, 14, 1) 100%)",
-            borderRadius: "14px",
-            border: "1px solid rgba(37, 211, 102, 0.2)",
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "12px",
-            minHeight: "560px"
-          }}
-        >
+        <div className="zambiaMapCanvasWrapper">
           {/* Compass Rose */}
-          <div style={{ position: "absolute", top: "18px", left: "20px", opacity: 0.9, pointerEvents: "none", textAlign: "center", fontSize: "11px", fontWeight: 800, color: "rgba(37, 211, 102, 1)", zIndex: 5 }}>
-            <span style={{ fontSize: "22px", display: "block" }}>🧭</span>
+          <div style={{ position: "absolute", top: "16px", left: "18px", opacity: 0.9, pointerEvents: "none", textAlign: "center", fontSize: "11px", fontWeight: 800, color: "rgba(37, 211, 102, 1)", zIndex: 5 }}>
+            <span style={{ fontSize: "20px", display: "block" }}>🧭</span>
             <span>NORTH</span>
           </div>
 
@@ -1312,18 +1287,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         </div>
 
         {/* Selected Destination Preview Drawer with FULL GPS Details */}
-        <div
-          className="zambiaMapDetailPanel"
-          style={{
-            background: "rgba(10, 32, 32, 0.95)",
-            borderRadius: "14px",
-            border: "1px solid rgba(37, 211, 102, 0.25)",
-            padding: "16px",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between"
-          }}
-        >
+        <div className="zambiaMapDetailPanel">
           {selectedPin ? (
             <div>
               <div style={{ position: "relative", borderRadius: "10px", overflow: "hidden", marginBottom: "12px", height: "160px", background: "rgba(0,0,0,1)" }}>

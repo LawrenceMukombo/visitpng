@@ -1100,23 +1100,14 @@ small{font-size:11px!important;line-height:1.4}.eyebrow{font-size:11px}.bottom b
 }
 
 .zambiaMapBody {
-  display: grid;
-  grid-template-columns: 1fr 360px;
+  display: flex;
+  flex-direction: column;
   gap: 16px;
-  align-items: start;
   width: 100%;
   padding: 16px;
   box-sizing: border-box;
 }
 
-@media (max-width: 1024px) {
-  .zambiaMapBody {
-    display: flex;
-    flex-direction: column;
-    padding: 12px;
-    gap: 14px;
-  }
-}
 
 .zambiaMapCanvasWrapper {
   position: relative;
