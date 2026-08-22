@@ -1,0 +1,649 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { formatPrice, type CurrencyCode } from "../../db/currency";
+
+interface BenefitItem {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+  usageLimit: number | null;
+}
+
+interface PlanItem {
+  id: number;
+  code: string;
+  name: string;
+  audience: string;
+  billingPeriod: string;
+  price: number;
+  currency: string;
+  description: string;
+  isComplimentary: boolean;
+  tierLevel: number;
+  badgeColor: string;
+  cardIncluded: boolean;
+  maxFamilyMembers: number;
+  isEventPass: boolean;
+  benefits: BenefitItem[];
+}
+
+interface TouristMembershipHubProps {
+  viewer: { signedIn: boolean; email?: string; displayName?: string; signInPath?: string };
+  currency: CurrencyCode;
+  onOpenRedemptionTerminal?: () => void;
+}
+
+export default function TouristMembershipHub({ viewer, currency, onOpenRedemptionTerminal }: TouristMembershipHubProps) {
+  const [data, setData] = useState<Record<string, unknown> | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [status, setStatus] = useState("");
+  const [activeTab, setActiveTab] = useState<"card" | "savings" | "offers" | "passport" | "family" | "plans">("card");
+  const [offers, setOffers] = useState<Array<Record<string, unknown>>>([]);
+  const [offerSearch, setOfferSearch] = useState("");
+  const [selectedDestination, setSelectedDestination] = useState<string>("all");
+  const [qrCountdown, setQrCountdown] = useState<number>(60);
+  const [physicalCardAddress, setPhysicalCardAddress] = useState("");
+  const [isOrderingCard, setIsOrderingCard] = useState(false);
+  const [familyForm, setFamilyForm] = useState({ fullName: "", relationship: "Spouse" });
+  const [isAddingFamily, setIsAddingFamily] = useState(false);
+
+  const loadHub = () => {
+    if (!viewer.signedIn) return;
+    setLoading(true);
+    fetch("/api/membership")
+      .then(async r => {
+        const x = await r.json();
+        if (r.ok) {
+          setData(x);
+          setStatus("");
+        } else {
+          setStatus(x.error || "Failed to load membership hub.");
+        }
+      })
+      .catch(() => setStatus("Network connection error."))
+      .finally(() => setLoading(false));
+
+    fetch("/api/membership/offers")
+      .then(async r => {
+        const x = await r.json();
+        if (r.ok && x.offers) setOffers(x.offers);
+      })
+      .catch(() => {});
+  };
+
+  useEffect(() => {
+    loadHub();
+  }, [viewer.signedIn]);
+
+  // Dynamic QR code 60-second ticker
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setQrCountdown(prev => {
+        if (prev <= 1) {
+          // Trigger silent refresh of dynamic QR token
+          if (viewer.signedIn) {
+            fetch("/api/membership").then(r => r.json()).then(x => {
+              if (x.dynamicQr) setData(curr => curr ? { ...curr, dynamicQr: x.dynamicQr } : curr);
+            }).catch(() => {});
+          }
+          return 60;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [viewer.signedIn]);
+
+  const act = async (body: Record<string, unknown>) => {
+    setStatus("Processing request…");
+    try {
+      const r = await fetch("/api/membership", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      const x = await r.json();
+      if (r.ok) {
+        setData(x);
+        setStatus("Success! Your membership has been updated.");
+        setIsOrderingCard(false);
+        setIsAddingFamily(false);
+      } else {
+        setStatus(x.error || "Action failed.");
+      }
+    } catch {
+      setStatus("Error communicating with server.");
+    }
+  };
+
+  const testPay = async (subscriptionId: number) => {
+    setStatus("Authorizing practice payment…");
+    const r = await fetch("/api/bookings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "testMembership", subscriptionId })
+    });
+    const x = await r.json();
+    if (r.ok) {
+      setStatus("Payment confirmed! Your membership card is now ACTIVE.");
+      loadHub();
+    } else {
+      setStatus(x.error || "Practice payment failed.");
+    }
+  };
+
+  if (!viewer.signedIn) {
+    return (
+      <section className="accountGuest">
+        <div className="accountMark">👑</div>
+        <p className="eyebrow lime">VISIT PNG NATIONAL MEMBERSHIP</p>
+        <h1>One membership unlocks better value across Papua New Guinea.</h1>
+        <p>Sign in to activate your Digital Membership Card, save up to 20% on premier lodges and cultural treks, and collect PNG Passport stamps.</p>
+        <a href={viewer.signInPath}>Sign in to Join / View Membership</a>
+      </section>
+    );
+  }
+
+  const sub = data?.subscription as Record<string, unknown> | null;
+  const plans = (data?.plans || []) as PlanItem[];
+  const savings = (data?.savings || {}) as Record<string, unknown>;
+  const stamps = (data?.passportStamps || []) as Array<Record<string, unknown>>;
+  const redemptions = (data?.redemptions || []) as Array<Record<string, unknown>>;
+  const familyMembers = (data?.familyMembers || []) as Array<Record<string, unknown>>;
+  const physicalCard = data?.physicalCard as Record<string, unknown> | null;
+  const dynamicQr = data?.dynamicQr as { token: string; expiresAt: number; formattedCode: string } | null;
+
+  const isUsable = sub && ["active", "complimentary"].includes(sub.status as string);
+  const currentTier = (sub?.planCode as string) || "visitor-free";
+
+  const getTierGradient = (code: string) => {
+    if (code.includes("elite")) return "linear-gradient(135deg, var(--brand-deep-teal), var(--brand-charcoal))";
+    if (code.includes("adventurer")) return "linear-gradient(135deg, var(--action-primary), var(--brand-deep-teal))";
+    if (code.includes("family")) return "linear-gradient(135deg, var(--derived-teal-soft), var(--brand-deep-teal))";
+    if (code.includes("explorer")) return "linear-gradient(135deg, var(--brand-deep-teal), var(--derived-teal-strong))";
+    return "linear-gradient(135deg, var(--surface-card), var(--surface-selected))";
+  };
+
+  return (
+    <section className="touristMembershipHubSection">
+      {/* Header Banner */}
+      <div className="hubHeaderBanner">
+        <div>
+          <p className="eyebrow lime">VISIT PNG TRAVELLER REWARDS & ECOSYSTEM</p>
+          <h1>{data?.memberName ? `${data.memberName}’s Membership` : "My Travel Membership"}</h1>
+          <p>National privileges, verified partner discounts, and your digital PNG Passport.</p>
+        </div>
+        <div className="hubPointsBadge">
+          <small>Loyalty Balance</small>
+          <strong>{Number(data?.pointsBalance || 0)}</strong>
+          <span>Points</span>
+        </div>
+      </div>
+
+      {status && <div className="membershipStatusBanner" aria-live="polite">{status}</div>}
+
+      {/* Navigation Tabs */}
+      <div className="hubNavTabs">
+        <button className={activeTab === "card" ? "active" : ""} onClick={() => setActiveTab("card")}>
+          💳 Digital Card
+        </button>
+        <button className={activeTab === "savings" ? "active" : ""} onClick={() => setActiveTab("savings")}>
+          📊 My Savings ({savings.totalDiscounts ? `PGK ${savings.totalDiscounts}` : "PGK 0"})
+        </button>
+        <button className={activeTab === "offers" ? "active" : ""} onClick={() => setActiveTab("offers")}>
+          🎁 Member Offers ({offers.length})
+        </button>
+        <button className={activeTab === "passport" ? "active" : ""} onClick={() => setActiveTab("passport")}>
+          🛂 PNG Passport ({stamps.length} Stamps)
+        </button>
+        <button className={activeTab === "family" ? "active" : ""} onClick={() => setActiveTab("family")}>
+          👨‍👩‍👧‍👦 Family Pass {familyMembers.length ? `(${familyMembers.length})` : ""}
+        </button>
+        <button className={activeTab === "plans" ? "active" : ""} onClick={() => setActiveTab("plans")}>
+          ⚡ Compare Plans
+        </button>
+      </div>
+
+      {/* TAB 1: DIGITAL & PHYSICAL MEMBERSHIP CARD */}
+      {activeTab === "card" && (
+        <div className="hubCardTabGrid">
+          <div className="digitalCardContainer">
+            {sub ? (
+              <div className="collectibleDigitalCard" style={{ background: getTierGradient(currentTier) }}>
+                <div className="cardWatermark">VISIT PNG</div>
+                <div className="cardTopRow">
+                  <div>
+                    <span className="cardBrandLogo"><i>V</i> VISIT PNG</span>
+                    <small className="cardTierLabel">{(sub.planName as string) || "Explorer Member"}</small>
+                  </div>
+                  <span className={`cardStatusPill ${sub.status}`}>
+                    {(sub.status as string).replaceAll("_", " ").toUpperCase()}
+                  </span>
+                </div>
+
+                <div className="cardHolderRow">
+                  <small>MEMBER NAME</small>
+                  <h3>{(data?.memberName as string) || viewer.displayName || "Valued Traveller"}</h3>
+                  <code>{(sub.memberNumber as string)}</code>
+                </div>
+
+                {/* Dynamic Rotating QR Verification */}
+                {isUsable && dynamicQr ? (
+                  <div className="dynamicQrSecurityBox">
+                    <div className="qrVisualPlaceholder">
+                      <div className="qrRotatingRings">
+                        <span>●</span><span>●</span><span>●</span>
+                      </div>
+                      <code className="dynamicTokenStr">{dynamicQr.token}</code>
+                    </div>
+                    <div className="qrSecurityMeta">
+                      <strong>🛡️ Anti-Screenshot Dynamic QR</strong>
+                      <small>Rotating in <b>{qrCountdown}s</b> · Server Verified</small>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="cardInactiveNotice">
+                    <small>Payment required to activate dynamic QR</small>
+                  </div>
+                )}
+
+                <div className="cardFooterRow">
+                  <div>
+                    <small>VALID UNTIL</small>
+                    <span>{sub.expiryDate ? new Date(sub.expiryDate as string).toLocaleDateString() : "Lifetime"}</span>
+                  </div>
+                  <div>
+                    <small>TYPE</small>
+                    <span>Digital & Mobile</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="noMembershipPromptCard">
+                <span className="promptIcon">🎫</span>
+                <h3>You don’t have an active membership yet</h3>
+                <p>Join over thousands of travellers exploring PNG with member discounts and VIP partner privileges.</p>
+                <button className="activateFreePlanBtn" onClick={() => act({ action: "select", planId: 1 })}>
+                  Activate Visitor Free Membership
+                </button>
+              </div>
+            )}
+
+            {sub?.status === "payment_due" && (
+              <div className="paymentDueBanner">
+                <div>
+                  <strong>Practice payment pending</strong>
+                  <p>Activate your membership to unlock your QR card and member rates.</p>
+                </div>
+                <button onClick={() => testPay(Number(sub.id))}>Complete Practice Payment</button>
+              </div>
+            )}
+          </div>
+
+          {/* Physical Card Fulfillment & Actions */}
+          <div className="cardSidebarInfo">
+            <div className="physicalCardStatusCard">
+              <p className="eyebrow">PHYSICAL CARD FULFILLMENT</p>
+              <h3>Collectible Embossed Card</h3>
+              {physicalCard ? (
+                <div className="physicalCardTracker">
+                  <div className="statusStepRow">
+                    <span className="stepDot completed">✓</span>
+                    <div>
+                      <strong>Order Status: {String(physicalCard.productionStatus || "requested").toUpperCase()}</strong>
+                      <small>Delivery Address: {String(physicalCard.deliveryAddress || "")}</small>
+                      {Boolean(physicalCard.trackingNumber) && <small>Tracking #: {String(physicalCard.trackingNumber)}</small>}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <p className="cardSidebarText">
+                    Prefer a physical card in your wallet? Elite, Adventurer and Family members receive a complimentary physical membership card delivered anywhere in PNG or internationally.
+                  </p>
+                  {isOrderingCard ? (
+                    <div className="orderCardForm">
+                      <label>
+                        Delivery Address in PNG or Overseas
+                        <input
+                          placeholder="e.g. P.O. Box 1024, Port Moresby, NCD, Papua New Guinea"
+                          value={physicalCardAddress}
+                          onChange={e => setPhysicalCardAddress(e.target.value)}
+                        />
+                      </label>
+                      <button
+                        className="confirmOrderCardBtn"
+                        disabled={!physicalCardAddress.trim()}
+                        onClick={() => act({ action: "request_physical_card", deliveryAddress: physicalCardAddress })}
+                      >
+                        Confirm Card Dispatch
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      className="requestCardBtn"
+                      disabled={!isUsable}
+                      onClick={() => setIsOrderingCard(true)}
+                    >
+                      Request Physical Membership Card 📬
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Quick Partner Redemption Scanner Trigger */}
+            <div className="cashierTerminalQuickAccess">
+              <p className="eyebrow">ARE YOU A TOURISM OPERATOR?</p>
+              <h4>Provider Redemption Terminal</h4>
+              <p>Verify tourist dynamic QR cards and apply discounts instantly at your front desk.</p>
+              <button className="openTerminalBtn" onClick={onOpenRedemptionTerminal}>
+                Open Staff Terminal 📲
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 2: MY SAVINGS & ROI LEDGER */}
+      {activeTab === "savings" && (
+        <div className="hubSavingsTab">
+          <div className="savingsKpiGrid">
+            <div className="savingsKpiCard">
+              <small>Total Discounts Saved</small>
+              <strong>{formatPrice(Number(savings.totalDiscounts || 0), currency)}</strong>
+              <span>Across all partner visits</span>
+            </div>
+            <div className="savingsKpiCard">
+              <small>Annual Membership Cost</small>
+              <strong>{formatPrice(Number(savings.membershipCost || 0), currency)}</strong>
+              <span>{(sub?.planName as string) || "Visitor Free"}</span>
+            </div>
+            <div className="savingsKpiCard highlight">
+              <small>Net Member Benefit</small>
+              <strong>{formatPrice(Math.max(0, Number(savings.netSavings || 0)), currency)}</strong>
+              <span>{savings.valuableMessage as string}</span>
+            </div>
+            <div className="savingsKpiCard">
+              <small>Redemptions Completed</small>
+              <strong>{Number(savings.redemptionsCount || 0)}</strong>
+              <span>Partner Transactions</span>
+            </div>
+          </div>
+
+          <div className="redemptionsHistoryCard">
+            <h3>Recent Discounts & Benefit Redemptions</h3>
+            {redemptions.length > 0 ? (
+              <div className="redemptionsTableWrapper">
+                <table className="enterpriseDataTable">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Partner Provider</th>
+                      <th>Offer / Benefit</th>
+                      <th>Original</th>
+                      <th>Discount</th>
+                      <th>Final Paid</th>
+                      <th>Receipt Reference</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {redemptions.map((r, i) => (
+                      <tr key={i}>
+                        <td>{new Date(r.createdAt as string).toLocaleDateString()}</td>
+                        <td><strong>{r.providerName as string}</strong></td>
+                        <td>{r.benefitSummary as string}</td>
+                        <td>{formatPrice(Number(r.originalAmount || 0), currency)}</td>
+                        <td className="discountHighlight">-{formatPrice(Number(r.discountAmount || 0), currency)}</td>
+                        <td><strong>{formatPrice(Number(r.finalAmount || 0), currency)}</strong></td>
+                        <td><code>{r.redemptionRef as string}</code></td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p className="emptyStateText">No partner redemptions recorded yet. Present your QR card at participating hotels and tour operators to start saving!</p>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 3: MEMBER OFFERS EXPLORER */}
+      {activeTab === "offers" && (
+        <div className="hubOffersTab">
+          <div className="offersFilterBar">
+            <input
+              placeholder="Search member discounts, stays, lodges or tours..."
+              value={offerSearch}
+              onChange={e => setOfferSearch(e.target.value)}
+            />
+            <select value={selectedDestination} onChange={e => setSelectedDestination(e.target.value)}>
+              <option value="all">All PNG Destinations</option>
+              <option value="Port Moresby">Port Moresby (NCD)</option>
+              <option value="Kokopo & Rabaul">Kokopo & Rabaul (ENB)</option>
+              <option value="Mount Hagen">Mount Hagen (Highlands)</option>
+              <option value="Madang Coast">Madang</option>
+              <option value="Sepik River">Sepik River</option>
+              <option value="Kokoda Trail">Kokoda Trail</option>
+            </select>
+          </div>
+
+          <div className="offersCardGrid">
+            {offers
+              .filter(o => {
+                if (selectedDestination !== "all" && !String(o.destinationName || "").includes(selectedDestination)) return false;
+                if (offerSearch.trim()) {
+                  const s = offerSearch.toLowerCase();
+                  return String(o.title || "").toLowerCase().includes(s) || String(o.providerName || "").toLowerCase().includes(s);
+                }
+                return true;
+              })
+              .map((off, idx) => (
+                <article key={idx} className="memberOfferCard">
+                  {Boolean(off.imageUrl) && (
+                    <div className="offerImgWrapper" style={{ backgroundImage: `url(${String(off.imageUrl)})` }}>
+                      <span className="partnerTierTag">{String(off.badgeTitle || "VisitPNG Partner")}</span>
+                    </div>
+                  )}
+                  <div className="offerBody">
+                    <div className="offerTopMeta">
+                      <span>{String(off.providerName || "")} · {String(off.provinceName || "")}</span>
+                      <strong className="benefitPill">
+                        {off.discountPct ? `${off.discountPct}% OFF` : off.discountAmount ? `PGK ${off.discountAmount} OFF` : "SPECIAL PERK"}
+                      </strong>
+                    </div>
+                    <h4>{String(off.title || "")}</h4>
+                    <p>{String(off.shortSummary || "")}</p>
+                    
+                    {Boolean(off.normalPrice && off.memberPrice) && (
+                      <div className="offerPriceRow">
+                        <div>
+                          <small>Member Price</small>
+                          <strong>{formatPrice(Number(off.memberPrice), currency)}</strong>
+                        </div>
+                        <del>{formatPrice(Number(off.normalPrice), currency)}</del>
+                      </div>
+                    )}
+
+                    <div className="offerFooter">
+                      <small className="termsSnippet">T&Cs: {off.termsConditions as string}</small>
+                      <button className="claimOfferBtn" onClick={() => alert(`To redeem "${off.title}", present your Digital QR card at ${off.providerName}!`)}>
+                        Redeem In Person 🎟️
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 4: MY PNG PASSPORT STAMPS */}
+      {activeTab === "passport" && (
+        <div className="hubPassportTab">
+          <div className="passportIntroBanner">
+            <div>
+              <p className="eyebrow lime">GAMIFIED PNG PASSPORT</p>
+              <h3>Collect Destination Stamps Across Papua New Guinea</h3>
+              <p>Each time you redeem a benefit at a verified partner in a new province or trail, your digital passport earns an authentic collector’s stamp and 50 bonus loyalty points.</p>
+            </div>
+            <div className="passportStatBadge">
+              <strong>{stamps.length}</strong>
+              <small>Destinations Visited</small>
+            </div>
+          </div>
+
+          <div className="passportStampsGrid">
+            {[
+              { name: "Port Moresby", prov: "NCD", icon: "🏛️", desc: "Capital Gateway & National Museum" },
+              { name: "Kokopo & Rabaul", prov: "East New Britain", icon: "🌋", desc: "Volcanoes, Mask Festival & Wrecks" },
+              { name: "Mount Hagen", prov: "Western Highlands", icon: "🎭", desc: "Highlands Cultural Singsing & Coffee" },
+              { name: "Madang", prov: "Madang", icon: "🤿", desc: "Flying Foxes & Coral Triangle Dives" },
+              { name: "Sepik River", prov: "East Sepik", icon: "🛶", desc: "Crocodile Clan Spirit Houses & Carvings" },
+              { name: "Kokoda Trail", prov: "Oro / Central", icon: "🥾", desc: "96km Historic Wilderness Pilgrimage" },
+              { name: "Alotau & Milne Bay", prov: "Milne Bay", icon: "⛵", desc: "Kenu & Kundu Canoe Festival" },
+              { name: "Goroka", prov: "Eastern Highlands", icon: "🪶", desc: "Asaro Mudmen & Bird of Paradise Sanctuaries" }
+            ].map((dest, i) => {
+              const hasStamp = stamps.some(s => String(s.destinationName).toLowerCase().includes(dest.name.toLowerCase()));
+              return (
+                <div key={i} className={`passportStampCard ${hasStamp ? "unlocked" : "locked"}`}>
+                  <div className="stampIconCircle">{dest.icon}</div>
+                  <h4>{dest.name}</h4>
+                  <small className="stampProv">{dest.prov}</small>
+                  <p>{dest.desc}</p>
+                  <span className="stampStatusTag">
+                    {hasStamp ? "✓ STAMP UNLOCKED (+50 pts)" : "🔒 Unvisited"}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* TAB 5: FAMILY & GROUP MEMBERS */}
+      {activeTab === "family" && (
+        <div className="hubFamilyTab">
+          <div className="familyIntroCard">
+            <p className="eyebrow">HOUSEHOLD PRIVILEGES</p>
+            <h3>Family & Group Linked Passes</h3>
+            <p>With a VisitPNG Family Pass, your spouse, children, or travelling companions each receive their own verified digital card and membership number linked to your shared account.</p>
+          </div>
+
+          <div className="familyMembersGrid">
+            <div className="primaryMemberCard">
+              <span className="memberRoleBadge">Primary Account Holder</span>
+              <h4>{(data?.memberName as string) || "Primary Member"}</h4>
+              <code>{(sub?.memberNumber as string) || "VPNG-000001"}</code>
+              <small>Status: Active</small>
+            </div>
+
+            {familyMembers.map((fm, idx) => (
+              <div key={idx} className="dependantMemberCard">
+                <span className="memberRoleBadge dependant">{fm.relationship as string}</span>
+                <h4>{fm.fullName as string}</h4>
+                <code>{fm.memberNumber as string}</code>
+                <small>Linked Dependant · Active</small>
+              </div>
+            ))}
+          </div>
+
+          {currentTier.includes("family") && familyMembers.length < 4 && (
+            <div className="addFamilySection">
+              {isAddingFamily ? (
+                <div className="addFamilyForm">
+                  <h4>Add Linked Family Member</h4>
+                  <div className="formRowGrid">
+                    <label>
+                      Full Name
+                      <input
+                        placeholder="e.g. Maria Mukombo"
+                        value={familyForm.fullName}
+                        onChange={e => setFamilyForm({ ...familyForm, fullName: e.target.value })}
+                      />
+                    </label>
+                    <label>
+                      Relationship
+                      <select
+                        value={familyForm.relationship}
+                        onChange={e => setFamilyForm({ ...familyForm, relationship: e.target.value })}
+                      >
+                        <option>Spouse / Partner</option>
+                        <option>Child / Dependant</option>
+                        <option>Parent</option>
+                        <option>Travel Companion</option>
+                      </select>
+                    </label>
+                  </div>
+                  <button
+                    className="saveFamilyBtn"
+                    disabled={!familyForm.fullName.trim()}
+                    onClick={() => act({ action: "add_family_member", fullName: familyForm.fullName, relationship: familyForm.relationship })}
+                  >
+                    Generate Dependant Digital Card
+                  </button>
+                </div>
+              ) : (
+                <button className="openAddFamilyBtn" onClick={() => setIsAddingFamily(true)}>
+                  + Add Dependant Member ({familyMembers.length}/4 spots filled)
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* TAB 6: COMPARE PLANS & UPGRADE */}
+      {activeTab === "plans" && (
+        <div className="hubPlansTab">
+          <div className="plansComparisonGrid">
+            {plans.map(p => {
+              const isCurrent = sub?.planId === p.id && sub?.status !== "cancelled";
+              return (
+                <article key={p.id} className={`planComparisonCard ${isCurrent ? "currentPlan" : ""}`}>
+                  {p.tierLevel >= 3 && <div className="popularRibbon">MOST POPULAR</div>}
+                  <div className="planCardHeader">
+                    <small>{p.audience.toUpperCase()} · {p.billingPeriod}</small>
+                    <h3>{p.name}</h3>
+                    <div className="planPriceTag">
+                      <strong>{p.price ? formatPrice(p.price, currency) : "Free"}</strong>
+                      {p.price > 0 && <small>/{p.billingPeriod}</small>}
+                    </div>
+                  </div>
+                  <p className="planDesc">{p.description}</p>
+                  <ul className="planFeaturesList">
+                    {p.benefits.map(b => (
+                      <li key={b.id}>
+                        <span className="checkIcon">✓</span>
+                        <div>
+                          <strong>{b.name}</strong>
+                          <small>{b.description}</small>
+                        </div>
+                      </li>
+                    ))}
+                    {p.cardIncluded && <li><span className="checkIcon">✓</span><strong>Embossed Physical Card Included</strong></li>}
+                    {p.maxFamilyMembers > 0 && <li><span className="checkIcon">✓</span><strong>Up to {p.maxFamilyMembers} Linked Family Members</strong></li>}
+                  </ul>
+                  <button
+                    className="planActionBtn"
+                    disabled={isCurrent}
+                    onClick={() => {
+                      if (confirm(`Switch to ${p.name}?`)) {
+                        act({ action: "select", planId: p.id });
+                      }
+                    }}
+                  >
+                    {isCurrent ? "Current Plan" : p.price ? `Upgrade to ${p.name}` : "Select Free Plan"}
+                  </button>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </section>
+  );
+}

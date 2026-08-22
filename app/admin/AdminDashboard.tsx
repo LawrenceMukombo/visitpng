@@ -3,6 +3,7 @@ import {useEffect,useState,useRef} from "react";
 import Link from "next/link";
 import SmartLocationCascade, {CascadeSelection} from "../components/SmartLocationCascade";
 import AdminProviderVetting from "../components/AdminProviderVetting";
+import AdminMembershipConsole from "../components/AdminMembershipConsole";
 import type { ProviderApplicationRecord } from "../../db/providers";
 import {PNG_REGIONS, PNG_PROVINCES} from "../../db/pngGeography";
 
@@ -26,10 +27,12 @@ type Listing={
   district?:string|null;
   provinceId:number;
   province:string;
+  provinceRegion:string;
   categoryId:number;
   category:string;
   providerId:number;
   provider:string;
+  lastReviewedAt:string|null;
 };
 
 type Data={
@@ -103,8 +106,9 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const [providerForm,setProviderForm]=useState({...blankProvider});
 
   const [status,setStatus]=useState("Loading information…");
-  const [section,setSection]=useState<"places"|"locations"|"provinces"|"hierarchy"|"categories"|"providers_vetting"|"api"|"activity">("places");
+  const [section,setSection]=useState<"places"|"locations"|"provinces"|"hierarchy"|"membership_ecosystem"|"providers_vetting"|"categories"|"api"|"activity">("places");
   const [providerApps,setProviderApps]=useState<ProviderApplicationRecord[]>([]);
+  const [membershipData,setMembershipData]=useState<Parameters<typeof AdminMembershipConsole>[0]["data"]>(null);
   const [search,setSearch]=useState("");
   const [categoryFilter,setCategoryFilter]=useState<string>("all");
   const [apiPreview,setApiPreview]=useState<string>("Click 'Test API' below to see live JSON response.");
@@ -126,6 +130,11 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
     fetch("/api/admin/providers").then(async r=>{
       const x=await r.json();
       if(r.ok && x.applications) setProviderApps(x.applications);
+    }).catch(()=>{});
+
+    fetch("/api/admin/membership").then(async r=>{
+      const x=await r.json();
+      if(r.ok) setMembershipData(x);
     }).catch(()=>{});
   };
 
@@ -418,6 +427,9 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
       <button className={section==="locations"?"active":""} onClick={()=>setSection("locations")}>Locations & Districts</button>
       <button className={section==="provinces"?"active":""} onClick={()=>setSection("provinces")}>Provinces</button>
       <button className={section==="hierarchy"?"active":""} onClick={()=>setSection("hierarchy")}>Smart Cascade Hierarchy</button>
+      <button className={section==="membership_ecosystem"?"active":""} onClick={()=>setSection("membership_ecosystem")}>
+        👑 Memberships & Partner Ecosystem
+      </button>
       <button className={section==="providers_vetting"?"active":""} onClick={()=>setSection("providers_vetting")}>
         🏢 Provider Vetting (Anti-Scam) {providerApps.filter(a=>a.status==="pending_review").length ? `(${providerApps.filter(a=>a.status==="pending_review").length} New)` : ""}
       </button>
@@ -905,6 +917,13 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
           </div>
         </section>
       </div>
+    )}
+
+    {section==="membership_ecosystem"&&(
+      <AdminMembershipConsole
+        data={membershipData}
+        onRefresh={load}
+      />
     )}
 
     {section==="providers_vetting"&&(

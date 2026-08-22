@@ -7,6 +7,8 @@ import DigitalPermitPass from "./components/DigitalPermitPass";
 import WantokConcierge from "./components/WantokConcierge";
 import TokPisinPhrasebook from "./components/TokPisinPhrasebook";
 import ProviderRegistrationModal from "./components/ProviderRegistrationModal";
+import TouristMembershipHub from "./components/TouristMembershipHub";
+import ProviderRedemptionTerminal from "./components/ProviderRedemptionTerminal";
 import { CountryIntroBanner } from "./components/CountryIntroBanner";
 import { SecurityAdvisory } from "./components/SecurityAdvisory";
 import {CurrencyCode, formatPrice} from "../db/currency";
@@ -45,6 +47,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   const[currency,setCurrency]=useState<CurrencyCode>("PGK");
   const[exploreMode,setExploreMode]=useState<"places"|"wantok"|"phrasebook"|"security"|"festivals"|"permits"|"trails">("places");
   const[showProviderModal,setShowProviderModal]=useState(false);
+  const[showRedemptionTerminal,setShowRedemptionTerminal]=useState(false);
 
   useEffect(()=>{
     if(new URLSearchParams(window.location.search).has("wishlist"))setTab("Saved");
@@ -169,13 +172,14 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
           {PNG_TRAIL_PACKS.map(trail=><TrailMapViewer key={trail.id} trail={trail}/>)}
         </div>
       </section>}
-    </>:tab==="Bookings"?<BookingsScreen viewer={viewer} currency={currency}/>:tab==="Reviews"?<ReviewsScreen viewer={viewer}/>:tab==="Saved"?<SavedScreen viewer={viewer}/>:tab==="Trips"?<TripsScreen viewer={viewer} currency={currency}/>:tab==="Membership"?<MembershipScreen viewer={viewer} currency={currency}/>:<ProfileScreen viewer={viewer}/>}
+    </>:tab==="Bookings"?<BookingsScreen viewer={viewer} currency={currency}/>:tab==="Reviews"?<ReviewsScreen viewer={viewer}/>:tab==="Saved"?<SavedScreen viewer={viewer}/>:tab==="Trips"?<TripsScreen viewer={viewer} currency={currency}/>:tab==="Membership"?<TouristMembershipHub viewer={viewer} currency={currency} onOpenRedemptionTerminal={()=>setShowRedemptionTerminal(true)}/>:<ProfileScreen viewer={viewer}/>}
     <Bottom tab={tab} setTab={setTab}/>
     {selected&&<Details listing={selected} currency={currency} close={()=>setSelected(null)} book={()=>{setSelected(null);viewer.signedIn?setBookingListing(selected):setTab("Profile")}} review={()=>{setSelected(null);viewer.signedIn?setReviewListing(selected):setTab("Profile")}}/>}
     {reviewListing&&viewer.signedIn&&<ReviewSheet listing={reviewListing} close={()=>setReviewListing(null)} done={()=>{setReviewListing(null);setTab("Reviews")}}/>}
     {bookingListing&&viewer.signedIn&&<BookingSheet listing={bookingListing} currency={currency} close={()=>setBookingListing(null)} openBookings={()=>{setBookingListing(null);setTab("Bookings")}}/>}
     {saveListing&&viewer.signedIn&&<SaveSheet listing={saveListing} close={()=>setSaveListing(null)}/>}
     {showProviderModal&&<ProviderRegistrationModal onClose={()=>setShowProviderModal(false)}/>}
+    {showRedemptionTerminal&&<ProviderRedemptionTerminal onClose={()=>setShowRedemptionTerminal(false)} currency={currency}/>}
   </main>;
 }
 
