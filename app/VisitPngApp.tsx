@@ -4,6 +4,8 @@ import CurrencySelector from "./components/CurrencySelector";
 import TrailMapViewer from "./components/TrailMapViewer";
 import FestivalCalendar from "./components/FestivalCalendar";
 import DigitalPermitPass from "./components/DigitalPermitPass";
+import WantokConcierge from "./components/WantokConcierge";
+import TokPisinPhrasebook from "./components/TokPisinPhrasebook";
 import {CurrencyCode, formatPrice} from "../db/currency";
 import {PNG_TRAIL_PACKS} from "../db/trailPacks";
 import {PNG_FESTIVALS} from "../db/festivals";
@@ -38,7 +40,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   const[reviewListing,setReviewListing]=useState<Listing|null>(null);
   const[tab,setTab]=useState<"Explore"|"Bookings"|"Reviews"|"Saved"|"Trips"|"Membership"|"Profile">("Explore");
   const[currency,setCurrency]=useState<CurrencyCode>("PGK");
-  const[exploreMode,setExploreMode]=useState<"places"|"trails"|"festivals"|"permits">("places");
+  const[exploreMode,setExploreMode]=useState<"places"|"trails"|"festivals"|"permits"|"wantok"|"phrasebook">("places");
 
   useEffect(()=>{
     if(new URLSearchParams(window.location.search).has("wishlist"))setTab("Saved");
@@ -96,9 +98,11 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
           </div>}
           <nav>
             <button className={category==="all"&&exploreMode==="places"?"selectedFilter":""} onClick={()=>{setCategory("all");setExploreMode("places")}}>All places</button>
-            <button className={exploreMode==="festivals"?"selectedFilter":""} onClick={()=>setExploreMode("festivals")}>🎭 Cultural Festivals</button>
-            <button className={exploreMode==="permits"?"selectedFilter":""} onClick={()=>setExploreMode("permits")}>🎫 Digital Permits</button>
-            <button className={exploreMode==="trails"?"selectedFilter":""} onClick={()=>setExploreMode("trails")}>🗺️ Trail Packs</button>
+            <button className={exploreMode==="wantok"?"selectedFilter":""} onClick={()=>setExploreMode("wantok")}>🤖 Wantok AI</button>
+            <button className={exploreMode==="phrasebook"?"selectedFilter":""} onClick={()=>setExploreMode("phrasebook")}>🗣️ Tok Pisin</button>
+            <button className={exploreMode==="festivals"?"selectedFilter":""} onClick={()=>setExploreMode("festivals")}>🎭 Festivals</button>
+            <button className={exploreMode==="permits"?"selectedFilter":""} onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
+            <button className={exploreMode==="trails"?"selectedFilter":""} onClick={()=>setExploreMode("trails")}>🗺️ Trails</button>
           </nav>
         </div>
       </section>
@@ -106,6 +110,8 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       {exploreMode==="places"?<section className="content">
         <div className="exploreModeSwitcher">
           <button className="active" onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
+          <button onClick={()=>setExploreMode("wantok")}>🤖 Wantok AI</button>
+          <button onClick={()=>setExploreMode("phrasebook")}>🗣️ Tok Pisin</button>
           <button onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
           <button onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
           <button onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>
@@ -121,9 +127,31 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
           {data.listings.map(p=><Card key={p.id} listing={p} currency={currency} open={setSelected} save={()=>viewer.signedIn?setSaveListing(p):setTab("Profile")}/>)}
         </div>:<Empty clear={()=>{setQ("");setCategory("all")}}/>}
         <ModuleStatus openReviews={()=>setTab("Reviews")}/>
+      </section>:exploreMode==="wantok"?<section className="content wantokContentSection">
+        <div className="exploreModeSwitcher">
+          <button onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
+          <button className="active" onClick={()=>setExploreMode("wantok")}>🤖 Wantok AI</button>
+          <button onClick={()=>setExploreMode("phrasebook")}>🗣️ Tok Pisin</button>
+          <button onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
+          <button onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
+          <button onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>
+        </div>
+        <WantokConcierge currency={currency} onOpenTrips={()=>setTab("Trips")}/>
+      </section>:exploreMode==="phrasebook"?<section className="content phrasebookContentSection">
+        <div className="exploreModeSwitcher">
+          <button onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
+          <button onClick={()=>setExploreMode("wantok")}>🤖 Wantok AI</button>
+          <button className="active" onClick={()=>setExploreMode("phrasebook")}>🗣️ Tok Pisin</button>
+          <button onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
+          <button onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
+          <button onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>
+        </div>
+        <TokPisinPhrasebook/>
       </section>:exploreMode==="festivals"?<section className="content festivalContentSection">
         <div className="exploreModeSwitcher">
           <button onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
+          <button onClick={()=>setExploreMode("wantok")}>🤖 Wantok AI</button>
+          <button onClick={()=>setExploreMode("phrasebook")}>🗣️ Tok Pisin</button>
           <button className="active" onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
           <button onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
           <button onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>
@@ -137,6 +165,8 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       </section>:exploreMode==="permits"?<section className="content permitsContentSection">
         <div className="exploreModeSwitcher">
           <button onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
+          <button onClick={()=>setExploreMode("wantok")}>🤖 Wantok AI</button>
+          <button onClick={()=>setExploreMode("phrasebook")}>🗣️ Tok Pisin</button>
           <button onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
           <button className="active" onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
           <button onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>
@@ -145,6 +175,8 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       </section>:<section className="content trailsContentSection">
         <div className="exploreModeSwitcher">
           <button onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
+          <button onClick={()=>setExploreMode("wantok")}>🤖 Wantok AI</button>
+          <button onClick={()=>setExploreMode("phrasebook")}>🗣️ Tok Pisin</button>
           <button onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
           <button onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
           <button className="active" onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>

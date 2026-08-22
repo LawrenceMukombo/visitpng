@@ -193,4 +193,106 @@ small{font-size:11px!important;line-height:1.4}.eyebrow{font-size:11px}.bottom b
 .rangerInstructions strong{color:var(--brand-deep-teal);display:block;margin-bottom:3px}
 @media(max-width:560px){.festivalFooter{flex-direction:column;align-items:flex-start}.festActionButtons{width:100%}.festActionButtons button{flex:1}.permitPassMeta{grid-template-columns:1fr}}
 
+/* Phase 3: Wantok AI Concierge UI */
+.wantokHeroHeader{margin-bottom:24px}
+.wantokTagline{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.wantokAvatar{font-size:32px;display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:var(--surface-selected);border:1px solid var(--brand-deep-teal)}
+.wantokTagline h2{margin:0;font-size:24px}
+.wantokDesc{margin:0;font-size:12px;color:var(--text-secondary);line-height:1.5;max-width:600px}
+.wantokWizardCard{padding:20px;background:var(--surface-subtle);border-radius:18px;border:1px solid var(--border-default);margin-bottom:24px}
+.wizardGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:16px}
+.wizardField label{display:block;font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
+.wizardInterestsGroup{margin-bottom:16px}
+.wizardInterestsGroup label{display:block;font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:8px}
+.interestChips{display:flex;gap:8px;flex-wrap:wrap}
+.interestChip{padding:6px 12px;border-radius:99px;border:1px solid var(--border-default);background:var(--surface-card);color:var(--text-primary);font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s}
+.interestChip.active{background:var(--brand-deep-teal);color:var(--text-on-dark);border-color:var(--brand-deep-teal)}
+.wizardCustomPrompt{margin-bottom:18px}
+.wizardCustomPrompt label{display:block;font-size:11px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
+.generateAiBtn{width:100%;padding:14px;border-radius:12px;background:var(--action-primary);color:var(--brand-charcoal);font-weight:800;font-size:13px;border:0;cursor:pointer;transition:opacity 0.2s}
+.generateAiBtn:disabled{opacity:0.6;cursor:not-allowed}
+.wantokAlertBanner{padding:12px 16px;border-radius:10px;background:var(--status-success-soft);color:var(--status-success);font-size:12px;font-weight:700;margin-bottom:20px;text-align:center}
+.generatedItineraryCard{background:var(--surface-card);border:1px solid var(--border-strong);border-radius:20px;padding:24px;box-shadow:var(--shadow-card)}
+.itineraryHeaderTop{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.itineraryStyleTag{padding:4px 10px;border-radius:6px;background:var(--surface-selected);color:var(--brand-deep-teal);font-size:10px;font-weight:800;text-transform:uppercase}
+.itineraryDaysTag,.itinerarySeasonTag{padding:4px 10px;border-radius:6px;background:var(--surface-page);color:var(--text-secondary);font-size:10px;font-weight:700;border:1px solid var(--border-default)}
+.itineraryHeader h2{margin:6px 0 4px;font-size:24px;color:var(--brand-deep-teal)}
+.itinerarySubtitle{margin:0 0 16px;font-size:12px;color:var(--text-secondary);line-height:1.5}
+.itineraryProvincesRow{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.itineraryProvincesRow strong{font-size:11px;color:var(--text-primary)}
+.provPills{display:flex;gap:6px;flex-wrap:wrap}
+.provPill{padding:3px 8px;border-radius:6px;background:var(--surface-subtle);color:var(--text-secondary);font-size:10px;font-weight:700}
+.itineraryBudgetBanner{display:flex;justify-content:space-between;align-items:center;padding:16px;background:var(--surface-subtle);border-radius:12px;margin-bottom:24px;flex-wrap:wrap;gap:14px}
+.itineraryBudgetBanner small{display:block;font-size:9px;text-transform:uppercase;color:var(--text-secondary)}
+.itineraryBudgetBanner strong{font-size:20px;color:var(--brand-deep-teal)}
+.itineraryTopActions{display:flex;gap:8px;flex-wrap:wrap}
+.saveToTripsBtn,.exportJsonBtn{padding:10px 16px;border-radius:10px;font-size:11px;font-weight:800;cursor:pointer;border:0}
+.saveToTripsBtn{background:var(--action-primary);color:var(--brand-charcoal)}
+.exportJsonBtn{background:var(--surface-card);color:var(--text-primary);border:1px solid var(--border-default)}
+.itineraryDaysList{margin-bottom:24px}
+.itineraryDaysList h3{margin:0 0 16px;font-size:18px;color:var(--brand-deep-teal)}
+.itineraryDayCard{display:flex;gap:16px;padding:16px;border-radius:14px;background:var(--surface-page);border:1px solid var(--border-default);margin-bottom:12px}
+.dayBadgeCol{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:70px}
+.dayNumBadge{padding:6px 10px;border-radius:8px;background:var(--brand-deep-teal);color:var(--text-on-dark);font-size:11px;font-weight:800;white-space:nowrap}
+.dayCostTag{font-size:10px;font-weight:700;color:var(--text-secondary)}
+.dayContentCol{flex:1}
+.dayContentCol h4{margin:0 0 4px;font-size:15px;color:var(--text-primary)}
+.dayLocation{font-size:11px;color:var(--text-secondary);margin:0 0 8px}
+.dayLocation b{color:var(--brand-deep-teal)}
+.daySummary{font-size:11px;line-height:1.5;color:var(--text-secondary);margin-bottom:10px}
+.dayActivities{padding:8px 12px;background:var(--surface-card);border-radius:8px;margin-bottom:10px;border:1px solid var(--border-default)}
+.dayActivities strong{display:block;font-size:10px;color:var(--brand-deep-teal);margin-bottom:4px}
+.dayActivities ul{margin:0;padding-left:14px;font-size:10px;line-height:1.45;color:var(--text-secondary)}
+.dayStayAndLogistics{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:10px;padding-top:8px;border-top:1px dashed var(--border-default)}
+.dayStayAndLogistics small{display:block;color:var(--text-secondary);font-size:9px;text-transform:uppercase;margin-bottom:2px}
+.dayStayAndLogistics b{color:var(--text-primary)}
+.dayStayAndLogistics p{margin:0;color:var(--text-secondary)}
+.itineraryAdvisoriesGrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.advisoryBox{padding:14px;border-radius:12px;border:1px solid var(--border-default)}
+.advisoryBox.packing{background:var(--surface-page)}
+.advisoryBox.safety{background:var(--surface-warning);border-color:var(--status-warning)}
+.advisoryBox strong{display:block;font-size:11px;margin-bottom:6px}
+.advisoryBox.packing strong{color:var(--brand-deep-teal)}
+.advisoryBox.safety strong{color:var(--text-warning)}
+.advisoryBox ul{margin:0;padding-left:16px;font-size:10px;line-height:1.45}
+.advisoryBox.packing ul{color:var(--text-secondary)}
+.advisoryBox.safety ul{color:var(--text-warning)}
+
+/* Phase 3: Tok Pisin Phrasebook UI */
+.phrasebookHero{margin-bottom:20px}
+.phrasebookHero h2{margin:4px 0 6px;font-size:24px}
+.phrasebookHero p{margin:0;font-size:12px;color:var(--text-secondary);line-height:1.5;max-width:600px}
+.phraseSearchAndFilter{margin-bottom:20px}
+.phraseSearchBox{position:relative;margin-bottom:12px}
+.phraseSearchBox span{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--text-secondary)}
+.phraseSearchBox input{width:100%;padding:12px 38px 12px 38px;border-radius:12px;border:1px solid var(--border-default);background:var(--surface-card);font-size:12px;color:var(--text-primary)}
+.clearSearchBtn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:0;font-size:16px;color:var(--text-secondary);cursor:pointer}
+.phraseCategoryPills{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.phraseCategoryPills button{white-space:nowrap;padding:7px 12px;border-radius:99px;border:1px solid var(--border-default);background:var(--surface-card);color:var(--text-primary);font-size:11px;font-weight:700;cursor:pointer}
+.phraseCategoryPills button.active{background:var(--brand-deep-teal);color:var(--text-on-dark);border-color:var(--brand-deep-teal)}
+.audioStatusNotice{padding:10px 14px;border-radius:8px;background:var(--surface-selected);color:var(--brand-deep-teal);font-size:11px;font-weight:700;margin-bottom:16px;text-align:center}
+.phrasesListGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:28px}
+.phraseCard{padding:18px;border-radius:16px;background:var(--surface-card);border:1px solid var(--border-default);box-shadow:var(--shadow-card);display:flex;flex-direction:column}
+.phraseCardHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.phraseCategoryBadge{font-size:9px;font-weight:700;color:var(--text-secondary);text-transform:uppercase}
+.audioPlayBtn{padding:4px 10px;border-radius:99px;background:var(--action-primary);color:var(--brand-charcoal);font-size:10px;font-weight:800;border:0;cursor:pointer}
+.audioPlayBtn.playing{background:var(--status-danger-soft);color:var(--status-danger)}
+.phraseTokPisin{margin:0 0 4px;font-size:18px;color:var(--brand-deep-teal)}
+.phrasePhonetic{margin:0 0 6px;font-size:11px;color:var(--brand-terracotta)}
+.phraseEnglish{margin:0 0 12px;font-size:11px;color:var(--text-secondary)}
+.phraseEnglish b{color:var(--text-primary)}
+.phraseCulturalNote{padding:10px;background:var(--surface-page);border-radius:10px;margin-top:auto;border:1px solid var(--border-default)}
+.phraseCulturalNote small{display:block;font-size:9px;font-weight:700;color:var(--brand-deep-teal);margin-bottom:2px}
+.phraseCulturalNote p{margin:0;font-size:10px;color:var(--text-secondary);line-height:1.4}
+.villageEtiquetteSection{padding:20px;background:var(--surface-subtle);border-radius:18px;border:1px solid var(--border-default)}
+.etiquetteHeader{margin-bottom:14px}
+.etiquetteHeader h3{margin:4px 0 6px;font-size:18px;color:var(--brand-deep-teal)}
+.etiquetteHeader p{margin:0;font-size:11px;color:var(--text-secondary)}
+.etiquetteRulesGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.etiquetteRuleCard{padding:14px;border-radius:12px;background:var(--surface-card);border:1px solid var(--border-default)}
+.etiquetteRuleCard h4{margin:0 0 6px;font-size:13px;color:var(--brand-deep-teal)}
+.etiquetteRuleCard p{margin:0;font-size:10px;color:var(--text-secondary);line-height:1.45}
+@media(max-width:560px){.itineraryDayCard{flex-direction:column}.dayStayAndLogistics{grid-template-columns:1fr}.itineraryAdvisoriesGrid{grid-template-columns:1fr}.itineraryBudgetBanner{flex-direction:column;align-items:flex-start}.itineraryTopActions{width:100%}.itineraryTopActions button{flex:1}}
+
+
 
