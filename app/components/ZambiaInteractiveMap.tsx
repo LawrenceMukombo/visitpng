@@ -572,6 +572,16 @@ interface ZambiaInteractiveMapProps {
 export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: ZambiaInteractiveMapProps) {
   const [selectedPin, setSelectedPin] = useState<MapDestinationPin | null>(ZAMBIA_TOURISM_PINS[0]);
 
+  // Selected district object when clicked directly on shapefile
+  const [selectedDistrictInfo, setSelectedDistrictInfo] = useState<{
+    id: string;
+    name: string;
+    provinceCode: string;
+    provinceName: string;
+    centerLat: number;
+    centerLon: number;
+  } | null>(null);
+
   // Cross-Filter States
   const [selectedProvinceCode, setSelectedProvinceCode] = useState<string>("all");
   const [selectedDistrictId, setSelectedDistrictId] = useState<string>("all");
@@ -602,8 +612,8 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
   const [showPins, setShowPins] = useState<boolean>(true);
 
   // Hover & Tooltip State
+  const [hoveredDistrict, setHoveredDistrict] = useState<{ name: string; prov: string } | null>(null);
   const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
-  const [hoveredDistrict, setHoveredDistrict] = useState<string | null>(null);
   const [hoveredPark, setHoveredPark] = useState<string | null>(null);
 
   // Zoom & Fullscreen
@@ -635,6 +645,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
     });
     setSelectedProvinceCode("all");
     setSelectedDistrictId("all");
+    setSelectedDistrictInfo(null);
     setSearchTerm("");
     setShowDistricts(true);
     setShowProvinces(true);
@@ -719,6 +730,26 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
     return ZAMBIA_DISTRICTS_SHAPEFILES.find((d) => d.id === selectedDistrictId)?.name || null;
   }, [selectedDistrictId]);
 
+  // Handle direct click on a district shapefile polygon
+  const handleDistrictClick = (district: (typeof ZAMBIA_DISTRICTS_SHAPEFILES)[0]) => {
+    if (selectedDistrictId === district.id) {
+      setSelectedDistrictId("all");
+      setSelectedDistrictInfo(null);
+    } else {
+      setSelectedDistrictId(district.id);
+      setSelectedProvinceCode(district.provinceCode);
+      setSelectedDistrictInfo(district);
+
+      // Check if there is a pin in this district
+      const matchingPin = ZAMBIA_TOURISM_PINS.find(
+        (p) => p.districtName && p.districtName.toLowerCase() === district.name.toLowerCase()
+      );
+      if (matchingPin) {
+        setSelectedPin(matchingPin);
+      }
+    }
+  };
+
   return (
     <div
       ref={mapContainerRef}
@@ -759,7 +790,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
             Real Map of Zambia · Districts, Royal Ceremonies & Safaris
           </h2>
           <p style={{ margin: "3px 0 0", fontSize: "12.5px", color: "rgba(255, 255, 255, 0.8)" }}>
-            Click on any province or district polygon to cross-filter destinations, ceremonies, and tourism passes in real time.
+            Click on any district polygon or legend chip to cross-filter destinations, ceremonies, and tourism passes in real time.
           </p>
         </div>
 
@@ -1096,6 +1127,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
             onChange={(e) => {
               setSelectedProvinceCode(e.target.value);
               setSelectedDistrictId("all");
+              setSelectedDistrictInfo(null);
             }}
             style={{
               background: "rgba(16, 51, 51, 1)",
@@ -1120,7 +1152,18 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
           {/* District Selector Dropdown (116 Districts, dynamically scoped) */}
           <select
             value={selectedDistrictId}
-            onChange={(e) => setSelectedDistrictId(e.target.value)}
+            onChange={(e) => {
+              setSelectedDistrictId(e.target.value);
+              const found = ZAMBIA_DISTRICTS_SHAPEFILES.find((d) => d.id === e.target.value);
+              setSelectedDistrictInfo(found || null);
+              if (found) {
+                setSelectedProvinceCode(found.provinceCode);
+                const matchingPin = ZAMBIA_TOURISM_PINS.find(
+                  (p) => p.districtName && p.districtName.toLowerCase() === found.name.toLowerCase()
+                );
+                if (matchingPin) setSelectedPin(matchingPin);
+              }
+            }}
             style={{
               background: "rgba(16, 51, 51, 1)",
               color: "var(--brand-white)",
@@ -1160,7 +1203,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
             {selectedDistrictName && (
               <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "rgba(168, 85, 247, 0.25)", color: "rgba(216, 180, 254, 1)", padding: "2px 8px", borderRadius: "12px", fontSize: "11px", fontWeight: 700 }}>
                 District: {selectedDistrictName}
-                <button type="button" onClick={() => setSelectedDistrictId("all")} style={{ background: "none", border: "none", color: "rgba(216, 180, 254, 1)", cursor: "pointer", fontWeight: 800 }}>×</button>
+                <button type="button" onClick={() => { setSelectedDistrictId("all"); setSelectedDistrictInfo(null); }} style={{ background: "none", border: "none", color: "rgba(216, 180, 254, 1)", cursor: "pointer", fontWeight: 800 }}>×</button>
               </span>
             )}
 
@@ -1228,13 +1271,15 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
           <div style={{ position: "absolute", bottom: "14px", left: "18px", background: "rgba(0,0,0,0.85)", padding: "6px 12px", borderRadius: "8px", border: "1px solid rgba(37,211,102,0.3)", fontSize: "11px", color: "var(--brand-white)", pointerEvents: "none", zIndex: 5, display: "flex", alignItems: "center", gap: "10px" }}>
             <span style={{ color: "rgba(37, 211, 102, 1)", fontWeight: 800 }}>📍 GIS HUD:</span>
             {hoveredDistrict ? (
-              <span>District: <strong>{hoveredDistrict}</strong></span>
+              <span>District: <strong style={{ color: "rgba(216, 180, 254, 1)" }}>{hoveredDistrict.name}</strong> ({hoveredDistrict.prov})</span>
             ) : hoveredProvince ? (
-              <span>Province: <strong>{hoveredProvince}</strong></span>
+              <span>Province: <strong style={{ color: "rgba(37, 211, 102, 1)" }}>{hoveredProvince}</strong></span>
             ) : hoveredPark ? (
-              <span>National Park: <strong>{hoveredPark}</strong></span>
+              <span>National Park: <strong style={{ color: "rgba(74, 222, 128, 1)" }}>{hoveredPark}</strong></span>
+            ) : selectedDistrictInfo ? (
+              <span>Selected District: <strong style={{ color: "rgba(216, 180, 254, 1)" }}>{selectedDistrictInfo.name}</strong> ({selectedDistrictInfo.provinceName})</span>
             ) : (
-              <span>Zambia (WGS84 752,618 km²) · 10 Provinces · 116 Districts</span>
+              <span>Zambia (WGS84 752,618 km²) · 10 Provinces · 116 Districts · Click to Inspect</span>
             )}
           </div>
 
@@ -1277,67 +1322,12 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 stroke="rgba(37, 211, 102, 0.95)"
                 strokeWidth="3.5"
                 filter="drop-shadow(0 0 12px rgba(37, 211, 102, 0.35))"
+                pointerEvents="none"
               />
 
-              {/* 116 OFFICIAL ADM2 DISTRICTS SHAPEFILE LAYER */}
-              {showDistricts && (
-                <g opacity="0.85">
-                  {ZAMBIA_DISTRICTS_SHAPEFILES.map((district) => {
-                    const isSelected = selectedDistrictId === district.id;
-                    const isProvSelected = selectedProvinceCode !== "all" && district.provinceCode === selectedProvinceCode;
-                    const isHovered = hoveredDistrict === district.name;
-
-                    return (
-                      <path
-                        key={district.id}
-                        d={district.svgPath}
-                        fill={
-                          isSelected
-                            ? "rgba(168, 85, 247, 0.55)"
-                            : isHovered
-                            ? "rgba(168, 85, 247, 0.35)"
-                            : isProvSelected
-                            ? "rgba(37, 211, 102, 0.15)"
-                            : "rgba(255, 255, 255, 0.015)"
-                        }
-                        stroke={
-                          isSelected
-                            ? "rgba(216, 180, 254, 1)"
-                            : isHovered
-                            ? "rgba(168, 85, 247, 0.9)"
-                            : isProvSelected
-                            ? "rgba(37, 211, 102, 0.45)"
-                            : "rgba(255, 255, 255, 0.12)"
-                        }
-                        strokeWidth={isSelected ? "2" : isHovered ? "1.5" : "0.6"}
-                        onMouseEnter={() => {
-                          setHoveredDistrict(district.name);
-                          setHoveredProvince(district.provinceName);
-                        }}
-                        onMouseLeave={() => {
-                          setHoveredDistrict(null);
-                          setHoveredProvince(null);
-                        }}
-                        onClick={() => {
-                          if (selectedDistrictId === district.id) {
-                            setSelectedDistrictId("all");
-                          } else {
-                            setSelectedDistrictId(district.id);
-                            setSelectedProvinceCode(district.provinceCode);
-                          }
-                        }}
-                        style={{ cursor: "pointer", transition: "fill 0.12s ease, stroke 0.12s ease" }}
-                      >
-                        <title>{district.name} District ({district.provinceName} Province)</title>
-                      </path>
-                    );
-                  })}
-                </g>
-              )}
-
-              {/* 10 OFFICIAL ADM1 PROVINCES SHAPEFILE LAYER */}
+              {/* 10 OFFICIAL ADM1 PROVINCES BACKGROUND & BOUNDARY LAYER */}
               {showProvinces && (
-                <g opacity="0.95">
+                <g opacity="0.95" style={{ pointerEvents: showDistricts ? "none" : "auto" }}>
                   {ZAMBIA_PROVINCES_SHAPEFILES.map((prov) => {
                     const isSelected = selectedProvinceCode === prov.code;
                     const isHovered = hoveredProvince === prov.name || hoveredProvince === prov.code;
@@ -1348,9 +1338,9 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                         d={prov.svgPath}
                         fill={
                           isSelected
-                            ? "rgba(37, 211, 102, 0.28)"
+                            ? "rgba(37, 211, 102, 0.25)"
                             : isHovered
-                            ? "rgba(37, 211, 102, 0.18)"
+                            ? "rgba(37, 211, 102, 0.15)"
                             : "transparent"
                         }
                         stroke={isSelected ? "rgba(37, 211, 102, 1)" : isHovered ? "rgba(52, 211, 153, 0.9)" : "rgba(255, 255, 255, 0.35)"}
@@ -1362,9 +1352,11 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                           if (selectedProvinceCode === prov.code) {
                             setSelectedProvinceCode("all");
                             setSelectedDistrictId("all");
+                            setSelectedDistrictInfo(null);
                           } else {
                             setSelectedProvinceCode(prov.code);
                             setSelectedDistrictId("all");
+                            setSelectedDistrictInfo(null);
                           }
                         }}
                         style={{ cursor: "pointer", transition: "fill 0.15s ease, stroke 0.15s ease" }}
@@ -1376,15 +1368,76 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 </g>
               )}
 
+              {/* 116 OFFICIAL ADM2 DISTRICTS SHAPEFILE LAYER (DIRECTLY INTERACTIVE) */}
+              {showDistricts && (
+                <g opacity="0.95" style={{ pointerEvents: "auto" }}>
+                  {ZAMBIA_DISTRICTS_SHAPEFILES.map((district) => {
+                    const isSelected = selectedDistrictId === district.id;
+                    const isProvSelected = selectedProvinceCode !== "all" && district.provinceCode === selectedProvinceCode;
+                    const isHovered = hoveredDistrict?.name === district.name;
+
+                    return (
+                      <path
+                        key={district.id}
+                        d={district.svgPath}
+                        fill={
+                          isSelected
+                            ? "rgba(168, 85, 247, 0.65)"
+                            : isHovered
+                            ? "rgba(168, 85, 247, 0.45)"
+                            : isProvSelected
+                            ? "rgba(37, 211, 102, 0.22)"
+                            : "rgba(255, 255, 255, 0.04)"
+                        }
+                        stroke={
+                          isSelected
+                            ? "rgba(236, 72, 153, 1)"
+                            : isHovered
+                            ? "rgba(216, 180, 254, 1)"
+                            : isProvSelected
+                            ? "rgba(37, 211, 102, 0.55)"
+                            : "rgba(255, 255, 255, 0.18)"
+                        }
+                        strokeWidth={isSelected ? "2.5" : isHovered ? "1.8" : "0.75"}
+                        onMouseEnter={() => {
+                          setHoveredDistrict({ name: district.name, prov: district.provinceName });
+                          setHoveredProvince(district.provinceName);
+                        }}
+                        onMouseLeave={() => {
+                          setHoveredDistrict(null);
+                          setHoveredProvince(null);
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDistrictClick(district);
+                        }}
+                        style={{ cursor: "pointer", transition: "fill 0.12s ease, stroke 0.12s ease" }}
+                      >
+                        <title>{district.name} District ({district.provinceName} Province)</title>
+                      </path>
+                    );
+                  })}
+                </g>
+              )}
+
               {/* NATIONAL PARKS SHAPEFILE LAYER */}
               {showParks && (
-                <g>
+                <g style={{ pointerEvents: "auto" }}>
                   {ZAMBIA_NATIONAL_PARKS_GIS.map((np) => (
                     <g
                       key={np.id}
                       opacity="0.9"
                       onMouseEnter={() => setHoveredPark(np.name)}
                       onMouseLeave={() => setHoveredPark(null)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Find matching pin or open park
+                        const matching = ZAMBIA_TOURISM_PINS.find(
+                          (p) => p.name.toLowerCase().includes(np.name.split(" ")[0].toLowerCase())
+                        );
+                        if (matching) setSelectedPin(matching);
+                      }}
+                      style={{ cursor: "pointer" }}
                     >
                       <path
                         d={np.path || ""}
@@ -1413,7 +1466,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
 
               {/* WATERBODIES & MAJOR RIVERS */}
               {showRivers && (
-                <g>
+                <g style={{ pointerEvents: "auto" }}>
                   {/* Lakes */}
                   {ZAMBIA_WATERBODIES_GIS.filter(w => w.type === "waterbody").map((lake) => (
                     <path
@@ -1422,6 +1475,14 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                       fill="url(#waterGradient)"
                       stroke="rgba(56, 189, 248, 1)"
                       strokeWidth="1.8"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const matching = ZAMBIA_TOURISM_PINS.find((p) =>
+                          p.name.toLowerCase().includes(lake.name.split(" ")[1]?.toLowerCase() || lake.name.toLowerCase())
+                        );
+                        if (matching) setSelectedPin(matching);
+                      }}
+                      style={{ cursor: "pointer" }}
                     >
                       <title>{lake.name}: {lake.description}</title>
                     </path>
@@ -1437,21 +1498,22 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                       strokeWidth="3.2"
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      pointerEvents="none"
                     >
                       <title>{river.name}: {river.description}</title>
                     </path>
                   ))}
 
-                  <text x="735" y="65" fill="rgba(56, 189, 248, 1)" fontSize="9.5" fontWeight="800">LAKE TANGANYIKA</text>
-                  <text x="440" y="655" fill="rgba(56, 189, 248, 1)" fontSize="9.5" fontWeight="800">LAKE KARIBA</text>
-                  <text x="560" y="270" fill="rgba(56, 189, 248, 0.95)" fontSize="9" fontWeight="800">L. BANGWEULU</text>
-                  <text x="500" y="130" fill="rgba(56, 189, 248, 0.95)" fontSize="8.5" fontWeight="800">L. MWERU</text>
+                  <text x="735" y="65" fill="rgba(56, 189, 248, 1)" fontSize="9.5" fontWeight="800" pointerEvents="none">LAKE TANGANYIKA</text>
+                  <text x="440" y="655" fill="rgba(56, 189, 248, 1)" fontSize="9.5" fontWeight="800" pointerEvents="none">LAKE KARIBA</text>
+                  <text x="560" y="270" fill="rgba(56, 189, 248, 0.95)" fontSize="9" fontWeight="800" pointerEvents="none">L. BANGWEULU</text>
+                  <text x="500" y="130" fill="rgba(56, 189, 248, 0.95)" fontSize="8.5" fontWeight="800" pointerEvents="none">L. MWERU</text>
                 </g>
               )}
 
               {/* ARTERIAL HIGHWAYS */}
               {showHighways && (
-                <g opacity="0.85">
+                <g opacity="0.85" pointerEvents="none">
                   {ZAMBIA_HIGHWAYS_GIS.map((hwy) => (
                     <path
                       key={hwy.id}
@@ -1501,7 +1563,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
 
               {/* DESTINATION & CEREMONY PINS */}
               {showPins && (
-                <g>
+                <g style={{ pointerEvents: "auto" }}>
                   {filteredPins.map((pin) => {
                     const isSelected = selectedPin?.id === pin.id;
                     const isCeremony = pin.category === "ceremony";
@@ -1520,8 +1582,9 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                         onClick={(e) => {
                           e.stopPropagation();
                           setSelectedPin(pin);
+                          setSelectedDistrictInfo(null);
                         }}
-                        style={{ cursor: "pointer", pointerEvents: "all" }}
+                        style={{ cursor: "pointer" }}
                       >
                         <circle r="28" fill="transparent" />
 
@@ -1586,35 +1649,127 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
             </svg>
           </div>
 
-          {/* Safari Circuits Strip */}
+          {/* Interactive Safari Circuits Strip */}
           <div className="zambiaMapCircuitsBar">
-            <span style={{ fontWeight: 800, color: "rgba(37, 211, 102, 1)" }}>Safari Circuits:</span>
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            <span style={{ fontWeight: 800, color: "rgba(37, 211, 102, 1)" }}>Quick Circuits:</span>
+            <button
+              type="button"
+              onClick={() => {
+                setVisibleCategories({ ceremony: true, nature: false, tours: false, stays: false, culture: false });
+                setSelectedProvinceCode("all");
+                setSelectedDistrictId("all");
+              }}
+              style={{ background: "none", border: "none", color: "rgba(251, 191, 36, 1)", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700 }}
+            >
               <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "rgba(245, 158, 11, 1)", display: "inline-block" }} />
               <span>👑 Traditional Ceremonies</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedProvinceCode("ZM-SOU");
+                setSelectedDistrictId("all");
+                setVisibleCategories({ ceremony: true, nature: true, tours: true, stays: true, culture: true });
+              }}
+              style={{ background: "none", border: "none", color: "rgba(52, 211, 153, 1)", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700 }}
+            >
               <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "rgba(16, 185, 129, 1)", display: "inline-block" }} />
               <span>Southern (Livingstone / Kariba)</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedProvinceCode("ZM-EAS");
+                setSelectedDistrictId("all");
+                setVisibleCategories({ ceremony: true, nature: true, tours: true, stays: true, culture: true });
+              }}
+              style={{ background: "none", border: "none", color: "rgba(103, 232, 249, 1)", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700 }}
+            >
               <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "rgba(6, 182, 212, 1)", display: "inline-block" }} />
               <span>Luangwa Valley (Mfuwe)</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedProvinceCode("ZM-NOR");
+                setSelectedDistrictId("all");
+                setVisibleCategories({ ceremony: true, nature: true, tours: true, stays: true, culture: true });
+              }}
+              style={{ background: "none", border: "none", color: "rgba(147, 197, 253, 1)", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700 }}
+            >
               <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "rgba(59, 130, 246, 1)", display: "inline-block" }} />
               <span>Northern Lakes (Tanganyika / Bangweulu)</span>
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedProvinceCode("ZM-WES");
+                setSelectedDistrictId("all");
+                setVisibleCategories({ ceremony: true, nature: true, tours: true, stays: true, culture: true });
+              }}
+              style={{ background: "none", border: "none", color: "rgba(216, 180, 254, 1)", cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "11px", fontWeight: 700 }}
+            >
               <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "rgba(139, 92, 246, 1)", display: "inline-block" }} />
               <span>Greater Kafue & Barotseland</span>
-            </div>
+            </button>
           </div>
         </div>
 
-        {/* Selected Destination Preview Drawer */}
+        {/* Selected Destination / District Details Drawer */}
         <div className="zambiaMapDetailPanel">
-          {selectedPin ? (
+          {selectedDistrictInfo && !selectedPin ? (
+            <div>
+              <div style={{ background: "rgba(168, 85, 247, 0.15)", border: "1px solid rgba(168, 85, 247, 0.4)", borderRadius: "10px", padding: "14px", marginBottom: "12px" }}>
+                <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(216, 180, 254, 1)", textTransform: "uppercase" }}>
+                  🏛️ SELECTED ZAMBIAN DISTRICT SHAPEFILE
+                </span>
+                <h3 style={{ fontSize: "20px", color: "var(--brand-white)", margin: "4px 0" }}>
+                  {selectedDistrictInfo.name} District
+                </h3>
+                <p style={{ margin: "2px 0 6px", fontSize: "12px", color: "rgba(255,255,255,0.8)" }}>
+                  Province: <strong>{selectedDistrictInfo.provinceName}</strong>
+                </p>
+                <div className="zambiaGpsBadge">
+                  <span>📍 GPS: {selectedDistrictInfo.centerLat.toFixed(4)}° S, {selectedDistrictInfo.centerLon.toFixed(4)}° E</span>
+                  <button
+                    type="button"
+                    onClick={() => handleCopyGps(selectedDistrictInfo.centerLat, selectedDistrictInfo.centerLon)}
+                    style={{ background: "none", border: "none", color: "rgba(37, 211, 102, 1)", cursor: "pointer", fontSize: "10.5px", fontWeight: 700, padding: "0 4px" }}
+                  >
+                    {copiedGps ? "✓ Copied" : "Copy GPS"}
+                  </button>
+                </div>
+              </div>
+
+              <div style={{ fontSize: "12.5px", color: "rgba(255,255,255,0.85)", lineHeight: 1.5, marginBottom: "14px" }}>
+                Explore safari lodges, tours, and traditional ceremonies active in <strong>{selectedDistrictInfo.name} District</strong>.
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  if (onSelectDestination) {
+                    onSelectDestination(selectedDistrictInfo.name.toLowerCase());
+                  } else {
+                    window.location.href = `/?q=${encodeURIComponent(selectedDistrictInfo.name)}`;
+                  }
+                }}
+                style={{
+                  width: "100%",
+                  background: "linear-gradient(135deg, rgba(168, 85, 247, 1) 0%, rgba(126, 34, 206, 1) 100%)",
+                  color: "var(--brand-white)",
+                  border: "none",
+                  padding: "12px 18px",
+                  borderRadius: "10px",
+                  fontSize: "13.5px",
+                  fontWeight: 800,
+                  cursor: "pointer"
+                }}
+              >
+                Search {selectedDistrictInfo.name} Listings & Passes →
+              </button>
+            </div>
+          ) : selectedPin ? (
             <div>
               <div style={{ position: "relative", borderRadius: "10px", overflow: "hidden", marginBottom: "12px", height: "180px", background: "rgba(0,0,0,1)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1754,7 +1909,10 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
               <div
                 key={pin.id}
                 className={`zambiaMiniCard ${isSelected ? "active" : ""}`}
-                onClick={() => setSelectedPin(pin)}
+                onClick={() => {
+                  setSelectedPin(pin);
+                  setSelectedDistrictInfo(null);
+                }}
                 style={{
                   flex: "0 0 180px",
                   background: isSelected ? "rgba(37, 211, 102, 0.15)" : "rgba(255,255,255,0.04)",
