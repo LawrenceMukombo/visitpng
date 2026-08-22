@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { ZamRoamLogo, ZamRoamLionCompass } from "./ZamRoamEmblem";
+import { ZamRoamLogo } from "./ZamRoamEmblem";
 
 export interface FooterProps {
   countryCode?: string;
@@ -31,7 +31,6 @@ export function Footer({
   onOpenMembershipHub
 }: FooterProps) {
   const passLabel = "ZamRoam Pass";
-  const partnerLabel = "ZamRoam Partners";
   const dealsLabel = "ZamRoam Deals";
 
   const [showTermsModal, setShowTermsModal] = useState(false);
@@ -328,11 +327,67 @@ export function Footer({
           </div>
         </div>
 
+        {/* Social Connect & Trust Badges Strip */}
+        <div style={{
+          maxWidth: "1200px",
+          margin: "0 auto",
+          padding: "1.25rem 0",
+          borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "1.25rem"
+        }}>
+          {/* Social Links with Icon Pack Images */}
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+            <span style={{ fontSize: "0.85rem", color: "#a3cfc9", fontWeight: 700, marginRight: "4px" }}>Follow ZamRoam:</span>
+            <a href="https://wa.me/260573506598" target="_blank" rel="noopener noreferrer" title="WhatsApp" style={{ opacity: 0.9 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/whatsapp.png" alt="WhatsApp" style={{ width: "28px", height: "28px" }} />
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" title="Facebook" style={{ opacity: 0.9 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/facebook.png" alt="Facebook" style={{ width: "28px", height: "28px" }} />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram" style={{ opacity: 0.9 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/instagram.png" alt="Instagram" style={{ width: "28px", height: "28px" }} />
+            </a>
+            <a href="https://x.com" target="_blank" rel="noopener noreferrer" title="X (Twitter)" style={{ opacity: 0.9 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/x_twitter.png" alt="X" style={{ width: "28px", height: "28px" }} />
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" title="YouTube" style={{ opacity: 0.9 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/youtube.png" alt="YouTube" style={{ width: "28px", height: "28px" }} />
+            </a>
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" title="TikTok" style={{ opacity: 0.9 }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/tiktok.png" alt="TikTok" style={{ width: "28px", height: "28px" }} />
+            </a>
+          </div>
+
+          {/* Trust Badges */}
+          <div style={{ display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.8rem", color: "#c2e2dc" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/trusted_partner_badge.png" alt="Trusted" style={{ width: "22px", height: "22px" }} />
+              <span>ZTA Licensed Partner</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.8rem", color: "#c2e2dc" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/top_rated_badge.png" alt="Top Rated" style={{ width: "22px", height: "22px" }} />
+              <span>Top Rated Experiences</span>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom Bar */}
         <div style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          paddingTop: "1.5rem",
+          paddingTop: "1.25rem",
           borderTop: "1px solid rgba(255, 255, 255, 0.08)",
           display: "flex",
           flexWrap: "wrap",

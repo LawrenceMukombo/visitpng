@@ -254,25 +254,34 @@ export function PassLanding({
           border: "1px solid rgba(255, 255, 255, 0.2)",
           width: "280px",
           color: "#ffffff",
-          boxShadow: "0 8px 20px rgba(0,0,0,0.3)"
+          boxShadow: "0 8px 20px rgba(0,0,0,0.3)",
+          position: "relative",
+          overflow: "hidden"
         }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-            <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "#DE7739" }}>{passName}</span>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "0.75rem" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/icons/zamroam_pass.png" alt="Pass" style={{ width: "22px", height: "22px" }} />
+              <span style={{ fontSize: "0.85rem", fontWeight: "700", color: "#DE7739" }}>{passName}</span>
+            </div>
             <span style={{ fontSize: "0.75rem", background: "rgba(255,255,255,0.15)", padding: "0.2rem 0.5rem", borderRadius: "10px" }}>GOLD</span>
           </div>
-          <div style={{ fontSize: "1.1rem", fontWeight: "800", marginBottom: "0.5rem" }}>Jane Doe</div>
-          <div style={{ fontSize: "0.75rem", color: "#a3cfc9", marginBottom: "1rem" }}>ID: ZV-M-2026-00482</div>
+          <div style={{ fontSize: "1.1rem", fontWeight: "800", marginBottom: "0.25rem" }}>Jane Doe</div>
+          <div style={{ fontSize: "0.75rem", color: "#a3cfc9", marginBottom: "0.75rem" }}>ID: ZV-M-2026-00482</div>
           <div style={{
             background: "#ffffff",
-            padding: "0.75rem",
+            padding: "0.6rem",
             borderRadius: "8px",
             textAlign: "center",
             color: "#1a2e2b",
-            fontWeight: "700",
-            fontSize: "0.85rem"
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "4px"
           }}>
-            [ 📱 Dynamic Secure QR ]<br />
-            <span style={{ fontSize: "0.7rem", color: "#666", fontWeight: "400" }}>Refreshes every 60s</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/icons/qr_code.png" alt="QR Code" style={{ width: "64px", height: "64px", objectFit: "contain" }} />
+            <span style={{ fontSize: "0.7rem", color: "#666", fontWeight: "600" }}>Dynamic QR • Refreshes 60s</span>
           </div>
         </div>
       </div>

@@ -201,12 +201,21 @@ export function PartnerLanding({
               padding: "1.75rem 1.5rem",
               display: "flex",
               flexDirection: "column",
-              boxShadow: tier.highlight ? "0 8px 24px rgba(222, 119, 57, 0.12)" : "0 2px 8px rgba(0,0,0,0.04)"
+              boxShadow: tier.highlight ? "0 8px 24px rgba(222, 119, 57, 0.12)" : "0 2px 8px rgba(0,0,0,0.04)",
+              position: "relative"
             }}
           >
-            <h3 style={{ margin: "0 0 0.5rem 0", fontSize: "1.3rem", fontWeight: "700", color: "#1B6960" }}>
-              {tier.name}
-            </h3>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+              <h3 style={{ margin: 0, fontSize: "1.3rem", fontWeight: "700", color: "#1B6960" }}>
+                {tier.name}
+              </h3>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={idx === 1 ? "/icons/verified_business_badge.png" : idx === 2 ? "/icons/trusted_partner_badge.png" : "/icons/partners.png"}
+                alt={tier.name}
+                style={{ width: "32px", height: "32px", objectFit: "contain" }}
+              />
+            </div>
             <div style={{ display: "flex", alignItems: "baseline", gap: "0.25rem", marginBottom: "1.5rem" }}>
               <span style={{ fontSize: "1.8rem", fontWeight: "800", color: "#1a2e2b" }}>
                 {tier.price === 0 ? "Free" : `${currencySymbol}${tier.price}`}

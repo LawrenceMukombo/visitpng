@@ -4,11 +4,6 @@ import React from "react";
 
 /**
  * Official ZamRoam Pin Emblem & Typography
- * Matches the official branding:
- * - Orange & Deep Green GPS Pin
- * - African Acacia Tree & Setting Sun
- * - Winding Zambezi River
- * - "ZamRoam" Typography with "DISCOVER ZAMBIA. EXPERIENCE MORE."
  */
 export function ZamRoamLogo({
   size = "medium",
@@ -19,9 +14,9 @@ export function ZamRoamLogo({
   showTagline?: boolean;
   variant?: "light" | "dark";
 }) {
-  const pinSize = size === "small" ? 32 : size === "large" ? 56 : 42;
-  const fontSize = size === "small" ? "18px" : size === "large" ? "32px" : "24px";
-  const taglineSize = size === "small" ? "8px" : size === "large" ? "11px" : "9.5px";
+  const pinSize = size === "small" ? 34 : size === "large" ? 58 : 44;
+  const fontSize = size === "small" ? "19px" : size === "large" ? "32px" : "24px";
+  const taglineSize = size === "small" ? "8.5px" : size === "large" ? "11px" : "9.5px";
 
   return (
     <div style={{ display: "inline-flex", alignItems: "center", gap: size === "small" ? "8px" : "12px", textDecoration: "none" }}>
@@ -35,30 +30,24 @@ export function ZamRoamLogo({
         style={{ filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.35))", flexShrink: 0 }}
       >
         <defs>
-          {/* Orange gradient for upper ring */}
           <linearGradient id="pinOrangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#EA580C" />
             <stop offset="100%" stopColor="#F97316" />
           </linearGradient>
-          {/* Green gradient for lower base */}
           <linearGradient id="pinGreenGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#0E3D35" />
             <stop offset="100%" stopColor="#15803D" />
           </linearGradient>
-          {/* Sun gradient */}
           <linearGradient id="sunGrad" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#FBBF24" />
             <stop offset="100%" stopColor="#F97316" />
           </linearGradient>
-          {/* River gradient */}
           <linearGradient id="riverGrad" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#FFFFFF" />
             <stop offset="100%" stopColor="#E2E8F0" />
           </linearGradient>
         </defs>
 
-        {/* Outer Pin Body */}
-        {/* Upper Orange Arch */}
         <path
           d="M50 4C24.595 4 4 24.595 4 50c0 14.2 6.5 27 16.8 35.3L50 112l29.2-26.7C89.5 77 96 64.2 96 50 96 24.595 75.405 4 50 4z"
           fill="#103630"
@@ -66,7 +55,6 @@ export function ZamRoamLogo({
           strokeWidth="6"
         />
 
-        {/* Orange Top Arc Accent */}
         <path
           d="M20 38C26 22 37 14 50 14s24 8 30 24"
           stroke="url(#pinOrangeGrad)"
@@ -74,29 +62,23 @@ export function ZamRoamLogo({
           strokeLinecap="round"
         />
 
-        {/* Inner Sky & Sun Circle */}
         <path
           d="M26 50a24 24 0 0 1 48 0H26z"
           fill="url(#sunGrad)"
         />
 
-        {/* Acacia Tree Silhouette */}
         <g fill="#0B2722">
-          {/* Tree Canopy */}
           <ellipse cx="40" cy="38" rx="16" ry="6" />
           <ellipse cx="36" cy="35" rx="11" ry="4" />
           <ellipse cx="45" cy="36" rx="9" ry="3.5" />
-          {/* Trunk & Branches */}
           <path d="M40 38v12h-3v-12c-2-1-4-3-6-5l2-1c2 2 4 3 5 4v-1c1-1 3-3 5-4l1.5 1c-2 2-3 3-4.5 5z" />
         </g>
 
-        {/* Lower Deep Green Landscape */}
         <path
           d="M16 52c0 18.778 15.222 34 34 34s34-15.222 34-34H16z"
           fill="url(#pinGreenGrad)"
         />
 
-        {/* Winding Zambezi River Ribbon */}
         <path
           d="M48 50c-2 8 6 14 2 22-3 6-7 10-4 14h8c-3-4 1-8 4-14 4-8-4-14-2-22h-8z"
           fill="url(#riverGrad)"
@@ -150,7 +132,6 @@ export function ZamRoamCircularSeal({ size = 160 }: { size?: number }) {
         textAlign: "center"
       }}
     >
-      {/* Outer decorative ring */}
       <div
         style={{
           position: "absolute",
@@ -178,7 +159,6 @@ export function ZamRoamCircularSeal({ size = 160 }: { size?: number }) {
         EXPERIENCE MORE.
       </div>
 
-      {/* Birds */}
       <div style={{ fontSize: "10px", marginTop: "4px", opacity: 0.8 }}>
         🦅 🦅 🦅
       </div>
@@ -187,7 +167,7 @@ export function ZamRoamCircularSeal({ size = 160 }: { size?: number }) {
 }
 
 /**
- * Golden Vintage Lion Compass Rose (Safari Overland Route)
+ * Golden Vintage Lion Compass Rose
  */
 export function ZamRoamLionCompass({ size = 120 }: { size?: number }) {
   return (
@@ -219,28 +199,20 @@ export function ZamRoamLionCompass({ size = 120 }: { size?: number }) {
           </linearGradient>
         </defs>
 
-        {/* Compass Outer Rings */}
         <circle cx="100" cy="100" r="70" stroke="url(#goldGrad)" strokeWidth="3" />
         <circle cx="100" cy="100" r="64" stroke="url(#goldGrad)" strokeWidth="1.5" strokeDasharray="3 3" />
         <circle cx="100" cy="100" r="50" stroke="url(#goldGrad)" strokeWidth="1.5" />
 
-        {/* Compass Star Points */}
-        {/* North */}
         <polygon points="100,10 93,85 100,75 107,85" fill="url(#goldLight)" stroke="url(#goldGrad)" strokeWidth="1" />
-        {/* South */}
         <polygon points="100,190 93,115 100,125 107,115" fill="url(#goldLight)" stroke="url(#goldGrad)" strokeWidth="1" />
-        {/* East */}
         <polygon points="190,100 115,93 125,100 115,107" fill="url(#goldLight)" stroke="url(#goldGrad)" strokeWidth="1" />
-        {/* West */}
         <polygon points="10,100 85,93 75,100 85,107" fill="url(#goldLight)" stroke="url(#goldGrad)" strokeWidth="1" />
 
-        {/* Compass Lettering */}
         <text x="100" y="24" fill="#FDE68A" fontSize="13" fontWeight="900" textAnchor="middle">N</text>
         <text x="100" y="185" fill="#FDE68A" fontSize="13" fontWeight="900" textAnchor="middle">S</text>
         <text x="182" y="104" fill="#FDE68A" fontSize="13" fontWeight="900" textAnchor="middle">E</text>
         <text x="18" y="104" fill="#FDE68A" fontSize="13" fontWeight="900" textAnchor="middle">W</text>
 
-        {/* Overland Safari Route Waypoint Path */}
         <path
           d="M30 150 Q 55 140, 80 120 T 130 90 T 170 70"
           stroke="url(#goldGrad)"
@@ -249,12 +221,10 @@ export function ZamRoamLionCompass({ size = 120 }: { size?: number }) {
           fill="none"
         />
 
-        {/* Waypoint Location Pins */}
         <circle cx="30" cy="150" r="5" fill="#F59E0B" stroke="#FFFFFF" strokeWidth="1.5" />
         <circle cx="150" cy="80" r="4" fill="#F59E0B" stroke="#FFFFFF" strokeWidth="1.5" />
         <circle cx="170" cy="70" r="5" fill="#F59E0B" stroke="#FFFFFF" strokeWidth="1.5" />
 
-        {/* Center Lion Head Emblem */}
         <circle cx="100" cy="100" r="38" fill="#1C1917" stroke="url(#goldGrad)" strokeWidth="2.5" />
         <text x="100" y="112" fontSize="32" textAnchor="middle">🦁</text>
       </svg>
@@ -278,14 +248,14 @@ export function ZamRoamLionCompass({ size = 120 }: { size?: number }) {
 }
 
 /**
- * Six Official ZamRoam Category Icons (From Banner)
+ * Official ZamRoam Category Navigation Pack
  */
 export const ZAMROAM_NAV_CATEGORIES = [
   {
     id: "stay",
     slug: "stays",
     label: "STAY",
-    iconName: "Bed",
+    iconPng: "/icons/stays.png",
     symbol: "🛏️",
     desc: "Luxury safari lodges, river chalets & heritage hotels"
   },
@@ -293,7 +263,7 @@ export const ZAMROAM_NAV_CATEGORIES = [
     id: "explore",
     slug: "tours",
     label: "EXPLORE",
-    iconName: "Camera",
+    iconPng: "/icons/camera.png",
     symbol: "📷",
     desc: "Game drives, walking safaris & expedition circuits"
   },
@@ -301,7 +271,7 @@ export const ZAMROAM_NAV_CATEGORIES = [
     id: "experience",
     slug: "nature",
     label: "EXPERIENCE",
-    iconName: "Pin",
+    iconPng: "/icons/destinations.png",
     symbol: "📍",
     desc: "Victoria Falls, lakes, canoe trails & wilderness"
   },
@@ -309,7 +279,7 @@ export const ZAMROAM_NAV_CATEGORIES = [
     id: "events",
     slug: "culture",
     label: "EVENTS",
-    iconName: "Calendar",
+    iconPng: "/icons/events.png",
     symbol: "📅",
     desc: "Kuomboka, Nc'wala & 10 Royal Ceremonies"
   },
@@ -317,7 +287,7 @@ export const ZAMROAM_NAV_CATEGORIES = [
     id: "deals",
     slug: "pass",
     label: "DEALS",
-    iconName: "Tag",
+    iconPng: "/icons/deals.png",
     symbol: "🏷️",
     desc: "ZamRoam Tourist Pass & exclusive travel perks"
   },
@@ -325,21 +295,21 @@ export const ZAMROAM_NAV_CATEGORIES = [
     id: "local_businesses",
     slug: "partners",
     label: "LOCAL BUSINESSES",
-    iconName: "Users",
+    iconPng: "/icons/partners.png",
     symbol: "👥",
     desc: "Registered Zambian tour operators & artisans"
   }
 ];
 
 /**
- * Four Trust & Value Props Ribbon (From Banner)
+ * Trust Ribbon with Authentic Icon Pack Badges
  */
 export function ZamRoamTrustRibbon() {
   const valueProps = [
-    { title: "TOP DESTINATIONS", desc: "Handpicked Zambian Wonders" },
-    { title: "EXCLUSIVE OFFERS", desc: "Best Verified Rates in ZMW" },
-    { title: "TRUSTED PARTNERS", desc: "ZTA Licensed Tour Guides" },
-    { title: "MEMBER BENEFITS", desc: "VIP Access & Offline Passes" }
+    { title: "TOP DESTINATIONS", desc: "Handpicked Zambian Wonders", icon: "/icons/top_rated_badge.png" },
+    { title: "EXCLUSIVE OFFERS", desc: "Best Verified Rates in ZMW", icon: "/icons/exclusive_deals_badge.png" },
+    { title: "TRUSTED PARTNERS", desc: "ZTA Licensed Tour Guides", icon: "/icons/trusted_partner_badge.png" },
+    { title: "MEMBER BENEFITS", desc: "VIP Access & Offline Passes", icon: "/icons/verified_business_badge.png" }
   ];
 
   return (
@@ -363,31 +333,19 @@ export function ZamRoamTrustRibbon() {
           style={{
             display: "inline-flex",
             alignItems: "center",
-            gap: "8px",
+            gap: "10px",
             fontSize: "12px",
             color: "#FFFFFF",
             fontWeight: 800,
             letterSpacing: "0.06em"
           }}
         >
-          {/* Orange Checkmark Pill */}
-          <span
-            style={{
-              width: "18px",
-              height: "18px",
-              borderRadius: "50%",
-              background: "#EA580C",
-              color: "#FFFFFF",
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "11px",
-              fontWeight: 900,
-              boxShadow: "0 2px 5px rgba(234, 88, 12, 0.4)"
-            }}
-          >
-            ✓
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={item.icon}
+            alt={item.title}
+            style={{ width: "24px", height: "24px", objectFit: "contain", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.4))" }}
+          />
           <span style={{ textTransform: "uppercase" }}>{item.title}</span>
         </div>
       ))}
@@ -422,7 +380,7 @@ export function ZamRoamHeroBanner({
       <div
         style={{
           position: "relative",
-          padding: "28px 24px 20px",
+          padding: "26px 24px 18px",
           background: "linear-gradient(135deg, rgba(8, 38, 32, 0.95) 0%, rgba(14, 61, 53, 0.85) 100%)",
           display: "flex",
           alignItems: "center",
@@ -437,22 +395,21 @@ export function ZamRoamHeroBanner({
             position: "absolute",
             top: 0,
             right: 0,
-            width: "120px",
-            height: "60px",
-            background: "linear-gradient(135deg, #15803D 50%, #B91C1C 50%, #B91C1C 66%, #1E293B 66%, #1E293B 83%, #EA580C 83%)",
-            opacity: 0.85,
-            borderBottomLeftRadius: "16px",
-            boxShadow: "0 4px 10px rgba(0,0,0,0.4)",
+            padding: "8px 14px",
+            background: "rgba(0,0,0,0.45)",
+            borderBottomLeftRadius: "14px",
             display: "flex",
             alignItems: "center",
-            justifyContent: "flex-end",
-            paddingRight: "10px",
-            color: "#F59E0B",
-            fontWeight: 900,
-            fontSize: "18px"
+            gap: "8px"
           }}
         >
-          🦅
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/icons/zambia_flag.png"
+            alt="Zambia Flag"
+            style={{ width: "26px", height: "18px", objectFit: "cover", borderRadius: "3px" }}
+          />
+          <span style={{ fontSize: "11px", fontWeight: 800, color: "#F59E0B" }}>ZAMBIA</span>
         </div>
 
         {/* Brand & Tagline */}
@@ -461,7 +418,7 @@ export function ZamRoamHeroBanner({
           <p
             style={{
               margin: "12px 0 0",
-              fontSize: "14.5px",
+              fontSize: "14px",
               color: "rgba(255, 255, 255, 0.9)",
               lineHeight: 1.5,
               fontWeight: 500
@@ -473,15 +430,32 @@ export function ZamRoamHeroBanner({
 
         {/* Lion Compass Graphic */}
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
-          <ZamRoamLionCompass size={110} />
+          {onOpenMap ? (
+            <button
+              type="button"
+              onClick={onOpenMap}
+              title="Open Interactive Zambia Map"
+              style={{
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+                transition: "transform 0.2s ease"
+              }}
+            >
+              <ZamRoamLionCompass size={105} />
+            </button>
+          ) : (
+            <ZamRoamLionCompass size={105} />
+          )}
         </div>
       </div>
 
-      {/* Six Main Category Navigation Buttons */}
+      {/* Six Main Category Navigation Buttons with Official Icon Pack */}
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fit, minmax(135px, 1fr))",
           gap: "10px",
           padding: "16px 20px",
           background: "rgba(5, 20, 16, 0.95)"
@@ -507,12 +481,17 @@ export function ZamRoamHeroBanner({
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              gap: "6px",
+              gap: "8px",
               cursor: "pointer",
               transition: "all 0.2s ease"
             }}
           >
-            <span style={{ fontSize: "24px" }}>{cat.symbol}</span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={cat.iconPng}
+              alt={cat.label}
+              style={{ width: "36px", height: "36px", objectFit: "contain", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.5))" }}
+            />
             <span
               style={{
                 fontSize: "12px",
@@ -545,9 +524,21 @@ export function ZamRoamHeroBanner({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "16px", flexWrap: "wrap" }}>
-          <span>🌐 <strong style={{ color: "#34D399" }}>zamroam.com</strong></span>
-          <span>✉️ <strong style={{ color: "#FB923C" }}>info@zamroam.com</strong></span>
-          <span>💬 WhatsApp: <strong style={{ color: "#34D399" }}>+260 573 506 598</strong></span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/icons/website_globe.png" alt="Website" style={{ width: "16px", height: "16px" }} />
+            <strong style={{ color: "#34D399" }}>zamroam.com</strong>
+          </span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/icons/email.png" alt="Email" style={{ width: "16px", height: "16px" }} />
+            <strong style={{ color: "#FB923C" }}>info@zamroam.com</strong>
+          </span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: "5px" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/icons/whatsapp.png" alt="WhatsApp" style={{ width: "16px", height: "16px" }} />
+            WhatsApp: <strong style={{ color: "#34D399" }}>+260 573 506 598</strong>
+          </span>
         </div>
         <div>
           <span style={{ color: "rgba(255,255,255,0.5)" }}>Owned & Operated by </span>

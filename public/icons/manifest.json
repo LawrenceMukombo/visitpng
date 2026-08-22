@@ -1,0 +1,795 @@
+[
+  {
+    "file": "stays.png",
+    "source_box": [
+      20,
+      255,
+      125,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "destinations.png",
+    "source_box": [
+      115,
+      255,
+      230,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "attractions.png",
+    "source_box": [
+      220,
+      255,
+      335,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "restaurants.png",
+    "source_box": [
+      330,
+      255,
+      445,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "experiences.png",
+    "source_box": [
+      425,
+      255,
+      550,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "events.png",
+    "source_box": [
+      545,
+      255,
+      665,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "deals.png",
+    "source_box": [
+      650,
+      255,
+      760,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "transport.png",
+    "source_box": [
+      750,
+      255,
+      855,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "zamroam_pass.png",
+    "source_box": [
+      825,
+      255,
+      930,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "partners.png",
+    "source_box": [
+      915,
+      255,
+      1020,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "verified.png",
+    "source_box": [
+      1000,
+      255,
+      1105,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "featured.png",
+    "source_box": [
+      1085,
+      255,
+      1190,
+      365
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "verified_business_badge.png",
+    "source_box": [
+      1180,
+      250,
+      1280,
+      370
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "trusted_partner_badge.png",
+    "source_box": [
+      1260,
+      250,
+      1365,
+      370
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "top_rated_badge.png",
+    "source_box": [
+      1340,
+      250,
+      1445,
+      370
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "exclusive_deals_badge.png",
+    "source_box": [
+      1420,
+      250,
+      1530,
+      370
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "elephant.png",
+    "source_box": [
+      10,
+      390,
+      100,
+      485
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "lion.png",
+    "source_box": [
+      90,
+      390,
+      170,
+      485
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "leopard.png",
+    "source_box": [
+      165,
+      390,
+      245,
+      485
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "giraffe.png",
+    "source_box": [
+      235,
+      390,
+      315,
+      490
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "hippo.png",
+    "source_box": [
+      300,
+      390,
+      390,
+      490
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "zebra.png",
+    "source_box": [
+      375,
+      390,
+      455,
+      490
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "eagle.png",
+    "source_box": [
+      515,
+      390,
+      595,
+      485
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "tree.png",
+    "source_box": [
+      595,
+      390,
+      680,
+      490
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "waterfall.png",
+    "source_box": [
+      675,
+      390,
+      765,
+      490
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "airplane.png",
+    "source_box": [
+      15,
+      660,
+      95,
+      750
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "bus.png",
+    "source_box": [
+      90,
+      655,
+      170,
+      750
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "safari_vehicle.png",
+    "source_box": [
+      250,
+      655,
+      335,
+      750
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "motorbike.png",
+    "source_box": [
+      500,
+      655,
+      585,
+      755
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "bicycle.png",
+    "source_box": [
+      575,
+      655,
+      660,
+      755
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "boat.png",
+    "source_box": [
+      655,
+      655,
+      745,
+      750
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "binoculars.png",
+    "source_box": [
+      470,
+      730,
+      560,
+      815
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "camera.png",
+    "source_box": [
+      395,
+      730,
+      485,
+      815
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "tent.png",
+    "source_box": [
+      105,
+      470,
+      195,
+      565
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "village_hut.png",
+    "source_box": [
+      195,
+      470,
+      280,
+      565
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "drum.png",
+    "source_box": [
+      500,
+      455,
+      590,
+      560
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "zambia_flag.png",
+    "source_box": [
+      1020,
+      540,
+      1125,
+      645
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "traditional_mask.png",
+    "source_box": [
+      1120,
+      540,
+      1205,
+      645
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "hibiscus.png",
+    "source_box": [
+      1250,
+      540,
+      1335,
+      645
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "emoji_love.png",
+    "source_box": [
+      10,
+      790,
+      95,
+      885
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "emoji_smile.png",
+    "source_box": [
+      90,
+      790,
+      175,
+      885
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "emoji_cool.png",
+    "source_box": [
+      170,
+      790,
+      255,
+      885
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "emoji_thumbsup.png",
+    "source_box": [
+      250,
+      790,
+      335,
+      885
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "emoji_heart.png",
+    "source_box": [
+      340,
+      790,
+      425,
+      885
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "emoji_fire.png",
+    "source_box": [
+      430,
+      790,
+      510,
+      885
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "facebook.png",
+    "source_box": [
+      710,
+      790,
+      785,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "instagram.png",
+    "source_box": [
+      780,
+      790,
+      855,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "tiktok.png",
+    "source_box": [
+      850,
+      790,
+      925,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "youtube.png",
+    "source_box": [
+      920,
+      790,
+      995,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "x_twitter.png",
+    "source_box": [
+      995,
+      790,
+      1070,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "linkedin.png",
+    "source_box": [
+      1070,
+      790,
+      1145,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "whatsapp.png",
+    "source_box": [
+      1145,
+      790,
+      1220,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "telegram.png",
+    "source_box": [
+      1220,
+      790,
+      1295,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "email.png",
+    "source_box": [
+      1295,
+      790,
+      1370,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "website_globe.png",
+    "source_box": [
+      1370,
+      790,
+      1445,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "location_pin.png",
+    "source_box": [
+      1440,
+      790,
+      1530,
+      875
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "mobile_app.png",
+    "source_box": [
+      720,
+      860,
+      805,
+      955
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "laptop_app.png",
+    "source_box": [
+      805,
+      860,
+      900,
+      955
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "qr_code.png",
+    "source_box": [
+      985,
+      860,
+      1070,
+      955
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "id_card.png",
+    "source_box": [
+      1070,
+      860,
+      1160,
+      955
+    ],
+    "size": [
+      512,
+      512
+    ]
+  },
+  {
+    "file": "wifi.png",
+    "source_box": [
+      1280,
+      860,
+      1360,
+      955
+    ],
+    "size": [
+      512,
+      512
+    ]
+  }
+]
