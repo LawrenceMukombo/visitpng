@@ -86,7 +86,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     sacredRegalia: "Sacred Makishi Masked Spirits (Kayipu, Chizaluke, Mwana Pwevo, Utenu)",
     dressCode: "Chitenge fabric attire with respect for sacred arena boundary gates",
     summary: "UNESCO-inscribed Masterpiece of Oral and Intangible Heritage. Over 50 sacred Makishi masked spirit masquerades emerge from the ancestral graveyard to celebrate the Mukanda initiation graduation at Mize Palace.",
-    imageUrl: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1100&q=82",
+    imageUrl: "/ceremonies/likumbi_lya_mize_makishi.jpg",
     latitude: -13.5417,
     longitude: 23.1083,
     highlights: [
@@ -144,7 +144,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     sacredRegalia: "Mukonzo Skirt, Mpok Sword, Imfukutu & Chinkwisha Royal Drums",
     dressCode: "Traditional Chitenge or formal dress (respectful at Ng'ona sacred river)",
     summary: "Spectacular royal victory pageant celebrating the great Lunda conquest of the Luapula valley. King Mwata Kazembe, draped in majestic flowing Mukonzo robes, performs the exhilarating Mutomboko victory sword dance.",
-    imageUrl: "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82",
+    imageUrl: "/ceremonies/umutomboko_mwata_kazembe.jpg",
     latitude: -9.8167,
     longitude: 28.7500,
     highlights: [
@@ -173,7 +173,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     sacredRegalia: "Icipuna ca Ng'wena (Sacred Crocodile Throne) & Royal Spears",
     dressCode: "Bemba red, white & black royal attire or smart cultural dress",
     summary: "The grand annual national ceremony of the Bemba people reenacting their historic 17th-century migration from Kola (Congo) to finding the dead crocodile totem at Ng'wena.",
-    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82",
+    imageUrl: "/ceremonies/ukusefya_pa_ngwena_chitimukulu.jpg",
     latitude: -10.1667,
     longitude: 31.3667,
     highlights: [
@@ -202,7 +202,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     sacredRegalia: "Injobo Leopard Skins, Cowhide Shields, Assegai Spears, Headgear",
     dressCode: "Ngoni animal skins / Chitenge attire",
     summary: "Ancient first-fruits harvest and warrior thanksgiving celebration. Thousands of Ngoni impis in majestic leopard skins and shields dance the thunderous Ingoma before Paramount Chief Mpezeni.",
-    imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=82",
+    imageUrl: "/ceremonies/ncwala_ngoni_warriors.jpg",
     latitude: -13.6333,
     longitude: 32.6500,
     highlights: [
@@ -260,7 +260,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     sacredRegalia: "Gule Wamkulu (Great Dance - UNESCO Intangible Masterpiece) Masquerades",
     dressCode: "Modest cultural clothing; absolute reverence for masked performers",
     summary: "Tri-national royal convergence where over 130 subordinate Chewa chiefs from Zambia, Malawi, and Mozambique assemble at Mkaika to pay tribute and present governance reports to King Kalonga Gawa Undi.",
-    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82",
+    imageUrl: "/ceremonies/kulamba_gawa_undi.jpg",
     latitude: -14.0500,
     longitude: 32.0333,
     highlights: [
