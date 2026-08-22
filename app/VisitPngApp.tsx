@@ -305,7 +305,7 @@ function Header({viewer,profile,currency,onCurrencyChange,countryCode}:{viewer:V
     </button>
     {viewer.signedIn&&<div className="headerWelcome"><small>Welcome</small><strong>{viewer.displayName}</strong></div>}
     <nav>
-      <span className="destinationPill" style={{background:"rgba(255,255,255,0.12)",color:"var(--brand-white)",border:"1px solid rgba(255,255,255,0.2)",padding:"4px 10px",borderRadius:"20px",fontSize:"12px",fontWeight:600}}>🇿🇲 Zambia</span>
+      <span className="destinationPill">🇿🇲 Zambia</span>
       <CurrencySelector currentCurrency={currency} onChange={onCurrencyChange}/>
       {viewer.signedIn?<button className="avatar" onClick={profile}>{initials}</button>:<a className="signInMini" href={viewer.signInPath}>Sign in</a>}
     </nav>

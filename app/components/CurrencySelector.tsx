@@ -7,7 +7,7 @@ interface CurrencySelectorProps {
 }
 
 export default function CurrencySelector({currentCurrency, onChange}: CurrencySelectorProps) {
-  const selected = CURRENCIES[currentCurrency] || CURRENCIES.PGK;
+  const selected = CURRENCIES[currentCurrency] || CURRENCIES.ZMW || CURRENCIES.PGK;
 
   return (
     <div
@@ -15,14 +15,16 @@ export default function CurrencySelector({currentCurrency, onChange}: CurrencySe
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: "4px",
-        background: "rgba(255, 255, 255, 0.12)",
-        border: "1px solid rgba(255, 255, 255, 0.22)",
-        borderRadius: "6px",
-        padding: "4px 8px"
+        gap: "6px",
+        background: "rgba(255, 255, 255, 0.14)",
+        border: "1px solid rgba(255, 255, 255, 0.25)",
+        borderRadius: "99px",
+        padding: "0 10px",
+        height: "32px",
+        boxSizing: "border-box"
       }}
     >
-      <span style={{ fontSize: "11px", lineHeight: 1 }}>{selected.flag}</span>
+      <span style={{ fontSize: "12px", lineHeight: 1, display: "inline-flex", alignItems: "center" }}>{selected.flag}</span>
       <select
         value={currentCurrency}
         onChange={e => onChange(e.target.value as CurrencyCode)}
@@ -30,18 +32,21 @@ export default function CurrencySelector({currentCurrency, onChange}: CurrencySe
         className="currencySelect"
         style={{
           background: "transparent",
-          color: "#FFFFFF",
+          color: "rgba(255, 255, 255, 1)",
           border: "none",
           outline: "none",
-          fontSize: "11px",
+          fontSize: "11.5px",
           fontWeight: 700,
           padding: 0,
           cursor: "pointer",
-          lineHeight: 1.2
+          lineHeight: "32px",
+          height: "32px",
+          display: "inline-flex",
+          alignItems: "center"
         }}
       >
         {Object.values(CURRENCIES).map(curr => (
-          <option key={curr.code} value={curr.code} style={{ background: "#FFFFFF", color: "#1E2A24", fontSize: "12px" }}>
+          <option key={curr.code} value={curr.code} style={{ background: "rgba(255, 255, 255, 1)", color: "rgba(30, 42, 36, 1)", fontSize: "12px" }}>
             {curr.code} ({curr.symbol})
           </option>
         ))}
