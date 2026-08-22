@@ -1,0 +1,30 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.*
+
+# Builds
+/.next/
+/out/
+/dist/
+tsconfig.tsbuildinfo
+
+# Local settings and data
+.env*
+!.env.example
+/data/
+*.db
+*.db-shm
+*.db-wal
+
+# Logs and local tools
+*.log
+.wrangler/
+/outputs/
+/work/
+.DS_Store
+*.pem
+.vercel/
+
+next-env.d.ts
+visitpng-prd.txt
