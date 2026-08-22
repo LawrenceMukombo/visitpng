@@ -49,9 +49,19 @@ small{font-size:11px!important;line-height:1.4}.eyebrow{font-size:11px}.bottom b
 .currencySelector{display:flex;align-items:center;gap:4px;background:var(--surface-subtle);border:1px solid var(--border-default);border-radius:99px;padding:4px 8px}
 .currencyFlag{font-size:14px}
 .currencySelect{border:0;background:transparent;color:var(--text-primary);font-size:11px;font-weight:700;cursor:pointer;outline:none}
-.exploreModeSwitcher{display:flex;gap:8px;margin-bottom:18px}
-.exploreModeSwitcher button{flex:1;padding:10px 14px;border:1px solid var(--border-default);border-radius:12px;background:var(--surface-card);color:var(--text-primary);font-weight:700;font-size:12px;cursor:pointer;transition:all 0.2s}
-.exploreModeSwitcher button.active{background:var(--brand-deep-teal);color:var(--text-on-dark);border-color:var(--brand-deep-teal)}
+.search nav{display:flex;gap:7px;margin-top:10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--brand-deep-teal) var(--surface-subtle);padding-bottom:6px}
+.search nav::-webkit-scrollbar{height:4px;display:block}
+.search nav::-webkit-scrollbar-track{background:var(--surface-subtle);border-radius:99px}
+.search nav::-webkit-scrollbar-thumb{background:var(--brand-deep-teal);border-radius:99px}
+.search nav button{flex:0 0 auto;white-space:nowrap;border:1px solid var(--border-default);background:var(--surface-page);border-radius:99px;padding:8px 12px;font-size:10px;font-weight:700}
+.exploreModeSwitcher{display:flex;gap:8px;align-items:center;margin-bottom:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--brand-deep-teal) var(--surface-subtle);padding:2px 2px 8px 2px}
+.exploreModeSwitcher::-webkit-scrollbar{height:5px;display:block}
+.exploreModeSwitcher::-webkit-scrollbar-track{background:var(--surface-subtle);border-radius:99px}
+.exploreModeSwitcher::-webkit-scrollbar-thumb{background:var(--brand-deep-teal);border-radius:99px}
+.exploreModeSwitcher button{flex:0 0 auto;white-space:nowrap;padding:8px 14px;border:1px solid var(--border-default);border-radius:99px;background:var(--surface-card);color:var(--text-primary);font-weight:700;font-size:11px;cursor:pointer;box-shadow:0 2px 6px var(--shadow-color);transition:all 0.15s ease}
+.exploreModeSwitcher button:hover{background:var(--surface-selected);border-color:var(--brand-deep-teal);color:var(--brand-deep-teal)}
+.exploreModeSwitcher button.active{background:var(--brand-deep-teal);color:var(--text-on-dark);border-color:var(--brand-deep-teal);box-shadow:0 2px 8px var(--shadow-color-strong)}
+.exploreModeSwitcher .partnerRegisterPill{background:var(--action-primary);color:var(--brand-charcoal);border-color:var(--brand-soft-mint);font-weight:800}
 .trailsContentSection{padding-top:16px}
 .trailsIntro{font-size:12px;line-height:1.55;color:var(--text-secondary);margin:6px 0 20px}
 .trailPacksGrid{display:grid;gap:24px}

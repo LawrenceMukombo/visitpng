@@ -4,6 +4,7 @@ import Link from "next/link";
 import SmartLocationCascade, {CascadeSelection} from "../components/SmartLocationCascade";
 import AdminProviderVetting from "../components/AdminProviderVetting";
 import AdminMembershipConsole from "../components/AdminMembershipConsole";
+import AdminOperationsConsole from "../components/AdminOperationsConsole";
 import type { ProviderApplicationRecord } from "../../db/providers";
 import {PNG_REGIONS, PNG_PROVINCES} from "../../db/pngGeography";
 
@@ -106,7 +107,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const [providerForm,setProviderForm]=useState({...blankProvider});
 
   const [status,setStatus]=useState("Loading information…");
-  const [section,setSection]=useState<"places"|"locations"|"provinces"|"hierarchy"|"membership_ecosystem"|"providers_vetting"|"categories"|"api"|"activity">("places");
+  const [section,setSection]=useState<"places"|"locations"|"provinces"|"hierarchy"|"membership_ecosystem"|"providers_vetting"|"operations"|"categories"|"api"|"activity">("places");
   const [providerApps,setProviderApps]=useState<ProviderApplicationRecord[]>([]);
   const [membershipData,setMembershipData]=useState<Parameters<typeof AdminMembershipConsole>[0]["data"]>(null);
   const [search,setSearch]=useState("");
@@ -432,6 +433,9 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
       </button>
       <button className={section==="providers_vetting"?"active":""} onClick={()=>setSection("providers_vetting")}>
         🏢 Provider Vetting (Anti-Scam) {providerApps.filter(a=>a.status==="pending_review").length ? `(${providerApps.filter(a=>a.status==="pending_review").length} New)` : ""}
+      </button>
+      <button className={section==="operations"?"active":""} onClick={()=>setSection("operations")}>
+        📊 Bookings, Reviews & Disputes
       </button>
       <button className={section==="categories"?"active":""} onClick={()=>setSection("categories")}>Categories & Providers</button>
       <button className={section==="api"?"active":""} onClick={()=>setSection("api")}>API Explorer</button>
@@ -971,6 +975,14 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
           <h3>Live API Response Preview {apiLoading?"(Loading...)":""}</h3>
           <pre>{apiPreview}</pre>
         </div>
+      </section>
+    )}
+
+    {section==="operations"&&(
+      <section className="adminHierarchySection" style={{ maxWidth: "1400px", margin: "24px auto", padding: "26px" }}>
+        <p className="eyebrow">ENTERPRISE PLATFORM OPERATIONS & RESOLUTION</p>
+        <h1 style={{ margin: "6px 0 18px", fontSize: "26px" }}>Customer Bookings, Reviews & Dispute Center</h1>
+        <AdminOperationsConsole />
       </section>
     )}
 
