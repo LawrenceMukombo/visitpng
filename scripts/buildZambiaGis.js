@@ -7,6 +7,7 @@ const __dirname = path.dirname(__filename);
 
 const adm1 = JSON.parse(fs.readFileSync(path.join(__dirname, '../db/zmb_adm1_simplified.geojson'), 'utf8'));
 const adm0 = JSON.parse(fs.readFileSync(path.join(__dirname, '../db/zmb_adm0_simplified.geojson'), 'utf8'));
+const adm2 = JSON.parse(fs.readFileSync(path.join(__dirname, '../db/zmb_adm2_simplified.geojson'), 'utf8'));
 
 const minLon = 21.9962;
 const maxLon = 33.7097;
@@ -23,12 +24,12 @@ function project(lon, lat) {
   return [Number(x.toFixed(1)), Number(y.toFixed(1))];
 }
 
-function polygonToPath(coordinates, type) {
+function polygonToPath(coordinates, type, maxStep = 1) {
   const rings = type === 'MultiPolygon' ? coordinates : [coordinates];
   let pathStr = '';
   rings.forEach(polygon => {
     polygon.forEach((ring) => {
-      const step = ring.length > 500 ? 2 : 1;
+      const step = ring.length > 400 ? Math.max(2, maxStep) : 1;
       const pts = [];
       for (let i = 0; i < ring.length; i += step) {
         pts.push(project(ring[i][0], ring[i][1]));
@@ -98,6 +99,30 @@ const labelOffsetMap = {
   'Western': { lat: -15.2, lon: 23.6 }
 };
 
+function pointInPolygon(pt, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const xi = ring[i][0], yi = ring[i][1];
+    const xj = ring[j][0], yj = ring[j][1];
+    const intersect = ((yi > pt[1]) !== (yj > pt[1])) && (pt[0] < (xj - xi) * (pt[1] - yi) / (yj - yi) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+function findProvinceName(center, districtName) {
+  if (districtName === 'Ikelenge') return 'North-Western';
+  for (const f of adm1.features) {
+    const rings = f.geometry.type === 'MultiPolygon' ? f.geometry.coordinates.map(p => p[0]) : f.geometry.coordinates;
+    for (const r of rings) {
+      if (pointInPolygon(center, r)) {
+        return f.properties.shapeName.trim();
+      }
+    }
+  }
+  return 'Central';
+}
+
 const provinces = adm1.features.map(f => {
   const name = f.properties.shapeName.trim();
   const code = provinceCodeMap[name] || 'ZM-GEN';
@@ -127,6 +152,33 @@ const provinces = adm1.features.map(f => {
     labelX,
     labelY,
     svgPath: path
+  };
+});
+
+const districts = adm2.features.map(f => {
+  const name = f.properties.shapeName.trim();
+  const id = 'dst-' + name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  const allCoords = f.geometry.type === 'MultiPolygon' ? f.geometry.coordinates.flat(2) : f.geometry.coordinates[0];
+  let sumLon = 0, sumLat = 0;
+  allCoords.forEach(([lon, lat]) => { sumLon += lon; sumLat += lat; });
+  const centerLon = sumLon / allCoords.length;
+  const centerLat = sumLat / allCoords.length;
+  const [centerX, centerY] = project(centerLon, centerLat);
+
+  const provName = findProvinceName([centerLon, centerLat], name);
+  const provCode = provinceCodeMap[provName] || 'ZM-GEN';
+  const svgPath = polygonToPath(f.geometry.coordinates, f.geometry.type, 2);
+
+  return {
+    id,
+    name,
+    provinceCode: provCode,
+    provinceName: provName,
+    centerLat: Number(centerLat.toFixed(4)),
+    centerLon: Number(centerLon.toFixed(4)),
+    centerX,
+    centerY,
+    svgPath
   };
 });
 
@@ -330,6 +382,18 @@ export interface ZambiaShapefileProvince {
   svgPath: string;
 }
 
+export interface ZambiaShapefileDistrict {
+  id: string;
+  name: string;
+  provinceCode: string;
+  provinceName: string;
+  centerLat: number;
+  centerLon: number;
+  centerX: number;
+  centerY: number;
+  svgPath: string;
+}
+
 export const ZAMBIA_GEO_BOUNDS = {
   minLon: ${minLon},
   maxLon: ${maxLon},
@@ -361,6 +425,8 @@ export const ZAMBIA_COUNTRY_OUTLINE_PATH = ${JSON.stringify(countryPath)};
 
 export const ZAMBIA_PROVINCES_SHAPEFILES: ZambiaShapefileProvince[] = ${JSON.stringify(provinces, null, 2)};
 
+export const ZAMBIA_DISTRICTS_SHAPEFILES: ZambiaShapefileDistrict[] = ${JSON.stringify(districts, null, 2)};
+
 export interface ZambiaGisFeature {
   id: string;
   name: string;
@@ -380,4 +446,4 @@ export const ZAMBIA_HIGHWAYS_GIS: ZambiaGisFeature[] = ${JSON.stringify(highways
 `;
 
 fs.writeFileSync(path.join(__dirname, '../db/zambiaShapefilesData.ts'), tsFile);
-console.log('Successfully generated db/zambiaShapefilesData.ts!');
+console.log('Successfully generated db/zambiaShapefilesData.ts with', provinces.length, 'provinces and', districts.length, 'districts!');

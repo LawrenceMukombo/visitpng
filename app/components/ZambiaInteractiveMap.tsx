@@ -6,6 +6,7 @@ import {
   projectGpsToSvg,
   ZAMBIA_COUNTRY_OUTLINE_PATH,
   ZAMBIA_PROVINCES_SHAPEFILES,
+  ZAMBIA_DISTRICTS_SHAPEFILES,
   ZAMBIA_NATIONAL_PARKS_GIS,
   ZAMBIA_WATERBODIES_GIS,
   ZAMBIA_HIGHWAYS_GIS
@@ -19,6 +20,7 @@ export interface MapDestinationPin {
   categoryIcon: string;
   provinceCode: string;
   provinceName: string;
+  districtName?: string;
   region: string;
   summary: string;
   imageUrl: string;
@@ -47,6 +49,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "👑",
     provinceCode: "ZM-WES",
     provinceName: "Western Province",
+    districtName: "Mongu",
     region: "Western & Barotseland",
     royalHost: "His Majesty The Litunga (King of the Lozi) & Barotse Royal Establishment",
     season: "March / April (Peak Zambezi Flood)",
@@ -75,6 +78,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "🎭",
     provinceCode: "ZM-NW",
     provinceName: "North-Western Province",
+    districtName: "Zambezi",
     region: "North-Western Circuit",
     royalHost: "His Royal Highness Senior Chief Ndungu & Luvale Royal Council",
     season: "Last Week of August (UNESCO Masterpiece)",
@@ -103,6 +107,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "⚔️",
     provinceCode: "ZM-NW",
     provinceName: "North-Western Province",
+    districtName: "Zambezi",
     region: "North-Western Circuit",
     royalHost: "His Royal Highness Senior Chief Ishindi of the Lunda Kingdom",
     season: "August / September",
@@ -131,6 +136,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "👑",
     provinceCode: "ZM-LUA",
     provinceName: "Luapula Province",
+    districtName: "Kawambwa",
     region: "Northern & Luapula",
     royalHost: "His Royal Highness Mwata Kazembe, King of the Eastern Lunda",
     season: "Last Weekend of July",
@@ -159,6 +165,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "🐊",
     provinceCode: "ZM-NOR",
     provinceName: "Northern Province",
+    districtName: "Mungwi",
     region: "Northern & Great Lakes",
     royalHost: "His Royal Highness Paramount Chief Chitimukulu (Mwine Lubemba)",
     season: "August",
@@ -187,6 +194,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "🛡️",
     provinceCode: "ZM-EAS",
     provinceName: "Eastern Province",
+    districtName: "Chipata",
     region: "Eastern & Luangwa Valley",
     royalHost: "His Royal Highness Paramount Chief Mpezeni, King of the Ngoni",
     season: "Last Saturday of February",
@@ -215,6 +223,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "🐂",
     provinceCode: "ZM-SOU",
     provinceName: "Southern Province",
+    districtName: "Namwala",
     region: "Southern Safari & Zambezi",
     royalHost: "Ba-Ila Royal Elders & Chiefs of Namwala",
     season: "September / October (Full Moon on the Kafue Flats)",
@@ -243,6 +252,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "🎭",
     provinceCode: "ZM-EAS",
     provinceName: "Eastern Province",
+    districtName: "Katete",
     region: "Eastern & Luangwa Valley",
     royalHost: "His Majesty Kalonga Gawa Undi, King of the Chewa (Zambia, Malawi, Mozambique)",
     season: "Last Saturday of August",
@@ -271,6 +281,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "🌧️",
     provinceCode: "ZM-SOU",
     provinceName: "Southern Province",
+    districtName: "Monze",
     region: "Southern Safari & Zambezi",
     royalHost: "Chief Monze, Spiritual Leader of the Tonga People",
     season: "First Weekend of July",
@@ -299,6 +310,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "🌾",
     provinceCode: "ZM-CEN",
     provinceName: "Central Province",
+    districtName: "Mkushi",
     region: "Central & Northern Circuit",
     royalHost: "Council of Chiefs of the Bisa, Swaka, and Lala Peoples",
     season: "September",
@@ -331,6 +343,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "◇",
     provinceCode: "ZM-SOU",
     provinceName: "Southern Province",
+    districtName: "Livingstone",
     region: "Southern Safari & Zambezi",
     summary: "UNESCO World Heritage wonder of the world where the Zambezi river cascades 108 metres into Batoka Gorge.",
     imageUrl: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82",
@@ -349,6 +362,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "◒",
     provinceCode: "ZM-EAS",
     provinceName: "Eastern Province",
+    districtName: "Mambwe",
     region: "Eastern & Luangwa Valley",
     summary: "Birthplace of the legendary African walking safari with unmatched leopard densities and elephant lagoons.",
     imageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82",
@@ -366,7 +380,8 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryName: "Nature & Safaris",
     categoryIcon: "◇",
     provinceCode: "ZM-LUS",
-    provinceName: "Lusaka / Southern",
+    provinceName: "Lusaka Province",
+    districtName: "Chongwe",
     region: "Southern Safari & Zambezi",
     summary: "Pristine wilderness facing Zimbabwe's Mana Pools, offering thrilling canoe trails and riverfront luxury lodges.",
     imageUrl: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=1100&q=82",
@@ -385,6 +400,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "◒",
     provinceCode: "ZM-CEN",
     provinceName: "Central Province",
+    districtName: "Mumbwa",
     region: "Central & Kafue Basin",
     summary: "One of Africa's largest national parks, featuring the mist-shrouded Busanga Plains and tree-climbing lions.",
     imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82",
@@ -403,6 +419,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "⌂",
     provinceCode: "ZM-SOU",
     provinceName: "Southern Province",
+    districtName: "Siavonga",
     region: "Southern Safari & Zambezi",
     summary: "The Zambian Riviera offering houseboat charters, scenic sunset cruises, and fresh Kariba bream dining.",
     imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82",
@@ -421,6 +438,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "◇",
     provinceCode: "ZM-WES",
     provinceName: "Western Province",
+    districtName: "Kalabo",
     region: "Western & Barotseland",
     summary: "Africa's second-largest wildebeest migration across vast golden plains managed in partnership with African Parks.",
     imageUrl: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82",
@@ -439,6 +457,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "⌂",
     provinceCode: "ZM-LUA",
     provinceName: "Luapula Province",
+    districtName: "Samfya",
     region: "Northern & Great Lakes",
     summary: "Zambia's inland white sand beaches and wetland sanctuary for the prehistoric Shoebill Stork.",
     imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82",
@@ -457,6 +476,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "⌂",
     provinceCode: "ZM-NOR",
     provinceName: "Northern Province",
+    districtName: "Mbala",
     region: "Northern & Great Lakes",
     summary: "The world's longest freshwater lake featuring pristine scuba diving, endemic cichlid fish, and Nsumbu National Park.",
     imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82",
@@ -475,6 +495,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "◇",
     provinceCode: "ZM-CEN",
     provinceName: "Central Province",
+    districtName: "Serenje",
     region: "Central & Northern Circuit",
     summary: "Home to the world's largest mammal migration where 10 million fruit bats arrive between October and December.",
     imageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82",
@@ -493,6 +514,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "♨",
     provinceCode: "ZM-NW",
     provinceName: "North-Western Province",
+    districtName: "Ikelenge",
     region: "North-Western Circuit",
     summary: "The sacred, forested birthplace where Africa's fourth-longest river begins its journey to the Indian Ocean.",
     imageUrl: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=1100&q=82",
@@ -511,6 +533,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "♨",
     provinceCode: "ZM-LUS",
     provinceName: "Lusaka Province",
+    districtName: "Lusaka",
     region: "Lusaka Central",
     summary: "Zambia's vibrant cosmopolitan capital featuring traditional artisan carving villages, wildlife sanctuaries, and top dining.",
     imageUrl: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82",
@@ -529,6 +552,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     categoryIcon: "◇",
     provinceCode: "ZM-SOU",
     provinceName: "Southern Province",
+    districtName: "Monze",
     region: "Southern Safari & Zambezi",
     summary: "World-renowned wetland paradise hosting over 420 bird species and massive herds of endemic Kafue Lechwe.",
     imageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82",
@@ -547,9 +571,13 @@ interface ZambiaInteractiveMapProps {
 
 export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: ZambiaInteractiveMapProps) {
   const [selectedPin, setSelectedPin] = useState<MapDestinationPin | null>(ZAMBIA_TOURISM_PINS[0]);
-  const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
 
-  // Toggable Legend Categories (Multi-toggle state)
+  // Cross-Filter States
+  const [selectedProvinceCode, setSelectedProvinceCode] = useState<string>("all");
+  const [selectedDistrictId, setSelectedDistrictId] = useState<string>("all");
+  const [searchTerm, setSearchTerm] = useState<string>("");
+
+  // Category Filter Toggles
   const [visibleCategories, setVisibleCategories] = useState<{
     ceremony: boolean;
     nature: boolean;
@@ -564,56 +592,109 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
     culture: true
   });
 
-  // Toggable Map Layers
+  // Layer Toggles
+  const [showDistricts, setShowDistricts] = useState<boolean>(true);
+  const [showProvinces, setShowProvinces] = useState<boolean>(true);
   const [showParks, setShowParks] = useState<boolean>(true);
   const [showRivers, setShowRivers] = useState<boolean>(true);
   const [showHighways, setShowHighways] = useState<boolean>(true);
-  const [showBorders, setShowBorders] = useState<boolean>(true);
   const [showLabels, setShowLabels] = useState<boolean>(true);
+  const [showPins, setShowPins] = useState<boolean>(true);
 
-  // Zoom & Pan state
+  // Hover & Tooltip State
+  const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
+  const [hoveredDistrict, setHoveredDistrict] = useState<string | null>(null);
+  const [hoveredPark, setHoveredPark] = useState<string | null>(null);
+
+  // Zoom & Fullscreen
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
-
-  const [selectedProvinceCode, setSelectedProvinceCode] = useState<string>("all");
-  const [searchTerm, setSearchTerm] = useState<string>("");
   const [copiedGps, setCopiedGps] = useState<boolean>(false);
 
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
 
+  // Available districts filtered by selected province
+  const availableDistricts = useMemo(() => {
+    if (selectedProvinceCode === "all") return ZAMBIA_DISTRICTS_SHAPEFILES;
+    return ZAMBIA_DISTRICTS_SHAPEFILES.filter((d) => d.provinceCode === selectedProvinceCode);
+  }, [selectedProvinceCode]);
+
+  // Toggle single category with instant feedback
   const toggleCategory = (cat: keyof typeof visibleCategories) => {
     setVisibleCategories((prev) => ({ ...prev, [cat]: !prev[cat] }));
   };
 
-  const selectAllCategories = () => {
-    setVisibleCategories({ ceremony: true, nature: true, tours: true, stays: true, culture: true });
+  // Reset all filters & layers
+  const handleResetFilters = () => {
+    setVisibleCategories({
+      ceremony: true,
+      nature: true,
+      tours: true,
+      stays: true,
+      culture: true
+    });
     setSelectedProvinceCode("all");
+    setSelectedDistrictId("all");
     setSearchTerm("");
+    setShowDistricts(true);
+    setShowProvinces(true);
     setShowParks(true);
     setShowRivers(true);
     setShowHighways(true);
+    setShowLabels(true);
+    setShowPins(true);
+    setZoomLevel(1);
   };
 
+  // Cross-Filtered Pins
   const filteredPins = useMemo(() => {
     return ZAMBIA_TOURISM_PINS.filter((pin) => {
       const catKey = pin.category as keyof typeof visibleCategories;
       const isCatEnabled = visibleCategories[catKey] ?? true;
       if (!isCatEnabled) return false;
 
-      const matchProv = selectedProvinceCode === "all" || pin.provinceCode === selectedProvinceCode;
+      // Province Filter
+      if (selectedProvinceCode !== "all" && pin.provinceCode !== selectedProvinceCode) {
+        return false;
+      }
 
-      const matchSearch =
-        !searchTerm.trim() ||
-        pin.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pin.provinceName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pin.region.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (pin.royalHost && pin.royalHost.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (pin.sacredRegalia && pin.sacredRegalia.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        pin.highlights.some((h) => h.toLowerCase().includes(searchTerm.toLowerCase()));
+      // District Filter
+      if (selectedDistrictId !== "all") {
+        const districtObj = ZAMBIA_DISTRICTS_SHAPEFILES.find((d) => d.id === selectedDistrictId);
+        if (districtObj && pin.districtName && pin.districtName.toLowerCase() !== districtObj.name.toLowerCase()) {
+          return false;
+        }
+      }
 
-      return matchProv && matchSearch;
+      // Text Search
+      if (searchTerm.trim()) {
+        const term = searchTerm.toLowerCase();
+        const matches =
+          pin.name.toLowerCase().includes(term) ||
+          pin.provinceName.toLowerCase().includes(term) ||
+          (pin.districtName && pin.districtName.toLowerCase().includes(term)) ||
+          pin.region.toLowerCase().includes(term) ||
+          (pin.royalHost && pin.royalHost.toLowerCase().includes(term)) ||
+          (pin.sacredRegalia && pin.sacredRegalia.toLowerCase().includes(term)) ||
+          pin.highlights.some((h) => h.toLowerCase().includes(term));
+        if (!matches) return false;
+      }
+
+      return true;
     });
-  }, [visibleCategories, selectedProvinceCode, searchTerm]);
+  }, [visibleCategories, selectedProvinceCode, selectedDistrictId, searchTerm]);
+
+  // Active filter count for badge
+  const activeFiltersCount = useMemo(() => {
+    let count = 0;
+    if (selectedProvinceCode !== "all") count++;
+    if (selectedDistrictId !== "all") count++;
+    if (searchTerm.trim()) count++;
+    Object.values(visibleCategories).forEach((val) => {
+      if (!val) count++;
+    });
+    return count;
+  }, [selectedProvinceCode, selectedDistrictId, searchTerm, visibleCategories]);
 
   const handleCopyGps = (lat: number, lon: number) => {
     const text = `${lat.toFixed(4)}°, ${lon.toFixed(4)}°`;
@@ -624,17 +705,19 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
     } catch {}
   };
 
-  const ceremonyCount = useMemo(() => {
-    return ZAMBIA_TOURISM_PINS.filter(p => p.category === "ceremony").length;
-  }, []);
-
   const handleZoom = (delta: number) => {
-    setZoomLevel((prev) => Math.min(2.2, Math.max(0.85, Number((prev + delta).toFixed(2)))));
+    setZoomLevel((prev) => Math.min(2.5, Math.max(0.8, Number((prev + delta).toFixed(2)))));
   };
 
-  const resetZoom = () => {
-    setZoomLevel(1);
-  };
+  const selectedProvinceName = useMemo(() => {
+    if (selectedProvinceCode === "all") return "All Zambia (10 Provinces)";
+    return ZAMBIA_PROVINCES.find((p) => p.code === selectedProvinceCode)?.name || selectedProvinceCode;
+  }, [selectedProvinceCode]);
+
+  const selectedDistrictName = useMemo(() => {
+    if (selectedDistrictId === "all") return null;
+    return ZAMBIA_DISTRICTS_SHAPEFILES.find((d) => d.id === selectedDistrictId)?.name || null;
+  }, [selectedDistrictId]);
 
   return (
     <div
@@ -643,7 +726,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
       style={{
         background: "linear-gradient(180deg, rgba(8, 26, 26, 0.98) 0%, rgba(4, 16, 16, 1) 100%)",
         borderRadius: isFullscreen ? "0" : "18px",
-        border: "1px solid rgba(37, 211, 102, 0.25)",
+        border: "1px solid rgba(37, 211, 102, 0.3)",
         boxShadow: "0 20px 45px rgba(0, 0, 0, 0.7)",
         overflow: "hidden",
         position: isFullscreen ? "fixed" : "relative",
@@ -656,36 +739,50 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         maxWidth: isFullscreen ? "100vw" : "100%"
       }}
     >
-      {/* Map Header with Real GIS Tag & Search */}
+      {/* Header: Title + Search + Fullscreen */}
       <div className="zambiaMapHeader" style={{ padding: "16px 20px", borderBottom: "1px solid rgba(255, 255, 255, 0.1)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "12px", background: "rgba(10, 32, 32, 0.95)" }}>
         <div>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
             <span style={{ fontSize: "11px", fontWeight: 800, letterSpacing: "0.1em", color: "rgba(37, 211, 102, 1)", textTransform: "uppercase" }}>
-              🗺️ OFFICIAL ZAMBIA GEODETIC SHAPEFILE MAP (WGS84)
+              🗺️ OFFICIAL ZAMBIA GIS MAP (WGS84)
             </span>
             <span style={{ fontSize: "10px", background: "rgba(37, 211, 102, 0.2)", color: "rgba(37, 211, 102, 1)", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>
-              10 Provinces · 9 National Parks · 4 Rivers · 4 Lakes
+              10 Provinces · 116 Districts · 9 National Parks · 8 Waterways
             </span>
+            {activeFiltersCount > 0 && (
+              <span style={{ fontSize: "10px", background: "rgba(245, 158, 11, 0.25)", color: "rgba(251, 191, 36, 1)", padding: "2px 6px", borderRadius: "4px", fontWeight: 700 }}>
+                ⚡ {activeFiltersCount} Active Filter{activeFiltersCount > 1 ? "s" : ""}
+              </span>
+            )}
           </div>
           <h2 style={{ fontSize: "21px", margin: "4px 0 0", color: "var(--brand-white)", fontWeight: 800 }}>
-            Real Map of Zambia · Royal Ceremonies & Safari Ecosystem
+            Real Map of Zambia · Districts, Royal Ceremonies & Safaris
           </h2>
           <p style={{ margin: "3px 0 0", fontSize: "12.5px", color: "rgba(255, 255, 255, 0.8)" }}>
-            Rendered from authentic national geodata shapefiles with millimeter-precision GPS, interactive provincial borders, and live layers.
+            Click on any province or district polygon to cross-filter destinations, ceremonies, and tourism passes in real time.
           </p>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+          {/* Quick Search */}
           <div style={{ display: "flex", alignItems: "center", background: "rgba(255,255,255,0.08)", borderRadius: "8px", padding: "6px 12px", border: "1px solid rgba(255,255,255,0.15)" }}>
             <span style={{ marginRight: "6px" }}>🔍</span>
             <input
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search Kuomboka, South Luangwa, Devil's Pool..."
+              placeholder="Search Kuomboka, Livingstone, Kafue, Ndola..."
               style={{ background: "transparent", border: "none", color: "var(--brand-white)", outline: "none", fontSize: "13px", width: "230px" }}
             />
-            {searchTerm && <button onClick={() => setSearchTerm("")} style={{ background: "none", border: "none", color: "rgba(255,255,255,0.6)", cursor: "pointer" }}>×</button>}
+            {searchTerm && (
+              <button
+                type="button"
+                onClick={() => setSearchTerm("")}
+                style={{ background: "none", border: "none", color: "rgba(255,255,255,0.6)", cursor: "pointer", fontSize: "14px" }}
+              >
+                ×
+              </button>
+            )}
           </div>
 
           <button
@@ -702,7 +799,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
               fontWeight: 700
             }}
           >
-            {isFullscreen ? "⤓ Normal View" : "⤢ Expand Map"}
+            {isFullscreen ? "⤓ Normal View" : "⤢ Expand Fullscreen"}
           </button>
 
           {onClose && (
@@ -713,232 +810,383 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         </div>
       </div>
 
-      {/* TOGGABLE LEGENDS & SHAPEFILE LAYERS BAR */}
-      <div style={{ background: "rgba(6, 20, 20, 0.95)", borderBottom: "1px solid rgba(255, 255, 255, 0.1)", padding: "12px 20px" }}>
+      {/* MASTER TOGGABLE LEGENDS & SHAPEFILE LAYERS PANEL */}
+      <div style={{ background: "rgba(6, 20, 20, 0.98)", borderBottom: "1px solid rgba(255, 255, 255, 0.12)", padding: "12px 20px" }}>
+        {/* Layer 1: Destination Categories Multi-Toggles */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "10px" }}>
-          <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(37, 211, 102, 1)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-            Toggable GIS Layers & Destination Categories:
-          </span>
-          <button
-            type="button"
-            onClick={selectAllCategories}
-            style={{ background: "transparent", border: "none", color: "rgba(255, 255, 255, 0.7)", fontSize: "11px", textDecoration: "underline", cursor: "pointer" }}
-          >
-            Reset All Layers
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(37, 211, 102, 1)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              👑 Destination Category Legends:
+            </span>
+            <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.6)" }}>(Click chips to toggle pins)</span>
+          </div>
+
+          {activeFiltersCount > 0 && (
+            <button
+              type="button"
+              onClick={handleResetFilters}
+              style={{
+                background: "rgba(239, 68, 68, 0.2)",
+                border: "1px solid rgba(239, 68, 68, 0.5)",
+                color: "rgba(252, 165, 165, 1)",
+                borderRadius: "6px",
+                padding: "3px 8px",
+                fontSize: "11px",
+                fontWeight: 700,
+                cursor: "pointer"
+              }}
+            >
+              ⟲ Reset All Filters
+            </button>
+          )}
         </div>
 
-        {/* Category Toggle Chips & Layer Toggles */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center", marginBottom: "12px" }}>
+          {/* Ceremony Toggle */}
           <button
             type="button"
             onClick={() => toggleCategory("ceremony")}
             style={{
-              padding: "6px 12px",
+              padding: "6px 14px",
               borderRadius: "20px",
               fontSize: "12px",
-              fontWeight: 700,
+              fontWeight: 800,
               cursor: "pointer",
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              border: visibleCategories.ceremony ? "1px solid rgba(245, 158, 11, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
-              background: visibleCategories.ceremony ? "rgba(245, 158, 11, 0.25)" : "rgba(255, 255, 255, 0.05)",
-              color: visibleCategories.ceremony ? "rgba(251, 191, 36, 1)" : "rgba(255, 255, 255, 0.4)"
+              border: visibleCategories.ceremony ? "1.5px solid rgba(245, 158, 11, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
+              background: visibleCategories.ceremony ? "rgba(245, 158, 11, 0.28)" : "rgba(255, 255, 255, 0.05)",
+              color: visibleCategories.ceremony ? "rgba(251, 191, 36, 1)" : "rgba(255, 255, 255, 0.4)",
+              boxShadow: visibleCategories.ceremony ? "0 0 10px rgba(245, 158, 11, 0.2)" : "none"
             }}
           >
             <span>{visibleCategories.ceremony ? "✓" : "○"}</span>
-            <span>👑 Royal Ceremonies ({ceremonyCount})</span>
+            <span>👑 Royal Ceremonies (10)</span>
           </button>
 
+          {/* Safari Game Drives Toggle */}
           <button
             type="button"
             onClick={() => toggleCategory("tours")}
             style={{
-              padding: "6px 12px",
+              padding: "6px 14px",
               borderRadius: "20px",
               fontSize: "12px",
-              fontWeight: 700,
+              fontWeight: 800,
               cursor: "pointer",
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              border: visibleCategories.tours ? "1px solid rgba(16, 185, 129, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
-              background: visibleCategories.tours ? "rgba(16, 185, 129, 0.25)" : "rgba(255, 255, 255, 0.05)",
-              color: visibleCategories.tours ? "rgba(52, 211, 153, 1)" : "rgba(255, 255, 255, 0.4)"
+              border: visibleCategories.tours ? "1.5px solid rgba(16, 185, 129, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
+              background: visibleCategories.tours ? "rgba(16, 185, 129, 0.28)" : "rgba(255, 255, 255, 0.05)",
+              color: visibleCategories.tours ? "rgba(52, 211, 153, 1)" : "rgba(255, 255, 255, 0.4)",
+              boxShadow: visibleCategories.tours ? "0 0 10px rgba(16, 185, 129, 0.2)" : "none"
             }}
           >
             <span>{visibleCategories.tours ? "✓" : "○"}</span>
             <span>◒ Safari Game Drives</span>
           </button>
 
+          {/* Nature & Falls Toggle */}
           <button
             type="button"
             onClick={() => toggleCategory("nature")}
             style={{
-              padding: "6px 12px",
+              padding: "6px 14px",
               borderRadius: "20px",
               fontSize: "12px",
-              fontWeight: 700,
+              fontWeight: 800,
               cursor: "pointer",
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              border: visibleCategories.nature ? "1px solid rgba(6, 182, 212, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
-              background: visibleCategories.nature ? "rgba(6, 182, 212, 0.25)" : "rgba(255, 255, 255, 0.05)",
-              color: visibleCategories.nature ? "rgba(103, 232, 249, 1)" : "rgba(255, 255, 255, 0.4)"
+              border: visibleCategories.nature ? "1.5px solid rgba(6, 182, 212, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
+              background: visibleCategories.nature ? "rgba(6, 182, 212, 0.28)" : "rgba(255, 255, 255, 0.05)",
+              color: visibleCategories.nature ? "rgba(103, 232, 249, 1)" : "rgba(255, 255, 255, 0.4)",
+              boxShadow: visibleCategories.nature ? "0 0 10px rgba(6, 182, 212, 0.2)" : "none"
             }}
           >
             <span>{visibleCategories.nature ? "✓" : "○"}</span>
             <span>◇ Waterfalls & Lakes</span>
           </button>
 
+          {/* Lodges Toggle */}
           <button
             type="button"
             onClick={() => toggleCategory("stays")}
             style={{
-              padding: "6px 12px",
+              padding: "6px 14px",
               borderRadius: "20px",
               fontSize: "12px",
-              fontWeight: 700,
+              fontWeight: 800,
               cursor: "pointer",
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              border: visibleCategories.stays ? "1px solid rgba(234, 88, 12, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
-              background: visibleCategories.stays ? "rgba(234, 88, 12, 0.25)" : "rgba(255, 255, 255, 0.05)",
-              color: visibleCategories.stays ? "rgba(251, 146, 60, 1)" : "rgba(255, 255, 255, 0.4)"
+              border: visibleCategories.stays ? "1.5px solid rgba(234, 88, 12, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
+              background: visibleCategories.stays ? "rgba(234, 88, 12, 0.28)" : "rgba(255, 255, 255, 0.05)",
+              color: visibleCategories.stays ? "rgba(251, 146, 60, 1)" : "rgba(255, 255, 255, 0.4)",
+              boxShadow: visibleCategories.stays ? "0 0 10px rgba(234, 88, 12, 0.2)" : "none"
             }}
           >
             <span>{visibleCategories.stays ? "✓" : "○"}</span>
             <span>⌂ Luxury Lodges</span>
           </button>
 
+          {/* Cultural Sites Toggle */}
           <button
             type="button"
             onClick={() => toggleCategory("culture")}
             style={{
-              padding: "6px 12px",
+              padding: "6px 14px",
               borderRadius: "20px",
               fontSize: "12px",
-              fontWeight: 700,
+              fontWeight: 800,
               cursor: "pointer",
               display: "inline-flex",
               alignItems: "center",
               gap: "6px",
-              border: visibleCategories.culture ? "1px solid rgba(236, 72, 153, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
-              background: visibleCategories.culture ? "rgba(236, 72, 153, 0.25)" : "rgba(255, 255, 255, 0.05)",
-              color: visibleCategories.culture ? "rgba(244, 114, 182, 1)" : "rgba(255, 255, 255, 0.4)"
+              border: visibleCategories.culture ? "1.5px solid rgba(236, 72, 153, 1)" : "1px solid rgba(255, 255, 255, 0.15)",
+              background: visibleCategories.culture ? "rgba(236, 72, 153, 0.28)" : "rgba(255, 255, 255, 0.05)",
+              color: visibleCategories.culture ? "rgba(244, 114, 182, 1)" : "rgba(255, 255, 255, 0.4)",
+              boxShadow: visibleCategories.culture ? "0 0 10px rgba(236, 72, 153, 0.2)" : "none"
             }}
           >
             <span>{visibleCategories.culture ? "✓" : "○"}</span>
             <span>♨ Cultural Sites</span>
           </button>
-
-          {/* GIS Shapefile Layer Toggles */}
-          <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-            <button
-              type="button"
-              onClick={() => setShowParks(!showParks)}
-              style={{
-                padding: "5px 9px",
-                borderRadius: "6px",
-                fontSize: "11px",
-                fontWeight: 700,
-                border: "1px solid rgba(34, 197, 94, 0.5)",
-                background: showParks ? "rgba(34, 197, 94, 0.25)" : "transparent",
-                color: showParks ? "rgba(74, 222, 128, 1)" : "rgba(255,255,255,0.4)",
-                cursor: "pointer"
-              }}
-            >
-              🦁 National Parks {showParks ? "ON" : "OFF"}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setShowRivers(!showRivers)}
-              style={{
-                padding: "5px 9px",
-                borderRadius: "6px",
-                fontSize: "11px",
-                fontWeight: 700,
-                border: "1px solid rgba(14, 165, 233, 0.5)",
-                background: showRivers ? "rgba(14, 165, 233, 0.25)" : "transparent",
-                color: showRivers ? "rgba(56, 189, 248, 1)" : "rgba(255,255,255,0.4)",
-                cursor: "pointer"
-              }}
-            >
-              🌊 Lakes & Rivers {showRivers ? "ON" : "OFF"}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setShowHighways(!showHighways)}
-              style={{
-                padding: "5px 9px",
-                borderRadius: "6px",
-                fontSize: "11px",
-                fontWeight: 700,
-                border: "1px solid rgba(234, 179, 8, 0.5)",
-                background: showHighways ? "rgba(234, 179, 8, 0.25)" : "transparent",
-                color: showHighways ? "rgba(250, 204, 21, 1)" : "rgba(255,255,255,0.4)",
-                cursor: "pointer"
-              }}
-            >
-              🛣️ Highways {showHighways ? "ON" : "OFF"}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setShowBorders(!showBorders)}
-              style={{
-                padding: "5px 9px",
-                borderRadius: "6px",
-                fontSize: "11px",
-                fontWeight: 700,
-                border: "1px solid rgba(37, 211, 102, 0.5)",
-                background: showBorders ? "rgba(37, 211, 102, 0.25)" : "transparent",
-                color: showBorders ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.4)",
-                cursor: "pointer"
-              }}
-            >
-              🗺️ Provinces {showBorders ? "ON" : "OFF"}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setShowLabels(!showLabels)}
-              style={{
-                padding: "5px 9px",
-                borderRadius: "6px",
-                fontSize: "11px",
-                fontWeight: 700,
-                border: "1px solid rgba(255, 255, 255, 0.3)",
-                background: showLabels ? "rgba(255, 255, 255, 0.2)" : "transparent",
-                color: showLabels ? "var(--brand-white)" : "rgba(255,255,255,0.4)",
-                cursor: "pointer"
-              }}
-            >
-              🏷️ Labels {showLabels ? "ON" : "OFF"}
-            </button>
-
-            <select
-              value={selectedProvinceCode}
-              onChange={(e) => setSelectedProvinceCode(e.target.value)}
-              style={{ background: "rgba(16, 51, 51, 1)", color: "var(--brand-white)", border: "1px solid rgba(255,255,255,0.2)", padding: "5px 10px", borderRadius: "6px", fontSize: "11.5px", outline: "none", fontWeight: 700 }}
-            >
-              <option value="all">All 10 Provinces</option>
-              {ZAMBIA_PROVINCES.map((p) => (
-                <option key={p.code} value={p.code}>
-                  {p.name}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
+
+        {/* Layer 2: Shapefile Vector Layers & Geographic Filters */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", alignItems: "center", borderTop: "1px solid rgba(255, 255, 255, 0.08)", paddingTop: "10px" }}>
+          <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(56, 189, 248, 1)", textTransform: "uppercase", letterSpacing: "0.06em", marginRight: "4px" }}>
+            GIS Shapefile Layers:
+          </span>
+
+          {/* Districts Shapefiles Toggle (116 Districts) */}
+          <button
+            type="button"
+            onClick={() => setShowDistricts(!showDistricts)}
+            style={{
+              padding: "5px 10px",
+              borderRadius: "6px",
+              fontSize: "11.5px",
+              fontWeight: 700,
+              border: "1px solid rgba(168, 85, 247, 0.5)",
+              background: showDistricts ? "rgba(168, 85, 247, 0.28)" : "transparent",
+              color: showDistricts ? "rgba(216, 180, 254, 1)" : "rgba(255,255,255,0.4)",
+              cursor: "pointer"
+            }}
+          >
+            🏛️ Districts (116) {showDistricts ? "ON" : "OFF"}
+          </button>
+
+          {/* National Parks Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowParks(!showParks)}
+            style={{
+              padding: "5px 10px",
+              borderRadius: "6px",
+              fontSize: "11.5px",
+              fontWeight: 700,
+              border: "1px solid rgba(34, 197, 94, 0.5)",
+              background: showParks ? "rgba(34, 197, 94, 0.28)" : "transparent",
+              color: showParks ? "rgba(74, 222, 128, 1)" : "rgba(255,255,255,0.4)",
+              cursor: "pointer"
+            }}
+          >
+            🦁 Parks (9) {showParks ? "ON" : "OFF"}
+          </button>
+
+          {/* Lakes & Rivers Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowRivers(!showRivers)}
+            style={{
+              padding: "5px 10px",
+              borderRadius: "6px",
+              fontSize: "11.5px",
+              fontWeight: 700,
+              border: "1px solid rgba(14, 165, 233, 0.5)",
+              background: showRivers ? "rgba(14, 165, 233, 0.28)" : "transparent",
+              color: showRivers ? "rgba(56, 189, 248, 1)" : "rgba(255,255,255,0.4)",
+              cursor: "pointer"
+            }}
+          >
+            🌊 Waterways (8) {showRivers ? "ON" : "OFF"}
+          </button>
+
+          {/* Highways Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowHighways(!showHighways)}
+            style={{
+              padding: "5px 10px",
+              borderRadius: "6px",
+              fontSize: "11.5px",
+              fontWeight: 700,
+              border: "1px solid rgba(234, 179, 8, 0.5)",
+              background: showHighways ? "rgba(234, 179, 8, 0.28)" : "transparent",
+              color: showHighways ? "rgba(250, 204, 21, 1)" : "rgba(255,255,255,0.4)",
+              cursor: "pointer"
+            }}
+          >
+            🛣️ Highways (4) {showHighways ? "ON" : "OFF"}
+          </button>
+
+          {/* Provinces Borders Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowProvinces(!showProvinces)}
+            style={{
+              padding: "5px 10px",
+              borderRadius: "6px",
+              fontSize: "11.5px",
+              fontWeight: 700,
+              border: "1px solid rgba(37, 211, 102, 0.5)",
+              background: showProvinces ? "rgba(37, 211, 102, 0.28)" : "transparent",
+              color: showProvinces ? "rgba(37, 211, 102, 1)" : "rgba(255,255,255,0.4)",
+              cursor: "pointer"
+            }}
+          >
+            🗺️ Provinces (10) {showProvinces ? "ON" : "OFF"}
+          </button>
+
+          {/* Labels Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowLabels(!showLabels)}
+            style={{
+              padding: "5px 10px",
+              borderRadius: "6px",
+              fontSize: "11.5px",
+              fontWeight: 700,
+              border: "1px solid rgba(255, 255, 255, 0.3)",
+              background: showLabels ? "rgba(255, 255, 255, 0.2)" : "transparent",
+              color: showLabels ? "var(--brand-white)" : "rgba(255,255,255,0.4)",
+              cursor: "pointer"
+            }}
+          >
+            🏷️ Labels {showLabels ? "ON" : "OFF"}
+          </button>
+
+          {/* Pins Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowPins(!showPins)}
+            style={{
+              padding: "5px 10px",
+              borderRadius: "6px",
+              fontSize: "11.5px",
+              fontWeight: 700,
+              border: "1px solid rgba(245, 158, 11, 0.5)",
+              background: showPins ? "rgba(245, 158, 11, 0.28)" : "transparent",
+              color: showPins ? "rgba(251, 191, 36, 1)" : "rgba(255,255,255,0.4)",
+              cursor: "pointer"
+            }}
+          >
+            📍 Pins ({filteredPins.length}) {showPins ? "ON" : "OFF"}
+          </button>
+
+          {/* Province Selector Dropdown */}
+          <select
+            value={selectedProvinceCode}
+            onChange={(e) => {
+              setSelectedProvinceCode(e.target.value);
+              setSelectedDistrictId("all");
+            }}
+            style={{
+              background: "rgba(16, 51, 51, 1)",
+              color: "var(--brand-white)",
+              border: "1.5px solid rgba(37, 211, 102, 0.4)",
+              padding: "5px 10px",
+              borderRadius: "6px",
+              fontSize: "11.5px",
+              outline: "none",
+              fontWeight: 700,
+              cursor: "pointer"
+            }}
+          >
+            <option value="all">All 10 Provinces</option>
+            {ZAMBIA_PROVINCES.map((p) => (
+              <option key={p.code} value={p.code}>
+                {p.name}
+              </option>
+            ))}
+          </select>
+
+          {/* District Selector Dropdown (116 Districts, dynamically scoped) */}
+          <select
+            value={selectedDistrictId}
+            onChange={(e) => setSelectedDistrictId(e.target.value)}
+            style={{
+              background: "rgba(16, 51, 51, 1)",
+              color: "var(--brand-white)",
+              border: "1.5px solid rgba(168, 85, 247, 0.4)",
+              padding: "5px 10px",
+              borderRadius: "6px",
+              fontSize: "11.5px",
+              outline: "none",
+              fontWeight: 700,
+              cursor: "pointer",
+              maxWidth: "200px"
+            }}
+          >
+            <option value="all">
+              {selectedProvinceCode === "all" ? "All 116 Districts" : `Districts in ${selectedProvinceName} (${availableDistricts.length})`}
+            </option>
+            {availableDistricts.map((d) => (
+              <option key={d.id} value={d.id}>
+                {d.name} ({d.provinceName.split(" ")[0]})
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Active Filter Chips Row */}
+        {activeFiltersCount > 0 && (
+          <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap", marginTop: "10px", paddingTop: "8px", borderTop: "1px dashed rgba(255,255,255,0.1)" }}>
+            <span style={{ fontSize: "10.5px", color: "rgba(255,255,255,0.6)", fontWeight: 700 }}>Active Filters:</span>
+
+            {selectedProvinceCode !== "all" && (
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "rgba(37, 211, 102, 0.2)", color: "rgba(37, 211, 102, 1)", padding: "2px 8px", borderRadius: "12px", fontSize: "11px", fontWeight: 700 }}>
+                Province: {selectedProvinceName}
+                <button type="button" onClick={() => setSelectedProvinceCode("all")} style={{ background: "none", border: "none", color: "rgba(37,211,102,1)", cursor: "pointer", fontWeight: 800 }}>×</button>
+              </span>
+            )}
+
+            {selectedDistrictName && (
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "rgba(168, 85, 247, 0.25)", color: "rgba(216, 180, 254, 1)", padding: "2px 8px", borderRadius: "12px", fontSize: "11px", fontWeight: 700 }}>
+                District: {selectedDistrictName}
+                <button type="button" onClick={() => setSelectedDistrictId("all")} style={{ background: "none", border: "none", color: "rgba(216, 180, 254, 1)", cursor: "pointer", fontWeight: 800 }}>×</button>
+              </span>
+            )}
+
+            {searchTerm.trim() && (
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "rgba(56, 189, 248, 0.2)", color: "rgba(56, 189, 248, 1)", padding: "2px 8px", borderRadius: "12px", fontSize: "11px", fontWeight: 700 }}>
+                Search: &quot;{searchTerm}&quot;
+                <button type="button" onClick={() => setSearchTerm("")} style={{ background: "none", border: "none", color: "rgba(56, 189, 248, 1)", cursor: "pointer", fontWeight: 800 }}>×</button>
+              </span>
+            )}
+
+            {Object.entries(visibleCategories).map(([key, val]) => {
+              if (!val) {
+                return (
+                  <span key={key} style={{ display: "inline-flex", alignItems: "center", gap: "4px", background: "rgba(239, 68, 68, 0.2)", color: "rgba(252, 165, 165, 1)", padding: "2px 8px", borderRadius: "12px", fontSize: "11px", fontWeight: 700 }}>
+                    Hidden: {key}
+                    <button type="button" onClick={() => toggleCategory(key as keyof typeof visibleCategories)} style={{ background: "none", border: "none", color: "rgba(252, 165, 165, 1)", cursor: "pointer", fontWeight: 800 }}>↺</button>
+                  </span>
+                );
+              }
+              return null;
+            })}
+          </div>
+        )}
       </div>
 
-      {/* Main Map Body: Full-Width Stacked Responsive Layout */}
+      {/* Main Map Body: Full-Width Stacked Layout */}
       <div className="zambiaMapBody">
         {/* Real Zambia SVG Map Canvas */}
         <div className="zambiaMapCanvasWrapper">
@@ -949,51 +1197,61 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
           </div>
 
           {/* Zoom & Reset Controls */}
-          <div style={{ position: "absolute", top: "18px", right: "20px", display: "flex", flexDirection: "column", gap: "6px", zIndex: 10 }}>
+          <div style={{ position: "absolute", top: "16px", right: "18px", display: "flex", flexDirection: "column", gap: "6px", zIndex: 10 }}>
             <button
               type="button"
-              onClick={() => handleZoom(0.2)}
+              onClick={() => handleZoom(0.25)}
               title="Zoom In"
-              style={{ width: "32px", height: "32px", borderRadius: "6px", background: "rgba(0,0,0,0.75)", color: "var(--brand-white)", border: "1px solid rgba(255,255,255,0.25)", fontSize: "16px", fontWeight: 800, cursor: "pointer" }}
+              style={{ width: "34px", height: "34px", borderRadius: "6px", background: "rgba(0,0,0,0.85)", color: "var(--brand-white)", border: "1px solid rgba(255,255,255,0.25)", fontSize: "18px", fontWeight: 800, cursor: "pointer" }}
             >
               +
             </button>
             <button
               type="button"
-              onClick={() => handleZoom(-0.2)}
+              onClick={() => handleZoom(-0.25)}
               title="Zoom Out"
-              style={{ width: "32px", height: "32px", borderRadius: "6px", background: "rgba(0,0,0,0.75)", color: "var(--brand-white)", border: "1px solid rgba(255,255,255,0.25)", fontSize: "16px", fontWeight: 800, cursor: "pointer" }}
+              style={{ width: "34px", height: "34px", borderRadius: "6px", background: "rgba(0,0,0,0.85)", color: "var(--brand-white)", border: "1px solid rgba(255,255,255,0.25)", fontSize: "18px", fontWeight: 800, cursor: "pointer" }}
             >
               −
             </button>
             <button
               type="button"
-              onClick={resetZoom}
+              onClick={() => setZoomLevel(1)}
               title="Reset Zoom"
-              style={{ width: "32px", height: "32px", borderRadius: "6px", background: "rgba(0,0,0,0.75)", color: "rgba(37, 211, 102, 1)", border: "1px solid rgba(255,255,255,0.25)", fontSize: "12px", fontWeight: 800, cursor: "pointer" }}
+              style={{ width: "34px", height: "34px", borderRadius: "6px", background: "rgba(0,0,0,0.85)", color: "rgba(37, 211, 102, 1)", border: "1px solid rgba(255,255,255,0.25)", fontSize: "14px", fontWeight: 800, cursor: "pointer" }}
             >
               ⟲
             </button>
           </div>
 
-          {/* Map Scale & Projection Bar */}
-          <div style={{ position: "absolute", bottom: "16px", left: "20px", background: "rgba(0,0,0,0.8)", padding: "5px 10px", borderRadius: "6px", border: "1px solid rgba(255,255,255,0.15)", fontSize: "10.5px", color: "rgba(255,255,255,0.85)", pointerEvents: "none", zIndex: 5 }}>
-            <span>🗺️ WGS84 Geodetic · Zambia 752,618 km²</span>
+          {/* Interactive Hover HUD Bar (Live Spatial Metadata) */}
+          <div style={{ position: "absolute", bottom: "14px", left: "18px", background: "rgba(0,0,0,0.85)", padding: "6px 12px", borderRadius: "8px", border: "1px solid rgba(37,211,102,0.3)", fontSize: "11px", color: "var(--brand-white)", pointerEvents: "none", zIndex: 5, display: "flex", alignItems: "center", gap: "10px" }}>
+            <span style={{ color: "rgba(37, 211, 102, 1)", fontWeight: 800 }}>📍 GIS HUD:</span>
+            {hoveredDistrict ? (
+              <span>District: <strong>{hoveredDistrict}</strong></span>
+            ) : hoveredProvince ? (
+              <span>Province: <strong>{hoveredProvince}</strong></span>
+            ) : hoveredPark ? (
+              <span>National Park: <strong>{hoveredPark}</strong></span>
+            ) : (
+              <span>Zambia (WGS84 752,618 km²) · 10 Provinces · 116 Districts</span>
+            )}
           </div>
 
-          {/* SVG Map Container with Zoom Transform */}
+          {/* SVG Map Canvas with Zoom Transform */}
           <div style={{ width: "100%", height: "100%", overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <svg
               viewBox="0 0 1000 780"
               style={{
                 width: "100%",
                 height: "auto",
-                maxHeight: isFullscreen ? "75vh" : "620px",
+                minHeight: "420px",
+                maxHeight: isFullscreen ? "78vh" : "640px",
                 filter: "drop-shadow(0 16px 32px rgba(0,0,0,0.7))",
                 pointerEvents: "auto",
                 transform: `scale(${zoomLevel})`,
                 transformOrigin: "center center",
-                transition: "transform 0.25s ease-out"
+                transition: "transform 0.2s ease-out"
               }}
             >
               <defs>
@@ -1012,7 +1270,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 </linearGradient>
               </defs>
 
-              {/* REAL AUTHENTIC ZAMBIA COUNTRY OUTLINE (Official Geodetic Border) */}
+              {/* REAL OFFICIAL ZAMBIA COUNTRY OUTLINE */}
               <path
                 d={ZAMBIA_COUNTRY_OUTLINE_PATH}
                 fill="url(#zambiaLandGradient)"
@@ -1021,29 +1279,94 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 filter="drop-shadow(0 0 12px rgba(37, 211, 102, 0.35))"
               />
 
-              {/* 10 AUTHENTIC PROVINCIAL POLYGONS FROM REAL SHAPEFILES */}
-              {showBorders && (
+              {/* 116 OFFICIAL ADM2 DISTRICTS SHAPEFILE LAYER */}
+              {showDistricts && (
+                <g opacity="0.85">
+                  {ZAMBIA_DISTRICTS_SHAPEFILES.map((district) => {
+                    const isSelected = selectedDistrictId === district.id;
+                    const isProvSelected = selectedProvinceCode !== "all" && district.provinceCode === selectedProvinceCode;
+                    const isHovered = hoveredDistrict === district.name;
+
+                    return (
+                      <path
+                        key={district.id}
+                        d={district.svgPath}
+                        fill={
+                          isSelected
+                            ? "rgba(168, 85, 247, 0.55)"
+                            : isHovered
+                            ? "rgba(168, 85, 247, 0.35)"
+                            : isProvSelected
+                            ? "rgba(37, 211, 102, 0.15)"
+                            : "rgba(255, 255, 255, 0.015)"
+                        }
+                        stroke={
+                          isSelected
+                            ? "rgba(216, 180, 254, 1)"
+                            : isHovered
+                            ? "rgba(168, 85, 247, 0.9)"
+                            : isProvSelected
+                            ? "rgba(37, 211, 102, 0.45)"
+                            : "rgba(255, 255, 255, 0.12)"
+                        }
+                        strokeWidth={isSelected ? "2" : isHovered ? "1.5" : "0.6"}
+                        onMouseEnter={() => {
+                          setHoveredDistrict(district.name);
+                          setHoveredProvince(district.provinceName);
+                        }}
+                        onMouseLeave={() => {
+                          setHoveredDistrict(null);
+                          setHoveredProvince(null);
+                        }}
+                        onClick={() => {
+                          if (selectedDistrictId === district.id) {
+                            setSelectedDistrictId("all");
+                          } else {
+                            setSelectedDistrictId(district.id);
+                            setSelectedProvinceCode(district.provinceCode);
+                          }
+                        }}
+                        style={{ cursor: "pointer", transition: "fill 0.12s ease, stroke 0.12s ease" }}
+                      >
+                        <title>{district.name} District ({district.provinceName} Province)</title>
+                      </path>
+                    );
+                  })}
+                </g>
+              )}
+
+              {/* 10 OFFICIAL ADM1 PROVINCES SHAPEFILE LAYER */}
+              {showProvinces && (
                 <g opacity="0.95">
                   {ZAMBIA_PROVINCES_SHAPEFILES.map((prov) => {
-                    const isHovered = hoveredProvince === prov.code;
                     const isSelected = selectedProvinceCode === prov.code;
+                    const isHovered = hoveredProvince === prov.name || hoveredProvince === prov.code;
+
                     return (
                       <path
                         key={prov.code}
                         d={prov.svgPath}
                         fill={
                           isSelected
-                            ? "rgba(37, 211, 102, 0.35)"
+                            ? "rgba(37, 211, 102, 0.28)"
                             : isHovered
-                            ? "rgba(37, 211, 102, 0.22)"
-                            : "rgba(255, 255, 255, 0.03)"
+                            ? "rgba(37, 211, 102, 0.18)"
+                            : "transparent"
                         }
-                        stroke={isSelected ? "rgba(37, 211, 102, 1)" : isHovered ? "rgba(52, 211, 153, 0.9)" : "rgba(255, 255, 255, 0.25)"}
-                        strokeWidth={isSelected ? "2.5" : isHovered ? "2" : "1.2"}
-                        strokeDasharray={isSelected ? "none" : "4 2"}
-                        onMouseEnter={() => setHoveredProvince(prov.code)}
+                        stroke={isSelected ? "rgba(37, 211, 102, 1)" : isHovered ? "rgba(52, 211, 153, 0.9)" : "rgba(255, 255, 255, 0.35)"}
+                        strokeWidth={isSelected ? "3" : isHovered ? "2.2" : "1.4"}
+                        strokeDasharray={isSelected ? "none" : "5 2"}
+                        onMouseEnter={() => setHoveredProvince(prov.name)}
                         onMouseLeave={() => setHoveredProvince(null)}
-                        onClick={() => setSelectedProvinceCode(selectedProvinceCode === prov.code ? "all" : prov.code)}
+                        onClick={() => {
+                          if (selectedProvinceCode === prov.code) {
+                            setSelectedProvinceCode("all");
+                            setSelectedDistrictId("all");
+                          } else {
+                            setSelectedProvinceCode(prov.code);
+                            setSelectedDistrictId("all");
+                          }
+                        }}
                         style={{ cursor: "pointer", transition: "fill 0.15s ease, stroke 0.15s ease" }}
                       >
                         <title>{prov.name} Province (Capital: {prov.capital})</title>
@@ -1053,11 +1376,16 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 </g>
               )}
 
-              {/* REAL NATIONAL PARKS SHAPEFILE LAYER */}
+              {/* NATIONAL PARKS SHAPEFILE LAYER */}
               {showParks && (
                 <g>
                   {ZAMBIA_NATIONAL_PARKS_GIS.map((np) => (
-                    <g key={np.id} opacity="0.9">
+                    <g
+                      key={np.id}
+                      opacity="0.9"
+                      onMouseEnter={() => setHoveredPark(np.name)}
+                      onMouseLeave={() => setHoveredPark(null)}
+                    >
                       <path
                         d={np.path || ""}
                         fill="url(#parkGradient)"
@@ -1083,10 +1411,10 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 </g>
               )}
 
-              {/* REAL WATERWAYS & LAKES LAYER (Lake Tanganyika, Lake Kariba, Bangweulu, Mweru & Rivers) */}
+              {/* WATERBODIES & MAJOR RIVERS */}
               {showRivers && (
                 <g>
-                  {/* Lakes Polygons */}
+                  {/* Lakes */}
                   {ZAMBIA_WATERBODIES_GIS.filter(w => w.type === "waterbody").map((lake) => (
                     <path
                       key={lake.id}
@@ -1099,7 +1427,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                     </path>
                   ))}
 
-                  {/* Rivers Polyline Courses */}
+                  {/* Rivers */}
                   {ZAMBIA_WATERBODIES_GIS.filter(w => w.type === "river").map((river) => (
                     <path
                       key={river.id}
@@ -1114,7 +1442,6 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                     </path>
                   ))}
 
-                  {/* Lake Annotations */}
                   <text x="735" y="65" fill="rgba(56, 189, 248, 1)" fontSize="9.5" fontWeight="800">LAKE TANGANYIKA</text>
                   <text x="440" y="655" fill="rgba(56, 189, 248, 1)" fontSize="9.5" fontWeight="800">LAKE KARIBA</text>
                   <text x="560" y="270" fill="rgba(56, 189, 248, 0.95)" fontSize="9" fontWeight="800">L. BANGWEULU</text>
@@ -1122,7 +1449,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 </g>
               )}
 
-              {/* HIGHWAYS & SAFARI CORRIDORS LAYER */}
+              {/* ARTERIAL HIGHWAYS */}
               {showHighways && (
                 <g opacity="0.85">
                   {ZAMBIA_HIGHWAYS_GIS.map((hwy) => (
@@ -1141,7 +1468,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 </g>
               )}
 
-              {/* PROVINCE LABELS & CAPITALS FROM REAL SHAPEFILE CENTROIDS */}
+              {/* PROVINCE LABELS */}
               {showLabels && (
                 <g pointerEvents="none">
                   {ZAMBIA_PROVINCES_SHAPEFILES.map((prov) => (
@@ -1172,96 +1499,95 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 </g>
               )}
 
-              {/* REAL GPS INTERACTIVE DESTINATION & CEREMONY PINS */}
-              {filteredPins.map((pin) => {
-                const isSelected = selectedPin?.id === pin.id;
-                const isCeremony = pin.category === "ceremony";
-                const coords = projectGpsToSvg(pin.latitude, pin.longitude);
-                const pinColor =
-                  pin.category === "ceremony" ? "rgba(245, 158, 11, 1)" :
-                  pin.category === "stays" ? "rgba(234, 88, 12, 1)" :
-                  pin.category === "tours" ? "rgba(16, 185, 129, 1)" :
-                  pin.category === "nature" ? "rgba(6, 182, 212, 1)" :
-                  pin.category === "culture" ? "rgba(236, 72, 153, 1)" : "rgba(168, 85, 247, 1)";
+              {/* DESTINATION & CEREMONY PINS */}
+              {showPins && (
+                <g>
+                  {filteredPins.map((pin) => {
+                    const isSelected = selectedPin?.id === pin.id;
+                    const isCeremony = pin.category === "ceremony";
+                    const coords = projectGpsToSvg(pin.latitude, pin.longitude);
+                    const pinColor =
+                      pin.category === "ceremony" ? "rgba(245, 158, 11, 1)" :
+                      pin.category === "stays" ? "rgba(234, 88, 12, 1)" :
+                      pin.category === "tours" ? "rgba(16, 185, 129, 1)" :
+                      pin.category === "nature" ? "rgba(6, 182, 212, 1)" :
+                      pin.category === "culture" ? "rgba(236, 72, 153, 1)" : "rgba(168, 85, 247, 1)";
 
-                return (
-                  <g
-                    key={pin.id}
-                    transform={`translate(${coords.x}, ${coords.y})`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedPin(pin);
-                    }}
-                    style={{ cursor: "pointer", pointerEvents: "all" }}
-                  >
-                    <circle r="28" fill="transparent" />
+                    return (
+                      <g
+                        key={pin.id}
+                        transform={`translate(${coords.x}, ${coords.y})`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedPin(pin);
+                        }}
+                        style={{ cursor: "pointer", pointerEvents: "all" }}
+                      >
+                        <circle r="28" fill="transparent" />
 
-                    {/* Pulsing radar ring for selected pin */}
-                    {isSelected && (
-                      <circle r="22" fill="none" stroke={isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)"} strokeWidth="3" opacity="0.9">
-                        <animate attributeName="r" values="16;28;16" dur="1.8s" repeatCount="indefinite" />
-                        <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.8s" repeatCount="indefinite" />
-                      </circle>
-                    )}
+                        {/* Pulsing radar ring on selection */}
+                        {isSelected && (
+                          <circle r="22" fill="none" stroke={isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)"} strokeWidth="3" opacity="0.9">
+                            <animate attributeName="r" values="16;28;16" dur="1.8s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" values="0.9;0.2;0.9" dur="1.8s" repeatCount="indefinite" />
+                          </circle>
+                        )}
 
-                    {/* Ceremony special aura ring */}
-                    {isCeremony && !isSelected && (
-                      <circle r="16" fill="none" stroke="rgba(245, 158, 11, 0.5)" strokeWidth="1.5" strokeDasharray="3 2" />
-                    )}
+                        {/* Pin Badge Circle */}
+                        <circle
+                          r={isSelected ? "15" : isCeremony ? "13" : "11"}
+                          fill={isSelected ? (isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)") : pinColor}
+                          stroke="rgba(255, 255, 255, 1)"
+                          strokeWidth={isSelected ? "2.5" : "1.5"}
+                          filter="drop-shadow(0 3px 6px rgba(0,0,0,0.65))"
+                        />
 
-                    {/* Pin Background Circle */}
-                    <circle
-                      r={isSelected ? "15" : isCeremony ? "13" : "11"}
-                      fill={isSelected ? (isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)") : pinColor}
-                      stroke="rgba(255, 255, 255, 1)"
-                      strokeWidth={isSelected ? "2.5" : "1.5"}
-                      filter="drop-shadow(0 3px 6px rgba(0,0,0,0.65))"
-                    />
+                        {/* Icon */}
+                        <text
+                          x="0"
+                          y="4"
+                          textAnchor="middle"
+                          fill={isSelected ? "rgba(0,0,0,1)" : "rgba(255,255,255,1)"}
+                          fontSize={isSelected ? "11" : "9"}
+                          fontWeight="bold"
+                          pointerEvents="none"
+                        >
+                          {pin.categoryIcon}
+                        </text>
 
-                    {/* Pin Category Icon */}
-                    <text
-                      x="0"
-                      y="4"
-                      textAnchor="middle"
-                      fill={isSelected ? "rgba(0,0,0,1)" : "rgba(255,255,255,1)"}
-                      fontSize={isSelected ? "11" : "9"}
-                      fontWeight="bold"
-                      pointerEvents="none"
-                    >
-                      {pin.categoryIcon}
-                    </text>
-
-                    {/* Pin Name Badge */}
-                    <rect
-                      x="-50"
-                      y={isSelected ? "-34" : "-26"}
-                      width="100"
-                      height="17"
-                      rx="5"
-                      fill="rgba(0, 0, 0, 0.88)"
-                      stroke={isSelected ? (isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)") : "rgba(255,255,255,0.25)"}
-                      strokeWidth={isSelected ? "1.5" : "1"}
-                      pointerEvents="none"
-                    />
-                    <text
-                      x="0"
-                      y={isSelected ? "-22" : "-14"}
-                      textAnchor="middle"
-                      fill={isCeremony ? "rgba(251, 191, 36, 1)" : "rgba(255,255,255,1)"}
-                      fontSize="9.5"
-                      fontWeight={isSelected ? "800" : "600"}
-                      pointerEvents="none"
-                    >
-                      {pin.name.length > 16 ? pin.name.slice(0, 15) + "…" : pin.name}
-                    </text>
-                  </g>
-                );
-              })}
+                        {/* Title pill */}
+                        <rect
+                          x="-50"
+                          y={isSelected ? "-34" : "-26"}
+                          width="100"
+                          height="17"
+                          rx="5"
+                          fill="rgba(0, 0, 0, 0.88)"
+                          stroke={isSelected ? (isCeremony ? "rgba(245, 158, 11, 1)" : "rgba(37, 211, 102, 1)") : "rgba(255,255,255,0.25)"}
+                          strokeWidth={isSelected ? "1.5" : "1"}
+                          pointerEvents="none"
+                        />
+                        <text
+                          x="0"
+                          y={isSelected ? "-22" : "-14"}
+                          textAnchor="middle"
+                          fill={isCeremony ? "rgba(251, 191, 36, 1)" : "rgba(255,255,255,1)"}
+                          fontSize="9.5"
+                          fontWeight={isSelected ? "800" : "600"}
+                          pointerEvents="none"
+                        >
+                          {pin.name.length > 16 ? pin.name.slice(0, 15) + "…" : pin.name}
+                        </text>
+                      </g>
+                    );
+                  })}
+                </g>
+              )}
             </svg>
           </div>
 
-          {/* Real Circuits Strip */}
-          <div className="zambiaMapCircuitsBar" style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "14px", flexWrap: "wrap", padding: "8px 12px", background: "rgba(0,0,0,0.65)", borderRadius: "8px", marginTop: "10px", fontSize: "11px", color: "rgba(255,255,255,0.85)" }}>
+          {/* Safari Circuits Strip */}
+          <div className="zambiaMapCircuitsBar">
             <span style={{ fontWeight: 800, color: "rgba(37, 211, 102, 1)" }}>Safari Circuits:</span>
             <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
               <span style={{ width: "9px", height: "9px", borderRadius: "2px", background: "rgba(245, 158, 11, 1)", display: "inline-block" }} />
@@ -1286,51 +1612,51 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
           </div>
         </div>
 
-        {/* Selected Destination Preview Drawer with FULL GPS Details */}
+        {/* Selected Destination Preview Drawer */}
         <div className="zambiaMapDetailPanel">
           {selectedPin ? (
             <div>
-              <div style={{ position: "relative", borderRadius: "10px", overflow: "hidden", marginBottom: "12px", height: "160px", background: "rgba(0,0,0,1)" }}>
+              <div style={{ position: "relative", borderRadius: "10px", overflow: "hidden", marginBottom: "12px", height: "180px", background: "rgba(0,0,0,1)" }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={selectedPin.imageUrl}
                   alt={selectedPin.name}
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
-                <span style={{ position: "absolute", top: "8px", left: "8px", background: "rgba(0,0,0,0.85)", color: selectedPin.category === "ceremony" ? "rgba(251, 191, 36, 1)" : "rgba(37, 211, 102, 1)", fontSize: "10.5px", fontWeight: 800, padding: "3px 8px", borderRadius: "6px", border: "1px solid rgba(255,255,255,0.2)" }}>
+                <span style={{ position: "absolute", top: "8px", left: "8px", background: "rgba(0,0,0,0.85)", color: selectedPin.category === "ceremony" ? "rgba(251, 191, 36, 1)" : "rgba(37, 211, 102, 1)", fontSize: "11px", fontWeight: 800, padding: "4px 9px", borderRadius: "6px", border: "1px solid rgba(255,255,255,0.2)" }}>
                   {selectedPin.categoryIcon} {selectedPin.categoryName}
                 </span>
-                <span style={{ position: "absolute", bottom: "8px", right: "8px", background: "rgba(0,0,0,0.85)", color: "rgba(250, 204, 21, 1)", fontSize: "11px", fontWeight: 700, padding: "2px 7px", borderRadius: "6px" }}>
+                <span style={{ position: "absolute", bottom: "8px", right: "8px", background: "rgba(0,0,0,0.85)", color: "rgba(250, 204, 21, 1)", fontSize: "11.5px", fontWeight: 800, padding: "3px 8px", borderRadius: "6px" }}>
                   ★ {selectedPin.rating.toFixed(1)}
                 </span>
               </div>
 
-              {/* Province & Region */}
+              {/* Province & District Tag */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "6px" }}>
-                <span style={{ fontSize: "11px", fontWeight: 800, color: "rgba(37, 211, 102, 1)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
-                  {selectedPin.provinceName} · {selectedPin.region}
+                <span style={{ fontSize: "11.5px", fontWeight: 800, color: "rgba(37, 211, 102, 1)", textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                  {selectedPin.provinceName} {selectedPin.districtName ? `· ${selectedPin.districtName} District` : ""}
                 </span>
               </div>
 
               {/* Exact GPS Coordinates Bar */}
-              <div className="zambiaGpsBadge" style={{ background: "rgba(0,0,0,0.4)", borderRadius: "6px", padding: "4px 8px", margin: "6px 0", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "10.5px", color: "rgba(255,255,255,0.85)" }}>
+              <div className="zambiaGpsBadge">
                 <span>📍 GPS: {selectedPin.latitude.toFixed(4)}° S, {selectedPin.longitude.toFixed(4)}° E</span>
                 <button
                   type="button"
                   onClick={() => handleCopyGps(selectedPin.latitude, selectedPin.longitude)}
-                  style={{ background: "none", border: "none", color: "rgba(37, 211, 102, 1)", cursor: "pointer", fontSize: "10px", fontWeight: 700, padding: "0 2px" }}
+                  style={{ background: "none", border: "none", color: "rgba(37, 211, 102, 1)", cursor: "pointer", fontSize: "10.5px", fontWeight: 700, padding: "0 4px" }}
                 >
-                  {copiedGps ? "✓ Copied" : "Copy"}
+                  {copiedGps ? "✓ Copied" : "Copy GPS"}
                 </button>
               </div>
 
-              <h3 style={{ fontSize: "18px", margin: "8px 0 6px", color: "var(--brand-white)", fontWeight: 800, lineHeight: 1.3 }}>
+              <h3 style={{ fontSize: "19px", margin: "8px 0 6px", color: "var(--brand-white)", fontWeight: 800, lineHeight: 1.3 }}>
                 {selectedPin.name}
               </h3>
 
               {/* Royal Host if ceremony */}
               {selectedPin.royalHost && (
-                <div style={{ background: "rgba(245, 158, 11, 0.12)", border: "1px solid rgba(245, 158, 11, 0.3)", borderRadius: "8px", padding: "7px 10px", margin: "8px 0", fontSize: "11.5px" }}>
+                <div style={{ background: "rgba(245, 158, 11, 0.12)", border: "1px solid rgba(245, 158, 11, 0.3)", borderRadius: "8px", padding: "8px 12px", margin: "8px 0", fontSize: "12px" }}>
                   <strong style={{ color: "rgba(251, 191, 36, 1)", display: "block", marginBottom: "2px" }}>👑 Royal Host & Palace:</strong>
                   <span style={{ color: "rgba(255, 255, 255, 0.9)" }}>{selectedPin.royalHost}</span>
                 </div>
@@ -1338,20 +1664,20 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
 
               {/* Timing */}
               {selectedPin.season && (
-                <div style={{ fontSize: "11.5px", color: "rgba(255, 255, 255, 0.8)", marginBottom: "6px" }}>
-                  <strong style={{ color: "rgba(37, 211, 102, 1)" }}>📅 Season:</strong> {selectedPin.season}
+                <div style={{ fontSize: "12px", color: "rgba(255, 255, 255, 0.85)", marginBottom: "8px" }}>
+                  <strong style={{ color: "rgba(37, 211, 102, 1)" }}>📅 Season / Timing:</strong> {selectedPin.season}
                 </div>
               )}
 
-              <p style={{ fontSize: "12.5px", color: "rgba(255,255,255,0.85)", lineHeight: 1.5, margin: "0 0 12px" }}>
+              <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.85)", lineHeight: 1.5, margin: "0 0 12px" }}>
                 {selectedPin.summary}
               </p>
 
-              <div style={{ marginBottom: "12px" }}>
-                <strong style={{ fontSize: "11.5px", color: "var(--brand-white)", display: "block", marginBottom: "4px" }}>
+              <div style={{ marginBottom: "14px" }}>
+                <strong style={{ fontSize: "12px", color: "var(--brand-white)", display: "block", marginBottom: "4px" }}>
                   {selectedPin.category === "ceremony" ? "Ceremonial Highlights & Rituals:" : "Key Highlights & Activities:"}
                 </strong>
-                <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "11.5px", color: "rgba(255,255,255,0.8)", lineHeight: 1.55 }}>
+                <ul style={{ margin: 0, paddingLeft: "18px", fontSize: "12px", color: "rgba(255,255,255,0.85)", lineHeight: 1.55 }}>
                   {selectedPin.highlights.map((h, i) => (
                     <li key={i}>{h}</li>
                   ))}
@@ -1359,16 +1685,16 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
               </div>
 
               {selectedPin.price && (
-                <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: "8px", padding: "8px 12px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
-                  <span style={{ fontSize: "11.5px", color: "rgba(255,255,255,0.7)" }}>Visitor Access & Rates:</span>
-                  <strong style={{ fontSize: "13px", color: selectedPin.category === "ceremony" ? "rgba(251, 191, 36, 1)" : "rgba(37, 211, 102, 1)" }}>{selectedPin.price}</strong>
+                <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: "8px", padding: "10px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
+                  <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)" }}>Visitor Access / Rates:</span>
+                  <strong style={{ fontSize: "13.5px", color: selectedPin.category === "ceremony" ? "rgba(251, 191, 36, 1)" : "rgba(37, 211, 102, 1)" }}>{selectedPin.price}</strong>
                 </div>
               )}
             </div>
           ) : (
             <div style={{ textAlign: "center", padding: "40px 10px", color: "rgba(255,255,255,0.5)" }}>
               <span style={{ fontSize: "36px", display: "block", marginBottom: "10px" }}>📍</span>
-              <p>Click on any pin on the map to inspect safari details, royal ceremonies, GPS points, and bookings.</p>
+              <p>Click on any pin or district on the map to inspect safari details, royal ceremonies, GPS points, and bookings.</p>
             </div>
           )}
 
@@ -1389,9 +1715,9 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   : "linear-gradient(135deg, rgba(16, 185, 129, 1) 0%, rgba(5, 150, 105, 1) 100%)",
                 color: selectedPin.category === "ceremony" ? "rgba(0,0,0,1)" : "var(--brand-white)",
                 border: "none",
-                padding: "12px 18px",
+                padding: "13px 20px",
                 borderRadius: "10px",
-                fontSize: "13.5px",
+                fontSize: "14px",
                 fontWeight: 800,
                 cursor: "pointer",
                 display: "flex",
@@ -1407,13 +1733,13 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         </div>
       </div>
 
-      {/* Quick Selection Tray: All Ceremonies & Safari Destinations */}
-      <div className="zambiaMapCardsTray" style={{ padding: "12px 16px 16px", borderTop: "1px solid rgba(255,255,255,0.1)", background: "rgba(6, 20, 20, 0.95)" }}>
-        <div className="zambiaMapCardsHeader" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+      {/* Quick Selection Tray: All Cross-Filtered Cards */}
+      <div className="zambiaMapCardsTray">
+        <div className="zambiaMapCardsHeader">
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <span style={{ fontSize: "16px" }}>📍</span>
             <strong style={{ fontSize: "13px", color: "var(--brand-white)" }}>
-              All Map Points ({filteredPins.length} Locations Available):
+              All Filtered Map Points ({filteredPins.length} Locations Available):
             </strong>
           </div>
           <span style={{ fontSize: "11px", color: "rgba(255, 255, 255, 0.6)" }}>
@@ -1421,7 +1747,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
           </span>
         </div>
 
-        <div className="zambiaMapCardsScroll" style={{ display: "flex", gap: "10px", overflowX: "auto", paddingBottom: "6px" }}>
+        <div className="zambiaMapCardsScroll">
           {filteredPins.map((pin) => {
             const isSelected = selectedPin?.id === pin.id;
             return (
@@ -1430,7 +1756,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 className={`zambiaMiniCard ${isSelected ? "active" : ""}`}
                 onClick={() => setSelectedPin(pin)}
                 style={{
-                  flex: "0 0 170px",
+                  flex: "0 0 180px",
                   background: isSelected ? "rgba(37, 211, 102, 0.15)" : "rgba(255,255,255,0.04)",
                   border: isSelected ? "1.5px solid rgba(37, 211, 102, 1)" : "1px solid rgba(255,255,255,0.1)",
                   borderRadius: "10px",
@@ -1439,7 +1765,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   transition: "transform 0.15s ease, border-color 0.15s ease"
                 }}
               >
-                <div style={{ height: "80px", width: "100%", position: "relative", overflow: "hidden", background: "rgba(0,0,0,0.5)" }}>
+                <div style={{ height: "85px", width: "100%", position: "relative", overflow: "hidden", background: "rgba(0,0,0,0.5)" }}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={pin.imageUrl}
@@ -1451,11 +1777,11 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   </span>
                 </div>
                 <div style={{ padding: "8px", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-                  <div style={{ fontWeight: 700, fontSize: "11px", color: isSelected ? "rgba(37, 211, 102, 1)" : "var(--brand-white)", lineHeight: 1.3, marginBottom: "3px" }}>
+                  <div style={{ fontWeight: 700, fontSize: "11.5px", color: isSelected ? "rgba(37, 211, 102, 1)" : "var(--brand-white)", lineHeight: 1.3, marginBottom: "3px" }}>
                     {pin.name}
                   </div>
-                  <div style={{ fontSize: "9px", color: "rgba(255,255,255,0.6)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span>{pin.provinceName.split(" ")[0]}</span>
+                  <div style={{ fontSize: "9.5px", color: "rgba(255,255,255,0.6)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span>{pin.districtName || pin.provinceName.split(" ")[0]}</span>
                     <span>📍 {pin.latitude.toFixed(1)}°, {pin.longitude.toFixed(1)}°</span>
                   </div>
                 </div>
