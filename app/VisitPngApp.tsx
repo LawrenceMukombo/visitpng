@@ -2,8 +2,11 @@
 import {useCallback,useEffect,useState} from "react";
 import CurrencySelector from "./components/CurrencySelector";
 import TrailMapViewer from "./components/TrailMapViewer";
+import FestivalCalendar from "./components/FestivalCalendar";
+import DigitalPermitPass from "./components/DigitalPermitPass";
 import {CurrencyCode, formatPrice} from "../db/currency";
 import {PNG_TRAIL_PACKS} from "../db/trailPacks";
+import {PNG_FESTIVALS} from "../db/festivals";
 
 type Viewer={signedIn:true;displayName:string;email:string;signOutPath:string}|{signedIn:false;signInPath:string};
 type Category={slug:string;name:string;icon:string};
@@ -35,7 +38,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   const[reviewListing,setReviewListing]=useState<Listing|null>(null);
   const[tab,setTab]=useState<"Explore"|"Bookings"|"Reviews"|"Saved"|"Trips"|"Membership"|"Profile">("Explore");
   const[currency,setCurrency]=useState<CurrencyCode>("PGK");
-  const[exploreMode,setExploreMode]=useState<"places"|"trails">("places");
+  const[exploreMode,setExploreMode]=useState<"places"|"trails"|"festivals"|"permits">("places");
 
   useEffect(()=>{
     if(new URLSearchParams(window.location.search).has("wishlist"))setTab("Saved");
@@ -93,8 +96,9 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
           </div>}
           <nav>
             <button className={category==="all"&&exploreMode==="places"?"selectedFilter":""} onClick={()=>{setCategory("all");setExploreMode("places")}}>All places</button>
-            <button className={exploreMode==="trails"?"selectedFilter":""} onClick={()=>setExploreMode("trails")}>🗺️ Offline Expedition Packs</button>
-            <button onClick={()=>setTab("Bookings")}>My bookings</button>
+            <button className={exploreMode==="festivals"?"selectedFilter":""} onClick={()=>setExploreMode("festivals")}>🎭 Cultural Festivals</button>
+            <button className={exploreMode==="permits"?"selectedFilter":""} onClick={()=>setExploreMode("permits")}>🎫 Digital Permits</button>
+            <button className={exploreMode==="trails"?"selectedFilter":""} onClick={()=>setExploreMode("trails")}>🗺️ Trail Packs</button>
           </nav>
         </div>
       </section>
@@ -102,7 +106,9 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       {exploreMode==="places"?<section className="content">
         <div className="exploreModeSwitcher">
           <button className="active" onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
-          <button onClick={()=>setExploreMode("trails")}>🗺️ Offline Expedition Packs ({PNG_TRAIL_PACKS.length})</button>
+          <button onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
+          <button onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
+          <button onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>
         </div>
         <div className="cats">
           {data?.categories.map(c=><button key={c.slug} className={category===c.slug?"active":""} onClick={()=>setCategory(category===c.slug?"all":c.slug)}><span>{c.icon}</span>{c.name}</button>)}
@@ -115,10 +121,33 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
           {data.listings.map(p=><Card key={p.id} listing={p} currency={currency} open={setSelected} save={()=>viewer.signedIn?setSaveListing(p):setTab("Profile")}/>)}
         </div>:<Empty clear={()=>{setQ("");setCategory("all")}}/>}
         <ModuleStatus openReviews={()=>setTab("Reviews")}/>
+      </section>:exploreMode==="festivals"?<section className="content festivalContentSection">
+        <div className="exploreModeSwitcher">
+          <button onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
+          <button className="active" onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
+          <button onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
+          <button onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>
+        </div>
+        <div className="title">
+          <div><p className="eyebrow lime">ANNUAL SINGSING & CULTURAL SHOWS</p><h2>Cultural Festival Calendar</h2></div>
+          <span className="resultCount">{PNG_FESTIVALS.length} major festivals</span>
+        </div>
+        <p className="trailsIntro">Explore verified schedules, tribe traditions, photography etiquette, and reserve official festival entry passes with 100% offline access.</p>
+        <FestivalCalendar currency={currency}/>
+      </section>:exploreMode==="permits"?<section className="content permitsContentSection">
+        <div className="exploreModeSwitcher">
+          <button onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
+          <button onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
+          <button className="active" onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
+          <button onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>
+        </div>
+        <DigitalPermitPass currency={currency}/>
       </section>:<section className="content trailsContentSection">
         <div className="exploreModeSwitcher">
           <button onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
-          <button className="active" onClick={()=>setExploreMode("trails")}>🗺️ Offline Expedition Packs ({PNG_TRAIL_PACKS.length})</button>
+          <button onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({PNG_FESTIVALS.length})</button>
+          <button onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
+          <button className="active" onClick={()=>setExploreMode("trails")}>🗺️ Trails ({PNG_TRAIL_PACKS.length})</button>
         </div>
         <div className="title">
           <div><p className="eyebrow lime">WILDERNESS & ADVENTURE MAPS</p><h2>Expedition & Trail Packs</h2></div>

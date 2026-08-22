@@ -86,3 +86,111 @@ small{font-size:11px!important;line-height:1.4}.eyebrow{font-size:11px}.bottom b
 .trailNoticeAlert{margin-top:12px;padding:10px;border-radius:8px;background:var(--surface-selected);color:var(--brand-deep-teal);font-size:11px;font-weight:700;text-align:center}
 @media(max-width:560px){.trailStatsGrid{grid-template-columns:1fr 1fr}.trailSafetyNotice{grid-template-columns:1fr}.trailActions{flex-direction:column}}
 
+/* Phase 2: Cultural Festivals UI */
+.festivalFilterBar{display:grid;gap:12px;margin-bottom:20px;padding:16px;background:var(--surface-subtle);border-radius:14px;border:1px solid var(--border-default)}
+.festivalFilterGroup small{display:block;font-size:10px;font-weight:700;color:var(--text-secondary);text-transform:uppercase;margin-bottom:6px}
+.filterPills{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.filterPills button{white-space:nowrap;padding:6px 12px;border-radius:99px;border:1px solid var(--border-default);background:var(--surface-card);color:var(--text-primary);font-size:11px;font-weight:700;cursor:pointer}
+.filterPills button.active{background:var(--brand-deep-teal);color:var(--text-on-dark);border-color:var(--brand-deep-teal)}
+.festivalAlertBanner{padding:12px 16px;border-radius:10px;background:var(--surface-selected);color:var(--brand-deep-teal);font-size:12px;font-weight:700;margin-bottom:16px;text-align:center}
+.festivalList{display:grid;gap:24px}
+.festivalCard{background:var(--surface-card);border:1px solid var(--border-default);border-radius:20px;overflow:hidden;box-shadow:var(--shadow-card)}
+.festivalCover{padding:28px 20px;background-size:cover;background-position:center;color:var(--text-on-dark);position:relative}
+.festCoverTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+.festRegionBadge{padding:4px 10px;border-radius:99px;background:var(--surface-glass);color:var(--text-on-dark);font-size:10px;font-weight:700}
+.festOfflineTag{padding:4px 10px;border-radius:99px;background:var(--status-success-soft);color:var(--status-success);font-size:10px;font-weight:800}
+.festivalCover h2{margin:0 0 6px;font-size:26px;color:var(--text-on-dark)}
+.festDateRow{margin:0;font-size:12px;color:var(--brand-soft-mint)}
+.festDateRow b{color:var(--text-on-dark)}
+.festivalDetails{padding:20px}
+.festDescription{font-size:12px;line-height:1.55;color:var(--text-secondary);margin-bottom:16px}
+.tribesSection strong,.scheduleTimeline strong,.etiquetteBox strong{display:block;font-size:12px;color:var(--brand-deep-teal);margin-bottom:8px}
+.tribeTags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tribeTag{padding:4px 8px;border-radius:6px;background:var(--surface-selected);color:var(--brand-deep-teal);font-size:11px;font-weight:700}
+.scheduleTimeline{margin:16px 0;padding:14px;background:var(--surface-page);border-radius:12px;border:1px solid var(--border-default)}
+.scheduleTimeline ul,.etiquetteBox ul{margin:0;padding-left:18px;font-size:11px;line-height:1.5;color:var(--text-secondary)}
+.scheduleTimeline li{margin:4px 0}
+.scheduleTimeline b{color:var(--text-primary)}
+.etiquetteBox{margin:16px 0;padding:14px;background:var(--surface-warning);border-radius:12px;border:1px solid var(--status-warning)}
+.etiquetteBox strong{color:var(--text-warning)}
+.etiquetteBox ul{color:var(--text-warning)}
+.festivalFooter{display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid var(--border-default);margin-top:18px;flex-wrap:wrap;gap:12px}
+.pricingColumn small{display:block;font-size:9px;text-transform:uppercase;color:var(--text-secondary)}
+.pricingColumn strong{font-size:18px;color:var(--brand-deep-teal)}
+.vipPrice{display:block;font-size:10px;color:var(--text-secondary);margin-top:2px}
+.festActionButtons{display:flex;gap:8px;flex-wrap:wrap}
+.festOfflineBtn,.festBookBtn{padding:10px 14px;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer;border:0}
+.festOfflineBtn{background:var(--surface-subtle);color:var(--text-primary);border:1px solid var(--border-default)}
+.festOfflineBtn.active{background:var(--status-success-soft);color:var(--status-success);border-color:var(--status-success)}
+.festBookBtn{background:var(--action-primary);color:var(--brand-charcoal)}
+.festBookingModal{padding:26px}
+.festModalDate{font-size:12px;color:var(--text-secondary);margin:4px 0 16px}
+.festPriceEstimate{display:flex;justify-content:space-between;align-items:center;padding:14px;background:var(--surface-subtle);border-radius:10px;margin:16px 0}
+.festPriceEstimate strong{font-size:18px;color:var(--brand-deep-teal)}
+.confirmFestBtn{width:100%;padding:14px;border-radius:12px;background:var(--action-primary);color:var(--brand-charcoal);font-weight:800;font-size:12px;border:0;cursor:pointer}
+
+/* Phase 2: Digital Permits & Passes UI */
+.permitsHeader{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:14px}
+.permitsHeader h2{margin:6px 0 8px;font-size:26px}
+.permitsHeader p{margin:0;font-size:12px;color:var(--text-secondary);max-width:500px;line-height:1.5}
+.issueNewPermitBtn{padding:12px 18px;border-radius:12px;background:var(--action-primary);color:var(--brand-charcoal);font-weight:800;font-size:12px;border:0;cursor:pointer}
+.permitAlertBanner{padding:12px 16px;border-radius:10px;background:var(--status-success-soft);color:var(--status-success);font-size:12px;font-weight:700;margin-bottom:20px;text-align:center}
+.permitWallet{margin-bottom:30px;padding:18px;background:var(--surface-subtle);border-radius:18px;border:1px solid var(--border-default)}
+.walletTitle{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.walletTitle h3{margin:0;font-size:16px;color:var(--brand-deep-teal)}
+.offlineStatusPill{padding:3px 8px;border-radius:99px;background:var(--status-success-soft);color:var(--status-success);font-size:10px;font-weight:800}
+.permitWalletCards{display:grid;gap:12px}
+.permitPassCard{padding:16px;border-radius:14px;background:var(--surface-card);border:1px solid var(--border-strong);cursor:pointer;box-shadow:var(--shadow-card);transition:transform 0.15s}
+.permitPassCard:hover{transform:translateY(-2px)}
+.permitPassTop{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.permitAuthorityBadge{font-size:10px;font-weight:700;color:var(--text-secondary);text-transform:uppercase}
+.permitActivePill{font-size:10px;font-weight:800;color:var(--status-success)}
+.permitPassCard h4{margin:0 0 6px;font-size:16px;color:var(--brand-deep-teal)}
+.permitReferenceRow{display:flex;justify-content:space-between;font-size:11px;color:var(--text-primary);margin-bottom:6px}
+.permitDatesRow{display:flex;justify-content:space-between;font-size:10px;color:var(--text-secondary)}
+.tapToView{font-weight:700;color:var(--brand-deep-teal)}
+.permitCatalogTitle{margin-bottom:14px}
+.permitCatalogTitle h3{margin:0;font-size:18px}
+.permitCatalogTitle small{color:var(--text-secondary);font-size:11px}
+.permitCatalogGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.permitTypeCard{padding:18px;border-radius:16px;background:var(--surface-card);border:1px solid var(--border-default);box-shadow:var(--shadow-card);display:flex;flex-direction:column}
+.permitTypeHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.permitCategoryTag{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:800;text-transform:uppercase}
+.permitCategoryTag.trek{background:var(--status-danger-soft);color:var(--status-danger)}
+.permitCategoryTag.park{background:var(--status-success-soft);color:var(--status-success)}
+.permitCategoryTag.marine{background:var(--derived-teal-soft);color:var(--brand-deep-teal)}
+.permitCategoryTag.cultural{background:var(--surface-selected);color:var(--brand-deep-teal)}
+.permitProvince{font-size:11px;color:var(--text-secondary);font-weight:700}
+.permitTypeCard h4{margin:0 0 6px;font-size:16px;color:var(--brand-deep-teal)}
+.permitAuthority{font-size:11px;color:var(--text-secondary);margin:0 0 10px}
+.permitAuthority b{color:var(--text-primary)}
+.permitDesc{font-size:11px;line-height:1.45;color:var(--text-secondary);margin-bottom:12px;flex:1}
+.permitBenefitsList{padding:10px;background:var(--surface-page);border-radius:10px;margin-bottom:14px;border:1px solid var(--border-default)}
+.permitBenefitsList strong{display:block;font-size:10px;color:var(--brand-deep-teal);margin-bottom:4px}
+.permitBenefitsList ul{margin:0;padding-left:14px;font-size:10px;line-height:1.4;color:var(--text-secondary)}
+.permitCardFooter{display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--border-default)}
+.permitCost small{display:block;font-size:8px;text-transform:uppercase;color:var(--text-secondary)}
+.permitCost strong{font-size:16px;color:var(--brand-deep-teal)}
+.getPermitBtn{padding:8px 14px;border-radius:9px;background:var(--action-primary);color:var(--brand-charcoal);font-weight:700;font-size:11px;border:0;cursor:pointer}
+.permitModalSheet{padding:26px}
+.permitIssuerInfo{font-size:11px;color:var(--text-secondary);margin:4px 0 14px}
+.permitFeeSummary{display:flex;justify-content:space-between;align-items:center;padding:12px;background:var(--surface-subtle);border-radius:10px;margin:14px 0}
+.permitFeeSummary strong{font-size:18px;color:var(--brand-deep-teal)}
+.issuePermitSubmitBtn{width:100%;padding:14px;border-radius:12px;background:var(--action-primary);color:var(--brand-charcoal);font-weight:800;font-size:12px;border:0;cursor:pointer}
+.permitQrModal{padding:28px;text-align:center}
+.permitPassHeader{position:relative;margin-bottom:18px}
+.permitPassWatermark{font-size:9px;font-weight:800;letter-spacing:0.15em;color:var(--brand-deep-teal);opacity:0.8;display:block;margin-bottom:4px}
+.permitPassHeader h2{margin:4px 0 8px;font-size:22px}
+.permitRefHighlight{display:inline-block;padding:4px 12px;border-radius:8px;background:var(--surface-selected);color:var(--brand-deep-teal);font-size:14px;letter-spacing:0.08em}
+.permitQrContainer{display:flex;flex-direction:column;align-items:center;margin:20px 0}
+.permitQrSvg{width:160px;height:160px;padding:8px;background:var(--surface-card);border-radius:12px;border:2px solid var(--brand-deep-teal)}
+.offlineQrNotice{display:block;margin-top:8px;font-size:10px;font-weight:800;color:var(--status-success)}
+.permitPassMeta{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left;margin:20px 0;padding:14px;background:var(--surface-page);border-radius:12px;border:1px solid var(--border-default)}
+.permitPassMeta small{display:block;font-size:9px;color:var(--text-secondary);text-transform:uppercase}
+.permitPassMeta b{font-size:11px;color:var(--text-primary)}
+.activeStatus{color:var(--status-success)!important}
+.rangerInstructions{padding:12px;background:var(--surface-subtle);border-radius:10px;font-size:10px;color:var(--text-secondary);line-height:1.45;text-align:left;border:1px dashed var(--brand-deep-teal)}
+.rangerInstructions strong{color:var(--brand-deep-teal);display:block;margin-bottom:3px}
+@media(max-width:560px){.festivalFooter{flex-direction:column;align-items:flex-start}.festActionButtons{width:100%}.festActionButtons button{flex:1}.permitPassMeta{grid-template-columns:1fr}}
+
+
