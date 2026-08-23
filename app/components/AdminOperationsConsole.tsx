@@ -589,7 +589,7 @@ export default function AdminOperationsConsole({ initialTab = "bookings", curren
       {activeTab === "disputes" && (
         <div className="adminTableCard">
           <div style={{ padding: "12px", background: "var(--surface-subtle)", borderRadius: "10px", marginBottom: "16px" }}>
-            <strong>PNG Tourism Reputation & Dispute Resolution Center</strong>
+            <strong>Zambia Tourism Reputation & Dispute Resolution Center</strong>
             <p style={{ margin: "4px 0 0", fontSize: "11px", color: "var(--text-secondary)" }}>
               Providers or tourists can dispute factual claims. Admin reviews evidence, interviews parties, and writes binding resolution notes.
             </p>

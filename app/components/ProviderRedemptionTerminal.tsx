@@ -218,7 +218,7 @@ export default function ProviderRedemptionTerminal({ countryCode = "ZMB", onClos
                     <div className="billInputRow">
                       <label>Total Customer Bill (Gross Amount)</label>
                       <div className="billAmountInputWrapper">
-                        <span>PGK</span>
+                        <span>ZMW</span>
                         <input
                           type="number"
                           value={billAmount}
@@ -233,7 +233,7 @@ export default function ProviderRedemptionTerminal({ countryCode = "ZMB", onClos
                         <strong>{formatPrice(original, currency)}</strong>
                       </div>
                       <div className="summaryLine discount">
-                        <span>VisitPNG Member Privilege:</span>
+                        <span>ZamRoam Member Privilege:</span>
                         <strong>-{formatPrice(estimatedDiscount, currency)}</strong>
                       </div>
                       <div className="summaryLine totalFinal">
@@ -269,7 +269,7 @@ export default function ProviderRedemptionTerminal({ countryCode = "ZMB", onClos
           <div className="receiptSuccessView">
             <div className="receiptIconBadge">✓</div>
             <h3>Redemption Completed Successfully!</h3>
-            <p>The member discount has been recorded in the VisitPNG national partner ledger.</p>
+            <p>The member discount has been recorded in the ZamRoam national partner ledger.</p>
 
             <div className="receiptCard">
               <div className="receiptTopRow">

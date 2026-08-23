@@ -429,7 +429,7 @@ function MembershipScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode
     const x=await r.json();
     if(r.ok){setData(x);setStatus("Membership saved.")}else setStatus(x.error||"Membership update failed.");
   };
-  if(!viewer.signedIn)return <section className="accountGuest"><div className="accountMark">★</div><p className="eyebrow">MEMBERSHIP</p><h1>More access. More PNG.</h1><p>Sign in to compare plans, manage your membership card and track reward points.</p><a href={viewer.signInPath}>Sign in to view membership</a></section>;
+  if(!viewer.signedIn)return <section className="accountGuest"><div className="accountMark">★</div><p className="eyebrow">MEMBERSHIP</p><h1>More access. More Zambia.</h1><p>Sign in to compare plans, manage your membership card and track reward points.</p><a href={viewer.signInPath}>Sign in to view membership</a></section>;
   const currentPlan=data?.plans.find(p=>p.id===data.subscription?.planId);
   const usable=data?.subscription&&["active","complimentary"].includes(data.subscription.status);
   return <section className="saved membershipPage">
@@ -438,7 +438,7 @@ function MembershipScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode
     <p>Choose the membership that suits you. Practice payments never charge real money.</p>
     {status&&<p className="formStatus" aria-live="polite">{status}</p>}
     {data?.subscription&&<article className="memberCard">
-      <div className="memberCardTop"><span>VISIT PNG</span><b>{data.subscription.status.replaceAll("_"," ")}</b></div>
+      <div className="memberCardTop"><span>ZAMROAM</span><b>{data.subscription.status.replaceAll("_"," ")}</b></div>
       <p>MEMBER</p>
       <h2>{data.memberName}</h2>
       <strong>{data.subscription.memberNumber}</strong>
@@ -637,7 +637,7 @@ function SavedScreen({viewer}:{viewer:Viewer}){
   const current=lists.find(l=>l.id===active)||lists[0];
   return <section className="saved">
     <p className="eyebrow">SAVED PLACES</p>
-    <h1>Your PNG wishlists.</h1>
+    <h1>Your Zambia wishlists.</h1>
     <p>Organise places into custom wishlists, add travel notes and move places between lists.</p>
     <form className="newList" onSubmit={e=>{e.preventDefault();if(newListName.trim()){mutate("POST",{action:"create",name:newListName.trim()});setNewListName("")}}}>
       <input placeholder="New wishlist name" value={newListName} onChange={e=>setNewListName(e.target.value)}/>

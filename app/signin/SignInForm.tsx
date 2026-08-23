@@ -127,13 +127,13 @@ export default function SignInForm({ returnTo }: SignInFormProps) {
           {mode === "signin"
             ? isAdminDestination
               ? "Sign in to Admin Dashboard"
-              : "Sign in to Visit PNG"
-            : "Start planning your PNG journey"}
+              : "Sign in to ZamRoam"
+            : "Start planning your Zambia journey"}
         </h1>
 
         <p className="authSubtext">
           {mode === "signin"
-            ? "Your trips, saved places, bookings and administrative rights stay together on your Visit PNG account."
+            ? "Your trips, saved places, bookings and administrative rights stay together on your ZamRoam account."
             : "Create your secure account to manage bookings, offline maps, and custom itineraries."}
         </p>
 
@@ -248,7 +248,7 @@ export default function SignInForm({ returnTo }: SignInFormProps) {
           }}
         >
           {mode === "signin"
-            ? "New to Visit PNG? Create an account"
+            ? "New to ZamRoam? Create an account"
             : "Already have an account? Sign in"}
         </button>
       </section>

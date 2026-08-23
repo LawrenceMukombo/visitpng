@@ -36,7 +36,7 @@ export default function AdminProviderVetting({
   const [factCheckingNotes, setFactCheckingNotes] = useState("");
   const [rejectionReason, setRejectionReason] = useState("");
   const [commissionRate, setCommissionRate] = useState(0.05);
-  const [gstRate, setGstRate] = useState(0.10);
+  const [gstRate, setGstRate] = useState(0.16);
   const [calcTestAmount, setCalcTestAmount] = useState(1000);
   const [isProcessing, setIsProcessing] = useState(false);
   const [actionMessage, setActionMessage] = useState("");
@@ -55,7 +55,7 @@ export default function AdminProviderVetting({
     setFactCheckingNotes(app.factCheckingNotes || "");
     setRejectionReason(app.rejectionReason || "");
     setCommissionRate(app.commissionRate ?? 0.05);
-    setGstRate(app.gstRate ?? 0.10);
+    setGstRate(app.gstRate ?? 0.16);
     setActionMessage("");
   };
 
@@ -295,7 +295,7 @@ export default function AdminProviderVetting({
                         <span className="catPill">{app.providerType.replace("_", " ")}</span>
                       </td>
                       <td>
-                        <span>{app.provinceName || "PNG"}</span>
+                        <span>{app.provinceName || "Zambia"}</span>
                         <small>{app.villageOrTown}</small>
                       </td>
                       <td>
@@ -479,9 +479,9 @@ export default function AdminProviderVetting({
               </div>
             </div>
 
-            {/* Commission & GST Rate Configuration (Customizable) */}
+            {/* Commission & VAT Rate Configuration (Customizable) */}
             <div className="inspectorSection commissionSection">
-              <h4>💰 Commission & GST Rate Settings</h4>
+              <h4>💰 Commission & Zambia VAT (ZRA) Rate Settings</h4>
               <div className="commissionConfigRow">
                 <div className="formField">
                   <label>Base Commission Rate (Default: 5% = 0.05):</label>
@@ -495,7 +495,7 @@ export default function AdminProviderVetting({
                   />
                 </div>
                 <div className="formField">
-                  <label>PNG GST on Fee (Default: 10% = 0.10):</label>
+                  <label>Zambia VAT (ZRA) on Fee (Default: 16% = 0.16):</label>
                   <input
                     type="number"
                     step="0.01"
@@ -510,7 +510,7 @@ export default function AdminProviderVetting({
               {/* Live Calculator Preview */}
               <div className="liveCalcCard">
                 <div className="calcTop">
-                  <span>Take-Rate Preview on {calcTestAmount} PGK Transaction:</span>
+                  <span>Take-Rate Preview on {calcTestAmount} ZMW (ZK) Transaction:</span>
                   <input
                     type="number"
                     className="quickTestInput"
@@ -519,9 +519,9 @@ export default function AdminProviderVetting({
                   />
                 </div>
                 <div className="calcBreakdownRow">
-                  <span>Fee: {payoutCalc.baseCommission.toFixed(2)} PGK ({(commissionRate * 100).toFixed(1)}%)</span>
-                  <span>GST: {payoutCalc.gstOnCommission.toFixed(2)} PGK ({(gstRate * 100).toFixed(1)}%)</span>
-                  <strong>Provider Net: {payoutCalc.netProviderPayout.toFixed(2)} PGK</strong>
+                  <span>Fee: {payoutCalc.baseCommission.toFixed(2)} ZMW ({(commissionRate * 100).toFixed(1)}%)</span>
+                  <span>VAT: {payoutCalc.gstOnCommission.toFixed(2)} ZMW ({(gstRate * 100).toFixed(1)}%)</span>
+                  <strong>Provider Net: {payoutCalc.netProviderPayout.toFixed(2)} ZMW (ZK)</strong>
                 </div>
               </div>
 

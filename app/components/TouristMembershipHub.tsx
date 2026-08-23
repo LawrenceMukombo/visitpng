@@ -639,14 +639,14 @@ export default function TouristMembershipHub({ countryCode = "ZMB", viewer, curr
           <div className="familyIntroCard">
             <p className="eyebrow">HOUSEHOLD PRIVILEGES</p>
             <h3>Family & Group Linked Passes</h3>
-            <p>With a VisitPNG Family Pass, your spouse, children, or travelling companions each receive their own verified digital card and membership number linked to your shared account.</p>
+            <p>With a ZamRoam Family Pass, your spouse, children, or travelling companions each receive their own verified digital card and membership number linked to your shared account.</p>
           </div>
 
           <div className="familyMembersGrid">
             <div className="primaryMemberCard">
               <span className="memberRoleBadge">Primary Account Holder</span>
               <h4>{(data?.memberName as string) || "Primary Member"}</h4>
-              <code>{(sub?.memberNumber as string) || "VPNG-000001"}</code>
+              <code>{(sub?.memberNumber as string) || "ZAM-000001"}</code>
               <small>Status: Active</small>
             </div>
 

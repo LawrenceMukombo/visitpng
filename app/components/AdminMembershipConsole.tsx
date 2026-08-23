@@ -77,7 +77,7 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
   // Export CSV Helper
   const exportRedemptionsCsv = () => {
     if (!data?.redemptions || !data.redemptions.length) return;
-    const headers = ["Receipt Reference", "Date", "Provider", "Member Name", "Member Email", "Original (PGK)", "Discount (PGK)", "Final Paid (PGK)", "Privilege Summary"];
+    const headers = ["Receipt Reference", "Date", "Provider", "Member Name", "Member Email", "Original (ZMW)", "Discount (ZMW)", "Final Paid (ZMW)", "Privilege Summary"];
     const rows = data.redemptions.map(r => [
       r.redemptionRef,
       new Date(r.createdAt as string).toISOString(),
@@ -123,7 +123,7 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
       {/* Top Banner & KPI Stat Counters */}
       <div className="sectionHeaderRow">
         <div>
-          <p className="eyebrow lime">VISIT PNG NATIONAL ECOSYSTEM</p>
+          <p className="eyebrow lime">ZAMROAM NATIONAL ECOSYSTEM</p>
           <h2>Membership, Partner Rewards & Benefits Administration</h2>
           <p className="subtext">Configure plans, moderate partner offers, manage physical cards, and audit national redemptions.</p>
         </div>
@@ -146,12 +146,12 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
         </div>
         <div className="adminKpiCard highlight">
           <small>Total Tourist Savings</small>
-          <strong>PGK {data?.stats.totalMemberSavings.toLocaleString() || 0}</strong>
+          <strong>ZMW {data?.stats.totalMemberSavings.toLocaleString() || 0}</strong>
           <span>Verified Redemptions</span>
         </div>
         <div className="adminKpiCard">
           <small>Associated Guest Spend</small>
-          <strong>PGK {data?.stats.totalAssociatedSpend.toLocaleString() || 0}</strong>
+          <strong>ZMW {data?.stats.totalAssociatedSpend.toLocaleString() || 0}</strong>
           <span>Partner Gross Revenue</span>
         </div>
         <div className="adminKpiCard">
@@ -216,7 +216,7 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
 
           <div className="overviewCard">
             <h3>Recent High-Value Redemptions</h3>
-            <p className="cardSubtext">Real-time spend and savings transactions logged across PNG.</p>
+            <p className="cardSubtext">Real-time spend and savings transactions logged across Zambia.</p>
             <div className="recentTransactionsFeed">
               {data?.redemptions.slice(0, 5).map((r, idx) => (
                 <div key={idx} className="feedItem">
@@ -225,8 +225,8 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
                     <small>{r.benefitSummary as string} · {r.memberName as string}</small>
                   </div>
                   <div className="feedNumbers">
-                    <span className="savedPill">Saved PGK {Number(r.discountAmount)}</span>
-                    <small>Bill: PGK {Number(r.originalAmount)}</small>
+                    <span className="savedPill">Saved ZMW {Number(r.discountAmount)}</span>
+                    <small>Bill: ZMW {Number(r.originalAmount)}</small>
                   </div>
                 </div>
               ))}
@@ -295,7 +295,7 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
                       <small className="appSlug">{s.email as string}</small>
                     </td>
                     <td><span className="catPill">{s.planName as string}</span></td>
-                    <td>PGK {Number(s.price || 0)}</td>
+                    <td>ZMW {Number(s.price || 0)}</td>
                     <td><span className={`statusBadge ${s.status}`}>{s.status as string}</span></td>
                     <td>{s.expiryDate ? new Date(s.expiryDate as string).toLocaleDateString() : "Lifetime"}</td>
                     <td><span className="cardStatusBadge">{s.physicalCardStatus as string || "None"}</span></td>
@@ -373,10 +373,10 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
                       <small className="appSlug">Benefit: {o.benefitType as string}</small>
                     </td>
                     <td><span className="catPill">{o.benefitType as string}</span></td>
-                    <td>{o.normalPrice ? `PGK ${o.normalPrice}` : "N/A"}</td>
+                    <td>{o.normalPrice ? `ZMW ${o.normalPrice}` : "N/A"}</td>
                     <td>
                       <strong className="discountHighlight">
-                        {o.discountPct ? `${o.discountPct}% OFF` : o.memberPrice ? `PGK ${o.memberPrice}` : (o.complimentaryItem as string || "Perk")}
+                        {o.discountPct ? `${o.discountPct}% OFF` : o.memberPrice ? `ZMW ${o.memberPrice}` : (o.complimentaryItem as string || "Perk")}
                       </strong>
                     </td>
                     <td><span className={`statusBadge ${o.approvalStatus}`}>{o.approvalStatus as string}</span></td>
@@ -505,9 +505,9 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
                       <strong>{r.memberName as string}</strong>
                       <small className="appSlug">{r.memberEmail as string}</small>
                     </td>
-                    <td>PGK {Number(r.originalAmount)}</td>
-                    <td className="discountHighlight">-PGK {Number(r.discountAmount)}</td>
-                    <td><strong>PGK {Number(r.finalAmount)}</strong></td>
+                    <td>ZMW {Number(r.originalAmount)}</td>
+                    <td className="discountHighlight">-ZMW {Number(r.discountAmount)}</td>
+                    <td><strong>ZMW {Number(r.finalAmount)}</strong></td>
                     <td>{r.benefitSummary as string}</td>
                   </tr>
                 ))}
