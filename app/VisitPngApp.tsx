@@ -156,7 +156,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
     </div>
   );
 
-  return <main className="app">
+  return <main className={tab === "Explore" && exploreMode === "map" ? "app mapViewActive" : "app"}>
     <Header viewer={viewer} profile={()=>setTab("Profile")} currency={currency} onCurrencyChange={handleCurrencyChange} countryCode={countryCode} onCountryChange={handleCountryChange}/>
     {tab==="Explore"?<>
       <section className="hero">
