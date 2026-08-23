@@ -3,7 +3,14 @@ import type {VisitPngUser} from "../app/auth";
 const accountSchema=[`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT,email TEXT NOT NULL UNIQUE,full_name TEXT,preferred_name TEXT,mobile TEXT,country TEXT NOT NULL DEFAULT 'Papua New Guinea',preferred_language TEXT NOT NULL DEFAULT 'English',role TEXT NOT NULL DEFAULT 'traveller',status TEXT NOT NULL DEFAULT 'active',created_at TEXT NOT NULL,updated_at TEXT NOT NULL)`,`CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique ON users(email)`,`CREATE TABLE IF NOT EXISTS audit_logs (id INTEGER PRIMARY KEY AUTOINCREMENT,user_id INTEGER REFERENCES users(id),actor_email TEXT NOT NULL,action TEXT NOT NULL,entity_type TEXT NOT NULL,entity_id TEXT,details TEXT,created_at TEXT NOT NULL)`,`CREATE INDEX IF NOT EXISTS audit_logs_user_idx ON audit_logs(user_id)`,`CREATE INDEX IF NOT EXISTS audit_logs_created_idx ON audit_logs(created_at)`];
 export type UserRole = "traveller" | "tourist" | "provider" | "provider_owner" | "provider_staff" | "country_administrator" | "administrator" | "super_administrator";
 export type AccountProfile={id:number;email:string;fullName:string|null;preferredName:string|null;mobile:string|null;country:string;preferredLanguage:string;role:UserRole;status:string;createdAt:string;updatedAt:string};
-export async function ensureAccounts(){await env.DB.batch(accountSchema.map(sql=>env.DB.prepare(sql)))}
+let accountsInitPromise: Promise<void> | null = null;
+export async function ensureAccounts(){
+  if(accountsInitPromise)return accountsInitPromise;
+  accountsInitPromise = (async () => {
+    await env.DB.batch(accountSchema.map(sql=>env.DB.prepare(sql)));
+  })();
+  return accountsInitPromise;
+}
 export async function getOrCreateAccount(identity:VisitPngUser):Promise<AccountProfile>{
   await ensureAccounts();
   const now=new Date().toISOString();

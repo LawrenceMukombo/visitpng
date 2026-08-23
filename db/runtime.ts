@@ -5,7 +5,7 @@ import { dirname, resolve } from "node:path";
 const databasePath = resolve(process.env.DATABASE_PATH || "data/visitpng.db");
 mkdirSync(dirname(databasePath), { recursive: true });
 const database = new DatabaseSync(databasePath);
-database.exec("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;");
+database.exec("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 10000;");
 
 type Value = string | number | bigint | null | Uint8Array;
 const toValue = (value: unknown): Value => value == null ? null : typeof value === "boolean" ? Number(value) : typeof value === "string" || typeof value === "number" || typeof value === "bigint" || value instanceof Uint8Array ? value : JSON.stringify(value);
@@ -22,13 +22,22 @@ class NativeStatement {
 class NativeDatabase {
   prepare(sql: string) { return new NativeStatement(sql); }
   async batch(statements: NativeStatement[]) {
-    database.exec("BEGIN");
+    let inTransaction = false;
+    try {
+      database.exec("BEGIN");
+      inTransaction = true;
+    } catch {
+      // If transaction is already active, run statements directly
+      return statements.map((statement) => statement.runNow());
+    }
     try {
       const results = statements.map((statement) => statement.runNow());
-      database.exec("COMMIT");
+      if (inTransaction) database.exec("COMMIT");
       return results;
     } catch (error) {
-      database.exec("ROLLBACK");
+      if (inTransaction) {
+        try { database.exec("ROLLBACK"); } catch {}
+      }
       throw error;
     }
   }

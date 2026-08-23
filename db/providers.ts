@@ -105,12 +105,16 @@ const providerStatements = [
   `CREATE INDEX IF NOT EXISTS prov_app_email_idx ON provider_applications(applicant_email)`
 ];
 
+let providerAppsInitPromise: Promise<void> | null = null;
+
 export async function ensureProviderApplications() {
-  await ensureCatalogue();
-  const d1 = env.DB;
-  for (const sql of providerStatements) {
-    await d1.prepare(sql).run();
-  }
+  if (providerAppsInitPromise) return providerAppsInitPromise;
+  providerAppsInitPromise = (async () => {
+    await ensureCatalogue();
+    const d1 = env.DB;
+    for (const sql of providerStatements) {
+      await d1.prepare(sql).run();
+    }
   const safeAlter = async (sql: string) => {
     try {
       await d1.prepare(sql).run();
@@ -292,6 +296,8 @@ export async function ensureProviderApplications() {
       ).run();
     }
   }
+  })();
+  return providerAppsInitPromise;
 }
 
 function slugify(text: string): string {

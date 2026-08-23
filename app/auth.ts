@@ -1,37 +1,43 @@
 import {cookies} from "next/headers";import {redirect} from "next/navigation";import {createHash,randomBytes,scryptSync,timingSafeEqual} from "node:crypto";import {env} from "../db/runtime";
 export type VisitPngUser={displayName:string;email:string;fullName:string|null};const COOKIE_NAME="visitpng_session";
-export async function ensureAuth(){
-  await env.DB.batch([
-    env.DB.prepare("CREATE TABLE IF NOT EXISTS auth_accounts (id INTEGER PRIMARY KEY AUTOINCREMENT,email TEXT NOT NULL UNIQUE,full_name TEXT NOT NULL,password_hash TEXT NOT NULL,created_at TEXT NOT NULL,updated_at TEXT NOT NULL)"),
-    env.DB.prepare("CREATE TABLE IF NOT EXISTS auth_sessions (id INTEGER PRIMARY KEY AUTOINCREMENT,account_id INTEGER NOT NULL REFERENCES auth_accounts(id) ON DELETE CASCADE,token_hash TEXT NOT NULL UNIQUE,expires_at TEXT NOT NULL,created_at TEXT NOT NULL)"),
-    env.DB.prepare("CREATE INDEX IF NOT EXISTS auth_sessions_expiry_idx ON auth_sessions(token_hash,expires_at)")
-  ]);
+let authInitPromise: Promise<void> | null = null;
 
-  const defaultAdminEmail = (process.env.ADMIN_EMAIL || "lawrencemukombo2@gmail.com").trim().toLowerCase();
-  const defaultAdminPassword = process.env.ADMIN_PASSWORD || "S@mund3ng0@4129";
-  const defaultAdminName = "Lawrence Mukombo";
-  const now = new Date().toISOString();
+export async function ensureAuth() {
+  if (authInitPromise) return authInitPromise;
+  authInitPromise = (async () => {
+    await env.DB.batch([
+      env.DB.prepare("CREATE TABLE IF NOT EXISTS auth_accounts (id INTEGER PRIMARY KEY AUTOINCREMENT,email TEXT NOT NULL UNIQUE,full_name TEXT NOT NULL,password_hash TEXT NOT NULL,created_at TEXT NOT NULL,updated_at TEXT NOT NULL)"),
+      env.DB.prepare("CREATE TABLE IF NOT EXISTS auth_sessions (id INTEGER PRIMARY KEY AUTOINCREMENT,account_id INTEGER NOT NULL REFERENCES auth_accounts(id) ON DELETE CASCADE,token_hash TEXT NOT NULL UNIQUE,expires_at TEXT NOT NULL,created_at TEXT NOT NULL)"),
+      env.DB.prepare("CREATE INDEX IF NOT EXISTS auth_sessions_expiry_idx ON auth_sessions(token_hash,expires_at)")
+    ]);
 
-  try {
-    const existing = await env.DB.prepare("SELECT id, password_hash AS passwordHash FROM auth_accounts WHERE email=?").bind(defaultAdminEmail).first<{id:number; passwordHash:string}>();
-    if (!existing) {
-      await env.DB.prepare("INSERT INTO auth_accounts (email, full_name, password_hash, created_at, updated_at) VALUES (?, ?, ?, ?, ?)").bind(
-        defaultAdminEmail,
-        defaultAdminName,
-        hashPassword(defaultAdminPassword),
-        now,
-        now
-      ).run();
-    } else if (!passwordMatches(defaultAdminPassword, existing.passwordHash)) {
-      await env.DB.prepare("UPDATE auth_accounts SET password_hash=?, updated_at=? WHERE id=?").bind(
-        hashPassword(defaultAdminPassword),
-        now,
-        existing.id
-      ).run();
+    const defaultAdminEmail = (process.env.ADMIN_EMAIL || "lawrencemukombo2@gmail.com").trim().toLowerCase();
+    const defaultAdminPassword = process.env.ADMIN_PASSWORD || "S@mund3ng0@4129";
+    const defaultAdminName = "Lawrence Mukombo";
+    const now = new Date().toISOString();
+
+    try {
+      const existing = await env.DB.prepare("SELECT id, password_hash AS passwordHash FROM auth_accounts WHERE email=?").bind(defaultAdminEmail).first<{id:number; passwordHash:string}>();
+      if (!existing) {
+        await env.DB.prepare("INSERT INTO auth_accounts (email, full_name, password_hash, created_at, updated_at) VALUES (?, ?, ?, ?, ?)").bind(
+          defaultAdminEmail,
+          defaultAdminName,
+          hashPassword(defaultAdminPassword),
+          now,
+          now
+        ).run();
+      } else if (!passwordMatches(defaultAdminPassword, existing.passwordHash)) {
+        await env.DB.prepare("UPDATE auth_accounts SET password_hash=?, updated_at=? WHERE id=?").bind(
+          hashPassword(defaultAdminPassword),
+          now,
+          existing.id
+        ).run();
+      }
+    } catch {
+      // Non-blocking fallback if database is locked or busy
     }
-  } catch {
-    // Non-blocking fallback if database is locked or busy
-  }
+  })();
+  return authInitPromise;
 }
 export function hashPassword(password:string){const salt=randomBytes(16).toString("hex");return`${salt}:${scryptSync(password,salt,64).toString("hex")}`}
 export function passwordMatches(password:string,stored:string){const[salt,hash]=stored.split(":");if(!salt||!hash)return false;const expected=Buffer.from(hash,"hex"),actual=scryptSync(password,salt,64);return expected.length===actual.length&&timingSafeEqual(expected,actual)}

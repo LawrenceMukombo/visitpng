@@ -144,13 +144,17 @@ const zambiaListingSeed = [
   ["ndole-bay-lake-ferry-charter", "ndole-bay-resort", "lake-tanganyika-mbala", "transport", "Ndole Bay Lake Tanganyika Boat Charter", "Customized lake cruiser charters for diving expeditions, Nsumbu National Park access, and scenic lake crossings.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "Ndole Bay Lodge", "https://ndolebaylodge.com", "Lake Charter", "ZMW", 1150, 980, 4.9, 44]
 ];
 
-export async function ensureCatalogue() {
-  const d1 = env.DB;
-  if (!d1) throw new Error("Database binding DB is unavailable");
+let catalogueInitPromise: Promise<void> | null = null;
 
-  await ensureCountries();
-  await d1.batch(schemaStatements.map(sql => d1.prepare(sql)));
-  await ensureCountryGeography("ZMB");
+export async function ensureCatalogue() {
+  if (catalogueInitPromise) return catalogueInitPromise;
+  catalogueInitPromise = (async () => {
+    const d1 = env.DB;
+    if (!d1) throw new Error("Database binding DB is unavailable");
+
+    await ensureCountries();
+    await d1.batch(schemaStatements.map(sql => d1.prepare(sql)));
+    await ensureCountryGeography("ZMB");
 
   const safeAlter = async (sql: string) => {
     try { await d1.prepare(sql).run(); } catch {}
@@ -224,6 +228,8 @@ export async function ensureCatalogue() {
   await d1.prepare("UPDATE listings SET country_id = ? WHERE country_id IS NULL").bind(zmbId).run();
   await d1.prepare("UPDATE listings SET currency = 'ZMW' WHERE currency IS NULL OR currency = 'PGK'").run();
   await d1.prepare("UPDATE listings SET publication_status = 'published' WHERE publication_status IS NULL OR publication_status != 'published'").run();
+  })();
+  return catalogueInitPromise;
 }
 
 export async function getCatalogue(query = "", category = "all", countryCode = "ZMB") {

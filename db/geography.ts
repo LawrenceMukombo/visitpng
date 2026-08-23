@@ -17,43 +17,52 @@ export interface RegionInfo {
   description: string;
 }
 
-export async function ensureCountryGeography(countryCode: string = "PNG"): Promise<void> {
-  await ensureCountries();
-  await env.DB.prepare("CREATE TABLE IF NOT EXISTS provinces (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,code TEXT NOT NULL UNIQUE,name TEXT NOT NULL,region TEXT NOT NULL)").run();
-  const normalized = (countryCode || "PNG").toUpperCase();
-  
-  const country = await env.DB.prepare("SELECT id FROM countries WHERE UPPER(code)=?").bind(normalized).first<{ id: number }>();
-  if (!country) return;
+const geographyInitMap = new Map<string, Promise<void>>();
 
-  if (normalized === "ZMB") {
-    // Seed Zambia Provinces
-    for (const prov of ZAMBIA_PROVINCES) {
-      const existing = await env.DB.prepare("SELECT id FROM provinces WHERE code=?").bind(prov.code).first<{ id: number }>();
-      if (!existing) {
-        await env.DB.prepare("INSERT INTO provinces (country_id, code, name, region) VALUES (?, ?, ?, ?)").bind(
-          country.id,
-          prov.code,
-          prov.name,
-          prov.region
-        ).run();
+export async function ensureCountryGeography(countryCode: string = "PNG"): Promise<void> {
+  const normalized = (countryCode || "PNG").toUpperCase();
+  if (geographyInitMap.has(normalized)) return geographyInitMap.get(normalized)!;
+
+  const initPromise = (async () => {
+    await ensureCountries();
+    await env.DB.prepare("CREATE TABLE IF NOT EXISTS provinces (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,code TEXT NOT NULL UNIQUE,name TEXT NOT NULL,region TEXT NOT NULL)").run();
+    
+    const country = await env.DB.prepare("SELECT id FROM countries WHERE UPPER(code)=?").bind(normalized).first<{ id: number }>();
+    if (!country) return;
+
+    if (normalized === "ZMB") {
+      // Seed Zambia Provinces
+      for (const prov of ZAMBIA_PROVINCES) {
+        const existing = await env.DB.prepare("SELECT id FROM provinces WHERE code=?").bind(prov.code).first<{ id: number }>();
+        if (!existing) {
+          await env.DB.prepare("INSERT INTO provinces (country_id, code, name, region) VALUES (?, ?, ?, ?)").bind(
+            country.id,
+            prov.code,
+            prov.name,
+            prov.region
+          ).run();
+        }
+      }
+    } else {
+      // Seed PNG Provinces
+      for (const prov of PNG_PROVINCES) {
+        const existing = await env.DB.prepare("SELECT id FROM provinces WHERE code=?").bind(prov.code).first<{ id: number }>();
+        if (!existing) {
+          await env.DB.prepare("INSERT INTO provinces (country_id, code, name, region) VALUES (?, ?, ?, ?)").bind(
+            country.id,
+            prov.code,
+            prov.name,
+            prov.region
+          ).run();
+        } else {
+          await env.DB.prepare("UPDATE provinces SET country_id=? WHERE id=? AND country_id IS NULL").bind(country.id, existing.id).run();
+        }
       }
     }
-  } else {
-    // Seed PNG Provinces
-    for (const prov of PNG_PROVINCES) {
-      const existing = await env.DB.prepare("SELECT id FROM provinces WHERE code=?").bind(prov.code).first<{ id: number }>();
-      if (!existing) {
-        await env.DB.prepare("INSERT INTO provinces (country_id, code, name, region) VALUES (?, ?, ?, ?)").bind(
-          country.id,
-          prov.code,
-          prov.name,
-          prov.region
-        ).run();
-      } else {
-        await env.DB.prepare("UPDATE provinces SET country_id=? WHERE id=? AND country_id IS NULL").bind(country.id, existing.id).run();
-      }
-    }
-  }
+  })();
+
+  geographyInitMap.set(normalized, initPromise);
+  return initPromise;
 }
 
 export async function getProvincesByCountry(countryCode: string = "PNG"): Promise<ProvinceRecord[]> {

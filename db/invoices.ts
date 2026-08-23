@@ -44,9 +44,15 @@ const invoiceSchema = [
   `CREATE INDEX IF NOT EXISTS invoices_email_idx ON invoices(customer_email)`
 ];
 
+let invoicesInitPromise: Promise<void> | null = null;
+
 export async function ensureInvoices() {
-  const d1 = env.DB;
-  await d1.batch(invoiceSchema.map(sql => d1.prepare(sql)));
+  if (invoicesInitPromise) return invoicesInitPromise;
+  invoicesInitPromise = (async () => {
+    const d1 = env.DB;
+    await d1.batch(invoiceSchema.map(sql => d1.prepare(sql)));
+  })();
+  return invoicesInitPromise;
 }
 
 export async function createInvoice(input: {

@@ -41,8 +41,12 @@ export interface CountryWithSettings extends Country {
   settings: CountrySettings | null;
 }
 
+let countriesInitPromise: Promise<void> | null = null;
+
 export async function ensureCountries(): Promise<void> {
-  // 1. Create countries table
+  if (countriesInitPromise) return countriesInitPromise;
+  countriesInitPromise = (async () => {
+    // 1. Create countries table
   await env.DB.prepare(`
     CREATE TABLE IF NOT EXISTS countries (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -149,6 +153,8 @@ export async function ensureCountries(): Promise<void> {
       }
     }
   }
+  })();
+  return countriesInitPromise;
 }
 
 export async function getAllCountries(): Promise<CountryWithSettings[]> {

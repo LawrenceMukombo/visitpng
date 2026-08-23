@@ -108,41 +108,47 @@ const brandSchema = [
   )`
 ];
 
+let brandsInitPromise: Promise<void> | null = null;
+
 export async function ensureBrands() {
-  const d1 = env.DB;
-  await d1.batch(brandSchema.map(sql => d1.prepare(sql)));
+  if (brandsInitPromise) return brandsInitPromise;
+  brandsInitPromise = (async () => {
+    const d1 = env.DB;
+    await d1.batch(brandSchema.map(sql => d1.prepare(sql)));
 
-  const now = new Date().toISOString();
+    const now = new Date().toISOString();
 
-  // 1. Seed Parent Legal Entity: Lamton Investments Ltd
-  await d1.prepare(`
-    INSERT INTO organizations (
-      legal_name, trading_name, registration_number, tax_number, country, registered_address, phone, email, website, status, created_at, updated_at
-    ) VALUES (
-      'Lamton Investments Ltd', 'Lamton Investments', 'LAM-ZM-2024-8891', 'TPIN-1002938482', 'Zambia', 'Plot 10444, Great East Road, Rhodes Park, Lusaka, Zambia', '+260573506598', 'info@lamtoninvestments.com', 'https://lamtoninvestments.com', 'active', ?, ?
-    ) ON CONFLICT(legal_name) DO UPDATE SET phone=excluded.phone, email=excluded.email, updated_at=?
-  `).bind(now, now, now).run();
+    // 1. Seed Parent Legal Entity: Lamton Investments Ltd
+    await d1.prepare(`
+      INSERT INTO organizations (
+        legal_name, trading_name, registration_number, tax_number, country, registered_address, phone, email, website, status, created_at, updated_at
+      ) VALUES (
+        'Lamton Investments Ltd', 'Lamton Investments', 'LAM-ZM-2024-8891', 'TPIN-1002938482', 'Zambia', 'Plot 10444, Great East Road, Rhodes Park, Lusaka, Zambia', '+260573506598', 'info@lamtoninvestments.com', 'https://lamtoninvestments.com', 'active', ?, ?
+      ) ON CONFLICT(legal_name) DO UPDATE SET phone=excluded.phone, email=excluded.email, updated_at=?
+    `).bind(now, now, now).run();
 
-  const org = await d1.prepare("SELECT id FROM organizations WHERE legal_name='Lamton Investments Ltd' LIMIT 1").first<{ id: number }>();
-  const orgId = org?.id || 1;
+    const org = await d1.prepare("SELECT id FROM organizations WHERE legal_name='Lamton Investments Ltd' LIMIT 1").first<{ id: number }>();
+    const orgId = org?.id || 1;
 
-  // 2. Seed Brand: ZamRoam (Zambia)
-  await d1.prepare(`
-    INSERT INTO brands (
-      organization_id, code, name, tagline, short_description, country_code, primary_domain, support_email, support_phone, pass_name, partner_program_name, verified_badge_name, deals_name, experiences_name, legal_notice, invoice_header, created_at, updated_at
-    ) VALUES (
-      ?, 'zamroam', 'ZamRoam', 'Roam Zambia. Experience More.', 'A premier tourism discovery, membership, deals, experiences and provider marketplace connecting travellers with the best of Zambia.', 'ZMB', 'zamroam.com', 'info@zamroam.com', '+260573506598', 'ZamRoam Pass', 'ZamRoam Partners', 'ZamRoam Verified', 'ZamRoam Deals', 'ZamRoam Experiences', 'ZamRoam is a tourism technology platform owned and operated by Lamton Investments Ltd.', 'LAMTON INVESTMENTS LTD — Operating ZamRoam', ?, ?
-    ) ON CONFLICT(code) DO UPDATE SET name=excluded.name, tagline=excluded.tagline, primary_domain=excluded.primary_domain, support_email=excluded.support_email, support_phone=excluded.support_phone, legal_notice=excluded.legal_notice, updated_at=excluded.updated_at
-  `).bind(orgId, now, now).run();
+    // 2. Seed Brand: ZamRoam (Zambia)
+    await d1.prepare(`
+      INSERT INTO brands (
+        organization_id, code, name, tagline, short_description, country_code, primary_domain, support_email, support_phone, pass_name, partner_program_name, verified_badge_name, deals_name, experiences_name, legal_notice, invoice_header, created_at, updated_at
+      ) VALUES (
+        ?, 'zamroam', 'ZamRoam', 'Roam Zambia. Experience More.', 'A premier tourism discovery, membership, deals, experiences and provider marketplace connecting travellers with the best of Zambia.', 'ZMB', 'zamroam.com', 'info@zamroam.com', '+260573506598', 'ZamRoam Pass', 'ZamRoam Partners', 'ZamRoam Verified', 'ZamRoam Deals', 'ZamRoam Experiences', 'ZamRoam is a tourism technology platform owned and operated by Lamton Investments Ltd.', 'LAMTON INVESTMENTS LTD — Operating ZamRoam', ?, ?
+      ) ON CONFLICT(code) DO UPDATE SET name=excluded.name, tagline=excluded.tagline, primary_domain=excluded.primary_domain, support_email=excluded.support_email, support_phone=excluded.support_phone, legal_notice=excluded.legal_notice, updated_at=excluded.updated_at
+    `).bind(orgId, now, now).run();
 
-  // 3. Seed Founding Partner Campaign for Zambia (100 Slots)
-  await d1.prepare(`
-    INSERT INTO founding_partner_campaigns (
-      country_code, name, total_slots, allocated_slots, promotional_price, regular_price, currency, badge_label, priority_months, is_active, deadline_date, created_at, updated_at
-    ) VALUES (
-      'ZMB', '100 Founding ZamRoam Partners', 100, 63, 1499, 2999, 'ZMW', 'Founding Partner', 12, 1, '2026-12-31', ?, ?
-    ) ON CONFLICT(country_code) DO UPDATE SET updated_at=excluded.updated_at
-  `).bind(now, now).run();
+    // 3. Seed Founding Partner Campaign for Zambia (100 Slots)
+    await d1.prepare(`
+      INSERT INTO founding_partner_campaigns (
+        country_code, name, total_slots, allocated_slots, promotional_price, regular_price, currency, badge_label, priority_months, is_active, deadline_date, created_at, updated_at
+      ) VALUES (
+        'ZMB', '100 Founding ZamRoam Partners', 100, 63, 1499, 2999, 'ZMW', 'Founding Partner', 12, 1, '2026-12-31', ?, ?
+      ) ON CONFLICT(country_code) DO UPDATE SET updated_at=excluded.updated_at
+    `).bind(now, now).run();
+  })();
+  return brandsInitPromise;
 }
 
 export async function getBrandConfig(countryCode: string = "ZMB") {

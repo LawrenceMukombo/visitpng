@@ -523,11 +523,15 @@ const seedProviderOffers = [
   }
 ];
 
+let ecosystemInitPromise: Promise<void> | null = null;
+
 export async function ensureMembershipEcosystem() {
-  const d1 = env.DB;
-  for (const sql of ecosystemSchemaStatements) {
-    await d1.prepare(sql).run();
-  }
+  if (ecosystemInitPromise) return ecosystemInitPromise;
+  ecosystemInitPromise = (async () => {
+    const d1 = env.DB;
+    for (const sql of ecosystemSchemaStatements) {
+      await d1.prepare(sql).run();
+    }
 
   // Safe additive column migrations on existing tables
   const safeAlter = async (sql: string) => {
@@ -596,6 +600,8 @@ export async function ensureMembershipEcosystem() {
       ).run();
     }
   }
+  })();
+  return ecosystemInitPromise;
 }
 
 // -------------------------------------------------------------
