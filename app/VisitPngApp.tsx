@@ -180,15 +180,22 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       {exploreMode==="places"?<section className="content">
         {switcherNav}
         <ZamRoamHeroBanner
-          onSelectCategory={(slug)=>setCategory(slug)}
+          onSelectCategory={(slug)=>{
+            setCategory(slug);
+            const el = document.getElementById("places-explore-heading");
+            if (el) el.scrollIntoView({ behavior: "smooth" });
+          }}
           onOpenMap={()=>setExploreMode("map")}
           onOpenPass={()=>setShowPassModal(true)}
+          onOpenPartner={()=>setShowPartnerModal(true)}
+          onOpenFestivals={()=>setExploreMode("festivals")}
+          onOpenProvider={()=>setShowProviderModal(true)}
         />
         <CountryIntroBanner countryCode={countryCode}/>
         <div className="cats">
           {data?.categories.map(c=><button key={c.slug} className={category===c.slug?"active":""} onClick={()=>setCategory(category===c.slug?"all":c.slug)}><span>{c.icon}</span>{c.name}</button>)}
         </div>
-        <div className="title">
+        <div id="places-explore-heading" className="title">
           <div><p className="eyebrow">PLACES TO EXPLORE IN {countryCode === "ZMB" ? "ZAMBIA" : "PAPUA NEW GUINEA"}</p><h2>{q?`Results for “${q}”`:"Discover something remarkable"}</h2></div>
           {data&&<span className="resultCount">{data.meta.count} found</span>}
         </div>

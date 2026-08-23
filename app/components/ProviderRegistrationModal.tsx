@@ -213,22 +213,38 @@ export default function ProviderRegistrationModal({
 
             {/* Stepper Navigation */}
             <div className="wizardStepper" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px", background: "rgba(0,0,0,0.03)", padding: "8px", borderRadius: "14px" }}>
-              <div style={{ textAlign: "center", padding: "8px 4px", borderRadius: "10px", background: step === 1 ? "var(--brand-deep-teal, #0d3838)" : step > 1 ? "#10b981" : "transparent", color: step >= 1 ? "#fff" : "#94a3b8", transition: "all 0.2s" }}>
-                <span style={{ display: "block", fontWeight: 800, fontSize: "14px" }}>1</span>
-                <small style={{ fontSize: "11px", fontWeight: 600 }}>Business</small>
-              </div>
-              <div style={{ textAlign: "center", padding: "8px 4px", borderRadius: "10px", background: step === 2 ? "var(--brand-deep-teal, #0d3838)" : step > 2 ? "#10b981" : "transparent", color: step >= 2 ? "#fff" : "#94a3b8", transition: "all 0.2s" }}>
-                <span style={{ display: "block", fontWeight: 800, fontSize: "14px" }}>2</span>
-                <small style={{ fontSize: "11px", fontWeight: 600 }}>Location</small>
-              </div>
-              <div style={{ textAlign: "center", padding: "8px 4px", borderRadius: "10px", background: step === 3 ? "var(--brand-deep-teal, #0d3838)" : step > 3 ? "#10b981" : "transparent", color: step >= 3 ? "#fff" : "#94a3b8", transition: "all 0.2s" }}>
-                <span style={{ display: "block", fontWeight: 800, fontSize: "14px" }}>3</span>
-                <small style={{ fontSize: "11px", fontWeight: 600 }}>Anti-Scam</small>
-              </div>
-              <div style={{ textAlign: "center", padding: "8px 4px", borderRadius: "10px", background: step === 4 ? "var(--brand-deep-teal, #0d3838)" : "transparent", color: step === 4 ? "#fff" : "#94a3b8", transition: "all 0.2s" }}>
-                <span style={{ display: "block", fontWeight: 800, fontSize: "14px" }}>4</span>
-                <small style={{ fontSize: "11px", fontWeight: 600 }}>Payout & 5%</small>
-              </div>
+              {[
+                { num: 1 as const, label: "Business" },
+                { num: 2 as const, label: "Location" },
+                { num: 3 as const, label: "Anti-Scam" },
+                { num: 4 as const, label: "Payout & 5%" }
+              ].map((s) => (
+                <button
+                  key={s.num}
+                  type="button"
+                  onClick={() => {
+                    setError("");
+                    setStep(s.num);
+                  }}
+                  style={{
+                    textAlign: "center",
+                    padding: "10px 4px",
+                    borderRadius: "10px",
+                    border: step === s.num ? "2px solid #10b981" : "1px solid transparent",
+                    background: step === s.num ? "var(--brand-deep-teal, #0d3838)" : step > s.num ? "#10b981" : "rgba(0,0,0,0.04)",
+                    color: step === s.num || step > s.num ? "#fff" : "#64748b",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  <span style={{ display: "block", fontWeight: 800, fontSize: "14px" }}>{s.num}</span>
+                  <small style={{ fontSize: "11px", fontWeight: 700 }}>{s.label}</small>
+                </button>
+              ))}
             </div>
           </div>
         )}

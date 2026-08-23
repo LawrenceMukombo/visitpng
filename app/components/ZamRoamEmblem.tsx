@@ -88,8 +88,8 @@ export function ZamRoamLogo({
       {/* Typography */}
       <div style={{ display: "inline-flex", flexDirection: "column", lineHeight: 1.05, whiteSpace: "nowrap", flexShrink: 0 }}>
         <div style={{ fontSize, fontWeight: 900, letterSpacing: "-0.03em", whiteSpace: "nowrap", display: "inline-flex", alignItems: "center" }}>
-          <span style={{ color: variant === "dark" ? "#0F3E36" : "#FFFFFF", display: "inline !important" as any }}>Zam</span>
-          <span style={{ color: "#F97316", display: "inline !important" as any }}>Roam</span>
+          <span style={{ color: variant === "dark" ? "#0F3E36" : "#FFFFFF", display: "inline" }}>Zam</span>
+          <span style={{ color: "#F97316", display: "inline" }}>Roam</span>
         </div>
         {showTagline && (
           <div
@@ -359,11 +359,17 @@ export function ZamRoamTrustRibbon() {
 export function ZamRoamHeroBanner({
   onSelectCategory,
   onOpenMap,
-  onOpenPass
+  onOpenPass,
+  onOpenPartner,
+  onOpenFestivals,
+  onOpenProvider
 }: {
   onSelectCategory?: (slug: string) => void;
   onOpenMap?: () => void;
   onOpenPass?: () => void;
+  onOpenPartner?: () => void;
+  onOpenFestivals?: () => void;
+  onOpenProvider?: () => void;
 }) {
   return (
     <div
@@ -400,21 +406,42 @@ export function ZamRoamHeroBanner({
             borderBottomLeftRadius: "14px",
             display: "flex",
             alignItems: "center",
-            gap: "8px"
+            gap: "8px",
+            borderLeft: "1px solid rgba(255,255,255,0.1)",
+            borderBottom: "1px solid rgba(255,255,255,0.1)"
           }}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/icons/zambia_flag.png"
-            alt="Zambia Flag"
-            style={{ width: "26px", height: "18px", objectFit: "cover", borderRadius: "3px" }}
+            src="/icons/zambia_flag_icon.png"
+            alt="Flag of Zambia"
+            style={{ width: "24px", height: "16px", borderRadius: "3px", objectFit: "cover", boxShadow: "0 1px 4px rgba(0,0,0,0.4)" }}
           />
-          <span style={{ fontSize: "11px", fontWeight: 800, color: "#F59E0B" }}>ZAMBIA</span>
+          <span style={{ fontSize: "11px", fontWeight: 800, color: "#34D399", letterSpacing: "0.08em" }}>ZAMBIA</span>
         </div>
 
-        {/* Brand & Tagline */}
-        <div style={{ maxWidth: "600px" }}>
-          <ZamRoamLogo size="large" showTagline={true} />
+        {/* Brand Text Content */}
+        <div style={{ flex: "1 1 320px", maxWidth: "580px" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: "8px", background: "rgba(37, 211, 102, 0.15)", border: "1px solid rgba(37, 211, 102, 0.3)", padding: "4px 12px", borderRadius: "20px", marginBottom: "10px" }}>
+            <span style={{ color: "#34D399", fontSize: "12px", fontWeight: 800, letterSpacing: "0.08em" }}>
+              🇿🇲 OFFICIAL NATIONAL TOURISM DIRECTORY
+            </span>
+          </div>
+
+          <h1
+            style={{
+              margin: 0,
+              fontSize: "30px",
+              fontWeight: 900,
+              color: "#FFFFFF",
+              letterSpacing: "-0.02em",
+              lineHeight: 1.15
+            }}
+          >
+            Roam Zambia. <br />
+            <span style={{ color: "#FB923C" }}>Experience More.</span>
+          </h1>
+
           <p
             style={{
               margin: "12px 0 0",
@@ -466,8 +493,16 @@ export function ZamRoamHeroBanner({
             key={cat.id}
             type="button"
             onClick={() => {
-              if (cat.slug === "pass" && onOpenPass) {
-                onOpenPass();
+              if (cat.id === "deals" || cat.slug === "pass") {
+                if (onOpenPass) onOpenPass();
+                else if (onSelectCategory) onSelectCategory("all");
+              } else if (cat.id === "local_businesses" || cat.slug === "partners") {
+                if (onOpenProvider) onOpenProvider();
+                else if (onOpenPartner) onOpenPartner();
+                else if (onSelectCategory) onSelectCategory("all");
+              } else if (cat.id === "events" || cat.slug === "events") {
+                if (onOpenFestivals) onOpenFestivals();
+                else if (onSelectCategory) onSelectCategory("events");
               } else if (onSelectCategory) {
                 onSelectCategory(cat.slug);
               }
