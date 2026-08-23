@@ -12,6 +12,13 @@ import {
   ZAMBIA_HIGHWAYS_GIS
 } from "../../db/zambiaShapefilesData";
 import { ZamRoamLionCompass } from "./ZamRoamEmblem";
+import ZambiaOsmMap from "./ZambiaOsmMap";
+import {
+  calculateDistanceBreakdown,
+  getDestinationTransportGuide,
+  type DestinationDistanceBreakdown,
+  type DestinationTransportGuide
+} from "../../db/zambiaTransportAmenities";
 
 export interface MapDestinationPin {
   id: string | number;
@@ -571,7 +578,28 @@ interface ZambiaInteractiveMapProps {
 }
 
 export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: ZambiaInteractiveMapProps) {
+  const [mapMode, setMapMode] = useState<"osm" | "shapefile">("osm");
   const [selectedPin, setSelectedPin] = useState<MapDestinationPin | null>(ZAMBIA_TOURISM_PINS[0]);
+
+  // Dynamic Distance Breakdown for Shapefile Inspector
+  const distanceBreakdown = useMemo(() => {
+    if (!selectedPin) return null;
+    return calculateDistanceBreakdown(
+      selectedPin.latitude,
+      selectedPin.longitude,
+      selectedPin.districtName,
+      selectedPin.provinceName
+    );
+  }, [selectedPin]);
+
+  const transportGuide = useMemo(() => {
+    if (!selectedPin) return null;
+    return getDestinationTransportGuide(
+      selectedPin.latitude,
+      selectedPin.longitude,
+      selectedPin.provinceName
+    );
+  }, [selectedPin]);
 
   // Selected district object when clicked directly on shapefile
   const [selectedDistrictInfo, setSelectedDistrictInfo] = useState<{
@@ -817,6 +845,52 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
             )}
           </div>
 
+          {/* Map View Mode Switcher: OSM vs Shapefiles */}
+          <div style={{ display: "flex", alignItems: "center", background: "rgba(0,0,0,0.5)", padding: "4px", borderRadius: "10px", border: "1px solid rgba(37,211,102,0.35)" }}>
+            <button
+              type="button"
+              onClick={() => setMapMode("osm")}
+              style={{
+                background: mapMode === "osm" ? "var(--brand-deep-teal, #0d3838)" : "transparent",
+                color: mapMode === "osm" ? "#fff" : "#94a3b8",
+                border: mapMode === "osm" ? "1.5px solid #10b981" : "none",
+                padding: "6px 12px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                fontWeight: 800,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                transition: "all 0.2s"
+              }}
+            >
+              <span>🗺️</span>
+              <span>OpenStreetMap (OSM)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMapMode("shapefile")}
+              style={{
+                background: mapMode === "shapefile" ? "var(--brand-deep-teal, #0d3838)" : "transparent",
+                color: mapMode === "shapefile" ? "#fff" : "#94a3b8",
+                border: mapMode === "shapefile" ? "1.5px solid #10b981" : "none",
+                padding: "6px 12px",
+                borderRadius: "8px",
+                fontSize: "12px",
+                fontWeight: 800,
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                transition: "all 0.2s"
+              }}
+            >
+              <span>🇿🇲</span>
+              <span>116 Districts GIS</span>
+            </button>
+          </div>
+
           <button
             type="button"
             onClick={() => setIsFullscreen(!isFullscreen)}
@@ -842,8 +916,15 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
         </div>
       </div>
 
-      {/* MASTER TOGGABLE LEGENDS & SHAPEFILE LAYERS PANEL */}
-      <div style={{ background: "rgba(6, 20, 20, 0.98)", borderBottom: "1px solid rgba(255, 255, 255, 0.12)", padding: "12px 20px" }}>
+      {/* Main Map Body: OpenStreetMap Live View OR District Shapefiles GIS */}
+      {mapMode === "osm" ? (
+        <div style={{ padding: "16px 20px" }}>
+          <ZambiaOsmMap initialSelectedPin={selectedPin} onSelectDestination={onSelectDestination} />
+        </div>
+      ) : (
+        <>
+          {/* MASTER TOGGABLE LEGENDS & SHAPEFILE LAYERS PANEL */}
+          <div style={{ background: "rgba(6, 20, 20, 0.98)", borderBottom: "1px solid rgba(255, 255, 255, 0.12)", padding: "12px 20px" }}>
         {/* Layer 1: Destination Categories Multi-Toggles */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px", marginBottom: "10px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
@@ -1839,6 +1920,41 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 </ul>
               </div>
 
+              {/* 3-Tier Headquarters Distance Matrix */}
+              {distanceBreakdown && (
+                <div style={{ background: "rgba(0,0,0,0.35)", borderRadius: "10px", padding: "10px 12px", marginBottom: "12px", border: "1px solid rgba(255,255,255,0.08)" }}>
+                  <span style={{ fontSize: "11px", fontWeight: 800, color: "#34D399", display: "block", marginBottom: "6px" }}>
+                    📏 DISTANCE TO KEY HUBS
+                  </span>
+                  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.85)", display: "flex", flexDirection: "column", gap: "4px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <span>📍 District HQ:</span>
+                      <strong style={{ color: "#38bdf8" }}>{distanceBreakdown.districtHq.name.split(" ")[0]} ({distanceBreakdown.districtHq.distanceKm} km)</strong>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <span>🏛️ Provincial HQ:</span>
+                      <strong style={{ color: "#facc15" }}>{distanceBreakdown.provincialHq.capitalName} ({distanceBreakdown.provincialHq.distanceKm} km)</strong>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <span>🇿🇲 Lusaka Capital:</span>
+                      <strong style={{ color: "#34D399" }}>{distanceBreakdown.nationalHq.distanceKm} km (~{distanceBreakdown.nationalHq.driveTime})</strong>
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginTop: "2px", borderTop: "1px dashed rgba(255,255,255,0.1)", paddingTop: "4px" }}>
+                      <span>✈️ Closest Airport:</span>
+                      <strong style={{ color: "#7dd3fc" }}>{distanceBreakdown.nearestAirport.code} ({distanceBreakdown.nearestAirport.distanceKm} km)</strong>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Transport & Vehicle Guide */}
+              {transportGuide && (
+                <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: "10px", padding: "8px 12px", marginBottom: "12px", fontSize: "11px", color: "rgba(255,255,255,0.8)" }}>
+                  <strong style={{ color: "#fb923c" }}>🚐 Vehicle: </strong>
+                  <span>{transportGuide.roadAccess.recommendedVehicle}</span>
+                </div>
+              )}
+
               {selectedPin.price && (
                 <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: "8px", padding: "10px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px" }}>
                   <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.7)" }}>Visitor Access / Rates:</span>
@@ -1948,6 +2064,8 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
           })}
         </div>
       </div>
+        </>
+      )}
     </div>
   );
 }
