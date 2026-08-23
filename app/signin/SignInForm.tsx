@@ -104,8 +104,8 @@ export default function SignInForm({ returnTo }: SignInFormProps) {
     <main className="nativeAuth">
       <section className="authContainer">
         <Link href="/" className="authBrand">
-          <i>V</i>
-          <span>VISIT PAPUA NEW GUINEA</span>
+          <i>Z</i>
+          <span>ZAMROAM · DISCOVER ZAMBIA</span>
         </Link>
 
         {isAdminDestination && (

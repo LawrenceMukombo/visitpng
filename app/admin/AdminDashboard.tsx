@@ -7,6 +7,7 @@ import AdminMembershipConsole from "../components/AdminMembershipConsole";
 import AdminOperationsConsole from "../components/AdminOperationsConsole";
 import type { ProviderApplicationRecord } from "../../db/providers";
 import {ZAMBIA_REGIONS, ZAMBIA_PROVINCES} from "../../db/zambiaGeography";
+import {ZAMBIAN_LANGUAGE_ZONES, ZambianLanguageZone} from "../../db/zambianLanguages";
 
 type Choice={id:number;name:string;displayOrder?:number;contactName?:string;contactEmail?:string;contactPhone?:string;physicalAddress?:string;sourceUrl?:string;licenseNumber?:string};
 type Province={id:number;code:string;name:string;region:string};
@@ -115,7 +116,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const [providerForm,setProviderForm]=useState({...blankProvider});
 
   const [status,setStatus]=useState("Loading information…");
-  const [section,setSection]=useState<"places"|"locations"|"provinces"|"hierarchy"|"membership_ecosystem"|"providers_vetting"|"operations"|"categories"|"api"|"activity">("places");
+  const [section,setSection]=useState<"places"|"locations"|"provinces"|"hierarchy"|"languages"|"membership_ecosystem"|"providers_vetting"|"operations"|"categories"|"api"|"activity">("places");
   const [providerApps,setProviderApps]=useState<ProviderApplicationRecord[]>([]);
   const [membershipData,setMembershipData]=useState<Parameters<typeof AdminMembershipConsole>[0]["data"]>(null);
   const [search,setSearch]=useState("");
@@ -126,6 +127,30 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const [expandedRegion,setExpandedRegion]=useState<string>("Southern & Lusaka");
   const [expandedCardIds,setExpandedCardIds]=useState<Set<number>>(new Set());
   const [allExpanded,setAllExpanded]=useState(false);
+
+  // Zambian Languages & Phrasebook Admin CRUD State
+  const [languageZones, setLanguageZones] = useState<ZambianLanguageZone[]>(ZAMBIAN_LANGUAGE_ZONES);
+  const [selectedAdminLangZone, setSelectedAdminLangZone] = useState<string>("bemba");
+  const [phraseForm, setPhraseForm] = useState<{
+    id: string;
+    category: "greetings" | "safari" | "market" | "navigation" | "emergency" | "culture";
+    english: string;
+    localText: string;
+    phonetic: string;
+    syllables: string;
+    literalMeaning: string;
+    culturalNote: string;
+  }>({
+    id: "",
+    category: "greetings",
+    english: "",
+    localText: "",
+    phonetic: "",
+    syllables: "",
+    literalMeaning: "",
+    culturalNote: ""
+  });
+  const [districtFilterSearch, setDistrictFilterSearch] = useState<string>("");
 
   const placeFileInputRef=useRef<HTMLInputElement|null>(null);
   const destFileInputRef=useRef<HTMLInputElement|null>(null);
@@ -474,7 +499,8 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
       <button className={section==="places"?"active":""} onClick={()=>setSection("places")}>Facilities & Places</button>
       <button className={section==="locations"?"active":""} onClick={()=>setSection("locations")}>Locations & Districts</button>
       <button className={section==="provinces"?"active":""} onClick={()=>setSection("provinces")}>Provinces</button>
-      <button className={section==="hierarchy"?"active":""} onClick={()=>setSection("hierarchy")}>Smart Cascade Hierarchy</button>
+      <button className={section==="hierarchy"?"active":""} onClick={()=>setSection("hierarchy")}>Smart Cascade Hierarchy (116 Districts)</button>
+      <button className={section==="languages"?"active":""} onClick={()=>setSection("languages")}>🗣️ Languages & Phrasebook</button>
       <button className={section==="membership_ecosystem"?"active":""} onClick={()=>setSection("membership_ecosystem")}>
         👑 Memberships & Partner Ecosystem
       </button>
@@ -880,9 +906,31 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
 
     {section==="hierarchy"&&(
       <section className="adminHierarchySection">
-        <p className="eyebrow">ZAMBIA GEOGRAPHY EXPLORER</p>
-        <h1>Smart Cascade Location Tree (5 Regions · 10 Provinces · 116 Districts)</h1>
-        <p>Explore the complete administrative and tourism geographic hierarchy of the Republic of Zambia:</p>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"12px",marginBottom:"12px"}}>
+          <div>
+            <p className="eyebrow" style={{color:"#C86428",fontWeight:800}}>COMPLETE ZAMBIA GEOGRAPHY REGISTRY</p>
+            <h1 style={{margin:"4px 0"}}>Smart Cascade Location Tree (5 Regions · 10 Provinces · 116 Districts)</h1>
+            <p style={{color:"var(--text-secondary)",fontSize:"13px",margin:0}}>
+              Showing all 116 official administrative districts across the 10 provinces of Zambia with provincial capitals and tourism hotspots:
+            </p>
+          </div>
+          <div style={{minWidth:"260px"}}>
+            <input
+              type="search"
+              placeholder="🔍 Search all 116 districts or capitals..."
+              value={districtFilterSearch}
+              onChange={(e)=>setDistrictFilterSearch(e.target.value)}
+              style={{
+                width:"100%",
+                padding:"8px 12px",
+                borderRadius:"8px",
+                border:"1px solid var(--border-default)",
+                background:"var(--surface-card)",
+                fontSize:"12px"
+              }}
+            />
+          </div>
+        </div>
 
         <div className="hierarchyRegionTabs">
           {ZAMBIA_REGIONS.map(r=>(
@@ -892,41 +940,331 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
               onClick={()=>setExpandedRegion(r.name)}
             >
               <b>{r.label}</b>
-              <small>{ZAMBIA_PROVINCES.filter(p=>p.region===r.name).length} Provinces · {ZAMBIA_PROVINCES.filter(p=>p.region===r.name).reduce((acc,p)=>acc+p.districts.length,0)} Key Districts</small>
+              <small>
+                {ZAMBIA_PROVINCES.filter(p=>p.region===r.name).length} Provinces · {ZAMBIA_PROVINCES.filter(p=>p.region===r.name).reduce((acc,p)=>acc+p.districts.length,0)} Districts
+              </small>
             </button>
           ))}
         </div>
 
         <div className="hierarchyProvinceList">
-          {ZAMBIA_PROVINCES.filter(p=>p.region===expandedRegion).map(prov=>(
-            <article key={prov.code} className="hierarchyProvinceCard">
-              <header>
-                <div>
-                  <span className="provBadge">{prov.code}</span>
-                  <h2>{prov.name}</h2>
-                  <small>Provincial Capital: <b>{prov.capital}</b> · Region: {prov.region} · {prov.districts.length} Key Tourism Districts</small>
-                </div>
-              </header>
+          {ZAMBIA_PROVINCES.filter(p=>districtFilterSearch ? true : p.region===expandedRegion).map(prov=>{
+            const filteredDistricts = prov.districts.filter(d =>
+              !districtFilterSearch ||
+              d.name.toLowerCase().includes(districtFilterSearch.toLowerCase()) ||
+              prov.name.toLowerCase().includes(districtFilterSearch.toLowerCase()) ||
+              prov.capital.toLowerCase().includes(districtFilterSearch.toLowerCase()) ||
+              d.keyDestinations.some(k => k.toLowerCase().includes(districtFilterSearch.toLowerCase()))
+            );
 
-              <div className="hierarchyDistrictsGrid">
-                {prov.districts.map((dist,dIdx)=>(
-                  <div key={dIdx} className="hierarchyDistrictBox">
-                    <div className="distBoxHeader">
-                      <strong>📍 {dist.name}</strong>
-                      <span className={`distCatBadge ${dist.category}`}>{dist.category}</span>
+            if (districtFilterSearch && filteredDistricts.length === 0) return null;
+
+            return (
+              <article key={prov.code} className="hierarchyProvinceCard" style={{marginBottom:"20px"}}>
+                <header style={{display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"8px",paddingBottom:"10px",borderBottom:"1px solid var(--border-default)"}}>
+                  <div>
+                    <span className="provBadge" style={{marginRight:"8px"}}>{prov.code}</span>
+                    <h2 style={{display:"inline",fontSize:"18px"}}>{prov.name}</h2>
+                    <div style={{fontSize:"11px",color:"var(--text-secondary)",marginTop:"3px"}}>
+                      Provincial Capital: <strong style={{color:"#0A4D3C"}}>{prov.capital}</strong> · Region: {prov.region} · <strong>{prov.districts.length} Official Districts</strong>
                     </div>
-                    <ul>
-                      {dist.keyDestinations.map((dest,kIdx)=>(
-                        <li key={kIdx}>• {dest}</li>
-                      ))}
-                    </ul>
                   </div>
-                ))}
-              </div>
-            </article>
-          ))}
+                  <span style={{fontSize:"11px",background:"rgba(10,77,60,0.1)",color:"#0A4D3C",padding:"4px 8px",borderRadius:"6px",fontWeight:700}}>
+                    {filteredDistricts.length} Districts Displayed
+                  </span>
+                </header>
+
+                <div className="hierarchyDistrictsGrid" style={{display:"grid",gridTemplateColumns:"repeat(auto-fill, minmax(280px, 1fr))",gap:"12px",marginTop:"12px"}}>
+                  {filteredDistricts.map((dist,dIdx)=>(
+                    <div key={dIdx} className="hierarchyDistrictBox" style={{background:"var(--surface-card)",border:"1px solid var(--border-default)",borderRadius:"8px",padding:"10px 12px"}}>
+                      <div className="distBoxHeader" style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:"6px"}}>
+                        <strong style={{fontSize:"13px",color:"var(--text-primary)"}}>📍 {dist.name}</strong>
+                        <span className={`distCatBadge ${dist.category}`} style={{fontSize:"9px",textTransform:"uppercase",padding:"2px 6px",borderRadius:"4px",fontWeight:700}}>
+                          {dist.category}
+                        </span>
+                      </div>
+                      <ul style={{margin:0,paddingLeft:"14px",fontSize:"11px",color:"var(--text-secondary)",lineHeight:"1.4"}}>
+                        {dist.keyDestinations.map((dest,kIdx)=>(
+                          <li key={kIdx} style={{marginBottom:"2px"}}>• {dest}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
+    )}
+
+    {section==="languages"&&(
+      <div className="adminGrid">
+        <section className="adminEditor">
+          <p className="eyebrow" style={{color:"#C86428",fontWeight:800}}>ZAMBIAN PHRASEBOOK & DIALECT MANAGEMENT</p>
+          <h1>{phraseForm.id ? "Edit Phrase" : "Add New Zambian Phrase"}</h1>
+          <form onSubmit={async (e) => {
+            e.preventDefault();
+            try {
+              const res = await fetch("/api/admin/languages", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ zoneCode: selectedAdminLangZone, phrase: phraseForm })
+              });
+              const json = await res.json();
+              if (json.success && json.zones) {
+                setLanguageZones([...json.zones]);
+                setPhraseForm({ id: "", category: "greetings", english: "", localText: "", phonetic: "", syllables: "", literalMeaning: "", culturalNote: "" });
+                setStatus(`✓ Phrase "${phraseForm.localText}" saved successfully.`);
+                setTimeout(() => setStatus(""), 4000);
+              } else {
+                setStatus(`✕ Error: ${json.error}`);
+              }
+            } catch {
+              setStatus(`✕ Failed to save phrase.`);
+            }
+          }}>
+            <label>Target Language Zone
+              <select
+                value={selectedAdminLangZone}
+                onChange={(e) => {
+                  setSelectedAdminLangZone(e.target.value);
+                  setPhraseForm({ id: "", category: "greetings", english: "", localText: "", phonetic: "", syllables: "", literalMeaning: "", culturalNote: "" });
+                }}
+              >
+                {languageZones.map((z) => (
+                  <option key={z.code} value={z.code}>
+                    {z.name} ({z.nativeName}) — {z.primaryProvinces.join(", ")}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label>Category
+              <select
+                value={phraseForm.category}
+                onChange={(e) => setPhraseForm({ ...phraseForm, category: e.target.value as "greetings" | "safari" | "market" | "navigation" | "emergency" | "culture" })}
+              >
+                <option value="greetings">👋 Essential Greetings</option>
+                <option value="safari">🦁 Safari & Wildlife</option>
+                <option value="market">🛍️ Market & Dining</option>
+                <option value="navigation">🧭 Directions & Travel</option>
+                <option value="emergency">🚨 Emergency & Help</option>
+                <option value="culture">👑 Cultural Respect & Royal Protocols</option>
+              </select>
+            </label>
+
+            <label>English Meaning
+              <input
+                required
+                placeholder="e.g. Good morning / How are you?"
+                value={phraseForm.english}
+                onChange={(e) => setPhraseForm({ ...phraseForm, english: e.target.value })}
+              />
+            </label>
+
+            <label>Local Zambian Text
+              <input
+                required
+                placeholder="e.g. Mwashibukeni / Mulibwanji"
+                value={phraseForm.localText}
+                onChange={(e) => setPhraseForm({ ...phraseForm, localText: e.target.value })}
+              />
+            </label>
+
+            <div className="adminFields">
+              <label>Phonetic Pronunciation
+                <input
+                  placeholder="e.g. mwah-shee-boo-KEH-nee"
+                  value={phraseForm.phonetic}
+                  onChange={(e) => setPhraseForm({ ...phraseForm, phonetic: e.target.value })}
+                />
+              </label>
+              <label>Syllable Breakdown
+                <input
+                  placeholder="e.g. Mwa-shi-bu-ke-ni"
+                  value={phraseForm.syllables}
+                  onChange={(e) => setPhraseForm({ ...phraseForm, syllables: e.target.value })}
+                />
+              </label>
+            </div>
+
+            <label>Literal Translation / Meaning
+              <input
+                placeholder="e.g. Have you awoken well?"
+                value={phraseForm.literalMeaning}
+                onChange={(e) => setPhraseForm({ ...phraseForm, literalMeaning: e.target.value })}
+              />
+            </label>
+
+            <label>Cultural Etiquette Note
+              <textarea
+                rows={2}
+                placeholder="e.g. Clapping hands gently twice or slight bow indicates deep respect."
+                value={phraseForm.culturalNote}
+                onChange={(e) => setPhraseForm({ ...phraseForm, culturalNote: e.target.value })}
+              />
+            </label>
+
+            <div className="adminActions" style={{marginTop:"10px"}}>
+              <button type="submit">
+                {phraseForm.id ? "Update Phrase" : "Add Phrase to Dictionary"}
+              </button>
+              {phraseForm.id && (
+                <button
+                  type="button"
+                  className="secondary"
+                  onClick={() => setPhraseForm({ id: "", category: "greetings", english: "", localText: "", phonetic: "", syllables: "", literalMeaning: "", culturalNote: "" })}
+                >
+                  Cancel
+                </button>
+              )}
+              {phraseForm.localText && (
+                <button
+                  type="button"
+                  style={{background:"#0A4D3C",color:"#fff"}}
+                  onClick={() => {
+                    if (typeof window !== "undefined" && "speechSynthesis" in window) {
+                      window.speechSynthesis.cancel();
+                      const u = new SpeechSynthesisUtterance(phraseForm.localText);
+                      u.rate = 0.85;
+                      window.speechSynthesis.speak(u);
+                    }
+                  }}
+                >
+                  🔊 Test Audio
+                </button>
+              )}
+            </div>
+          </form>
+        </section>
+
+        <section className="adminList">
+          {(() => {
+            const currentZone = languageZones.find((z) => z.code === selectedAdminLangZone) || languageZones[0];
+            return (
+              <div>
+                <header>
+                  <div>
+                    <p className="eyebrow" style={{color:"#0A4D3C",fontWeight:800}}>{currentZone.name.toUpperCase()} DICTIONARY</p>
+                    <h2>{currentZone.phrases.length} Phrases Configured in {currentZone.name}</h2>
+                    <p style={{fontSize:"11px",color:"var(--text-secondary)",margin:"2px 0 0"}}>
+                      Spoken across: {currentZone.primaryProvinces.join(", ")} · Speakers: {currentZone.speakerCount}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setPhraseForm({ id: "", category: "greetings", english: "", localText: "", phonetic: "", syllables: "", literalMeaning: "", culturalNote: "" })}
+                    style={{background:"#0A4D3C",color:"#fff",border:"none",padding:"6px 12px",borderRadius:"6px",fontSize:"11px",fontWeight:700,cursor:"pointer"}}
+                  >
+                    + Add New Phrase
+                  </button>
+                </header>
+
+                <div style={{display:"grid",gap:"10px",marginTop:"14px"}}>
+                  {currentZone.phrases.map((phrase) => (
+                    <div
+                      key={phrase.id}
+                      style={{
+                        background:"var(--surface-card)",
+                        border:"1px solid var(--border-default)",
+                        borderRadius:"10px",
+                        padding:"12px 14px",
+                        boxShadow:"0 2px 5px rgba(0,0,0,0.04)",
+                        display:"flex",
+                        justifyContent:"space-between",
+                        alignItems:"flex-start",
+                        gap:"12px"
+                      }}
+                    >
+                      <div style={{flex:1}}>
+                        <div style={{display:"flex",alignItems:"center",gap:"8px",marginBottom:"4px"}}>
+                          <span style={{fontSize:"9px",background:"rgba(200,100,40,0.15)",color:"#C86428",padding:"2px 6px",borderRadius:"4px",fontWeight:800,textTransform:"uppercase"}}>
+                            {phrase.category}
+                          </span>
+                          <strong style={{fontSize:"14px",color:"#0A4D3C"}}>{phrase.localText}</strong>
+                          <span style={{fontSize:"11px",color:"var(--text-secondary)",fontStyle:"italic"}}>
+                            [{phrase.phonetic}]
+                          </span>
+                        </div>
+                        <div style={{fontSize:"12px",color:"var(--text-primary)",fontWeight:600,marginBottom:"3px"}}>
+                          🇬🇧 {phrase.english}
+                        </div>
+                        {phrase.literalMeaning && (
+                          <div style={{fontSize:"11px",color:"var(--text-secondary)",marginBottom:"2px"}}>
+                            <em>Literal: &quot;{phrase.literalMeaning}&quot;</em> · Syllables: <code>{phrase.syllables}</code>
+                          </div>
+                        )}
+                        {phrase.culturalNote && (
+                          <div style={{fontSize:"10px",color:"var(--text-secondary)",background:"rgba(10,77,60,0.04)",padding:"4px 8px",borderRadius:"6px",marginTop:"4px"}}>
+                            💡 <strong>Etiquette:</strong> {phrase.culturalNote}
+                          </div>
+                        )}
+                      </div>
+
+                      <div style={{display:"flex",flexDirection:"column",gap:"4px",flexShrink:0}}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (typeof window !== "undefined" && "speechSynthesis" in window) {
+                              window.speechSynthesis.cancel();
+                              const u = new SpeechSynthesisUtterance(phrase.localText);
+                              u.rate = 0.85;
+                              window.speechSynthesis.speak(u);
+                            }
+                          }}
+                          style={{padding:"4px 8px",fontSize:"10px",background:"var(--surface-subtle)",border:"1px solid var(--border-default)",borderRadius:"4px",cursor:"pointer"}}
+                        >
+                          🔊 Listen
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setPhraseForm({
+                              id: phrase.id,
+                              category: phrase.category,
+                              english: phrase.english,
+                              localText: phrase.localText,
+                              phonetic: phrase.phonetic,
+                              syllables: phrase.syllables || "",
+                              literalMeaning: phrase.literalMeaning || "",
+                              culturalNote: phrase.culturalNote || ""
+                            });
+                          }}
+                          style={{padding:"4px 8px",fontSize:"10px",background:"#0A4D3C",color:"#fff",border:"none",borderRadius:"4px",cursor:"pointer",fontWeight:700}}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (!confirm(`Delete phrase "${phrase.localText}"?`)) return;
+                            try {
+                              const res = await fetch(`/api/admin/languages?zoneCode=${selectedAdminLangZone}&phraseId=${phrase.id}`, {
+                                method: "DELETE"
+                              });
+                              const json = await res.json();
+                              if (json.success && json.zones) {
+                                setLanguageZones([...json.zones]);
+                                setStatus(`✓ Deleted phrase "${phrase.localText}".`);
+                                setTimeout(() => setStatus(""), 3500);
+                              }
+                            } catch {
+                              setStatus("✕ Failed to delete phrase.");
+                            }
+                          }}
+                          style={{padding:"4px 8px",fontSize:"10px",background:"rgba(220,53,69,0.1)",color:"#dc3545",border:"1px solid #dc3545",borderRadius:"4px",cursor:"pointer"}}
+                        >
+                          ✕ Delete
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+        </section>
+      </div>
     )}
 
     {section==="categories"&&(
