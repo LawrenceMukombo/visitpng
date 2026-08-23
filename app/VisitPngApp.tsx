@@ -307,17 +307,86 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   </main>;
 }
 
-function Header({viewer,profile,currency,onCurrencyChange,countryCode}:{viewer:Viewer;profile:()=>void;currency:CurrencyCode;onCurrencyChange:(c:CurrencyCode)=>void;countryCode:string;onCountryChange?:(c:string)=>void}){
+function Header({viewer,profile,currency,onCurrencyChange,countryCode:_countryCode}:{viewer:Viewer;profile:()=>void;currency:CurrencyCode;onCurrencyChange:(c:CurrencyCode)=>void;countryCode:string;onCountryChange?:(c:string)=>void}){
   const initials=viewer.signedIn?viewer.displayName.split(/\s|@/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase():"GU";
-  return <header>
-    <button className="brand" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "flex", alignItems: "center" }}>
+  return <header style={{ height: "68px", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 18px", background: "var(--brand-deep-teal)" }}>
+    <button className="brand" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "inline-flex", alignItems: "center" }}>
       <ZamRoamLogo size="small" showTagline={false} />
     </button>
     {viewer.signedIn&&<div className="headerWelcome"><small>Welcome</small><strong>{viewer.displayName}</strong></div>}
-    <nav>
-      <span className="destinationPill">🇿🇲 Zambia</span>
+    <nav style={{ display: "inline-flex", alignItems: "center", gap: "8px", height: "34px", flexShrink: 0 }}>
+      <span
+        className="destinationPill"
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          height: "34px",
+          padding: "0 12px",
+          borderRadius: "99px",
+          background: "rgba(255, 255, 255, 0.14)",
+          border: "1px solid rgba(255, 255, 255, 0.25)",
+          color: "#ffffff",
+          fontSize: "11.5px",
+          fontWeight: 700,
+          whiteSpace: "nowrap",
+          boxSizing: "border-box",
+          lineHeight: 1,
+          verticalAlign: "middle"
+        }}
+      >
+        🇿🇲 Zambia
+      </span>
       <CurrencySelector currentCurrency={currency} onChange={onCurrencyChange}/>
-      {viewer.signedIn?<button className="avatar" onClick={profile}>{initials}</button>:<a className="signInMini" href={viewer.signInPath}>Sign in</a>}
+      {viewer.signedIn?(
+        <button
+          className="avatar"
+          onClick={profile}
+          style={{
+            width: "34px",
+            height: "34px",
+            borderRadius: "50%",
+            background: "var(--brand-premium-gold)",
+            color: "var(--brand-deep-teal)",
+            fontSize: "11px",
+            fontWeight: 800,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "none",
+            cursor: "pointer",
+            flexShrink: 0
+          }}
+        >
+          {initials}
+        </button>
+      ):(
+        <a
+          className="signInMini"
+          href={viewer.signInPath}
+          style={{
+            height: "34px",
+            padding: "0 16px",
+            borderRadius: "99px",
+            fontSize: "11.5px",
+            fontWeight: 800,
+            display: "inline-flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxSizing: "border-box",
+            whiteSpace: "nowrap",
+            background: "var(--action-primary)",
+            color: "var(--brand-white)",
+            textDecoration: "none",
+            border: "none",
+            boxShadow: "0 2px 8px var(--shadow-color-strong)",
+            lineHeight: 1,
+            verticalAlign: "middle"
+          }}
+        >
+          Sign in
+        </a>
+      )}
     </nav>
   </header>;
 }

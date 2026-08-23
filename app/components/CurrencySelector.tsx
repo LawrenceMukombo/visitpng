@@ -15,13 +15,16 @@ export default function CurrencySelector({currentCurrency, onChange}: CurrencySe
       style={{
         display: "inline-flex",
         alignItems: "center",
+        justifyContent: "center",
         gap: "6px",
         background: "rgba(255, 255, 255, 0.14)",
         border: "1px solid rgba(255, 255, 255, 0.25)",
         borderRadius: "99px",
         padding: "0 10px",
         height: "34px",
-        boxSizing: "border-box"
+        boxSizing: "border-box",
+        lineHeight: 1,
+        verticalAlign: "middle"
       }}
     >
       <span style={{ fontSize: "12px", lineHeight: 1, display: "inline-flex", alignItems: "center" }}>{selected.flag}</span>
@@ -38,6 +41,7 @@ export default function CurrencySelector({currentCurrency, onChange}: CurrencySe
           fontSize: "11.5px",
           fontWeight: 700,
           padding: 0,
+          margin: 0,
           cursor: "pointer",
           lineHeight: "34px",
           height: "34px",
