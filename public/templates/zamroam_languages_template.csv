@@ -1,58 +1,120 @@
 zone_code,category,english,local_text,phonetic,syllables,literal_meaning,cultural_note
-bemba,greetings,Hello,Muli Shani,moo-lee shah-nee,Mu-li Sha-ni,General Greeting,Universal greeting across Bemba regions
-bemba,greetings,How are you? (Informal),Uli shani?,oo-lee shah-nee,U-li sha-ni,How are you?,Informal greeting for friends
-bemba,greetings,How are you? (Polite),Muli shani!,moo-lee shah-nee,Mu-li sha-ni!,How are you?,Respectful greeting for elders and visitors
-bemba,greetings,My name is...,Ishina lyandi ni ne...,ee-shee-nah lyahn-dee nee neh,I-shi-na lyan-di ni ne,My name is indeed,Introduction statement
-bemba,greetings,Goodbye (Informal),Shalapo,shah-lah-poh,Sha-la-po,Stay there,Casual departure farewell
-bemba,greetings,Goodbye (Polite),Shalenipo mukwai,shah-leh-nee-poh moo-kwhy,Sha-le-ni-po mu-kwai,Stay peacefully with respect,Polite farewell to elders/hosts
-bemba,greetings,Thank you (Informal),Natotela,nah-toh-teh-lah,Na-to-te-la,I thank you,Standard gratitude
-bemba,greetings,Thank you (Polite),Natotela mukwai,nah-toh-teh-lah moo-kwhy,Na-to-te-la mu-kwai,I thank you sir/madam,Polite gratitude with honorific
-nyanja,greetings,Hello,Bwanji,bwah-njee,Bwa-nji,How is it,Everyday greeting in markets and streets
-nyanja,greetings,How are you? (Informal),Uli bwanji?,oo-lee bwah-njee,U-li bwa-nji,How are you?,Informal inquiry
-nyanja,greetings,How are you? (Polite),Muli bwanji!,moo-lee bwah-njee,Mu-li bwa-nji,How are you?,Respectful greeting across Lusaka & Eastern
-nyanja,greetings,My name is...,Dzina langa ndine...,dzee-nah lahn-gah n-dee-neh,Dzi-na lan-ga ndi-ne,My name I am,Introduction phrase
-nyanja,greetings,Goodbye,Pitani bwino / Salani bwino,pee-tah-nee bwee-noh / sah-lah-nee bwee-noh,Pi-ta-ni bwi-no,Go well / Stay well,Traditional farewell blessing
-nyanja,greetings,Thank you (Informal),Dzikomo,dzee-koh-moh,Dzi-ko-mo,Thank you / Excuse me,Universal Zambian courtesy word
-nyanja,greetings,Thank you (Polite),Dzikomo kwambiri,dzee-koh-moh kwahm-bee-ree,Dzi-ko-mo kwam-bi-ri,Thank you very much,Deep appreciation
-tonga,greetings,Hello (Informal),Wapona,wah-poh-nah,Wa-po-na,You survive,Casual greeting among peers
-tonga,greetings,Hello (Polite),Mwapona,mwah-poh-nah,Mwa-po-na,You survive peacefully,Respectful greeting in Southern Province
-tonga,greetings,How are you? (Polite),Muli buti?,moo-lee boo-tee,Mu-li bu-ti,How are you in state?,Respectful health inquiry
-tonga,greetings,My name is...,Izyina lyangu ndime...,ee-zyee-nah lyahn-goo n-dee-meh,I-zyi-na lyan-gu ndi-me,My name I am,Self-introduction
-tonga,greetings,Goodbye,Muchaale kabotu,moo-chah-leh kah-boh-too,Mu-chaa-le ka-bo-tu,May you remain well,Traditional Tonga farewell
-tonga,greetings,Thank you (Informal),Ndalumba,n-dah-loom-bah,Nda-lum-ba,I thank you,Individual gratitude
-tonga,greetings,Thank you (Polite),Twalumba,twah-loom-bah,Twa-lum-ba,We thank you,Collective respectful gratitude
-lozi,greetings,Hello (General),Eeni, sha,eh-nee shah,Ee-ni, sha,Yes friend/greetings,Universal Barotse affirmation
-lozi,greetings,Hello (Informal),Lumela,loo-meh-lah,Lu-me-la,Greetings,Informal greeting among peers
-lozi,greetings,Hello (Polite),Mu lumeleng' sha,moo loo-meh-leng shah,Mu lu-me-leng sha,Greetings to you respectfully,Polite honorific greeting to elders
-lozi,greetings,My name is...,K'i na...,kee nah,K'i na,It is I,Introduction statement
-lozi,greetings,Goodbye (Informal),Siyala foo,see-yah-lah foh,Si-ya-la foo,Stay here,Casual farewell
-lozi,greetings,Goodbye (Polite),Basyale foo,bah-syah-leh foh,Ba-sya-le foo,Remain peacefully here,Respectful farewell to elders
-lozi,greetings,Thank you (Informal),Luitumezi,loo-ee-too-meh-zee,Lu-i-tu-me-zi,We thank you,Standard gratitude
-lozi,greetings,Thank you (Polite),Luitumezi shangwe,loo-ee-too-meh-zee shahng-weh,Lu-i-tu-me-zi shang-we,We thank you sir/madam,Deep gratitude with honorific
-kaonde,greetings,Hello (Informal),Byepi?,byeh-pee,Bye-pi,How is it?,Casual greeting
-kaonde,greetings,Hello (Polite),Muji byepi,moo-jee byeh-pee,Mu-ji bye-pi,How are you?,Polite greeting
-kaonde,greetings,How are you? (Informal),Muji byepi?,moo-jee byeh-pee,Mu-ji bye-pi,How are you?,Informal inquiry
-kaonde,greetings,How are you? (Polite),Baji byepi mwane?,bah-jee byeh-pee mwah-neh,Ba-ji bye-pi mwa-ne,How are they (you) peacefully?,Honorific inquiry for elders
-kaonde,greetings,My name is...,Jizhina jami yami...,jee-zhee-nah jah-mee yah-mee,Ji-zhi-na ja-mi ya-mi,My name is I,Introduction
-kaonde,greetings,Goodbye (Informal),Shalaipo,shah-lah-ee-poh,Sha-lai-po,Stay there,Casual farewell
-kaonde,greetings,Goodbye (Polite),Shalaipo mwane,shah-lah-ee-poh mwah-neh,Sha-lai-po mwa-ne,Stay peacefully with honor,Respectful farewell
-kaonde,greetings,Thank you (Informal),Nasanta bingi,nah-sahn-tah been-gee,Na-san-ta bin-gi,I thank you very much,Everyday gratitude
-kaonde,greetings,Thank you (Polite),Twasanta mwane,twah-sahn-tah mwah-neh,Twa-san-ta mwa-ne,We thank you with respect,Polite honorific gratitude
-luvale,greetings,Hello (Informal),Ngachili?,n-gah-chee-lee,Nga-chi-li,How is it?,Casual greeting
-luvale,greetings,Hello (Polite),Ngachili mwane,n-gah-chee-lee mwah-neh,Nga-chi-li mwa-ne,Greetings with respect,Respectful greeting
-luvale,greetings,How are you? (Informal),Ulingachili?,oo-leen-gah-chee-lee,U-li-nga-chi-li,How are you?,Informal inquiry
-luvale,greetings,How are you? (Polite),Muli ngachili mwane?,moo-lee n-gah-chee-lee mwah-neh,Mu-li nga-chi-li mwa-ne,How are you peacefully?,Honorific inquiry
-luvale,greetings,My name is...,Lijina lyami yami...,lee-jee-nah lyah-mee yah-mee,Li-ji-na lya-mi ya-mi,My name is I,Introduction
-luvale,greetings,Goodbye (Informal),Musale kanawa / Tunasalisa / Salenuho,moo-sah-leh kah-nah-wah,Mu-sa-le ka-na-wa,Remain well,Casual farewell
-luvale,greetings,Goodbye (Polite),Musale kanawa mwane / Tunasalisa mwane / Salenuho mwane,moo-sah-leh kah-nah-wah mwah-neh,Mu-sa-le ka-na-wa mwa-ne,Remain peacefully with honor,Respectful farewell
-luvale,greetings,Thank you (Informal),Vulye,voo-lyeh,Vu-lye,Thank you,Everyday thanks
-luvale,greetings,Thank you (Polite),Vulye mwane,voo-lyeh mwah-neh,Vu-lye mwa-ne,Thank you with respect,Polite gratitude
-lunda,greetings,Hello (Informal),Ngahi?,n-gah-hee,Nga-hi,How is it?,Casual greeting in Mwinilunga & Ikelenge
-lunda,greetings,Hello (Polite),Ngahi mwani,n-gah-hee mwah-nee,Nga-hi mwa-ni,Greetings with respect,Respectful greeting
-lunda,greetings,How are you? (Informal),Mudingâhi?,moo-deen-gah-hee,Mu-din-ga-hi,How are you?,Casual inquiry
-lunda,greetings,How are you? (Polite),Mundingâhi mwani?,moon-deen-gah-hee mwah-nee,Mun-din-ga-hi mwa-ni,How are you peacefully?,Respectful inquiry
-lunda,greetings,My name is...,Jina dami yami...,jee-nah dah-mee yah-mee,Ji-na da-mi ya-mi,My name is I,Introduction
-lunda,greetings,Goodbye (Informal),Chunahi,choo-nah-hee,Chu-na-hi,Stay well,Casual farewell
-lunda,greetings,Goodbye (Polite),Chunahi mwani,choo-nah-hee mwah-nee,Chu-na-hi mwa-ni,Remain peacefully with honor,Respectful farewell
-lunda,greetings,Thank you (Informal),Vudye,voo-dyeh,Vu-dye,Thank you,Everyday gratitude
-lunda,greetings,Thank you (Polite),Vudye mwani,voo-dyeh mwah-nee,Vu-dye mwa-ni,Thank you with respect,Polite gratitude
+bemba,greetings,How are you? / Greetings,Muli shani mukwai?,moo-lee shah-nee moo-kwhy,Mu-li sha-ni mu-kwai,"How are you, respectfully?",Polite general Bemba greeting; mukwai adds respect.
+bemba,greetings,Good morning / How did you wake?,Mwaukeni mukwai?,mwah-oo-keh-nee moo-kwhy,Mwa-u-ke-ni mu-kwai,How did you wake?,Traditional morning greeting.
+bemba,greetings,Good afternoon / How is the day?,Mwachibeni mukwai?,mwah-chee-beh-nee moo-kwhy,Mwa-chi-be-ni mu-kwai,How have you spent the day?,Polite daytime/afternoon greeting.
+bemba,greetings,I am fine / Peaceful,Ndi bwino mukwai,n-dee bwee-noh moo-kwhy,Ndi bwi-no mu-kwai,I am well/fine.,Common polite response.
+bemba,greetings,Thank you,Natotela mukwai,nah-toh-teh-lah moo-kwhy,Na-to-te-la mu-kwai,I thank you.,Standard polite gratitude.
+bemba,greetings,Thank you very much,Natotela sana mukwai,nah-toh-teh-lah sah-nah moo-kwhy,Na-to-te-la sa-na mu-kwai,I thank you very much.,Used for strong appreciation.
+bemba,greetings,Welcome (to visitors),Mwaiseni mukwai,mwah-ee-seh-nee moo-kwhy,Mwa-i-se-ni mu-kwai,You are welcome / come in.,Warm welcome to visitors.
+bemba,greetings,Goodbye (to person staying / Stay well),Shalenipo bwino mukwai,shah-leh-nee-poh bwee-noh moo-kwhy,Sha-le-ni-po bwi-no mu-kwai,Remain well.,Said by the person who is leaving.
+bemba,greetings,Goodbye (to person leaving / Go safely),Kabenipo bwino mukwai,kah-beh-nee-poh bwee-noh moo-kwhy,Ka-be-ni-po bwi-no mu-kwai,Go/be well.,Farewell to the person departing.
+bemba,safari,The waterfall is magnificent,Icipoma ici cawama sana,ee-chee-poh-mah ee-chee chah-wah-mah sah-nah,I-ci-po-ma i-ci ca-wa-ma sa-na,This waterfall is very beautiful.,Natural tourist compliment.
+bemba,safari,Lion / Elephant / Leopard,Inkalamo / Insofu / Ingwe,een-kah-lah-moh / een-soh-foo / een-gweh,In-ka-la-mo / In-so-fu / In-gwe,Lion / Elephant / Leopard,Wildlife vocabulary.
+bemba,navigation,Where is the road to...?,Musebo uya ku... uli kwi?,moo-seh-boh oo-yah koo oo-lee kwee,Mu-se-bo u-ya ku u-li kwi,Where is the road that goes to...?,Useful when asking directions.
+bemba,market,How much is this?,Ni shinga ici mukwai?,nee sheen-gah ee-chee moo-kwhy,Ni shi-nga i-ci mu-kwai,How much is this?,Polite market question.
+bemba,market,Drinking water / Nshima (staple meal),Amenshi yakunwa / Ubwali,ah-mehn-shee yah-koon-wah / oo-bwah-lee,A-men-shi ya-ku-nwa / U-bwa-li,Drinking water / Nshima,Ubwali is the Bemba staple maize meal.
+bemba,market,The food is very delicious,Icakulya ici cawama sana,ee-chah-kool-yah ee-chee chah-wah-mah sah-nah,I-ca-ku-lya i-ci ca-wa-ma sa-na,This food is very good.,Compliment for food.
+bemba,emergency,Please help me,Nafweniko mukwai,nah-fweh-nee-koh moo-kwhy,Na-fwe-ni-ko mu-kwai,Please help me.,Polite request for assistance.
+bemba,emergency,I need a doctor / clinic,Ndefwaya dokota / ukuya ku cipatala,n-deh-fwah-yah doh-koh-tah / oo-yah koo chee-pah-tah-lah,Nde-fwa-ya do-ko-ta / u-ya ku ci-pa-ta-la,I need/want a doctor / to go to a clinic or hospital.,Emergency/health phrase.
+nyanja,greetings,How are you? / Greetings,Muli bwanji?,moo-lee bwahn-jee,Mu-li bwa-nji,How are you?,Respectful/plural general greeting.
+nyanja,greetings,Good morning / How did you wake?,Mwauka bwanji? / Mwadzuka bwanji?,mwah-oo-kah bwahn-jee / mwah-dzoo-kah bwahn-jee,Mwa-u-ka bwa-nji / Mwa-dzu-ka bwa-nji,How have you woken?,Standard morning greeting.
+nyanja,greetings,Good afternoon / How is the day?,Mwasewela bwanji? / Mwachoma bwanji?,mwah-seh-weh-lah bwahn-jee / mwah-choh-mah bwahn-jee,Mwa-se-we-la bwa-nji / Mwa-cho-ma bwa-nji,How is your afternoon/day?,Afternoon forms vary by community.
+nyanja,greetings,I am fine / Peaceful,Ndili bwino,n-dee-lee bwee-noh,Ndi-li bwi-no,I am well.,Standard response.
+nyanja,greetings,Thank you,Zikomo,zee-koh-moh,Zi-ko-mo,Thank you.,Standard Nyanja gratitude.
+nyanja,greetings,Thank you very much,Zikomo kwambiri,zee-koh-moh kwahm-bee-ree,Zi-ko-mo kwa-mbi-ri,Thank you very much.,Strong appreciation.
+nyanja,greetings,Welcome (to visitors),Mwalandiridwa,mwah-lahn-dee-ree-dwah,Mwa-la-ndi-ri-dwa,You are welcome.,Welcome to a visitor/guest.
+nyanja,greetings,Goodbye (to person staying / Stay well),Mutsale bwino,moo-tsah-leh bwee-noh,Mu-tsa-le bwi-no,Remain well.,Said to the person staying.
+nyanja,greetings,Goodbye (to person leaving / Go safely),Muyende bwino,moo-yehn-deh bwee-noh,Mu-ye-nde bwi-no,Travel/go well.,Said to the person leaving.
+nyanja,safari,The waterfall is magnificent,Mathithi awa ndi okongola kwambiri,mah-thee-thee ah-wah n-dee oh-kohn-goh-lah kwahm-bee-ree,Ma-thi-thi a-wa ndi o-ko-ngo-la kwa-mbi-ri,These waterfalls are very beautiful.,Tourist compliment.
+nyanja,safari,Lion / Elephant / Leopard,Mkango / Njovu / Kambuku,m-kahn-goh / n-joh-voo / kahm-boo-koo,Mka-ngo / Njo-vu / Ka-mbu-ku,Lion / Elephant / Leopard,Common wildlife names.
+nyanja,navigation,Where is the road to...?,Njira yopita ku... ili kuti?,n-jee-rah yoh-pee-tah koo ee-lee koo-tee,Nji-ra yo-pi-ta ku i-li ku-ti,Where is the road/path going to...?,Useful direction question.
+nyanja,market,How much is this?,Ichi ndi zingati?,ee-chee n-dee zeen-gah-tee,I-chi ndi zi-nga-ti,How much is this?,Market price question.
+nyanja,market,Drinking water / Nshima (staple meal),Madzi akumwa / Nsima,mah-dzee ah-koom-wah / n-see-mah,Ma-dzi a-ku-mwa / Nsi-ma,Drinking water / Nshima,Nsima is the staple maize meal.
+nyanja,market,The food is very delicious,Chakudya ichi ndi chokoma kwambiri,chah-koo-dyah ee-chee n-dee choh-koh-mah kwahm-bee-ree,Cha-ku-dya i-chi ndi cho-ko-ma kwa-mbi-ri,This food is very tasty.,Food compliment.
+nyanja,emergency,Please help me,Chonde ndithandizeni,chon-deh n-dee-thahn-dee-zeh-nee,Cho-nde ndi-tha-ndi-ze-ni,Please help me.,Polite emergency request.
+nyanja,emergency,I need a doctor / clinic,Ndikufuna dokotala / chipatala,n-dee-koo-foo-nah doh-koh-tah-lah / chee-pah-tah-lah,Ndi-ku-fu-na do-ko-ta-la / chi-pa-ta-la,I need/want a doctor / clinic or hospital.,Health emergency phrase.
+kaonde,greetings,How are you? / Greetings,Muji byepi mwane?,moo-jee byeh-pee mwah-neh,Mu-ji bye-pi mwa-ne,"How are you, respectfully?",Standard polite Kaonde greeting.
+kaonde,greetings,Good morning / How did you wake?,Mwabuka byepi mwane?,mwah-boo-kah byeh-pee mwah-neh,Mwa-bu-ka bye-pi mwa-ne,How did you wake?,Respectful morning greeting.
+kaonde,greetings,Good afternoon / How is the day?,Kimute mwane!,kee-moo-teh mwah-neh,Ki-mu-te mwa-ne,Good afternoon.,Established Kaonde afternoon greeting.
+kaonde,greetings,I am fine / Peaceful,Njitu bulongo mwane,n-jee-too boo-lohn-goh mwah-neh,Nji-tu bu-lo-ngo mwa-ne,I am well/fine.,Standard response.
+kaonde,greetings,Thank you,Nasanta mwane,nah-sahn-tah mwah-neh,Na-san-ta mwa-ne,I thank you.,Polite gratitude.
+kaonde,greetings,Thank you very much,Nasanta bingi mwane,nah-sahn-tah been-gee mwah-neh,Na-san-ta bi-ngi mwa-ne,I thank you very much.,Strong appreciation.
+kaonde,greetings,Welcome (to visitors),Mwaiyai mwane,mwah-ee-yah-ee mwah-neh,Mwa-i-ya-i mwa-ne,Welcome.,Greeting used to welcome visitors.
+kaonde,greetings,Goodbye (to person staying / Stay well),Shalaipo bulongo mwane,shah-lah-ee-poh boo-lohn-goh mwah-neh,Sha-lai-po bu-lo-ngo mwa-ne,Remain well.,Farewell to a person staying.
+kaonde,greetings,Goodbye (to person leaving / Go safely),Endai bulongo mwane,ehn-dah-ee boo-lohn-goh mwah-neh,En-da-i bu-lo-ngo mwa-ne,Go well.,Farewell to a person leaving.
+kaonde,safari,The waterfall is magnificent,Kipoma kiji bulongo bingi,kee-poh-mah kee-jee boo-lohn-goh been-gee,Ki-po-ma ki-ji bu-lo-ngo bi-ngi,The waterfall is very beautiful.,Tourism phrase; local wording should be audio-validated.
+kaonde,safari,Lion / Elephant / Leopard,Nkhalamo / Nzovu / Nkashi,n-khah-lah-moh / n-zoh-voo / n-kah-shee,Nkha-la-mo / Nzo-vu / Nka-shi,Lion / Elephant / Leopard,Wildlife vocabulary; regional forms may vary.
+kaonde,navigation,Where is the road to...?,Nzila ya kuya ku... iji kwepi?,n-zee-lah yah koo-yah koo ee-jee kweh-pee,Nzi-la ya ku-ya ku i-ji kwe-pi,Where is the road to...?,Direction phrase.
+kaonde,market,How much is this?,Kino kiji bunga?,kee-noh kee-jee boon-gah,Ki-no ki-ji bu-nga,How much is this?,Price question; native-speaker validation recommended.
+kaonde,market,Drinking water / Nshima (staple meal),Meema a kunwa / Nshima,meh-mah ah koo-nwah / n-shee-mah,Mee-ma a ku-nwa / Nshi-ma,Drinking water / Nshima,Common everyday food vocabulary.
+kaonde,market,The food is very delicious,Byakulya bino byawama bingi,byah-koo-lyah bee-noh byah-wah-mah been-gee,Bya-ku-lya bi-no bya-wa-ma bi-ngi,This food is very good.,Food compliment.
+kaonde,emergency,Please help me,Ngafweniko mwane,n-gah-fweh-nee-koh mwah-neh,Nga-fwe-ni-ko mwa-ne,Please help me.,Emergency request; audio should be native-speaker checked.
+kaonde,emergency,I need a doctor / clinic,Ngitonda dokota / chipatala,n-gee-tohn-dah doh-koh-tah / chee-pah-tah-lah,Ngi-to-nda do-ko-ta / chi-pa-ta-la,I need a doctor / clinic.,Health phrase; loanwords are widely understood.
+lunda,greetings,How are you? / Greetings,Mudi ngahi mwani?,moo-dee ngah-hee mwah-nee,Mu-di nga-hi mwa-ni,How are you?,Respectful Lunda greeting.
+lunda,greetings,Good morning / How did you wake?,Ntetemena mwani,n-teh-teh-meh-nah mwah-nee,Nte-te-me-na mwa-ni,Good morning.,Documented Lunda morning greeting.
+lunda,greetings,Good afternoon / How is the day?,Melela mwani,meh-leh-lah mwah-nee,Me-le-la mwa-ni,Good day/evening.,Common later-day greeting; usage varies locally.
+lunda,greetings,I am fine / Peaceful,Nidi chachiwahi mwani,nee-dee chah-chee-wah-hee mwah-nee,Ni-di cha-chi-wa-hi mwa-ni,I am well.,Standard response.
+lunda,greetings,Thank you,Nasakalili mwani,nah-sah-kah-lee-lee mwah-nee,Na-sa-ka-li-li mwa-ni,Thank you.,Standard gratitude.
+lunda,greetings,Thank you very much,Nasakalili nankashi mwani,nah-sah-kah-lee-lee nahn-kah-shee mwah-nee,Na-sa-ka-li-li nan-ka-shi mwa-ni,Thank you very much.,Strong appreciation; regional wording may vary.
+lunda,greetings,Welcome (to visitors),Shikenu mwani,shee-keh-noo mwah-nee,Shi-ke-nu mwa-ni,Welcome.,Documented welcome greeting.
+lunda,greetings,Goodbye (to person staying / Stay well),Mushalu chiwahi mwani,moo-shah-loo chee-wah-hee mwah-nee,Mu-sha-lu chi-wa-hi mwa-ni,Stay well.,Said to a person remaining.
+lunda,greetings,Goodbye (to person leaving / Go safely),Mwenduhu chiwahi mwani,mwehn-doo-hoo chee-wah-hee mwah-nee,Mwe-ndu-hu chi-wa-hi mwa-ni,Go well.,Said to a person departing.
+lunda,safari,The waterfall is magnificent,Chipoma chidi chachiwahi nankashi,chee-poh-mah chee-dee chah-chee-wah-hee nahn-kah-shee,Chi-po-ma chi-di cha-chi-wa-hi nan-ka-shi,The waterfall is very beautiful.,Tourism phrase; native Ndembu/Lunda audio validation recommended.
+lunda,safari,Lion / Elephant / Leopard,Ntambu / Nzovu / Nkashi,n-tahm-boo / n-zoh-voo / n-kah-shee,Nta-mbu / Nzo-vu / Nka-shi,Lion / Elephant / Leopard,Wildlife terms may vary by Lunda variety.
+lunda,navigation,Where is the road to...?,Nzila ya kuya ku... yidi kwihi?,n-zee-lah yah koo-yah koo yee-dee kwee-hee,Nzi-la ya ku-ya ku yi-di kwi-hi,Where is the road to...?,Direction phrase.
+lunda,market,How much is this?,Chingahi mwani?,cheen-gah-hee mwah-nee,Chi-nga-hi mwa-ni,How much is it?,Documented price question.
+lunda,market,Drinking water / Nshima (staple meal),Meji a kunwa / Nshima,meh-jee ah koo-nwah / n-shee-mah,Me-ji a ku-nwa / Nshi-ma,Drinking water / Nshima,Common everyday terms.
+lunda,market,The food is very delicious,Chakulya ichi chachiwahi nankashi,chah-koo-lyah ee-chee chah-chee-wah-hee nahn-kah-shee,Cha-ku-lya i-chi cha-chi-wa-hi nan-ka-shi,This food is very good.,Food compliment.
+lunda,emergency,Please help me,Ankwashuku mwani,ahn-kwah-shoo-koo mwah-nee,An-kwa-shu-ku mwa-ni,Please help me.,Polite request for help.
+lunda,emergency,I need a doctor / clinic,Ninatonda ndotolo / chipatala,nee-nah-tohn-dah n-doh-toh-loh / chee-pah-tah-lah,Ni-na-to-nda ndo-to-lo / chi-pa-ta-la,I need a doctor / clinic.,Health phrase; medical loanwords may vary.
+luvale,greetings,How are you? / Greetings,Muli ngachili mwane? / Munayoyo mwane?,moo-lee n-gah-chee-lee mwah-neh / moo-nah-yoh-yoh mwah-neh,Mu-li nga-chi-li mwa-ne / Mu-na-yo-yo mwa-ne,How are you?,Respectful Luvale greeting.
+luvale,greetings,Good morning / How did you wake?,Chimene mwane,chee-meh-neh mwah-neh,Chi-me-ne mwa-ne,Good morning.,Established Luvale morning greeting.
+luvale,greetings,Good afternoon / How is the day?,Musana mwane,moo-sah-nah mwah-neh,Mu-sa-na mwa-ne,Good afternoon.,Established Luvale afternoon greeting.
+luvale,greetings,I am fine / Peaceful,Nguli kanawa mwane,n-goo-lee kah-nah-wah mwah-neh,Ngu-li ka-na-wa mwa-ne,I am fine.,Standard response.
+luvale,greetings,Thank you,Ngunasakwilila mwane,n-goo-nah-sah-kwee-lee-lah mwah-neh,Ngu-na-sa-kwi-li-la mwa-ne,Thank you.,Polite gratitude.
+luvale,greetings,Thank you very much,Ngunasakwilila chikuma mwane,n-goo-nah-sah-kwee-lee-lah chee-koo-mah mwah-neh,Ngu-na-sa-kwi-li-la chi-ku-ma mwa-ne,Thank you very much.,Strong appreciation.
+luvale,greetings,Welcome (to visitors),Tambukenu mwane,tahm-boo-keh-noo mwah-neh,Ta-mbu-ke-nu mwa-ne,Welcome.,Common visitor welcome.
+luvale,greetings,Goodbye (to person staying / Stay well),Salenuho kanawa mwane,sah-leh-noo-hoh kah-nah-wah mwah-neh,Sa-le-nu-ho ka-na-wa mwa-ne,Stay well.,Farewell to those remaining.
+luvale,greetings,Goodbye (to person leaving / Go safely),Mwendenga kanawa mwane,mwehn-dehn-gah kah-nah-wah mwah-neh,Mwe-nde-nga ka-na-wa mwa-ne,Go safely/well.,Farewell to departing traveller.
+luvale,safari,The waterfall is magnificent,Chikuma cha mema ichi chawahe chikuma,chee-koo-mah chah meh-mah ee-chee chah-wah-heh chee-koo-mah,Chi-ku-ma cha me-ma i-chi cha-wa-he chi-ku-ma,This waterfall is very beautiful.,Tourism phrase; native-speaker validation recommended.
+luvale,safari,Lion / Elephant / Leopard,Ndumba / Nzovu / Nkashi,n-doom-bah / n-zoh-voo / n-kah-shee,Ndu-mba / Nzo-vu / Nka-shi,Lion / Elephant / Leopard,Wildlife terms can vary regionally.
+luvale,navigation,Where is the road to...?,Njila ya kuya ku... yili kulihi?,n-jee-lah yah koo-yah koo yee-lee koo-lee-hee,Nji-la ya ku-ya ku yi-li ku-li-hi,Where is the road to...?,Direction phrase.
+luvale,market,How much is this?,Jingahi mwane?,jeen-gah-hee mwah-neh,Ji-nga-hi mwa-ne,How much?,Documented Luvale price question.
+luvale,market,Drinking water / Nshima (staple meal),Meji akumwa / Nshima,meh-jee ah-koom-wah / n-shee-mah,Me-ji a-ku-mwa / Nshi-ma,Drinking water / Nshima,Everyday food vocabulary.
+luvale,market,The food is very delicious,Chakulya ichi chawahe chikuma,chah-koo-lyah ee-chee chah-wah-heh chee-koo-mah,Cha-ku-lya i-chi cha-wa-he chi-ku-ma,This food is very delicious/good.,Food compliment.
+luvale,emergency,Please help me,Ngukwashenu mwane,n-goo-kwah-sheh-noo mwah-neh,Ngu-kwa-she-nu mwa-ne,Please help me.,Emergency request; native-speaker audio validation recommended.
+luvale,emergency,I need a doctor / clinic,Ngwatonda ndotolo / chipatela,n-gwah-tohn-dah n-doh-toh-loh / chee-pah-teh-lah,Ngwa-to-nda ndo-to-lo / chi-pa-te-la,I need a doctor / clinic.,Health phrase.
+lozi,greetings,How are you? / Greetings,Mucwani? / Mu zuhile cwani?,moo-chwah-nee / moo zoo-hee-leh chwah-nee,Mu-cwa-ni / Mu zu-hi-le cwa-ni,How are you?,Common siLozi greeting.
+lozi,greetings,Good morning / How did you wake?,Mu zuhile cwani?,moo zoo-hee-leh chwah-nee,Mu zu-hi-le cwa-ni,How did you wake?,Morning greeting.
+lozi,greetings,Good afternoon / How is the day?,Mu tozi cwani?,moo toh-zee chwah-nee,Mu to-zi cwa-ni,How is your afternoon/day?,Afternoon greeting.
+lozi,greetings,I am fine / Peaceful,Ni inzi hande / Ni iketile,nee een-zee hahn-deh / nee ee-keh-tee-leh,Ni in-zi ha-nde / Ni i-ke-ti-le,I am well/fine.,Standard response.
+lozi,greetings,Thank you,Luitumezi,loo-ee-too-meh-zee,Lu-i-tu-me-zi,Thank you.,Standard gratitude.
+lozi,greetings,Thank you very much,Ni itumezi hahulu,nee ee-too-meh-zee hah-hoo-loo,Ni i-tu-me-zi ha-hu-lu,Thank you very much.,Strong appreciation.
+lozi,greetings,Welcome (to visitors),Mu amuhezwi,moo ah-moo-heh-zwee,Mu a-mu-he-zwi,You are welcome.,Visitor welcome.
+lozi,greetings,Goodbye (to person staying / Stay well),Mu siyale hande,moo see-yah-leh hahn-deh,Mu si-ya-le ha-nde,Remain well.,Farewell to person staying.
+lozi,greetings,Goodbye (to person leaving / Go safely),Mu zamaye hande,moo zah-mah-yeh hahn-deh,Mu za-ma-ye ha-nde,Travel/go well.,Farewell to person leaving.
+lozi,safari,The waterfall is magnificent,Mulapo wa mezi wo ki omunde hahulu,moo-lah-poh wah meh-zee woh kee oh-moon-deh hah-hoo-loo,Mu-la-po wa me-zi wo ki o-mu-nde ha-hu-lu,The waterfall is very beautiful.,Tourism phrase; native-speaker validation recommended.
+lozi,safari,Lion / Elephant / Leopard,Tau / Tlou / Nkwazi,tah-oo / tloh-oo / n-kwah-zee,Ta-u / Tlou / Nkwa-zi,Lion / Elephant / Leopard,Wildlife vocabulary; regional forms may vary.
+lozi,navigation,Where is the road to...?,Nzila ya kuya kwa... ki kai?,n-zee-lah yah koo-yah kwah kee kah-ee,Nzi-la ya ku-ya kwa ki ka-i,Where is the road to...?,Direction phrase.
+lozi,market,How much is this?,Ki bukai sesi?,kee boo-kah-ee seh-see,Ki bu-ka-i se-si,How much is this?,Market price question; wording varies.
+lozi,market,Drinking water / Nshima (staple meal),Mezi a kunwa / Buhobe,meh-zee ah koo-nwah / boo-hoh-beh,Me-zi a ku-nwa / Bu-ho-be,Drinking water / staple maize meal,Buhobe is a common Lozi staple porridge.
+lozi,market,The food is very delicious,Lico ze ki ze nde hahulu,lee-choh zeh kee zeh n-deh hah-hoo-loo,Li-co ze ki ze nde ha-hu-lu,The food is very good.,Food compliment.
+lozi,emergency,Please help me,"Ni tuseni, ni a kupa",nee too-seh-nee nee ah koo-pah,Ni tu-se-ni / ni a ku-pa,Please help me.,Polite request for assistance.
+lozi,emergency,I need a doctor / clinic,Ni tokwa dokota / sipatela,nee toh-kwah doh-koh-tah / see-pah-teh-lah,Ni to-kwa do-ko-ta / si-pa-te-la,I need a doctor / clinic.,Health emergency phrase.
+tonga,greetings,How are you? / Greetings,Muli buti? / Mwapona?,moo-lee boo-tee / mwah-poh-nah,Mu-li bu-ti / Mwa-po-na,How are you?,Respectful/general Tonga greeting.
+tonga,greetings,Good morning / How did you wake?,Mwabuka buti?,mwah-boo-kah boo-tee,Mwa-bu-ka bu-ti,How did you wake?,Standard morning greeting.
+tonga,greetings,Good afternoon / How is the day?,Mwayusa buti?,mwah-yoo-sah boo-tee,Mwa-yu-sa bu-ti,How is your afternoon/day?,Common afternoon greeting.
+tonga,greetings,I am fine / Peaceful,Ndili kabotu,n-dee-lee kah-boh-too,Ndi-li ka-bo-tu,I am well/fine.,Standard response.
+tonga,greetings,Thank you,Ndalumba / Twalumba,n-dah-loom-bah / twah-loom-bah,Nda-lum-ba / Twa-lum-ba,I/we thank you.,Standard gratitude.
+tonga,greetings,Thank you very much,Ndalumba kapati / Twalumba kapati,n-dah-loom-bah kah-pah-tee / twah-loom-bah kah-pah-tee,Nda-lum-ba ka-pa-ti / Twa-lum-ba ka-pa-ti,Thank you very much.,Strong appreciation.
+tonga,greetings,Welcome (to visitors),Mwabonwa / Amusike,mwah-bohn-wah / ah-moo-see-keh,Mwa-bo-nwa / A-mu-si-ke,Welcome.,Established Tonga welcome forms.
+tonga,greetings,Goodbye (to person staying / Stay well),Muchaale kabotu,moo-chah-ah-leh kah-boh-too,Mu-chaa-le ka-bo-tu,Remain well.,Traditional farewell to those staying.
+tonga,greetings,Goodbye (to person leaving / Go safely),Muyende kabotu,moo-yehn-deh kah-boh-too,Mu-ye-nde ka-bo-tu,Go/travel well.,Farewell to departing traveller.
+tonga,safari,The waterfall is magnificent,Mfula yamatalika eeyi njibotu kapati,m-foo-lah yah-mah-tah-lee-kah eh-yee n-jee-boh-too kah-pah-tee,Mfu-la ya-ma-ta-li-ka ee-yi nji-bo-tu ka-pa-ti,This waterfall is very beautiful.,Tourism phrase; local terminology should be native-speaker checked.
+tonga,safari,Lion / Elephant / Leopard,Shumba / Nzovu / Nkaka,shoom-bah / n-zoh-voo / n-kah-kah,Shu-mba / Nzo-vu / Nka-ka,Lion / Elephant / Leopard,Wildlife vocabulary; dialect forms may vary.
+tonga,navigation,Where is the road to...?,Nzila iinda ku... ili kuli?,n-zee-lah ee-n-dah koo ee-lee koo-lee,Nzi-la i-nda ku i-li ku-li,Where is the road to...?,Direction phrase.
+tonga,market,How much is this?,Mali nzi eeci?,mah-lee n-zee eh-chee,Ma-li nzi ee-ci,How much is this?,Documented Tonga shopping phrase.
+tonga,market,Drinking water / Nshima (staple meal),Meenda akunwa / Bwali,meh-ehn-dah ah-koon-wah / bwah-lee,Mee-nda a-ku-nwa / Bwa-li,Drinking water / staple maize meal,Bwali is the staple maize meal.
+tonga,market,The food is very delicious,Chakulya eeci nchibotu kapati,chah-koo-lyah eh-chee n-chee-boh-too kah-pah-tee,Cha-ku-lya ee-ci nchi-bo-tu ka-pa-ti,This food is very good.,Food compliment.
+tonga,emergency,Please help me,Amundigwasye,ah-moon-dee-gwah-syeh,A-mu-ndi-gwa-sye,Please help me.,Polite request for help.
+tonga,emergency,I need a doctor / clinic,Ndiyanda dotolo / chipatala,n-dee-yahn-dah doh-toh-loh / chee-pah-tah-lah,Ndi-ya-nda do-to-lo / chi-pa-ta-la,I need a doctor / clinic.,Health emergency phrase.
