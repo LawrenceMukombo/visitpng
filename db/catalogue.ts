@@ -177,27 +177,44 @@ export async function ensureCatalogue() {
 
   // 2. Seed Zambia Destinations, Providers, Listings
   for (const d of zambiaDestinationSeed) {
-    const prov = await d1.prepare("SELECT id FROM provinces WHERE code=?").bind(d[3]).first<{ id: number }>();
+    let prov = await d1.prepare("SELECT id FROM provinces WHERE code=?").bind(d[3]).first<{ id: number }>();
+    if (!prov) {
+      prov = await d1.prepare("SELECT id FROM provinces WHERE country_id=? LIMIT 1").bind(zmbId).first<{ id: number }>();
+    }
+    if (!prov) {
+      prov = await d1.prepare("SELECT id FROM provinces LIMIT 1").first<{ id: number }>();
+    }
     if (prov) {
       await d1.prepare("INSERT OR IGNORE INTO destinations (slug, name, summary, province_id, district, latitude, longitude, cover_image_url, source_url, country_id, is_test_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)")
         .bind(d[0], d[1], d[2], prov.id, d[4], d[5], d[6], d[7], d[8], zmbId).run();
-      await d1.prepare("UPDATE destinations SET summary=?, cover_image_url=?, source_url=?, is_test_data=0 WHERE slug=?").bind(d[2], d[7], d[8], d[0]).run();
+      await d1.prepare("UPDATE destinations SET province_id=?, summary=?, district=?, latitude=?, longitude=?, cover_image_url=?, source_url=?, country_id=?, is_test_data=0 WHERE slug=?")
+        .bind(prov.id, d[2], d[4], d[5], d[6], d[7], d[8], zmbId, d[0]).run();
     }
   }
   for (const p of zambiaProviderSeed) {
     await d1.prepare("INSERT OR IGNORE INTO providers (slug, trading_name, source_name, source_url, country_id, is_test_data) VALUES (?, ?, ?, ?, ?, 0)")
       .bind(p[0], p[1], p[2], p[3], zmbId).run();
-    await d1.prepare("UPDATE providers SET trading_name=?, source_name=?, source_url=?, is_test_data=0 WHERE slug=?").bind(p[1], p[2], p[3], p[0]).run();
+    await d1.prepare("UPDATE providers SET trading_name=?, source_name=?, source_url=?, country_id=?, is_test_data=0 WHERE slug=?")
+      .bind(p[1], p[2], p[3], zmbId, p[0]).run();
   }
   for (const l of zambiaListingSeed) {
-    const prov = await d1.prepare("SELECT id FROM providers WHERE slug=?").bind(l[1]).first<{ id: number }>();
-    const dest = await d1.prepare("SELECT id FROM destinations WHERE slug=?").bind(l[2]).first<{ id: number }>();
-    const cat = await d1.prepare("SELECT id FROM categories WHERE slug=?").bind(l[3]).first<{ id: number }>();
+    let prov = await d1.prepare("SELECT id FROM providers WHERE slug=?").bind(l[1]).first<{ id: number }>();
+    if (!prov) {
+      prov = await d1.prepare("SELECT id FROM providers WHERE country_id=? LIMIT 1").bind(zmbId).first<{ id: number }>();
+    }
+    let dest = await d1.prepare("SELECT id FROM destinations WHERE slug=?").bind(l[2]).first<{ id: number }>();
+    if (!dest) {
+      dest = await d1.prepare("SELECT id FROM destinations WHERE country_id=? LIMIT 1").bind(zmbId).first<{ id: number }>();
+    }
+    let cat = await d1.prepare("SELECT id FROM categories WHERE slug=?").bind(l[3]).first<{ id: number }>();
+    if (!cat) {
+      cat = await d1.prepare("SELECT id FROM categories LIMIT 1").first<{ id: number }>();
+    }
     if (prov && dest && cat) {
       await d1.prepare("INSERT OR IGNORE INTO listings (slug, provider_id, destination_id, category_id, name, summary, image_url, photo_credit, deep_link_url, tag, currency, base_price, member_price, rating, review_count, country_id, publication_status, is_test_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', 0)")
         .bind(l[0], prov.id, dest.id, cat.id, l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11], l[12], l[13], l[14], zmbId).run();
-      await d1.prepare("UPDATE listings SET provider_id=?, destination_id=?, category_id=?, name=?, summary=?, image_url=?, photo_credit=?, deep_link_url=?, tag=?, currency=?, base_price=?, member_price=?, rating=?, review_count=?, country_id=?, publication_status='published', is_test_data=0 WHERE slug=?")
-        .bind(prov.id, dest.id, cat.id, l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11], l[12], l[13], l[14], zmbId, l[0]).run();
+      await d1.prepare("UPDATE listings SET provider_id=?, destination_id=?, category_id=?, name=?, summary=?, image_url=?, photo_credit=?, deep_link_url=?, tag=?, currency='ZMW', base_price=?, member_price=?, rating=?, review_count=?, country_id=?, publication_status='published', is_test_data=0 WHERE slug=?")
+        .bind(prov.id, dest.id, cat.id, l[4], l[5], l[6], l[7], l[8], l[9], l[11], l[12], l[13], l[14], zmbId, l[0]).run();
     }
   }
 
@@ -235,11 +252,11 @@ export async function getCatalogue(query = "", category = "all", countryCode = "
     JOIN categories c ON c.id=l.category_id
     JOIN providers p ON p.id=l.provider_id
     WHERE l.publication_status='published'
-      AND 1=1 AND l.country_id = ?
+      AND (l.country_id = ? OR l.country_id IS NULL OR ? = 0)
       AND (?='' OR l.name LIKE ? OR l.summary LIKE ? OR l.tag LIKE ? OR d.name LIKE ? OR d.summary LIKE ? OR d.district LIKE ? OR pv.name LIKE ? OR pv.region LIKE ? OR c.name LIKE ? OR p.trading_name LIKE ?)
       AND (?='all' OR c.slug=?)
     ORDER BY l.rating DESC, l.name ASC
-  `).bind(countryId, query.trim(), like, like, like, like, like, like, like, like, like, like, category, category).all();
+  `).bind(countryId, countryId, query.trim(), like, like, like, like, like, like, like, like, like, like, category, category).all();
 
   const cats = await d1.prepare("SELECT slug, name, icon, display_order AS displayOrder FROM categories WHERE is_active=1 ORDER BY display_order").all();
 
