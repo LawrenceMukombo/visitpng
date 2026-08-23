@@ -7,14 +7,16 @@ import { getAllCountries, ensureCountries } from "./countries";
 export async function requireAdministrator(identity: VisitPngUser) {
   await ensureAccounts();
   const account = await getOrCreateAccount(identity);
-  const allowed = (process.env.ADMIN_EMAIL || "").split(",").map(x => x.trim().toLowerCase()).filter(Boolean);
+  const defaultAdmins = ["lawrencemukombo2@gmail.com", "info@zamroam.com"];
+  const envAdmins = (process.env.ADMIN_EMAIL || "").split(",").map(x => x.trim().toLowerCase()).filter(Boolean);
+  const allowed = Array.from(new Set([...defaultAdmins, ...envAdmins]));
   
-  if(allowed.includes(identity.email.toLowerCase())&&account.role!=="administrator"){
-    await env.DB.prepare("UPDATE users SET role='administrator',updated_at=? WHERE id=?").bind(new Date().toISOString(),account.id).run();
-    account.role="administrator";
+  if (allowed.includes(identity.email.toLowerCase()) && account.role !== "administrator" && account.role !== "super_administrator") {
+    await env.DB.prepare("UPDATE users SET role='super_administrator',updated_at=? WHERE id=?").bind(new Date().toISOString(), account.id).run();
+    account.role = "super_administrator";
   }
   
-  if(account.role!=="administrator"&&account.role!=="super_administrator"||account.status!=="active"){
+  if (account.role !== "administrator" && account.role !== "super_administrator" || account.status !== "active") {
     throw new Error("ADMIN_REQUIRED");
   }
 

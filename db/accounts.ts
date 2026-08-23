@@ -4,7 +4,25 @@ const accountSchema=[`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY A
 export type UserRole = "traveller" | "tourist" | "provider" | "provider_owner" | "provider_staff" | "country_administrator" | "administrator" | "super_administrator";
 export type AccountProfile={id:number;email:string;fullName:string|null;preferredName:string|null;mobile:string|null;country:string;preferredLanguage:string;role:UserRole;status:string;createdAt:string;updatedAt:string};
 export async function ensureAccounts(){await env.DB.batch(accountSchema.map(sql=>env.DB.prepare(sql)))}
-export async function getOrCreateAccount(identity:VisitPngUser):Promise<AccountProfile>{await ensureAccounts();const now=new Date().toISOString();await env.DB.prepare(`INSERT INTO users (email,full_name,preferred_name,country,preferred_language,role,status,created_at,updated_at) VALUES (?,?,?,?,?,'traveller','active',?,?) ON CONFLICT(email) DO UPDATE SET full_name=COALESCE(excluded.full_name,users.full_name)`).bind(identity.email,identity.fullName,identity.fullName,"Papua New Guinea","English",now,now).run();const user=await env.DB.prepare(`SELECT id,email,full_name AS fullName,preferred_name AS preferredName,mobile,country,preferred_language AS preferredLanguage,role,status,created_at AS createdAt,updated_at AS updatedAt FROM users WHERE email=?`).bind(identity.email).first<AccountProfile>();if(!user)throw new Error("Account could not be created");const existing=await env.DB.prepare("SELECT id FROM audit_logs WHERE user_id=? AND action='account_created' LIMIT 1").bind(user.id).first();if(!existing)await audit(user.id,identity.email,"account_created","user",String(user.id),{source:"visitpng"});return user}
+export async function getOrCreateAccount(identity:VisitPngUser):Promise<AccountProfile>{
+  await ensureAccounts();
+  const now=new Date().toISOString();
+  const defaultAdmins = ["lawrencemukombo2@gmail.com", "info@zamroam.com"];
+  const isDefaultAdmin = defaultAdmins.includes(identity.email.toLowerCase());
+  const initialRole: UserRole = isDefaultAdmin ? "super_administrator" : "traveller";
+
+  await env.DB.prepare(`INSERT INTO users (email,full_name,preferred_name,country,preferred_language,role,status,created_at,updated_at) VALUES (?,?,?,?,?,'${initialRole}','active',?,?) ON CONFLICT(email) DO UPDATE SET full_name=COALESCE(excluded.full_name,users.full_name)`).bind(identity.email,identity.fullName,identity.fullName,"Zambia","English",now,now).run();
+  
+  if (isDefaultAdmin) {
+    await env.DB.prepare("UPDATE users SET role='super_administrator',updated_at=? WHERE email=?").bind(now, identity.email.toLowerCase()).run();
+  }
+
+  const user=await env.DB.prepare(`SELECT id,email,full_name AS fullName,preferred_name AS preferredName,mobile,country,preferred_language AS preferredLanguage,role,status,created_at AS createdAt,updated_at AS updatedAt FROM users WHERE email=?`).bind(identity.email.toLowerCase()).first<AccountProfile>();
+  if(!user)throw new Error("Account could not be created");
+  const existing=await env.DB.prepare("SELECT id FROM audit_logs WHERE user_id=? AND action='account_created' LIMIT 1").bind(user.id).first();
+  if(!existing)await audit(user.id,identity.email,"account_created","user",String(user.id),{source:"zamroam"});
+  return user;
+}
 export async function updateAccount(identity:VisitPngUser,input:{preferredName:string;mobile:string;country:string;preferredLanguage:string}){const user=await getOrCreateAccount(identity);const now=new Date().toISOString();await env.DB.prepare(`UPDATE users SET preferred_name=?,mobile=?,country=?,preferred_language=?,updated_at=? WHERE id=?`).bind(input.preferredName||null,input.mobile||null,input.country,input.preferredLanguage,now,user.id).run();await audit(user.id,identity.email,"profile_updated","user",String(user.id),{fields:["preferredName","mobile","country","preferredLanguage"]});return getOrCreateAccount(identity)}
 export async function getAccountAudit(identity:VisitPngUser){const user=await getOrCreateAccount(identity);const rows=await env.DB.prepare(`SELECT action,entity_type AS entityType,details,created_at AS createdAt FROM audit_logs WHERE user_id=? ORDER BY created_at DESC LIMIT 10`).bind(user.id).all();return rows.results}
 async function audit(userId:number,email:string,action:string,entityType:string,entityId:string,details:unknown){await env.DB.prepare(`INSERT INTO audit_logs (user_id,actor_email,action,entity_type,entity_id,details,created_at) VALUES (?,?,?,?,?,?,?)`).bind(userId,email,action,entityType,entityId,JSON.stringify(details),new Date().toISOString()).run()}
