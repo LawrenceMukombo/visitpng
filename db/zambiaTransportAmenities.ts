@@ -619,8 +619,237 @@ export const ZAMBIA_HIGHWAY_CORRIDORS: ZambiaHighwayCorridor[] = [
       [-15.1667, 23.1333],
       [-14.99, 22.68]
     ]
+  },
+  {
+    code: "T5",
+    name: "T5 North-Western & Zambezi Source Corridor",
+    description: "The primary highway from the Copperbelt through Solwezi, Mutanda, and Mwinilunga to Ikelenge and the Source of the Zambezi River.",
+    distanceKm: 520,
+    typicalDriveHours: 6.5,
+    roadCondition: "Fully Paved / Excellent",
+    startTown: "Chingola (Copperbelt T3)",
+    endTown: "Ikelenge / Zambezi Source (Angola/DRC Tri-Border)",
+    keyWaypoints: [
+      { name: "Chingola Junction", lat: -12.5333, lon: 27.85 },
+      { name: "Solwezi (Provincial HQ)", lat: -12.1688, lon: 26.3894 },
+      { name: "Mutanda River Junction", lat: -12.3833, lon: 26.0667 },
+      { name: "Mwinilunga Town", lat: -11.7358, lon: 24.4286 },
+      { name: "Ikelenge District Centre", lat: -11.2333, lon: 24.2667 },
+      { name: "Source of the Zambezi (Point Zero)", lat: -11.2981, lon: 24.3142 }
+    ],
+    coordinates: [
+      [-12.5333, 27.85],
+      [-12.1688, 26.3894],
+      [-12.3833, 26.0667],
+      [-11.7358, 24.4286],
+      [-11.2333, 24.2667],
+      [-11.2981, 24.3142]
+    ]
+  },
+  {
+    code: "M3",
+    name: "M3 Luapula & Northern Waterfalls Circuit",
+    description: "Connecting Central Province through Samfya (Lake Bangweulu), Mansa, Kawambwa (Lumangwe Falls), and Mporokoso to Kasama.",
+    distanceKm: 640,
+    typicalDriveHours: 8.0,
+    roadCondition: "Fully Paved / Excellent",
+    startTown: "Serenje (T2 Great North Road)",
+    endTown: "Kasama (Northern Province HQ)",
+    keyWaypoints: [
+      { name: "Serenje Turnoff", lat: -13.2325, lon: 30.2353 },
+      { name: "Samfya (Lake Bangweulu)", lat: -11.3647, lon: 29.5564 },
+      { name: "Mansa (Luapula HQ)", lat: -11.1998, lon: 28.8943 },
+      { name: "Mwense Rapids", lat: -10.3833, lon: 28.7 },
+      { name: "Kawambwa (Lumangwe & Kabwelume Falls)", lat: -9.7917, lon: 29.0833 },
+      { name: "Mporokoso", lat: -9.3833, lon: 30.1333 },
+      { name: "Kasama (Chishimba Falls)", lat: -10.2129, lon: 31.1808 }
+    ],
+    coordinates: [
+      [-13.2325, 30.2353],
+      [-11.3647, 29.5564],
+      [-11.1998, 28.8943],
+      [-10.3833, 28.7],
+      [-9.7917, 29.0833],
+      [-9.3833, 30.1333],
+      [-10.2129, 31.1808]
+    ]
+  },
+  {
+    code: "M10",
+    name: "M10 Southwestern Zambezi Corridor",
+    description: "Scenic route from Livingstone along the Zambezi River via Kazungula, Sesheke, Sioma Ngwezi, and Senanga to Mongu.",
+    distanceKm: 510,
+    typicalDriveHours: 6.5,
+    roadCondition: "Fully Paved / Excellent",
+    startTown: "Livingstone (Victoria Falls)",
+    endTown: "Mongu (Western Province HQ)",
+    keyWaypoints: [
+      { name: "Livingstone / Victoria Falls", lat: -17.8419, lon: 25.8544 },
+      { name: "Kazungula Quadripoint Bridge", lat: -17.7833, lon: 25.2667 },
+      { name: "Sesheke (Katima Mulilo)", lat: -17.475, lon: 24.2958 },
+      { name: "Sioma (Ngonye) Falls", lat: -16.65, lon: 23.63 },
+      { name: "Senanga Harbour", lat: -16.1167, lon: 23.2667 },
+      { name: "Mongu (Barotseland HQ)", lat: -15.2484, lon: 23.1274 }
+    ],
+    coordinates: [
+      [-17.8419, 25.8544],
+      [-17.7833, 25.2667],
+      [-17.475, 24.2958],
+      [-16.65, 23.63],
+      [-16.1167, 23.2667],
+      [-15.2484, 23.1274]
+    ]
   }
 ];
+
+/**
+ * Returns the realistic road route coordinates from Lusaka (National Capital) to any destination.
+ * Follows actual paved highways (T1, T2, T3, T4, T5, M3, M9, M10) and secondary road connectors.
+ */
+export function getRoadRouteToDestination(
+  destLat: number,
+  destLon: number,
+  provinceName?: string
+): [number, number][] {
+  const normProv = (provinceName || "").toLowerCase();
+  const lusaka: [number, number] = [LUSAKA_NATIONAL_HQ.latitude, LUSAKA_NATIONAL_HQ.longitude];
+  const destination: [number, number] = [destLat, destLon];
+
+  // 1. Southern Province (Livingstone / Victoria Falls / Siavonga / Kariba)
+  if (normProv.includes("southern") || destLat < -16.0) {
+    if (destLon > 28.2 && destLat < -16.2) {
+      // Siavonga / Kariba route
+      return [
+        lusaka,
+        [-15.7692, 28.1814], // Kafue
+        [-16.0333, 28.85], // Chirundu turnoff
+        [-16.5383, 28.7083], // Siavonga
+        destination
+      ];
+    }
+    // T1 Highway corridor
+    return [
+      lusaka,
+      [-15.7692, 28.1814], // Kafue
+      [-15.856, 27.748], // Mazabuka
+      [-16.2833, 27.4833], // Monze
+      [-16.5333, 27.2167], // Pemba
+      [-16.8094, 26.9856], // Choma
+      [-17.0333, 26.5], // Kalomo
+      [-17.3167, 26.2], // Zimba
+      [-17.8419, 25.8544], // Livingstone
+      destination
+    ];
+  }
+
+  // 2. Eastern Province (South Luangwa / Mfuwe / Chipata)
+  if (normProv.includes("eastern") || (destLon > 31.0 && destLat > -15.0 && destLat < -12.0)) {
+    return [
+      lusaka,
+      [-15.3289, 28.6822], // Chongwe
+      [-15.0833, 29.4167], // Rufunsa
+      [-15.0167, 30.2167], // Luangwa Bridge
+      [-14.5567, 30.8144], // Nyimba
+      [-14.2428, 31.3253], // Petauke
+      [-14.05, 32.05], // Katete
+      [-13.6333, 32.65], // Chipata
+      [-13.1167, 31.7667], // Mfuwe Gate
+      destination
+    ];
+  }
+
+  // 3. North-Western Province & Zambezi Source (Ikelenge / Solwezi / Zambezi)
+  if (
+    normProv.includes("north-western") ||
+    normProv.includes("northwestern") ||
+    normProv.includes("n/western") ||
+    (destLon < 26.5 && destLat < -11.0)
+  ) {
+    if (destLat > -13.6 && destLon < 23.5) {
+      // Zambezi District / Likumbi Lya Mize route via Solwezi-Mutanda-Kasempa-Zambezi
+      return [
+        lusaka,
+        [-14.4422, 28.4464], // Kabwe
+        [-13.9714, 28.6694], // Kapiri
+        [-12.9692, 28.6366], // Ndola
+        [-12.8024, 28.2132], // Kitwe
+        [-12.5333, 27.85], // Chingola
+        [-12.1688, 26.3894], // Solwezi
+        [-12.3833, 26.0667], // Mutanda
+        [-13.5936, 24.2008], // Kabompo
+        [-13.5417, 23.1083], // Zambezi
+        destination
+      ];
+    }
+    // T3 + T5 Highway corridor to Ikelenge / Source of the Zambezi
+    return [
+      lusaka,
+      [-14.4422, 28.4464], // Kabwe
+      [-13.9714, 28.6694], // Kapiri Mposhi
+      [-12.9692, 28.6366], // Ndola
+      [-12.8024, 28.2132], // Kitwe
+      [-12.5333, 27.85], // Chingola
+      [-12.1688, 26.3894], // Solwezi
+      [-12.3833, 26.0667], // Mutanda
+      [-11.7358, 24.4286], // Mwinilunga
+      [-11.2333, 24.2667], // Ikelenge
+      destination
+    ];
+  }
+
+  // 4. Western Province & Barotseland (Mongu / Kuomboka / Kalabo / Liuwa)
+  if (normProv.includes("western") && !normProv.includes("north")) {
+    return [
+      lusaka,
+      [-14.9833, 27.0667], // Mumbwa
+      [-14.95, 26.0], // Kafue Spine
+      [-14.7833, 24.8], // Kaoma
+      [-15.2484, 23.1274], // Mongu
+      [-15.1667, 23.1333], // Limulunga
+      [-14.99, 22.68], // Kalabo
+      destination
+    ];
+  }
+
+  // 5. Northern / Luapula / Muchinga (Kasama, Lake Tanganyika, Samfya, Shiwa Ng'andu)
+  if (normProv.includes("northern") || normProv.includes("luapula") || normProv.includes("muchinga")) {
+    if (normProv.includes("luapula") || destLon < 30.0) {
+      // Mansa / Samfya route
+      return [
+        lusaka,
+        [-14.4422, 28.4464], // Kabwe
+        [-13.9714, 28.6694], // Kapiri
+        [-13.2325, 30.2353], // Serenje
+        [-11.3647, 29.5564], // Samfya (Lake Bangweulu)
+        [-11.1998, 28.8943], // Mansa
+        destination
+      ];
+    }
+    // T2 Great North Road to Mpika, Kasama, Mbala
+    return [
+      lusaka,
+      [-14.65, 28.0833], // Chibombo
+      [-14.4422, 28.4464], // Kabwe
+      [-13.9714, 28.6694], // Kapiri Mposhi
+      [-13.62, 29.39], // Mkushi
+      [-13.2325, 30.2353], // Serenje
+      [-11.8344, 31.4528], // Mpika
+      [-11.2033, 31.7583], // Shiwa Ng'andu
+      [-10.2129, 31.1808], // Kasama
+      [-8.8403, 31.3658], // Mbala
+      [-8.7667, 31.1167], // Mpulungu / Lake Tanganyika
+      destination
+    ];
+  }
+
+  // Default Central
+  return [
+    lusaka,
+    [-14.65, 28.0833],
+    [-14.4422, 28.4464],
+    destination
+  ];
+}
 
 // ============================================================================
 // 5. AMENITIES DIRECTORY (Fuel, Hospitals, Banks, Mobile Networks)

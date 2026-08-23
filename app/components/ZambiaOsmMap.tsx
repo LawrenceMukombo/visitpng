@@ -10,6 +10,7 @@ import {
   TRAVEL_MODES,
   calculateDistanceBreakdown,
   getDestinationTransportGuide,
+  getRoadRouteToDestination,
   type DestinationDistanceBreakdown,
   type DestinationTransportGuide,
   type ZambiaAirport,
@@ -174,6 +175,48 @@ export default function ZambiaOsmMap({
   // Zoom handlers
   const handleZoomIn = () => setZoom((prev) => Math.min(13, prev + 0.5));
   const handleZoomOut = () => setZoom((prev) => Math.max(5, prev - 0.5));
+
+  // Wheel Zoom handler (smooth zoom with mouse wheel)
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    if (e.deltaY < 0) {
+      setZoom((prev) => Math.min(13, prev + 0.5));
+    } else {
+      setZoom((prev) => Math.max(5, prev - 0.5));
+    }
+  };
+
+  // Double Click Zoom handler (zoom into clicked point)
+  const handleDoubleClick = (e: React.MouseEvent) => {
+    const rect = mapViewportRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+
+    const scale = 256 * Math.pow(2, zoom);
+    const centerX = ((center.lon + 180) / 360) * scale;
+    const centerY =
+      ((1 -
+        Math.log(
+          Math.tan((center.lat * Math.PI) / 180) + 1 / Math.cos((center.lat * Math.PI) / 180)
+        ) /
+          Math.PI) /
+        2) *
+      scale;
+
+    const targetX = clickX - mapDimensions.width / 2 + centerX;
+    const targetY = clickY - mapDimensions.height / 2 + centerY;
+
+    const lon = (targetX / scale) * 360 - 180;
+    const latRad = Math.atan(Math.sinh(Math.PI * (1 - 2 * (targetY / scale))));
+    const lat = (latRad * 180) / Math.PI;
+
+    setCenter({
+      lat: Math.max(-18.5, Math.min(-8.0, lat)),
+      lon: Math.max(21.5, Math.min(34.0, lon))
+    });
+    setZoom((prev) => Math.min(13, prev + 1));
+  };
 
   // Center on specific pin
   const handleSelectPin = (pin: MapDestinationPin) => {
@@ -496,6 +539,8 @@ export default function ZambiaOsmMap({
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
+          onWheel={handleWheel}
+          onDoubleClick={handleDoubleClick}
         >
           {/* Tile Layer Container */}
           <div
@@ -547,7 +592,7 @@ export default function ZambiaOsmMap({
             })}
           </div>
 
-          {/* SVG Overlay: Highways, Connectors & Distance Vectors */}
+          {/* SVG Overlay: Highways, Connectors & Realistic Road Routes */}
           <svg
             style={{
               position: "absolute",
@@ -558,7 +603,7 @@ export default function ZambiaOsmMap({
               pointerEvents: "none"
             }}
           >
-            {/* Highway Routes */}
+            {/* National Highway Network Corridors */}
             {showRoutes &&
               ZAMBIA_HIGHWAY_CORRIDORS.map((corridor) => {
                 const points = corridor.coordinates.map((coord) => {
@@ -577,53 +622,100 @@ export default function ZambiaOsmMap({
                       strokeDasharray={corridor.roadCondition.includes("Gravel") ? "6 4" : "none"}
                       strokeLinecap="round"
                       strokeLinejoin="round"
+                      style={{ pointerEvents: "auto", cursor: "pointer" }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedRoute(corridor);
+                      }}
                     />
                   </g>
                 );
               })}
 
-            {/* Direct Distance Ray from Lusaka to Selected Pin */}
+            {/* Realistic Highway Route to Selected Destination (NO STRAIGHT LINES) */}
             {selectedPin && (
               <g>
                 {(() => {
-                  const lusakaPos = projectToPixels(
-                    LUSAKA_NATIONAL_HQ.latitude,
-                    LUSAKA_NATIONAL_HQ.longitude
-                  );
-                  const pinPos = projectToPixels(
+                  const routeCoords = getRoadRouteToDestination(
                     selectedPin.latitude,
-                    selectedPin.longitude
+                    selectedPin.longitude,
+                    selectedPin.provinceName
+                  );
+                  const polylinePoints = routeCoords.map((coord) => {
+                    const p = projectToPixels(coord[0], coord[1]);
+                    return `${p.x},${p.y}`;
+                  });
+
+                  // Midpoint for road distance badge along highway
+                  const midIndex = Math.floor(routeCoords.length / 2);
+                  const midPoint = projectToPixels(
+                    routeCoords[midIndex][0],
+                    routeCoords[midIndex][1]
                   );
 
                   return (
                     <>
-                      <line
-                        x1={lusakaPos.x}
-                        y1={lusakaPos.y}
-                        x2={pinPos.x}
-                        y2={pinPos.y}
-                        stroke="rgba(52, 211, 153, 0.7)"
-                        strokeWidth="2"
-                        strokeDasharray="4 4"
+                      {/* Outer Glowing Highway Highlight */}
+                      <polyline
+                        points={polylinePoints.join(" ")}
+                        fill="none"
+                        stroke="rgba(56, 189, 248, 0.35)"
+                        strokeWidth="8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
-                      <circle
-                        cx={(lusakaPos.x + pinPos.x) / 2}
-                        cy={(lusakaPos.y + pinPos.y) / 2}
-                        r="14"
-                        fill="rgba(13, 56, 56, 0.9)"
-                        stroke="#10b981"
+                      {/* Primary Road Line */}
+                      <polyline
+                        points={polylinePoints.join(" ")}
+                        fill="none"
+                        stroke="#38bdf8"
+                        strokeWidth="3.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      {/* Animated Flow Dashes */}
+                      <polyline
+                        points={polylinePoints.join(" ")}
+                        fill="none"
+                        stroke="#ffffff"
                         strokeWidth="1.5"
+                        strokeDasharray="6 8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       />
-                      <text
-                        x={(lusakaPos.x + pinPos.x) / 2}
-                        y={(lusakaPos.y + pinPos.y) / 2 + 4}
-                        textAnchor="middle"
-                        fill="#fff"
-                        fontSize="9"
-                        fontWeight="800"
-                      >
-                        {distanceBreakdown.nationalHq.distanceKm}km
-                      </text>
+                      {/* Interactive Route Distance Badge */}
+                      <g transform={`translate(${midPoint.x}, ${midPoint.y})`}>
+                        <rect
+                          x="-42"
+                          y="-13"
+                          width="84"
+                          height="26"
+                          rx="13"
+                          fill="rgba(10, 32, 32, 0.95)"
+                          stroke="#38bdf8"
+                          strokeWidth="1.5"
+                        />
+                        <text
+                          x="0"
+                          y="-1"
+                          textAnchor="middle"
+                          fill="#38bdf8"
+                          fontSize="9"
+                          fontWeight="800"
+                        >
+                          🛣️ {distanceBreakdown.nationalHq.distanceKm} km
+                        </text>
+                        <text
+                          x="0"
+                          y="9"
+                          textAnchor="middle"
+                          fill="#facc15"
+                          fontSize="8"
+                          fontWeight="700"
+                        >
+                          ~{distanceBreakdown.nationalHq.driveTime}
+                        </text>
+                      </g>
                     </>
                   );
                 })()}
@@ -631,7 +723,7 @@ export default function ZambiaOsmMap({
             )}
           </svg>
 
-          {/* Interactive HTML Markers: Destinations, Airports, Amenities */}
+          {/* Interactive HTML Markers: Destinations, Airports, Amenities (pointer-events none on container, auto on children) */}
           <div
             style={{
               position: "absolute",
@@ -639,7 +731,7 @@ export default function ZambiaOsmMap({
               left: 0,
               width: "100%",
               height: "100%",
-              pointerEvents: "auto"
+              pointerEvents: "none"
             }}
           >
             {/* 1. National Capital Lusaka Marker */}
@@ -659,9 +751,13 @@ export default function ZambiaOsmMap({
                     flexDirection: "column",
                     alignItems: "center",
                     cursor: "pointer",
+                    pointerEvents: "auto",
                     zIndex: 20
                   }}
-                  onClick={() => setCenter({ lat: LUSAKA_NATIONAL_HQ.latitude, lon: LUSAKA_NATIONAL_HQ.longitude })}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCenter({ lat: LUSAKA_NATIONAL_HQ.latitude, lon: LUSAKA_NATIONAL_HQ.longitude });
+                  }}
                   title="Lusaka - National Capital & Government HQ"
                 >
                   <div
@@ -715,9 +811,13 @@ export default function ZambiaOsmMap({
                       flexDirection: "column",
                       alignItems: "center",
                       cursor: "pointer",
+                      pointerEvents: "auto",
                       zIndex: 15
                     }}
-                    onClick={() => setCenter({ lat: prov.latitude, lon: prov.longitude })}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCenter({ lat: prov.latitude, lon: prov.longitude });
+                    }}
                     title={`${prov.name} - ${prov.provinceName} Capital`}
                   >
                     <div
@@ -772,6 +872,7 @@ export default function ZambiaOsmMap({
                       flexDirection: "column",
                       alignItems: "center",
                       cursor: "pointer",
+                      pointerEvents: "auto",
                       zIndex: isSelected ? 25 : 12
                     }}
                     onClick={(e) => {
@@ -835,6 +936,7 @@ export default function ZambiaOsmMap({
                       flexDirection: "column",
                       alignItems: "center",
                       cursor: "pointer",
+                      pointerEvents: "auto",
                       zIndex: isSelected ? 22 : 10
                     }}
                     onClick={(e) => {
@@ -883,6 +985,7 @@ export default function ZambiaOsmMap({
                       flexDirection: "column",
                       alignItems: "center",
                       cursor: "pointer",
+                      pointerEvents: "auto",
                       zIndex: isSelected ? 30 : 18
                     }}
                     onClick={(e) => {
@@ -948,7 +1051,8 @@ export default function ZambiaOsmMap({
               display: "flex",
               flexDirection: "column",
               gap: "6px",
-              zIndex: 40
+              zIndex: 60,
+              pointerEvents: "auto"
             }}
           >
             <button
