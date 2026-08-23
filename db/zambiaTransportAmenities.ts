@@ -831,11 +831,12 @@ export function estimateRoadDistance(
   lon1: number,
   lat2: number,
   lon2: number,
-  averageSpeedKmH = 75
+  averageSpeedKmH = 75,
+  customWindingFactor?: number
 ): { distanceKm: number; driveHours: number; driveTimeFormatted: string } {
   const directKm = calculateGeodesicDistanceKm(lat1, lon1, lat2, lon2);
-  // Overland winding factor: ~1.28x for paved highways, up to 1.35x for escarpments/bush tracks
-  const windingFactor = directKm > 350 ? 1.25 : directKm > 100 ? 1.30 : 1.35;
+  // Overland winding factor: ~1.25x for paved highways, up to 1.35x for escarpments/bush tracks
+  const windingFactor = customWindingFactor || (directKm > 350 ? 1.25 : directKm > 100 ? 1.30 : 1.35);
   const roadKm = Math.round(directKm * windingFactor);
 
   const hoursDecimal = roadKm / averageSpeedKmH;
@@ -859,13 +860,153 @@ export function estimateRoadDistance(
 /**
  * Finds the nearest provincial capital for a given coordinate or province name.
  */
+/**
+ * Travel Modes and Speed Configurations for Time To Travel (TTT) Estimation
+ */
+export type TravelMode = "sedan" | "overland4x4" | "bus" | "airCharter";
+
+export interface TravelModeConfig {
+  id: TravelMode;
+  name: string;
+  icon: string;
+  speedKmh: number;
+  terrainFactor: number;
+  description: string;
+}
+
+export const TRAVEL_MODES: TravelModeConfig[] = [
+  {
+    id: "sedan",
+    name: "2WD Sedan / Standard Car",
+    icon: "🚗",
+    speedKmh: 80,
+    terrainFactor: 1.25,
+    description: "Tarred highways (T1, T2, T3, T4, M9) at 80 km/h average cruise"
+  },
+  {
+    id: "overland4x4",
+    name: "High Clearance 4x4 / Safari Rig",
+    icon: "🚙",
+    speedKmh: 65,
+    terrainFactor: 1.35,
+    description: "Mixed tarmac, gravel, park tracks & sand paths at 65 km/h"
+  },
+  {
+    id: "bus",
+    name: "Inter-City Express Coach",
+    icon: "🚌",
+    speedKmh: 70,
+    terrainFactor: 1.25,
+    description: "Shalom / Mazhandu / Likili / Power Tools scheduled coach routes"
+  },
+  {
+    id: "airCharter",
+    name: "Direct Air Charter Flight",
+    icon: "🛩️",
+    speedKmh: 340,
+    terrainFactor: 1.0,
+    description: "Direct turboprop flight (e.g. Cessna Caravan / King Air) at 340 km/h"
+  }
+];
+
+/**
+ * Finds the exact provincial capital for a given province name, code, or coordinates.
+ * Strictly guarantees:
+ * - Western Province -> Mongu
+ * - North-Western Province -> Solwezi
+ * - Central Province -> Kabwe
+ * - Southern Province -> Choma
+ * - Copperbelt Province -> Ndola
+ * - Eastern Province -> Chipata
+ * - Northern Province -> Kasama
+ * - Luapula Province -> Mansa
+ * - Muchinga Province -> Chinsali
+ * - Lusaka Province -> Lusaka
+ */
 export function getProvincialCapital(provinceName?: string, lat?: number, lon?: number): ProvincialCapital {
   if (provinceName) {
-    const norm = provinceName.toLowerCase();
-    const match = ZAMBIA_PROVINCIAL_CAPITALS.find(p => p.provinceName.toLowerCase().includes(norm) || norm.includes(p.provinceName.toLowerCase()));
-    if (match) return match;
+    const raw = provinceName.trim().toLowerCase();
+
+    // 1. Check direct province code matches
+    const codeMatch = ZAMBIA_PROVINCIAL_CAPITALS.find(
+      (p) => p.provinceCode.toLowerCase() === raw || p.provinceCode.toLowerCase().replace("zm-", "") === raw
+    );
+    if (codeMatch) return codeMatch;
+
+    // 2. Strict dictionary mapping for all 10 Zambian provinces and abbreviations
+    const PROVINCE_TO_CAPITAL: Record<string, string> = {
+      western: "Mongu",
+      "western province": "Mongu",
+      barotseland: "Mongu",
+      wes: "Mongu",
+      "zm-wes": "Mongu",
+
+      "north-western": "Solwezi",
+      "north-western province": "Solwezi",
+      northwestern: "Solwezi",
+      "northwestern province": "Solwezi",
+      "north western": "Solwezi",
+      "north western province": "Solwezi",
+      "n/western": "Solwezi",
+      "n/western province": "Solwezi",
+      "n-western": "Solwezi",
+      nw: "Solwezi",
+      "zm-nw": "Solwezi",
+
+      central: "Kabwe",
+      "central province": "Kabwe",
+      cen: "Kabwe",
+      "zm-cen": "Kabwe",
+
+      southern: "Choma",
+      "southern province": "Choma",
+      sou: "Choma",
+      "zm-sou": "Choma",
+
+      copperbelt: "Ndola",
+      "copperbelt province": "Ndola",
+      cop: "Ndola",
+      "zm-cop": "Ndola",
+
+      eastern: "Chipata",
+      "eastern province": "Chipata",
+      eas: "Chipata",
+      "zm-eas": "Chipata",
+
+      northern: "Kasama",
+      "northern province": "Kasama",
+      nor: "Kasama",
+      "zm-nor": "Kasama",
+
+      luapula: "Mansa",
+      "luapula province": "Mansa",
+      lua: "Mansa",
+      "zm-lua": "Mansa",
+
+      muchinga: "Chinsali",
+      "muchinga province": "Chinsali",
+      muc: "Chinsali",
+      "zm-muc": "Chinsali",
+
+      lusaka: "Lusaka",
+      "lusaka province": "Lusaka",
+      lus: "Lusaka",
+      "zm-lus": "Lusaka"
+    };
+
+    const targetCapName = PROVINCE_TO_CAPITAL[raw] || PROVINCE_TO_CAPITAL[raw.replace(/province/g, "").trim()];
+    if (targetCapName) {
+      const match = ZAMBIA_PROVINCIAL_CAPITALS.find((p) => p.name.toLowerCase() === targetCapName.toLowerCase());
+      if (match) return match;
+    }
+
+    const exactMatch = ZAMBIA_PROVINCIAL_CAPITALS.find(
+      (p) => p.provinceName.toLowerCase() === raw || p.name.toLowerCase() === raw
+    );
+    if (exactMatch) return exactMatch;
   }
 
+  // If coordinates provided, find geographically nearest capital
   if (lat !== undefined && lon !== undefined) {
     let closest = ZAMBIA_PROVINCIAL_CAPITALS[0];
     let minDist = Infinity;
@@ -888,7 +1029,9 @@ export function getProvincialCapital(provinceName?: string, lat?: number, lon?: 
 export function getDistrictCapital(districtName?: string, lat?: number, lon?: number): DistrictCapital {
   if (districtName) {
     const norm = districtName.toLowerCase().replace(/district|urban/g, "").trim();
-    const match = ZAMBIA_DISTRICT_CAPITALS.find(d => d.districtName.toLowerCase().includes(norm) || d.name.toLowerCase().includes(norm));
+    const match = ZAMBIA_DISTRICT_CAPITALS.find(
+      (d) => d.districtName.toLowerCase().includes(norm) || d.name.toLowerCase().includes(norm)
+    );
     if (match) return match;
   }
 
@@ -909,29 +1052,39 @@ export function getDistrictCapital(districtName?: string, lat?: number, lon?: nu
 }
 
 /**
- * Complete distance breakdown for any destination coordinate:
- * - Distance to District Headquarters
- * - Distance to Provincial Headquarters
- * - Distance to Lusaka National Capital
+ * Complete distance breakdown and Estimated Time To Travel (TTT) for any destination coordinate:
+ * - Distance & TTT to District Headquarters
+ * - Distance & TTT to Provincial Headquarters
+ * - Distance & TTT to Lusaka National Capital
+ * - Closest Airstrip / Airport & Flight Time
  */
 export interface DestinationDistanceBreakdown {
   destinationCoordinates: { lat: number; lon: number };
+  travelMode: TravelMode;
+  travelModeName: string;
   districtHq: {
     name: string;
+    districtName: string;
     distanceKm: number;
+    straightLineKm: number;
     driveTime: string;
+    hoursDecimal: number;
   };
   provincialHq: {
     provinceName: string;
     capitalName: string;
     distanceKm: number;
+    straightLineKm: number;
     driveTime: string;
+    hoursDecimal: number;
   };
   nationalHq: {
     name: string;
     distanceKm: number;
+    straightLineKm: number;
     driveTime: string;
     flightTimeMinutes: number;
+    hoursDecimal: number;
   };
   nearestAirport: {
     name: string;
@@ -948,14 +1101,43 @@ export function calculateDistanceBreakdown(
   lat: number,
   lon: number,
   districtName?: string,
-  provinceName?: string
+  provinceName?: string,
+  travelMode: TravelMode = "sedan"
 ): DestinationDistanceBreakdown {
+  const modeConfig = TRAVEL_MODES.find((m) => m.id === travelMode) || TRAVEL_MODES[0];
   const distCap = getDistrictCapital(districtName, lat, lon);
   const provCap = getProvincialCapital(provinceName, lat, lon);
 
-  const districtRoad = estimateRoadDistance(lat, lon, distCap.latitude, distCap.longitude, 60);
-  const provRoad = estimateRoadDistance(lat, lon, provCap.latitude, provCap.longitude, 75);
-  const nationalRoad = estimateRoadDistance(lat, lon, LUSAKA_NATIONAL_HQ.latitude, LUSAKA_NATIONAL_HQ.longitude, 80);
+  const districtGeodesic = calculateGeodesicDistanceKm(lat, lon, distCap.latitude, distCap.longitude);
+  const provGeodesic = calculateGeodesicDistanceKm(lat, lon, provCap.latitude, provCap.longitude);
+  const nationalGeodesic = calculateGeodesicDistanceKm(lat, lon, LUSAKA_NATIONAL_HQ.latitude, LUSAKA_NATIONAL_HQ.longitude);
+
+  const districtRoad = estimateRoadDistance(
+    lat,
+    lon,
+    distCap.latitude,
+    distCap.longitude,
+    modeConfig.speedKmh * 0.85,
+    modeConfig.terrainFactor
+  );
+
+  const provRoad = estimateRoadDistance(
+    lat,
+    lon,
+    provCap.latitude,
+    provCap.longitude,
+    modeConfig.speedKmh,
+    modeConfig.terrainFactor
+  );
+
+  const nationalRoad = estimateRoadDistance(
+    lat,
+    lon,
+    LUSAKA_NATIONAL_HQ.latitude,
+    LUSAKA_NATIONAL_HQ.longitude,
+    modeConfig.speedKmh,
+    modeConfig.terrainFactor
+  );
 
   // Find nearest airport / airstrip
   let nearestAir = ZAMBIA_AIRPORTS[0];
@@ -967,35 +1149,48 @@ export function calculateDistanceBreakdown(
       nearestAir = air;
     }
   }
-  const airportRoad = estimateRoadDistance(lat, lon, nearestAir.latitude, nearestAir.longitude, 60);
+  const airportRoad = estimateRoadDistance(lat, lon, nearestAir.latitude, nearestAir.longitude, 60, 1.25);
 
   // Flight time estimate from Lusaka (based on 380 km/h turboprop cruise)
-  const directFromLusaka = calculateGeodesicDistanceKm(lat, lon, LUSAKA_NATIONAL_HQ.latitude, LUSAKA_NATIONAL_HQ.longitude);
-  const flightTimeEstimate = Math.round((directFromLusaka / 380) * 60) + 15; // +15 min taxi/climb
+  const flightTimeEstimate = Math.round((nationalGeodesic / 380) * 60) + 15; // +15 min taxi/climb
 
   return {
     destinationCoordinates: { lat, lon },
+    travelMode: modeConfig.id,
+    travelModeName: modeConfig.name,
     districtHq: {
-      name: `${distCap.name} (${distCap.districtName})`,
+      name: distCap.name,
+      districtName: distCap.districtName,
       distanceKm: districtRoad.distanceKm,
-      driveTime: districtRoad.driveTimeFormatted
+      straightLineKm: Math.round(districtGeodesic),
+      driveTime: districtRoad.driveTimeFormatted,
+      hoursDecimal: districtRoad.driveHours
     },
     provincialHq: {
       provinceName: provCap.provinceName,
       capitalName: provCap.name,
       distanceKm: provRoad.distanceKm,
-      driveTime: provRoad.driveTimeFormatted
+      straightLineKm: Math.round(provGeodesic),
+      driveTime: provRoad.driveTimeFormatted,
+      hoursDecimal: provRoad.driveHours
     },
     nationalHq: {
       name: "Lusaka (National Capital)",
       distanceKm: nationalRoad.distanceKm,
+      straightLineKm: Math.round(nationalGeodesic),
       driveTime: nationalRoad.driveTimeFormatted,
-      flightTimeMinutes: flightTimeEstimate
+      flightTimeMinutes: flightTimeEstimate,
+      hoursDecimal: nationalRoad.driveHours
     },
     nearestAirport: {
       name: nearestAir.name,
       code: nearestAir.code,
-      type: nearestAir.type === "safari_bush_strip" ? "Safari Bush Airstrip" : nearestAir.type === "international" ? "International Airport" : "Domestic Airport",
+      type:
+        nearestAir.type === "safari_bush_strip"
+          ? "Safari Bush Airstrip"
+          : nearestAir.type === "international"
+          ? "International Airport"
+          : "Domestic Airport",
       distanceKm: airportRoad.distanceKm,
       driveTime: airportRoad.driveTimeFormatted,
       runway: nearestAir.runway,

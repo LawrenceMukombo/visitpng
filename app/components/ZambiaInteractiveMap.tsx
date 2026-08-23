@@ -1920,28 +1920,28 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 </ul>
               </div>
 
-              {/* 3-Tier Headquarters Distance Matrix */}
+              {/* 3-Tier Headquarters Distance & TTT Matrix */}
               {distanceBreakdown && (
                 <div style={{ background: "rgba(0,0,0,0.35)", borderRadius: "10px", padding: "10px 12px", marginBottom: "12px", border: "1px solid rgba(255,255,255,0.08)" }}>
                   <span style={{ fontSize: "11px", fontWeight: 800, color: "#34D399", display: "block", marginBottom: "6px" }}>
-                    📏 DISTANCE TO KEY HUBS
+                    📏 DISTANCE & ESTIMATED TIME TO TRAVEL (TTT)
                   </span>
                   <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.85)", display: "flex", flexDirection: "column", gap: "4px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                       <span>📍 District HQ:</span>
-                      <strong style={{ color: "#38bdf8" }}>{distanceBreakdown.districtHq.name.split(" ")[0]} ({distanceBreakdown.districtHq.distanceKm} km)</strong>
+                      <strong style={{ color: "#38bdf8" }}>{distanceBreakdown.districtHq.name} ({distanceBreakdown.districtHq.distanceKm} km · ~{distanceBreakdown.districtHq.driveTime})</strong>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                       <span>🏛️ Provincial HQ:</span>
-                      <strong style={{ color: "#facc15" }}>{distanceBreakdown.provincialHq.capitalName} ({distanceBreakdown.provincialHq.distanceKm} km)</strong>
+                      <strong style={{ color: "#facc15" }}>{distanceBreakdown.provincialHq.capitalName} ({distanceBreakdown.provincialHq.provinceName}) · {distanceBreakdown.provincialHq.distanceKm} km (~{distanceBreakdown.provincialHq.driveTime})</strong>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                       <span>🇿🇲 Lusaka Capital:</span>
-                      <strong style={{ color: "#34D399" }}>{distanceBreakdown.nationalHq.distanceKm} km (~{distanceBreakdown.nationalHq.driveTime})</strong>
+                      <strong style={{ color: "#34D399" }}>{distanceBreakdown.nationalHq.distanceKm} km (~{distanceBreakdown.nationalHq.driveTime} TTT)</strong>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", marginTop: "2px", borderTop: "1px dashed rgba(255,255,255,0.1)", paddingTop: "4px" }}>
                       <span>✈️ Closest Airport:</span>
-                      <strong style={{ color: "#7dd3fc" }}>{distanceBreakdown.nearestAirport.code} ({distanceBreakdown.nearestAirport.distanceKm} km)</strong>
+                      <strong style={{ color: "#7dd3fc" }}>{distanceBreakdown.nearestAirport.name.split("(")[0].trim()} ({distanceBreakdown.nearestAirport.distanceKm} km · {distanceBreakdown.nearestAirport.driveTime})</strong>
                     </div>
                   </div>
                 </div>

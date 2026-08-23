@@ -7,13 +7,15 @@ import {
   ZAMBIA_HIGHWAY_CORRIDORS,
   ZAMBIA_PROVINCIAL_CAPITALS,
   LUSAKA_NATIONAL_HQ,
+  TRAVEL_MODES,
   calculateDistanceBreakdown,
   getDestinationTransportGuide,
   type DestinationDistanceBreakdown,
   type DestinationTransportGuide,
   type ZambiaAirport,
   type ZambiaAmenity,
-  type ZambiaHighwayCorridor
+  type ZambiaHighwayCorridor,
+  type TravelMode
 } from "../../db/zambiaTransportAmenities";
 import { ZAMBIA_TOURISM_PINS, type MapDestinationPin } from "./ZambiaInteractiveMap";
 
@@ -94,14 +96,18 @@ export default function ZambiaOsmMap({
     };
   }, []);
 
+  // Travel Mode state for dynamic TTT recalculation
+  const [travelMode, setTravelMode] = useState<TravelMode>("sedan");
+  const [recalcFlash, setRecalcFlash] = useState<boolean>(false);
+
   // Calculate dynamic distance breakdown for selected location
   const distanceBreakdown: DestinationDistanceBreakdown = useMemo(() => {
     const lat = selectedPin?.latitude ?? center.lat;
     const lon = selectedPin?.longitude ?? center.lon;
     const districtName = selectedPin?.districtName;
     const provinceName = selectedPin?.provinceName;
-    return calculateDistanceBreakdown(lat, lon, districtName, provinceName);
-  }, [selectedPin, center]);
+    return calculateDistanceBreakdown(lat, lon, districtName, provinceName, travelMode);
+  }, [selectedPin, center, travelMode]);
 
   // Calculate dynamic transport guide
   const transportGuide: DestinationTransportGuide = useMemo(() => {
@@ -110,6 +116,11 @@ export default function ZambiaOsmMap({
     const provinceName = selectedPin?.provinceName;
     return getDestinationTransportGuide(lat, lon, provinceName);
   }, [selectedPin, center]);
+
+  const handleRecalculateTtt = () => {
+    setRecalcFlash(true);
+    setTimeout(() => setRecalcFlash(false), 800);
+  };
 
   // Filtered Pins
   const filteredPins = useMemo(() => {
@@ -1056,7 +1067,72 @@ export default function ZambiaOsmMap({
           )}
 
           {/* ================================================================= */}
-          {/* 1. THREE-TIER HEADQUARTERS DISTANCE MATRIX */}
+          {/* 1. TRAVEL MODE & SPEED SELECTOR FOR TTT CALCULATION */}
+          {/* ================================================================= */}
+          <div
+            style={{
+              background: "rgba(255,255,255,0.04)",
+              borderRadius: "12px",
+              border: "1px solid rgba(255,255,255,0.1)",
+              padding: "12px 14px"
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
+              <span style={{ fontSize: "11px", fontWeight: 800, color: "#34D399", letterSpacing: "0.5px" }}>
+                ⏱️ TRAVEL MODE & SPEED (TTT)
+              </span>
+              <button
+                onClick={handleRecalculateTtt}
+                style={{
+                  background: recalcFlash ? "#22c55e" : "rgba(34,197,94,0.15)",
+                  color: recalcFlash ? "#000" : "#4ade80",
+                  border: "1px solid rgba(74,222,128,0.4)",
+                  borderRadius: "6px",
+                  padding: "3px 8px",
+                  fontSize: "11px",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "all 0.2s"
+                }}
+              >
+                {recalcFlash ? "✓ Recalculated!" : "🔄 Recalculate TTT"}
+              </button>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "6px" }}>
+              {TRAVEL_MODES.map((mode) => {
+                const isActive = travelMode === mode.id;
+                return (
+                  <button
+                    key={mode.id}
+                    onClick={() => setTravelMode(mode.id)}
+                    style={{
+                      background: isActive ? "rgba(34, 197, 94, 0.25)" : "rgba(0, 0, 0, 0.3)",
+                      border: isActive ? "1px solid #4ade80" : "1px solid rgba(255, 255, 255, 0.08)",
+                      borderRadius: "8px",
+                      padding: "6px 8px",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px",
+                      transition: "all 0.15s"
+                    }}
+                  >
+                    <div style={{ fontSize: "11.5px", fontWeight: 700, color: isActive ? "#4ade80" : "#fff" }}>
+                      {mode.icon} {mode.name.split("/")[0].trim()}
+                    </div>
+                    <div style={{ fontSize: "10px", color: "rgba(255, 255, 255, 0.6)" }}>
+                      Avg: {mode.speedKmh} km/h
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ================================================================= */}
+          {/* 2. THREE-TIER HEADQUARTERS DISTANCE & TTT MATRIX */}
           {/* ================================================================= */}
           <div
             style={{
@@ -1068,7 +1144,7 @@ export default function ZambiaOsmMap({
           >
             <div style={{ fontSize: "12px", fontWeight: 800, color: "#34D399", marginBottom: "10px", display: "flex", alignItems: "center", gap: "6px" }}>
               <span>📏</span>
-              <span>CALCULATED DISTANCE BREAKDOWN</span>
+              <span>CALCULATED DISTANCE & TIME TO TRAVEL (TTT)</span>
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
@@ -1076,11 +1152,11 @@ export default function ZambiaOsmMap({
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(0,0,0,0.3)", padding: "8px 10px", borderRadius: "8px" }}>
                 <div>
                   <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.6)", display: "block" }}>📍 District HQ</span>
-                  <strong style={{ fontSize: "12.5px", color: "#fff" }}>{distanceBreakdown.districtHq.name}</strong>
+                  <strong style={{ fontSize: "12.5px", color: "#fff" }}>{distanceBreakdown.districtHq.name} ({distanceBreakdown.districtHq.districtName})</strong>
                 </div>
                 <div style={{ textAlign: "right" }}>
                   <span style={{ fontSize: "13px", fontWeight: 800, color: "#38bdf8" }}>{distanceBreakdown.districtHq.distanceKm} km</span>
-                  <small style={{ display: "block", fontSize: "10px", color: "rgba(255,255,255,0.6)" }}>~{distanceBreakdown.districtHq.driveTime}</small>
+                  <small style={{ display: "block", fontSize: "10px", color: "#38bdf8", fontWeight: 600 }}>TTT: ~{distanceBreakdown.districtHq.driveTime}</small>
                 </div>
               </div>
 
@@ -1088,11 +1164,11 @@ export default function ZambiaOsmMap({
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(0,0,0,0.3)", padding: "8px 10px", borderRadius: "8px" }}>
                 <div>
                   <span style={{ fontSize: "11px", color: "rgba(255,255,255,0.6)", display: "block" }}>🏛️ Provincial HQ</span>
-                  <strong style={{ fontSize: "12.5px", color: "#fff" }}>{distanceBreakdown.provincialHq.capitalName} ({distanceBreakdown.provincialHq.provinceName.split(" ")[0]})</strong>
+                  <strong style={{ fontSize: "12.5px", color: "#fff" }}>{distanceBreakdown.provincialHq.capitalName} ({distanceBreakdown.provincialHq.provinceName})</strong>
                 </div>
                 <div style={{ textAlign: "right" }}>
                   <span style={{ fontSize: "13px", fontWeight: 800, color: "#facc15" }}>{distanceBreakdown.provincialHq.distanceKm} km</span>
-                  <small style={{ display: "block", fontSize: "10px", color: "rgba(255,255,255,0.6)" }}>~{distanceBreakdown.provincialHq.driveTime}</small>
+                  <small style={{ display: "block", fontSize: "10px", color: "#facc15", fontWeight: 600 }}>TTT: ~{distanceBreakdown.provincialHq.driveTime}</small>
                 </div>
               </div>
 
@@ -1100,12 +1176,12 @@ export default function ZambiaOsmMap({
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.3)", padding: "8px 10px", borderRadius: "8px" }}>
                 <div>
                   <span style={{ fontSize: "11px", color: "#34D399", display: "block", fontWeight: 700 }}>🇿🇲 National Capital</span>
-                  <strong style={{ fontSize: "12.5px", color: "#fff" }}>Lusaka Central</strong>
+                  <strong style={{ fontSize: "12.5px", color: "#fff" }}>Lusaka (Central HQ)</strong>
                 </div>
                 <div style={{ textAlign: "right" }}>
                   <span style={{ fontSize: "13.5px", fontWeight: 800, color: "#34D399" }}>{distanceBreakdown.nationalHq.distanceKm} km</span>
-                  <small style={{ display: "block", fontSize: "10px", color: "rgba(255,255,255,0.7)" }}>
-                    ~{distanceBreakdown.nationalHq.driveTime} drive · {distanceBreakdown.nationalHq.flightTimeMinutes}m flight
+                  <small style={{ display: "block", fontSize: "10px", color: "rgba(255,255,255,0.85)" }}>
+                    Overland: ~{distanceBreakdown.nationalHq.driveTime} · Flight: {distanceBreakdown.nationalHq.flightTimeMinutes}m
                   </small>
                 </div>
               </div>
