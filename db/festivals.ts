@@ -206,6 +206,33 @@ export const ZAMBIA_FESTIVALS: FestivalEvent[] = [
       { day: "Saturday", event: "Arrival of International Chewa Delegations", time: "09:00 AM" },
       { day: "Sunday", event: "Grand Gule Wamkulu Masquerade & King's Address", time: "10:00 AM – 05:00 PM" }
     ]
+  },
+  {
+    id: "lunda-lubanza-ceremony",
+    name: "Lunda Lubanza Traditional Ceremony",
+    subtitle: "Sacred annual royal gathering and heritage celebration of the Lunda people under Senior Chief Ishindi",
+    month: "August",
+    dates: "August 14 – 16",
+    year: 2026,
+    location: "Mukandakunda Royal Capital, Zambezi District",
+    province: "North-Western Province",
+    region: "North-Western",
+    coverImage: "/ceremonies/lunda_lubanza_senior_chief_ishindi.jpg",
+    description: "Celebrated annually by the Lunda people of Northwestern Zambia at Mukandakunda. Led by His Royal Highness Senior Chief Ishindi, the ceremony features vibrant royal processions, traditional Lunda drumming, cultural exhibits, and homage to ancestral heritage.",
+    featuredTribes: ["Lunda of Senior Chief Ishindi", "Mukandakunda Royal Drummers", "North-Western Cultural Troupe"],
+    ticketPriceZmw: 300,
+    ticketPricePgk: 300,
+    vipPackagePriceZmw: 750,
+    vipPackagePricePgk: 750,
+    etiquetteTips: [
+      "Observe royal court etiquette and traditional salutations before Senior Chief Ishindi.",
+      "Support local North-Western artisans selling traditional baskets and copper crafts."
+    ],
+    scheduleHighlights: [
+      { day: "Day 1", event: "Palace Purification & Royal Fire Kindling at Mukandakunda", time: "06:00 PM" },
+      { day: "Day 2", event: "Grand Procession of Senior Chief Ishindi & Royal Lunda War Dances", time: "09:30 AM – 04:00 PM" },
+      { day: "Day 3", event: "Tribute by Subordinate Chiefs & Cultural Performances", time: "10:00 AM – 03:00 PM" }
+    ]
   }
 ];
 

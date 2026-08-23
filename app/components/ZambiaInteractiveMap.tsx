@@ -114,8 +114,8 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     season: "August / September",
     sacredRegalia: "Royal Mpok (Lunda Double-Edged Battle Sword) & Royal Palanquin",
     dressCode: "Formal traditional attire / Lunda royal colors",
-    summary: "Ancient celebration of Lunda royal sovereignty and cultural solidarity at Mukanda Nkambo. Senior Chief Ishindi is borne aloft on the royal palanquin accompanied by royal drummers and ceremonial sword salutes.",
-    imageUrl: "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=1100&q=82",
+    summary: "Ancient celebration of Lunda royal sovereignty and cultural solidarity at Mukandakunda. Senior Chief Ishindi is borne aloft on the royal palanquin accompanied by royal drummers and ceremonial sword salutes.",
+    imageUrl: "/ceremonies/lunda_lubanza_senior_chief_ishindi.jpg",
     latitude: -13.5167,
     longitude: 23.1500,
     highlights: [
