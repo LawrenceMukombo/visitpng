@@ -149,9 +149,8 @@ export async function ensureCatalogue() {
   if (!d1) throw new Error("Database binding DB is unavailable");
 
   await ensureCountries();
-  await ensureCountryGeography("ZMB");
-
   await d1.batch(schemaStatements.map(sql => d1.prepare(sql)));
+  await ensureCountryGeography("ZMB");
 
   const safeAlter = async (sql: string) => {
     try { await d1.prepare(sql).run(); } catch {}

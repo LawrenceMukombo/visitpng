@@ -19,6 +19,7 @@ export interface RegionInfo {
 
 export async function ensureCountryGeography(countryCode: string = "PNG"): Promise<void> {
   await ensureCountries();
+  await env.DB.prepare("CREATE TABLE IF NOT EXISTS provinces (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,code TEXT NOT NULL UNIQUE,name TEXT NOT NULL,region TEXT NOT NULL)").run();
   const normalized = (countryCode || "PNG").toUpperCase();
   
   const country = await env.DB.prepare("SELECT id FROM countries WHERE UPPER(code)=?").bind(normalized).first<{ id: number }>();
