@@ -154,6 +154,33 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
 
   const placeFileInputRef=useRef<HTMLInputElement|null>(null);
   const destFileInputRef=useRef<HTMLInputElement|null>(null);
+  const csvFileInputRef=useRef<HTMLInputElement|null>(null);
+
+  const handleCsvUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setStatus("⏳ Uploading and processing phrasebook CSV...");
+      const text = await file.text();
+      const res = await fetch("/api/admin/languages/upload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ csvText: text })
+      });
+      const json = await res.json();
+      if (json.success && json.zones) {
+        setLanguageZones([...json.zones]);
+        setStatus(`🎉 ${json.message}`);
+        setTimeout(() => setStatus(""), 6000);
+      } else {
+        setStatus(`✕ Upload failed: ${json.error}`);
+      }
+    } catch {
+      setStatus("✕ Failed to upload CSV file.");
+    } finally {
+      if (csvFileInputRef.current) csvFileInputRef.current.value = "";
+    }
+  };
 
   const toggleCardExpansion=(id:number)=>{
     setExpandedCardIds(prev=>{
@@ -1144,7 +1171,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
             const currentZone = languageZones.find((z) => z.code === selectedAdminLangZone) || languageZones[0];
             return (
               <div>
-                <header>
+                <header style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"10px"}}>
                   <div>
                     <p className="eyebrow" style={{color:"#0A4D3C",fontWeight:800}}>{currentZone.name.toUpperCase()} DICTIONARY</p>
                     <h2>{currentZone.phrases.length} Phrases Configured in {currentZone.name}</h2>
@@ -1152,12 +1179,57 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
                       Spoken across: {currentZone.primaryProvinces.join(", ")} · Speakers: {currentZone.speakerCount}
                     </p>
                   </div>
-                  <button
-                    onClick={() => setPhraseForm({ id: "", category: "greetings", english: "", localText: "", phonetic: "", syllables: "", literalMeaning: "", culturalNote: "" })}
-                    style={{background:"#0A4D3C",color:"#fff",border:"none",padding:"6px 12px",borderRadius:"6px",fontSize:"11px",fontWeight:700,cursor:"pointer"}}
-                  >
-                    + Add New Phrase
-                  </button>
+                  <div style={{display:"flex",gap:"6px",flexWrap:"wrap",alignItems:"center"}}>
+                    <input
+                      ref={csvFileInputRef}
+                      type="file"
+                      accept=".csv,text/csv"
+                      style={{display:"none"}}
+                      onChange={handleCsvUpload}
+                    />
+                    <a
+                      href="/templates/zamroam_languages_template.csv"
+                      download="zamroam_languages_template.csv"
+                      style={{
+                        background:"var(--surface-subtle)",
+                        border:"1px solid var(--border-default)",
+                        color:"var(--text-primary)",
+                        padding:"6px 10px",
+                        borderRadius:"6px",
+                        fontSize:"11px",
+                        fontWeight:600,
+                        textDecoration:"none",
+                        display:"inline-flex",
+                        alignItems:"center",
+                        gap:"4px"
+                      }}
+                    >
+                      📥 Download CSV Template
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => csvFileInputRef.current?.click()}
+                      style={{
+                        background:"#C86428",
+                        color:"#fff",
+                        border:"none",
+                        padding:"6px 12px",
+                        borderRadius:"6px",
+                        fontSize:"11px",
+                        fontWeight:700,
+                        cursor:"pointer"
+                      }}
+                    >
+                      📤 Upload CSV / Bulk Import
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setPhraseForm({ id: "", category: "greetings", english: "", localText: "", phonetic: "", syllables: "", literalMeaning: "", culturalNote: "" })}
+                      style={{background:"#0A4D3C",color:"#fff",border:"none",padding:"6px 12px",borderRadius:"6px",fontSize:"11px",fontWeight:700,cursor:"pointer"}}
+                    >
+                      + Add New Phrase
+                    </button>
+                  </div>
                 </header>
 
                 <div style={{display:"grid",gap:"10px",marginTop:"14px"}}>
