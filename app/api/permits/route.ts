@@ -26,7 +26,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const {permitTypeId, holderName, passportOrId, countryOfOrigin, startDate, currencyPaid} = body;
+    const {permitTypeId, holderName, passportOrId, visitorTier, countryOfOrigin, startDate, currencyPaid} = body;
 
     if (!permitTypeId) {
       return Response.json({ success: false, error: "Permit type is required" }, { status: 400 });
@@ -39,6 +39,7 @@ export async function POST(request: Request) {
       permitTypeId,
       holderName,
       passportOrId || "PASSPORT-ZMB",
+      visitorTier || "International",
       countryOfOrigin || "Zambia",
       startDate || new Date().toISOString().slice(0, 10),
       currencyPaid || "ZMW"
