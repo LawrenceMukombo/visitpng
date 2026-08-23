@@ -139,7 +139,7 @@ export const ZAMBIA_FESTIVALS: FestivalEvent[] = [
     location: "Maala, Namwala District",
     province: "Southern Province",
     region: "Southern",
-    coverImage: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82",
+    coverImage: "/ceremonies/shimunenga_baila_warriors.jpg",
     description: "Celebrated by the Ba-Ila people on the Kafue Flats. Thousands of cattle are driven through flooded channels while spear-wielding warriors chant heroic poems honoring their ancestors.",
     featuredTribes: ["Ba-Ila Cattlemen", "Namwala Cultural Troupe", "Kafue River Choirs"],
     ticketPriceZmw: 280,

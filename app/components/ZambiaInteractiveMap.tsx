@@ -231,7 +231,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     sacredRegalia: "Long Ila Spears, Impandala Feathered Headgear, Ancestral Horns",
     dressCode: "Light safari or cultural clothing suitable for floodplain heat",
     summary: "One of Africa's most breathtaking pastoral spectacles. Thousands of prized horned Ila cattle swim across the flooded Kafue River as fearless young warriors dive alongside them singing heroic cattle praises.",
-    imageUrl: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82",
+    imageUrl: "/ceremonies/shimunenga_baila_warriors.jpg",
     latitude: -15.7500,
     longitude: 26.4333,
     highlights: [
