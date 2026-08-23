@@ -254,7 +254,8 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       tagline={countryCode === "ZMB" ? "Roam Zambia. Experience More." : "The Land of a Million Journeys"}
       legalOwner="Lamton Investments Ltd"
       onOpenPass={() => setShowPassModal(true)}
-      onOpenPartnerRegistration={() => setShowPartnerModal(true)}
+      onOpenPartnerRegistration={() => setShowProviderModal(true)}
+      onOpenFoundingPartners={() => setShowPartnerModal(true)}
       onOpenAbout={() => setShowAboutModal(true)}
       onSelectCategory={(slug) => {
         setTab("Explore");
@@ -276,7 +277,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       onOpenMap={() => {
         setTab("Explore");
         setExploreMode("map");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 380, behavior: "smooth" });
       }}
       onOpenMembershipHub={() => {
         setTab("Membership");

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import { ZamRoamLogo } from "./ZamRoamEmblem";
 
 export interface FooterProps {
@@ -9,6 +10,7 @@ export interface FooterProps {
   legalOwner?: string;
   onOpenPass?: () => void;
   onOpenPartnerRegistration?: () => void;
+  onOpenFoundingPartners?: () => void;
   onOpenAbout?: () => void;
   onSelectCategory?: (categorySlug: string) => void;
   onOpenDeals?: () => void;
@@ -23,6 +25,7 @@ export function Footer({
   legalOwner = "Lamton Investments Ltd",
   onOpenPass,
   onOpenPartnerRegistration,
+  onOpenFoundingPartners,
   onOpenAbout,
   onSelectCategory,
   onOpenDeals,
@@ -91,8 +94,18 @@ export function Footer({
     }
   };
 
-  const handlePartnerClick = () => {
+  const handlePartnerRegisterClick = () => {
     if (onOpenPartnerRegistration) {
+      onOpenPartnerRegistration();
+    } else {
+      window.location.href = "/partners";
+    }
+  };
+
+  const handleFoundingPartnersClick = () => {
+    if (onOpenFoundingPartners) {
+      onOpenFoundingPartners();
+    } else if (onOpenPartnerRegistration) {
       onOpenPartnerRegistration();
     } else {
       window.location.href = "/partners";
@@ -155,9 +168,15 @@ export function Footer({
               {tagline}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.85rem", color: "#c2e2dc", marginBottom: "1.25rem" }}>
-              <span>🌐 <strong>zamroam.com</strong></span>
-              <span>✉️ <strong>info@zamroam.com</strong></span>
-              <span>💬 WhatsApp: <strong>+260 573 506 598</strong></span>
+              <Link href="/" style={{ color: "#c2e2dc", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                🌐 <strong>zamroam.com</strong>
+              </Link>
+              <a href="mailto:info@zamroam.com" style={{ color: "#c2e2dc", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                ✉️ <strong>info@zamroam.com</strong>
+              </a>
+              <a href="https://wa.me/260573506598" target="_blank" rel="noopener noreferrer" style={{ color: "#c2e2dc", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                💬 WhatsApp: <strong>+260 573 506 598</strong>
+              </a>
             </div>
             <div style={{
               background: "rgba(255, 255, 255, 0.05)",
@@ -281,7 +300,7 @@ export function Footer({
               <li>
                 <button
                   type="button"
-                  onClick={handlePartnerClick}
+                  onClick={handlePartnerRegisterClick}
                   style={highlightLinkStyle}
                 >
                   Become a Partner (List Business)
@@ -290,7 +309,7 @@ export function Footer({
               <li>
                 <button
                   type="button"
-                  onClick={handlePartnerClick}
+                  onClick={handleFoundingPartnersClick}
                   style={linkStyle}
                 >
                   100 Founding ZamRoam Partners
@@ -346,23 +365,23 @@ export function Footer({
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/icons/whatsapp.png" alt="WhatsApp" style={{ width: "28px", height: "28px" }} />
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" title="Facebook" style={{ opacity: 0.9 }}>
+            <a href="https://facebook.com/zamroam" target="_blank" rel="noopener noreferrer" title="Facebook" style={{ opacity: 0.9 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/icons/facebook.png" alt="Facebook" style={{ width: "28px", height: "28px" }} />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram" style={{ opacity: 0.9 }}>
+            <a href="https://instagram.com/zamroam" target="_blank" rel="noopener noreferrer" title="Instagram" style={{ opacity: 0.9 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/icons/instagram.png" alt="Instagram" style={{ width: "28px", height: "28px" }} />
             </a>
-            <a href="https://x.com" target="_blank" rel="noopener noreferrer" title="X (Twitter)" style={{ opacity: 0.9 }}>
+            <a href="https://x.com/zamroam" target="_blank" rel="noopener noreferrer" title="X (Twitter)" style={{ opacity: 0.9 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/icons/x_twitter.png" alt="X" style={{ width: "28px", height: "28px" }} />
             </a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" title="YouTube" style={{ opacity: 0.9 }}>
+            <a href="https://youtube.com/@zamroam" target="_blank" rel="noopener noreferrer" title="YouTube" style={{ opacity: 0.9 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/icons/youtube.png" alt="YouTube" style={{ width: "28px", height: "28px" }} />
             </a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" title="TikTok" style={{ opacity: 0.9 }}>
+            <a href="https://tiktok.com/@zamroam" target="_blank" rel="noopener noreferrer" title="TikTok" style={{ opacity: 0.9 }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/icons/tiktok.png" alt="TikTok" style={{ width: "28px", height: "28px" }} />
             </a>
