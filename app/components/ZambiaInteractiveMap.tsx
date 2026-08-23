@@ -57,7 +57,7 @@ export const ZAMBIA_TOURISM_PINS: MapDestinationPin[] = [
     sacredRegalia: "Nalikwanda Royal Barge, Royal Maoma War Drums, Elephant Crest Canopy",
     dressCode: "Traditional Siziba (Men: kilt, shirt, red beret) & Musisi (Women: tiered silk dresses)",
     summary: "The world's most spectacular royal water pageant. As floodwaters submerge the Barotse plains, the King sails in the colossal 100-oarsmen Nalikwanda barge from Lealui to the highlands of Limulunga.",
-    imageUrl: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82",
+    imageUrl: "/ceremonies/kuomboka_nalikwanda_barge.jpg",
     latitude: -15.2819,
     longitude: 23.1311,
     highlights: [

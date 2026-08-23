@@ -30,7 +30,7 @@ export const ZAMBIA_FESTIVALS: FestivalEvent[] = [
     location: "Lealui to Limulunga, Mongu District",
     province: "Western Province",
     region: "Western",
-    coverImage: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82",
+    coverImage: "/ceremonies/kuomboka_nalikwanda_barge.jpg",
     description: "One of Africa's most ancient and magnificent royal pageants. When the Zambezi floodwaters rise, the Litunga boards the Nalikwanda, an enormous black-and-white striped barge rowed by 100 men in traditional red berets, accompanied by roaring royal Maoma war drums.",
     featuredTribes: ["Lozi / Barotse Nation", "Royal Nalikwanda Paddlers", "Mongu Traditional Troupe"],
     ticketPriceZmw: 450,
