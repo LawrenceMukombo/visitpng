@@ -174,16 +174,6 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
             {data.listings.slice(0,5).map(place=><button key={place.id} role="option" onMouseDown={e=>e.preventDefault()} onClick={()=>{setQ(place.name);setSearchOpen(false)}}><strong>{place.name}</strong><span>{place.destination} · {place.province}</span></button>)}
             {!loading&&data.listings.length===0&&<p>No matching suggestions yet</p>}
           </div>}
-          <nav>
-            <button className={category==="all"&&exploreMode==="places"?"selectedFilter":""} onClick={()=>{setCategory("all");setExploreMode("places")}}>All places</button>
-            <button className={exploreMode==="map"?"selectedFilter":""} onClick={()=>setExploreMode("map")}>🗺️ Interactive Map</button>
-            <button className={exploreMode==="wantok"?"selectedFilter":""} onClick={()=>setExploreMode("wantok")}>{isZambia ? "🦁 Safari AI" : "🤖 Wantok AI"}</button>
-            <button className={exploreMode==="security"?"selectedFilter":""} onClick={()=>setExploreMode("security")}>🛡️ SafeTravel</button>
-            <button className={exploreMode==="phrasebook"?"selectedFilter":""} onClick={()=>setExploreMode("phrasebook")}>{isZambia ? "🗣️ Local Phrases" : "🗣️ Tok Pisin"}</button>
-            <button className={exploreMode==="festivals"?"selectedFilter":""} onClick={()=>setExploreMode("festivals")}>{isZambia ? "🎭 Ceremonies" : "🎭 Festivals"}</button>
-            <button className={exploreMode==="permits"?"selectedFilter":""} onClick={()=>setExploreMode("permits")}>{isZambia ? "🎫 Park Permits" : "🎫 Permits"}</button>
-            <button className={exploreMode==="trails"?"selectedFilter":""} onClick={()=>setExploreMode("trails")}>{isZambia ? "🗺️ Safari Trails" : "🗺️ Trails"}</button>
-          </nav>
         </div>
       </section>
 
