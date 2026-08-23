@@ -918,7 +918,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
 
       {/* Main Map Body: OpenStreetMap Live View OR District Shapefiles GIS */}
       {mapMode === "osm" ? (
-        <div style={{ padding: "16px 20px" }}>
+        <div style={{ padding: "16px 20px", width: "100%", boxSizing: "border-box" }}>
           <ZambiaOsmMap initialSelectedPin={selectedPin} onSelectDestination={onSelectDestination} />
         </div>
       ) : (

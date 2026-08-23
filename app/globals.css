@@ -1247,6 +1247,53 @@ small{font-size:11px!important;line-height:1.4}.eyebrow{font-size:11px}.bottom b
   overflow-y: auto !important;
 }
 
+/* OpenStreetMap (OSM) Live Explorer Grid & Canvas */
+.zambiaOsmGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 380px;
+  gap: 16px;
+  align-items: start;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1100px) {
+  .zambiaOsmGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.zambiaOsmMapCanvas {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  height: 580px;
+  min-height: 480px;
+  background: rgba(13, 32, 29, 1);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(37, 211, 102, 0.3);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.zambiaOsmSidebar {
+  background: rgba(10, 32, 32, 0.95);
+  border-radius: 16px;
+  border: 1px solid rgba(37, 211, 102, 0.3);
+  padding: 18px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-height: 580px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+
 
 
 

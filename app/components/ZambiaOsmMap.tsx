@@ -56,8 +56,8 @@ export default function ZambiaOsmMap({
 
   // Map container width & height state to avoid accessing refs during render
   const [mapDimensions, setMapDimensions] = useState<{ width: number; height: number }>({
-    width: 750,
-    height: 620
+    width: 800,
+    height: 580
   });
 
   // Dragging / Pan state for custom tile canvas
@@ -68,15 +68,30 @@ export default function ZambiaOsmMap({
   useEffect(() => {
     const updateSize = () => {
       if (mapViewportRef.current) {
-        setMapDimensions({
-          width: mapViewportRef.current.clientWidth || 750,
-          height: 620
-        });
+        const rect = mapViewportRef.current.getBoundingClientRect();
+        if (rect.width > 0) {
+          setMapDimensions({
+            width: rect.width,
+            height: rect.height || 580
+          });
+        }
       }
     };
     updateSize();
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined" && mapViewportRef.current) {
+      resizeObserver = new ResizeObserver(() => {
+        updateSize();
+      });
+      resizeObserver.observe(mapViewportRef.current);
+    }
+
     window.addEventListener("resize", updateSize);
-    return () => window.removeEventListener("resize", updateSize);
+    return () => {
+      window.removeEventListener("resize", updateSize);
+      if (resizeObserver) resizeObserver.disconnect();
+    };
   }, []);
 
   // Calculate dynamic distance breakdown for selected location
@@ -457,29 +472,12 @@ export default function ZambiaOsmMap({
       </div>
 
       {/* Main Grid: Interactive Map + Distance & Amenities Inspector */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 380px",
-          gap: "16px",
-          alignItems: "start"
-        }}
-        className="zambiaOsmGrid"
-      >
+      <div className="zambiaOsmGrid">
         {/* Left Column: OpenStreetMap Canvas & Interactive Markers */}
         <div
-          style={{
-            position: "relative",
-            height: "620px",
-            background: "#0d201d",
-            borderRadius: "16px",
-            overflow: "hidden",
-            border: "1px solid rgba(37, 211, 102, 0.3)",
-            boxShadow: "0 16px 36px rgba(0,0,0,0.6)",
-            cursor: isDragging ? "grabbing" : "grab",
-            userSelect: "none"
-          }}
+          className="zambiaOsmMapCanvas"
           ref={mapViewportRef}
+          style={{ cursor: isDragging ? "grabbing" : "grab" }}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
@@ -515,7 +513,7 @@ export default function ZambiaOsmMap({
               const tileY = (t.y / Math.pow(2, t.z)) * tileScale;
 
               const left = mapDimensions.width / 2 + (tileX - centerX);
-              const top = 310 + (tileY - centerY);
+              const top = mapDimensions.height / 2 + (tileY - centerY);
 
               return (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -1029,20 +1027,7 @@ export default function ZambiaOsmMap({
         </div>
 
         {/* Right Column: Distance Calculator, Transport Logistics & Amenities Inspector */}
-        <div
-          style={{
-            background: "rgba(10, 32, 32, 0.95)",
-            borderRadius: "16px",
-            border: "1px solid rgba(37, 211, 102, 0.3)",
-            padding: "20px",
-            boxShadow: "0 12px 30px rgba(0,0,0,0.5)",
-            display: "flex",
-            flexDirection: "column",
-            gap: "16px",
-            maxHeight: "620px",
-            overflowY: "auto"
-          }}
-        >
+        <div className="zambiaOsmSidebar">
           {/* Header of Selected Item */}
           {selectedPin ? (
             <div>
