@@ -489,16 +489,50 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
     }
   };
 
-  if(!data)return <main className="adminShell"><div className="adminAccess"><div className="adminLogo">V</div><h1>Visit PNG administration</h1><p>{status}</p><Link href="/">Return to Visit PNG</Link></div></main>;
+  if(!data){
+    return (
+      <main className="adminShell">
+        <div className="adminAccess" style={{maxWidth:"480px",margin:"60px auto",padding:"32px",background:"#fff",borderRadius:"16px",boxShadow:"0 8px 30px rgba(0,0,0,0.08)",textAlign:"center"}}>
+          <div className="adminLogo" style={{fontSize:"36px",marginBottom:"12px"}}>🇿🇲</div>
+          <h1 style={{fontSize:"22px",fontWeight:800,color:"#0A4D3C",marginBottom:"8px"}}>ZAMROAM ADMINISTRATION</h1>
+          <p style={{color:"#555",fontSize:"14px",lineHeight:"1.6",marginBottom:"20px"}}>{status}</p>
+          <div style={{display:"flex",gap:"10px",justifyContent:"center",flexWrap:"wrap"}}>
+            <button
+              type="button"
+              onClick={() => load(selectedCountry)}
+              style={{padding:"10px 18px",background:"#D96B27",color:"#fff",border:"none",borderRadius:"8px",fontWeight:700,cursor:"pointer"}}
+            >
+              🔄 Retry Loading
+            </button>
+            <Link
+              href="/"
+              style={{padding:"10px 18px",background:"#f1f5f9",color:"#334155",borderRadius:"8px",fontWeight:600,textDecoration:"none",display:"inline-block"}}
+            >
+              Return to ZamRoam
+            </Link>
+            <a
+              href={viewer.signOut}
+              style={{padding:"10px 18px",background:"#fee2e2",color:"#dc2626",borderRadius:"8px",fontWeight:600,textDecoration:"none",display:"inline-block"}}
+            >
+              Sign Out & Re-login
+            </a>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
-  const filteredListings=data.listings.filter(x=>{
+  const listingsList = data.listings || [];
+  const destinationsList = data.destinations || [];
+
+  const filteredListings = listingsList.filter(x=>{
     const q=search.toLowerCase();
     const matchesSearch = !q||x.name.toLowerCase().includes(q)||x.destination.toLowerCase().includes(q)||(x.district&&x.district.toLowerCase().includes(q))||x.province.toLowerCase().includes(q);
     const matchesCat = categoryFilter==="all" || x.category.toLowerCase().includes(categoryFilter.toLowerCase());
     return matchesSearch && matchesCat;
   });
 
-  const filteredDestinations=data.destinations.filter(x=>{
+  const filteredDestinations = destinationsList.filter(x=>{
     const q=search.toLowerCase();
     return !q||x.name.toLowerCase().includes(q)||(x.district&&x.district.toLowerCase().includes(q))||x.provinceName.toLowerCase().includes(q);
   });

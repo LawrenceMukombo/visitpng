@@ -5,7 +5,7 @@ import { dirname, resolve } from "node:path";
 const databasePath = resolve(process.env.DATABASE_PATH || "data/visitpng.db");
 mkdirSync(dirname(databasePath), { recursive: true });
 const database = new DatabaseSync(databasePath);
-database.exec("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;");
+database.exec("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON; PRAGMA busy_timeout = 5000;");
 
 type Value = string | number | bigint | null | Uint8Array;
 const toValue = (value: unknown): Value => value == null ? null : typeof value === "boolean" ? Number(value) : typeof value === "string" || typeof value === "number" || typeof value === "bigint" || value instanceof Uint8Array ? value : JSON.stringify(value);
