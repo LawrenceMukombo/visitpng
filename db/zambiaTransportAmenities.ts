@@ -220,7 +220,8 @@ export const ZAMBIA_DISTRICT_CAPITALS: DistrictCapital[] = [
 
   // North-Western Province
   { districtName: "Solwezi District", provinceName: "North-Western Province", name: "Solwezi", latitude: -12.1688, longitude: 26.3894 },
-  { districtName: "Mwinilunga District", provinceName: "North-Western Province", name: "Mwinilunga (Zambezi Source)", latitude: -11.7358, longitude: 24.4286 },
+  { districtName: "Ikelenge District", provinceName: "North-Western Province", name: "Ikelenge (Source of the Zambezi)", latitude: -11.2333, longitude: 24.2667 },
+  { districtName: "Mwinilunga District", provinceName: "North-Western Province", name: "Mwinilunga", latitude: -11.7358, longitude: 24.4286 },
   { districtName: "Kasempa District", provinceName: "North-Western Province", name: "Kasempa", latitude: -13.4583, longitude: 25.8333 },
   { districtName: "Zambezi District", provinceName: "North-Western Province", name: "Zambezi (Mize Palace)", latitude: -13.5417, longitude: 23.1083 },
   { districtName: "Kabompo District", provinceName: "North-Western Province", name: "Kabompo", latitude: -13.5936, longitude: 24.2008 },
@@ -447,6 +448,18 @@ export const ZAMBIA_AIRPORTS: ZambiaAirport[] = [
     flightTimeFromLusakaMinutes: 80,
     scheduledOperators: ["African Parks Conservation Flights"],
     charterOperators: ["African Parks Air", "Sky Trails"]
+  },
+  {
+    name: "Zengamina / Ikelenge Bush Airstrip (Zambezi Source)",
+    code: "IKL",
+    icao: "FLIK",
+    type: "safari_bush_strip",
+    runway: "1,150m Compacted Gravel / All-Weather",
+    latitude: -11.24,
+    longitude: 24.27,
+    flightTimeFromLusakaMinutes: 75,
+    scheduledOperators: ["Charter Flights on Request"],
+    charterOperators: ["Royal Air Charters", "Mission Flight Services", "Flying Mission Zambia", "ProCharter"]
   }
 ];
 
@@ -774,25 +787,52 @@ export const ZAMBIA_AMENITIES: ZambiaAmenity[] = [
     services: ["24/7 Emergency Service", "Surgical Care", "Diagnostics", "Ambulance"]
   },
 
-  // Solwezi / North-Western
+  // Solwezi & Ikelenge / North-Western
   {
     id: "amenity-sol-fuel",
-    name: "Mount Meru Petroleum Solwezi Highway",
+    name: "Mount Meru & TotalEnergies Petroleum Solwezi",
     type: "fuel_station",
-    typeName: "Mining Belt Fuel Station",
+    typeName: "North-Western Gateway Fuel Station",
     icon: "⛽",
     townOrDistrict: "Solwezi District",
     provinceName: "North-Western Province",
     latitude: -12.165,
     longitude: 26.392,
     openingHours: "24 Hours",
-    services: ["Heavy Vehicle Diesel", "Petrol", "Tyre Service", "Convenience Store"]
+    services: ["Heavy Vehicle Diesel", "Unleaded Petrol", "Tyre Service", "Convenience Store", "ATM"]
+  },
+  {
+    id: "amenity-ike-hospital",
+    name: "Kalene Mission Hospital (Ikelenge / Zambezi Source)",
+    type: "hospital_clinic",
+    typeName: "Referral Hospital & Emergency Medical Centre",
+    icon: "🏥",
+    townOrDistrict: "Ikelenge District",
+    provinceName: "North-Western Province",
+    latitude: -11.1833,
+    longitude: 24.1833,
+    contact: "+260 218 821045 / Emergency 992",
+    openingHours: "24/7 Emergency Casualty",
+    services: ["24/7 Emergency Unit", "Inpatient Wards", "Surgical Theatre", "Tropical Medicine & Malaria Unit", "Ambulance"]
+  },
+  {
+    id: "amenity-ike-fuel",
+    name: "Rubis Mwinilunga & Ikelenge Energy Depot",
+    type: "fuel_station",
+    typeName: "Upper Zambezi Fuel Station",
+    icon: "⛽",
+    townOrDistrict: "Ikelenge District",
+    provinceName: "North-Western Province",
+    latitude: -11.735,
+    longitude: 24.43,
+    openingHours: "06:00 - 21:00 Daily",
+    services: ["Diesel", "Petrol", "4x4 Service Point", "Engine Oil"]
   },
   {
     id: "amenity-sol-hospital",
-    name: "Solwezi General Hospital",
+    name: "Solwezi Provincial General Hospital",
     type: "hospital_clinic",
-    typeName: "North-Western Provincial Hospital",
+    typeName: "North-Western Provincial Teaching Hospital",
     icon: "🏥",
     townOrDistrict: "Solwezi District",
     provinceName: "North-Western Province",
@@ -800,7 +840,7 @@ export const ZAMBIA_AMENITIES: ZambiaAmenity[] = [
     longitude: 26.385,
     contact: "+260 218 821100",
     openingHours: "24/7 Emergency",
-    services: ["Emergency Trauma Unit", "Industrial Injury Care", "Pharmacy"]
+    services: ["Emergency Trauma Unit", "Surgical Wards", "Advanced Diagnostics", "Air Evac Helipad Coordination"]
   }
 ];
 
@@ -1235,9 +1275,39 @@ export function getDestinationTransportGuide(
     };
   }
 
-  if (normProv.includes("western")) {
+  // North-Western Province (Solwezi, Ikelenge, Zambezi Source, Mwinilunga, West Lunga)
+  if (
+    normProv.includes("north-western") ||
+    normProv.includes("northwestern") ||
+    normProv.includes("north western") ||
+    normProv.includes("n/western") ||
+    normProv.includes("n-western") ||
+    normProv === "nw" ||
+    normProv === "zm-nw"
+  ) {
     return {
-      scheduledFlights: ["Proflight Zambia / African Parks charter to Kalabo (Liuwa Plain)"],
+      scheduledFlights: ["Proflight Zambia (Daily flights from Lusaka to Solwezi SLI - 65 mins)"],
+      charterFlights: [
+        "Royal Air Charters",
+        "ProCharter (Flights to Ikelenge / Zengamina / Kalumbila / Mwinilunga)"
+      ],
+      roadAccess: {
+        recommendedVehicle: "High Clearance SUV / 4x4 Required for upper North-Western & Ikelenge forest trails",
+        primaryHighway: "T5 Highway (Chingola - Solwezi - Mwinilunga - Ikelenge)",
+        expressBuses: [
+          "Likili Motorways",
+          "Power Tools Bus",
+          "Euro Express (Lusaka - Ndola - Kitwe - Chingola - Solwezi - Mwinilunga - Ikelenge)"
+        ],
+        fuelStationsEnRoute: "Mount Meru Solwezi, TotalEnergies Solwezi, Rubis Mwinilunga, Ikelenge Service Point"
+      }
+    };
+  }
+
+  // Western Province & Barotseland (Mongu, Kalabo, Liuwa Plain, Senanga, Sesheke)
+  if (normProv.includes("western") && !normProv.includes("north")) {
+    return {
+      scheduledFlights: ["Proflight Zambia / African Parks charter to Kalabo (Liuwa Plain) / Mongu"],
       charterFlights: ["Sky Trails Charters", "African Parks Conservation Flights"],
       roadAccess: {
         recommendedVehicle: "4x4 Required (Barotse sand tracks & floodplains) / Sedan on M9 paved",
@@ -1245,7 +1315,7 @@ export function getDestinationTransportGuide(
         expressBuses: ["Mazhandu Family Bus", "Shalom Express", "Likili Motorways (Lusaka to Mongu, 8 hrs)"],
         fuelStationsEnRoute: "Rubis Mongu, Puma Kaoma, Total Mumbwa"
       },
-      waterOrRail: "Traditional Zambezi wooden dugout canoe & speedboat transfers across floodplain (Kuomboka routes)"
+      waterOrRail: "Traditional Zambezi wooden dugout canoe & speedboat transfers across Barotse Floodplain (Kuomboka routes)"
     };
   }
 

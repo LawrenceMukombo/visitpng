@@ -592,9 +592,9 @@ export const ZAMBIAN_LANGUAGE_ZONES: ZambianLanguageZone[] = [
     name: "Lunda (Chilunda)",
     nativeName: "ChiLunda",
     primaryProvinces: ["North-Western Province", "Copperbelt Province"],
-    regionLabel: "North-Western (Mwinilunga, Ikelenge, Zambezi Source, Solwezi)",
+    regionLabel: "North-Western (Ikelenge, Mwinilunga, Solwezi, Zambezi)",
     speakerCount: "800,000+",
-    description: "The language of the ancient Lunda Kingdom, spoken around the sacred Zambezi River Source in Mwinilunga and celebrated during the Lunda Lubanza royal ceremony.",
+    description: "The language of the ancient Lunda Kingdom, spoken around the sacred Zambezi River Source in Ikelenge District and celebrated during the Lunda Lubanza royal ceremony.",
     culturalEtiquette: [
       "Gently touch the chest or clap softly when greeting elders as a sign of deep respect.",
       "Address elders politely as 'Mwami' or 'Mwanami' (Sir/Elder).",

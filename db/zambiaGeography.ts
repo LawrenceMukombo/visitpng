@@ -219,8 +219,8 @@ export const ZAMBIA_PROVINCES: ZambiaProvinceData[] = [
     region: "Copperbelt & North-Western",
     districts: [
       { name: "Solwezi District", category: "culture", keyDestinations: ["Kifubwa Rock Stream Prehistoric Engravings Sanctuary", "Kansanshi Golf Estate", "Mutanda Falls"] },
-      { name: "Mwinilunga District", category: "nature", keyDestinations: ["Source of the Zambezi River National Monument", "Zambezi Botanical Heritage Reserve", "West Lunga National Park Gateway", "Pineapple Plantation Agro Trails"] },
-      { name: "Ikelenge District", category: "nature", keyDestinations: ["Zambezi Spring Source Point Zero", "Zambezi Rapids & Zengamina Hydro Wonder", "Hillwood Farm Wildlife Sanctuary"] },
+      { name: "Ikelenge District", category: "nature", keyDestinations: ["Source of the Zambezi River National Monument (Point Zero)", "Zambezi Botanical Heritage Reserve", "Zambezi Rapids & Zengamina Hydro Wonder", "Hillwood Farm Wildlife Sanctuary", "Kalene Hill Historical Mission"] },
+      { name: "Mwinilunga District", category: "nature", keyDestinations: ["West Lunga National Park Gateway", "Lunga River Wilderness", "Pineapple Plantation Agro Trails", "Luakela Forest Reserve"] },
       { name: "Zambezi District", category: "culture", keyDestinations: ["Senior Chief Ndungu Mize Capital (Likumbi Lya Mize UNESCO Masquerade)", "Senior Chief Ishindi Mukandakunda Royal Capital (Lunda Lubanza)"] },
       { name: "Chavuma District", category: "adventure", keyDestinations: ["Chavuma Falls on the Upper Zambezi", "Angola Border Vista & Rock Gorges"] },
       { name: "Kasempa District", category: "nature", keyDestinations: ["Kufukwila Cultural Ceremony Grounds", "Mukinge Hill Scenic Lookout", "Kafue National Park Northern Access Gate"] },
