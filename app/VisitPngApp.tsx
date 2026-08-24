@@ -156,8 +156,25 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
     </div>
   );
 
+  const handleGoHome = () => {
+    setTab("Explore");
+    setExploreMode("places");
+    setCategory("all");
+    setQ("");
+    setSelected(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return <main className={tab === "Explore" && exploreMode === "map" ? "app mapViewActive" : "app"}>
-    <Header viewer={viewer} profile={()=>setTab("Profile")} currency={currency} onCurrencyChange={handleCurrencyChange} countryCode={countryCode} onCountryChange={handleCountryChange}/>
+    <Header
+      viewer={viewer}
+      profile={()=>setTab("Profile")}
+      currency={currency}
+      onCurrencyChange={handleCurrencyChange}
+      countryCode={countryCode}
+      onCountryChange={handleCountryChange}
+      onHome={handleGoHome}
+    />
     {tab==="Explore"?<>
       <section className="hero">
         <p className="eyebrow lime">{heroEyebrow}</p>
@@ -305,88 +322,140 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   </main>;
 }
 
-function Header({viewer,profile,currency,onCurrencyChange,countryCode:_countryCode}:{viewer:Viewer;profile:()=>void;currency:CurrencyCode;onCurrencyChange:(c:CurrencyCode)=>void;countryCode:string;onCountryChange?:(c:string)=>void}){
-  const initials=viewer.signedIn?viewer.displayName.split(/\s|@/).filter(Boolean).slice(0,2).map(x=>x[0]).join("").toUpperCase():"GU";
-  return <header style={{ height: "68px", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 18px", background: "var(--brand-deep-teal)" }}>
-    <button className="brand" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "inline-flex", alignItems: "center" }}>
-      <ZamRoamLogo size="small" showTagline={false} />
-    </button>
-    {viewer.signedIn&&<div className="headerWelcome"><small>Welcome</small><strong>{viewer.displayName}</strong></div>}
-    <nav style={{ display: "inline-flex", alignItems: "center", gap: "8px", height: "34px", flexShrink: 0 }}>
-      <span
-        className="destinationPill"
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          height: "34px",
-          padding: "0 12px",
-          borderRadius: "99px",
-          background: "rgba(255, 255, 255, 0.14)",
-          border: "1px solid rgba(255, 255, 255, 0.25)",
-          color: "#ffffff",
-          fontSize: "11.5px",
-          fontWeight: 700,
-          whiteSpace: "nowrap",
-          boxSizing: "border-box",
-          lineHeight: 1,
-          verticalAlign: "middle"
+function Header({
+  viewer,
+  profile,
+  currency,
+  onCurrencyChange,
+  countryCode: _countryCode,
+  onHome
+}: {
+  viewer: Viewer;
+  profile: () => void;
+  currency: CurrencyCode;
+  onCurrencyChange: (c: CurrencyCode) => void;
+  countryCode: string;
+  onCountryChange?: (c: string) => void;
+  onHome?: () => void;
+}) {
+  const initials = viewer.signedIn
+    ? viewer.displayName.split(/\s|@/).filter(Boolean).slice(0, 2).map(x => x[0]).join("").toUpperCase()
+    : "GU";
+  const firstName = viewer.signedIn
+    ? (viewer.displayName.includes("@") ? viewer.displayName.split("@")[0] : viewer.displayName.split(" ")[0])
+    : "";
+
+  return (
+    <header style={{ height: "68px", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 14px", background: "var(--brand-deep-teal)", gap: "8px" }}>
+      <button
+        className="brand"
+        type="button"
+        onClick={() => {
+          if (onHome) onHome();
+          else window.scrollTo({ top: 0, behavior: "smooth" });
         }}
+        style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "inline-flex", alignItems: "center", flexShrink: 0 }}
       >
-        🇿🇲 Zambia
-      </span>
-      <CurrencySelector currentCurrency={currency} onChange={onCurrencyChange}/>
-      {viewer.signedIn?(
-        <button
-          className="avatar"
-          onClick={profile}
+        <ZamRoamLogo size="small" showTagline={false} />
+      </button>
+
+      <nav style={{ display: "inline-flex", alignItems: "center", gap: "6px", height: "34px", flexShrink: 0 }}>
+        {viewer.signedIn && (
+          <button
+            type="button"
+            onClick={profile}
+            className="headerUserChip"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              height: "34px",
+              padding: "0 10px 0 5px",
+              borderRadius: "99px",
+              background: "rgba(255, 255, 255, 0.12)",
+              border: "1px solid rgba(255, 255, 255, 0.22)",
+              color: "#ffffff",
+              fontSize: "12px",
+              fontWeight: 700,
+              cursor: "pointer",
+              whiteSpace: "nowrap"
+            }}
+          >
+            <span
+              style={{
+                width: "24px",
+                height: "24px",
+                borderRadius: "50%",
+                background: "var(--brand-premium-gold, #F59E0B)",
+                color: "#032F2B",
+                fontSize: "10px",
+                fontWeight: 800,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center"
+              }}
+            >
+              {initials}
+            </span>
+            <span style={{ maxWidth: "100px", overflow: "hidden", textOverflow: "ellipsis" }}>
+              {firstName || viewer.displayName}
+            </span>
+          </button>
+        )}
+
+        <span
+          className="destinationPill"
           style={{
-            width: "34px",
-            height: "34px",
-            borderRadius: "50%",
-            background: "var(--brand-premium-gold)",
-            color: "var(--brand-deep-teal)",
-            fontSize: "11px",
-            fontWeight: 800,
             display: "inline-flex",
             alignItems: "center",
             justifyContent: "center",
-            border: "none",
-            cursor: "pointer",
-            flexShrink: 0
-          }}
-        >
-          {initials}
-        </button>
-      ):(
-        <a
-          className="signInMini"
-          href={viewer.signInPath}
-          style={{
             height: "34px",
-            padding: "0 16px",
+            padding: "0 10px",
             borderRadius: "99px",
+            background: "rgba(255, 255, 255, 0.14)",
+            border: "1px solid rgba(255, 255, 255, 0.25)",
+            color: "#ffffff",
             fontSize: "11.5px",
-            fontWeight: 800,
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxSizing: "border-box",
+            fontWeight: 700,
             whiteSpace: "nowrap",
-            background: "var(--action-primary)",
-            color: "var(--brand-white)",
-            textDecoration: "none",
-            border: "none",
-            boxShadow: "0 2px 8px var(--shadow-color-strong)",
+            boxSizing: "border-box",
             lineHeight: 1,
             verticalAlign: "middle"
           }}
         >
-          Sign in
-        </a>
-      )}
-    </nav>
-  </header>;
+          🇿🇲 Zambia
+        </span>
+        <CurrencySelector currentCurrency={currency} onChange={onCurrencyChange}/>
+        {!viewer.signedIn && (
+          <a
+            className="signInMini"
+            href={viewer.signInPath}
+            style={{
+              height: "34px",
+              padding: "0 16px",
+              borderRadius: "99px",
+              fontSize: "11.5px",
+              fontWeight: 800,
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxSizing: "border-box",
+              whiteSpace: "nowrap",
+              background: "var(--action-primary)",
+              color: "var(--brand-white)",
+              textDecoration: "none",
+              border: "none",
+              boxShadow: "0 2px 8px var(--shadow-color-strong)",
+              lineHeight: 1,
+              verticalAlign: "middle"
+            }}
+          >
+            Sign in
+          </a>
+        )}
+      </nav>
+    </header>
+  );
 }
 
 function ProfileScreen({viewer}:{viewer:Viewer}){

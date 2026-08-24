@@ -39,12 +39,43 @@ export default function WantokConcierge({ currency, onOpenTrips }: WantokConcier
     "Tribal Textiles & Craft"
   ];
 
+  const updateItineraryLive = (
+    interests: string[],
+    duration: number,
+    style: string,
+    fitness: string
+  ) => {
+    const it = generateCustomItinerary(
+      interests.length ? interests : [customPrompt || "Safari"],
+      duration,
+      style,
+      fitness,
+      "ZMB"
+    );
+    setActiveItinerary(it);
+  };
+
   const toggleInterest = (int: string) => {
-    if (selectedInterests.includes(int)) {
-      setSelectedInterests(selectedInterests.filter(i => i !== int));
-    } else {
-      setSelectedInterests([...selectedInterests, int]);
-    }
+    const updated = selectedInterests.includes(int)
+      ? selectedInterests.filter(i => i !== int)
+      : [...selectedInterests, int];
+    setSelectedInterests(updated);
+    updateItineraryLive(updated, durationDays, selectedStyle, fitnessLevel);
+  };
+
+  const handleStyleChange = (newStyle: string) => {
+    setSelectedStyle(newStyle);
+    updateItineraryLive(selectedInterests, durationDays, newStyle, fitnessLevel);
+  };
+
+  const handleDurationChange = (newDuration: number) => {
+    setDurationDays(newDuration);
+    updateItineraryLive(selectedInterests, newDuration, selectedStyle, fitnessLevel);
+  };
+
+  const handleFitnessChange = (newFitness: string) => {
+    setFitnessLevel(newFitness);
+    updateItineraryLive(selectedInterests, durationDays, selectedStyle, newFitness);
   };
 
   const handleGenerate = (e: React.FormEvent) => {
@@ -62,7 +93,7 @@ export default function WantokConcierge({ currency, onOpenTrips }: WantokConcier
       setIsGenerating(false);
       setSaveNotice(`✨ New ${it.durationDays}-Day itinerary generated for ${it.travelStyle}!`);
       setTimeout(() => setSaveNotice(""), 3500);
-    }, 400);
+    }, 300);
   };
 
   // Customizer Actions:
@@ -261,7 +292,7 @@ export default function WantokConcierge({ currency, onOpenTrips }: WantokConcier
             <label>Travel Style</label>
             <select
               value={selectedStyle}
-              onChange={e => setSelectedStyle(e.target.value)}
+              onChange={e => handleStyleChange(e.target.value)}
             >
               <option value="Cultural Immersion">🎭 Cultural Ceremonies & Royal Palaces</option>
               <option value="Wilderness Expedition">🦁 Walking Safaris & Big 5 Game Drives</option>
@@ -278,7 +309,7 @@ export default function WantokConcierge({ currency, onOpenTrips }: WantokConcier
               min="3"
               max="14"
               value={durationDays}
-              onChange={e => setDurationDays(Number(e.target.value))}
+              onChange={e => handleDurationChange(Number(e.target.value))}
             />
           </div>
 
@@ -286,7 +317,7 @@ export default function WantokConcierge({ currency, onOpenTrips }: WantokConcier
             <label>Fitness Pace</label>
             <select
               value={fitnessLevel}
-              onChange={e => setFitnessLevel(e.target.value)}
+              onChange={e => handleFitnessChange(e.target.value)}
             >
               <option value="Relaxed">Relaxed (Scenic drives & lodge pools)</option>
               <option value="Moderate">Moderate (Morning walking safaris & nature trails)</option>
