@@ -5,6 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "ZamRoam | Roam Zambia — Experience More",
   description: "Experience the majesty of Victoria Falls, world-class safaris in South Luangwa & Lower Zambezi, traditional ceremonies across 10 provinces, and verified Zambian hospitality.",
+  manifest: "/manifest.json",
   icons: { icon: "/favicon.svg" }
 };
 
