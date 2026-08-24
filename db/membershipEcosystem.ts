@@ -1,6 +1,7 @@
 import { env } from "./runtime";
 import type { VisitPngUser } from "../app/auth";
 import { getOrCreateAccount } from "./accounts";
+import { ensureMembership } from "./membership";
 
 export interface TouristPlan {
   id: number;
@@ -528,6 +529,7 @@ let ecosystemInitPromise: Promise<void> | null = null;
 export async function ensureMembershipEcosystem() {
   if (ecosystemInitPromise) return ecosystemInitPromise;
   ecosystemInitPromise = (async () => {
+    await ensureMembership();
     const d1 = env.DB;
     for (const sql of ecosystemSchemaStatements) {
       await d1.prepare(sql).run();
