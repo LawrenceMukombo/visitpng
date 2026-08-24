@@ -562,8 +562,33 @@ export function AiChatModal({
   );
 }
 
-// Floating Quick Action Widget on screen
+// Floating Quick Action Widget on screen with Auto-Hide / Auto-Collapse
 export function FloatingConciergeWidget({ onOpenAiChat }: { onOpenAiChat: () => void }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    // Show expanded briefly on initial load for 3.5s, then collapse to discreet floating icon badges
+    const initialTimer = setTimeout(() => {
+      setIsExpanded(false);
+    }, 3500);
+
+    let scrollTimeout: NodeJS.Timeout;
+    const handleActivity = () => {
+      setIsExpanded(true);
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        setIsExpanded(false);
+      }, 3000);
+    };
+
+    window.addEventListener("scroll", handleActivity, { passive: true });
+    return () => {
+      clearTimeout(initialTimer);
+      clearTimeout(scrollTimeout);
+      window.removeEventListener("scroll", handleActivity);
+    };
+  }, []);
+
   const openWhatsApp = () => {
     const text = encodeURIComponent("Hello ZamRoam team! I need assistance with Zambia travel and safari bookings.");
     window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${text}`, "_blank");
@@ -572,6 +597,8 @@ export function FloatingConciergeWidget({ onOpenAiChat }: { onOpenAiChat: () => 
   return (
     <aside
       aria-label="Concierge and WhatsApp support"
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
       style={{
         position: "fixed",
         bottom: "84px",
@@ -579,8 +606,9 @@ export function FloatingConciergeWidget({ onOpenAiChat }: { onOpenAiChat: () => 
         zIndex: 9000,
         display: "flex",
         flexDirection: "column",
-        gap: "10px",
-        alignItems: "flex-end"
+        gap: "8px",
+        alignItems: "flex-end",
+        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
       }}
     >
       {/* WhatsApp Quick Button */}
@@ -593,20 +621,22 @@ export function FloatingConciergeWidget({ onOpenAiChat }: { onOpenAiChat: () => 
           color: "rgba(255, 255, 255, 1)",
           border: "none",
           borderRadius: "28px",
-          padding: "10px 16px",
+          padding: isExpanded ? "9px 15px" : "9px 12px",
           display: "flex",
           alignItems: "center",
-          gap: "8px",
+          gap: isExpanded ? "8px" : "0px",
           fontWeight: 800,
-          fontSize: "12.5px",
-          boxShadow: "0 6px 18px rgba(37, 211, 102, 0.45)",
+          fontSize: "12px",
+          boxShadow: "0 4px 14px rgba(37, 211, 102, 0.35)",
           cursor: "pointer",
-          transition: "transform 0.15s ease",
-          fontFamily: "Ubuntu, sans-serif"
+          transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+          fontFamily: "Ubuntu, sans-serif",
+          whiteSpace: "nowrap",
+          opacity: 0.95
         }}
       >
         <span style={{ fontSize: "16px" }}>💬</span>
-        <span>WhatsApp Support</span>
+        {isExpanded && <span>WhatsApp Support</span>}
       </button>
 
       {/* AI Safari Concierge Button */}
@@ -619,20 +649,22 @@ export function FloatingConciergeWidget({ onOpenAiChat }: { onOpenAiChat: () => 
           color: "var(--brand-white)",
           border: "1.5px solid rgba(37, 211, 102, 0.7)",
           borderRadius: "28px",
-          padding: "10px 16px",
+          padding: isExpanded ? "9px 15px" : "9px 12px",
           display: "flex",
           alignItems: "center",
-          gap: "8px",
+          gap: isExpanded ? "8px" : "0px",
           fontWeight: 800,
-          fontSize: "12.5px",
-          boxShadow: "0 6px 18px rgba(0, 0, 0, 0.45)",
+          fontSize: "12px",
+          boxShadow: "0 4px 14px rgba(0, 0, 0, 0.35)",
           cursor: "pointer",
-          transition: "transform 0.15s ease",
-          fontFamily: "Ubuntu, sans-serif"
+          transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+          fontFamily: "Ubuntu, sans-serif",
+          whiteSpace: "nowrap",
+          opacity: 0.95
         }}
       >
         <span style={{ fontSize: "16px" }}>🦁</span>
-        <span>Ask Safari AI</span>
+        {isExpanded && <span>Ask Safari AI</span>}
       </button>
     </aside>
   );
