@@ -806,7 +806,7 @@ function Card({listing:p,open,save,currency}:{listing:Listing;open:(p:Listing)=>
           <a
             href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am inquiring about ${p.name} on ZamRoam.`)}`}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             title="Chat directly on WhatsApp"
             style={{
               display: "inline-flex",
@@ -829,7 +829,7 @@ function Card({listing:p,open,save,currency}:{listing:Listing;open:(p:Listing)=>
           <a
             href={website}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             title="Visit official website"
             style={{
               display: "inline-flex",
@@ -1146,7 +1146,7 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
               <a
                 href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am contacting you directly regarding ${p.name} on ZamRoam.`)}`}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -1190,7 +1190,7 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
               <a
                 href={website}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -1232,7 +1232,7 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
             {website && (
               <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
                 <strong style={{ minWidth: "95px", color: "#032F2B" }}>🌐 Website:</strong>
-                <a href={website} target="_blank" rel="noreferrer" style={{ color: "#032F2B", textDecoration: "underline", wordBreak: "break-all" }}>{website}</a>
+                <a href={website} target="_blank" rel="noopener noreferrer" style={{ color: "#032F2B", textDecoration: "underline", wordBreak: "break-all" }}>{website}</a>
               </div>
             )}
           </div>
