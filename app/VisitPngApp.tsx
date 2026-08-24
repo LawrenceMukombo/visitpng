@@ -754,9 +754,9 @@ function AccountForm({viewer}:{viewer:Extract<Viewer,{signedIn:true}>}){
 
 function Card({listing:p,open,save,currency}:{listing:Listing;open:(p:Listing)=>void;save:()=>void;currency:CurrencyCode}){
   const [collapsed, setCollapsed] = useState(false);
-  const phone = p.providerPhone || "+260 573 506 598";
-  const whatsappNumber = (p.providerWhatsapp || p.providerPhone?.replace(/\D/g, "") || "260573506598").replace(/\D/g, "");
-  const website = p.providerWebsite || p.sourceUrl || p.deepLinkUrl;
+  const phone = p.providerPhone || null;
+  const whatsappNumber = p.providerWhatsapp ? p.providerWhatsapp.replace(/\D/g, "") : null;
+  const website = p.providerWebsite || p.sourceUrl || p.deepLinkUrl || null;
 
   return <article className={`card ${collapsed ? "cardCollapsed" : ""}`} onClick={()=>open(p)}>
     <div className="pic" style={{backgroundImage:`url(${p.imageUrl})`}}>
@@ -779,76 +779,78 @@ function Card({listing:p,open,save,currency}:{listing:Listing;open:(p:Listing)=>
       <h3>{p.name}</h3>
       {!collapsed && <p>{p.summary}</p>}
 
-      {/* Quick Direct Contacts Bar */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", margin: "8px 0 10px", alignItems: "center" }} onClick={e=>e.stopPropagation()}>
-        {phone && (
-          <a
-            href={`tel:${phone}`}
-            title={`Call provider directly at ${phone}`}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "4px",
-              padding: "4px 8px",
-              borderRadius: "6px",
-              background: "rgba(3, 47, 43, 0.08)",
-              color: "#032F2B",
-              fontSize: "11px",
-              fontWeight: 700,
-              textDecoration: "none",
-              border: "1px solid rgba(3, 47, 43, 0.15)"
-            }}
-          >
-            📞 {phone}
-          </a>
-        )}
-        {whatsappNumber && (
-          <a
-            href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am inquiring about ${p.name} on ZamRoam.`)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Chat directly on WhatsApp"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "4px",
-              padding: "4px 8px",
-              borderRadius: "6px",
-              background: "rgba(37, 211, 102, 0.12)",
-              color: "#15803d",
-              fontSize: "11px",
-              fontWeight: 700,
-              textDecoration: "none",
-              border: "1px solid rgba(37, 211, 102, 0.25)"
-            }}
-          >
-            💬 WhatsApp
-          </a>
-        )}
-        {website && (
-          <a
-            href={website}
-            target="_blank"
-            rel="noopener noreferrer"
-            title="Visit official website"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "4px",
-              padding: "4px 8px",
-              borderRadius: "6px",
-              background: "rgba(200, 134, 10, 0.1)",
-              color: "#92400e",
-              fontSize: "11px",
-              fontWeight: 700,
-              textDecoration: "none",
-              border: "1px solid rgba(200, 134, 10, 0.2)"
-            }}
-          >
-            🌐 Website
-          </a>
-        )}
-      </div>
+      {/* Quick Direct Contacts Bar (Only when verified channels exist) */}
+      {(phone || whatsappNumber || website) && (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", margin: "8px 0 10px", alignItems: "center" }} onClick={e=>e.stopPropagation()}>
+          {phone && (
+            <a
+              href={`tel:${phone}`}
+              title={`Call provider directly at ${phone}`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px",
+                padding: "4px 8px",
+                borderRadius: "6px",
+                background: "rgba(3, 47, 43, 0.08)",
+                color: "#032F2B",
+                fontSize: "11px",
+                fontWeight: 700,
+                textDecoration: "none",
+                border: "1px solid rgba(3, 47, 43, 0.15)"
+              }}
+            >
+              📞 {phone}
+            </a>
+          )}
+          {whatsappNumber && (
+            <a
+              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am inquiring about ${p.name} on ZamRoam.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Chat directly on WhatsApp"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px",
+                padding: "4px 8px",
+                borderRadius: "6px",
+                background: "rgba(37, 211, 102, 0.12)",
+                color: "#15803d",
+                fontSize: "11px",
+                fontWeight: 700,
+                textDecoration: "none",
+                border: "1px solid rgba(37, 211, 102, 0.25)"
+              }}
+            >
+              💬 WhatsApp
+            </a>
+          )}
+          {website && (
+            <a
+              href={website}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Visit official website"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px",
+                padding: "4px 8px",
+                borderRadius: "6px",
+                background: "rgba(200, 134, 10, 0.1)",
+                color: "#92400e",
+                fontSize: "11px",
+                fontWeight: 700,
+                textDecoration: "none",
+                border: "1px solid rgba(200, 134, 10, 0.2)"
+              }}
+            >
+              🌐 Website
+            </a>
+          )}
+        </div>
+      )}
 
       <footer>
         <div>
@@ -1079,11 +1081,12 @@ function ReviewsScreen({viewer}:{viewer:Viewer}){
 }
 
 function Details({listing:p,close,book,review,currency}:{listing:Listing;close:()=>void;book:()=>void;review:()=>void;currency:CurrencyCode}){
-  const phone = p.providerPhone || "+260 573 506 598";
-  const whatsappNumber = (p.providerWhatsapp || p.providerPhone?.replace(/\D/g, "") || "260573506598").replace(/\D/g, "");
-  const email = p.providerEmail || "reservations@zamroam.com";
-  const website = p.providerWebsite || p.sourceUrl || p.deepLinkUrl;
-  const address = p.providerAddress || `${p.destination}, ${p.province}, Zambia`;
+  const phone = p.providerPhone || null;
+  const whatsappNumber = p.providerWhatsapp ? p.providerWhatsapp.replace(/\D/g, "") : null;
+  const email = p.providerEmail || null;
+  const website = p.providerWebsite || p.sourceUrl || p.deepLinkUrl || null;
+  const address = p.providerAddress || (p.destination ? `${p.destination}, ${p.province || "Zambia"}` : null);
+  const hasDirectAction = Boolean(phone || whatsappNumber || email || website);
 
   return <div className="overlay" onClick={close}>
     <article className="sheet" onClick={e=>e.stopPropagation()}>
@@ -1114,102 +1117,108 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
             <strong style={{ fontSize: "14px", color: "var(--brand-deep-teal, #032F2B)", display: "flex", alignItems: "center", gap: "6px" }}>
               <span>📞</span> Direct Facility & Owner Contacts
             </strong>
-            <span style={{ fontSize: "11px", fontWeight: 700, color: "#16a34a", background: "rgba(22, 163, 74, 0.12)", padding: "3px 8px", borderRadius: "99px" }}>
-              ✓ Direct Reachable
+            <span style={{ fontSize: "11px", fontWeight: 700, color: hasDirectAction ? "#16a34a" : "#64748b", background: hasDirectAction ? "rgba(22, 163, 74, 0.12)" : "rgba(100, 116, 139, 0.12)", padding: "3px 8px", borderRadius: "99px" }}>
+              {hasDirectAction ? "✓ Direct Reachable" : "Official Facility"}
             </span>
           </div>
 
           {/* Quick Action Touchpoints */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "10px", marginBottom: "14px" }}>
-            {phone && (
-              <a
-                href={`tel:${phone}`}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  padding: "10px 14px",
-                  borderRadius: "10px",
-                  background: "#032F2B",
-                  color: "#ffffff",
-                  textDecoration: "none",
-                  fontWeight: 700,
-                  fontSize: "12.5px",
-                  boxShadow: "0 2px 6px rgba(3,47,43,0.25)"
-                }}
-              >
-                <span>📞 Call Directly</span>
-              </a>
-            )}
-            {whatsappNumber && (
-              <a
-                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am contacting you directly regarding ${p.name} on ZamRoam.`)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  padding: "10px 14px",
-                  borderRadius: "10px",
-                  background: "#25D366",
-                  color: "#ffffff",
-                  textDecoration: "none",
-                  fontWeight: 700,
-                  fontSize: "12.5px",
-                  boxShadow: "0 2px 6px rgba(37,211,102,0.3)"
-                }}
-              >
-                <span>💬 WhatsApp Chat</span>
-              </a>
-            )}
-            {email && (
-              <a
-                href={`mailto:${email}?subject=${encodeURIComponent(`Inquiry for ${p.name} (ZamRoam)`)}`}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  padding: "10px 14px",
-                  borderRadius: "10px",
-                  background: "#C8860A",
-                  color: "#ffffff",
-                  textDecoration: "none",
-                  fontWeight: 700,
-                  fontSize: "12.5px",
-                  boxShadow: "0 2px 6px rgba(200,134,10,0.25)"
-                }}
-              >
-                <span>✉️ Direct Email</span>
-              </a>
-            )}
-            {website && (
-              <a
-                href={website}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  padding: "10px 14px",
-                  borderRadius: "10px",
-                  background: "rgba(0,0,0,0.06)",
-                  border: "1px solid rgba(0,0,0,0.15)",
-                  color: "#1e293b",
-                  textDecoration: "none",
-                  fontWeight: 700,
-                  fontSize: "12.5px"
-                }}
-              >
-                <span>🌐 Official Website ↗</span>
-              </a>
-            )}
-          </div>
+          {hasDirectAction ? (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "10px", marginBottom: "14px" }}>
+              {phone && (
+                <a
+                  href={`tel:${phone}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    padding: "10px 14px",
+                    borderRadius: "10px",
+                    background: "#032F2B",
+                    color: "#ffffff",
+                    textDecoration: "none",
+                    fontWeight: 700,
+                    fontSize: "12.5px",
+                    boxShadow: "0 2px 6px rgba(3,47,43,0.25)"
+                  }}
+                >
+                  <span>📞 Call Directly</span>
+                </a>
+              )}
+              {whatsappNumber && (
+                <a
+                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am contacting you directly regarding ${p.name} on ZamRoam.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    padding: "10px 14px",
+                    borderRadius: "10px",
+                    background: "#25D366",
+                    color: "#ffffff",
+                    textDecoration: "none",
+                    fontWeight: 700,
+                    fontSize: "12.5px",
+                    boxShadow: "0 2px 6px rgba(37,211,102,0.3)"
+                  }}
+                >
+                  <span>💬 WhatsApp Chat</span>
+                </a>
+              )}
+              {email && (
+                <a
+                  href={`mailto:${email}?subject=${encodeURIComponent(`Inquiry for ${p.name} (ZamRoam)`)}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    padding: "10px 14px",
+                    borderRadius: "10px",
+                    background: "#C8860A",
+                    color: "#ffffff",
+                    textDecoration: "none",
+                    fontWeight: 700,
+                    fontSize: "12.5px",
+                    boxShadow: "0 2px 6px rgba(200,134,10,0.25)"
+                  }}
+                >
+                  <span>✉️ Direct Email</span>
+                </a>
+              )}
+              {website && (
+                <a
+                  href={website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "6px",
+                    padding: "10px 14px",
+                    borderRadius: "10px",
+                    background: "rgba(0,0,0,0.06)",
+                    border: "1px solid rgba(0,0,0,0.15)",
+                    color: "#1e293b",
+                    textDecoration: "none",
+                    fontWeight: 700,
+                    fontSize: "12.5px"
+                  }}
+                >
+                  <span>🌐 Official Website ↗</span>
+                </a>
+              )}
+            </div>
+          ) : (
+            <div style={{ padding: "10px 12px", borderRadius: "8px", background: "rgba(3, 47, 43, 0.05)", color: "#032F2B", fontSize: "12px", fontStyle: "italic", marginBottom: "12px" }}>
+              📍 Direct telephone and booking channels are currently being verified with the local organizer/custodian.
+            </div>
+          )}
 
           {/* Detailed Contact List */}
           <div style={{ fontSize: "12.5px", color: "var(--brand-body, #334155)", display: "flex", flexDirection: "column", gap: "7px" }}>
@@ -1225,10 +1234,12 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
                 <a href={`mailto:${email}`} style={{ color: "#032F2B", textDecoration: "none" }}>{email}</a>
               </div>
             )}
-            <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
-              <strong style={{ minWidth: "95px", color: "#032F2B" }}>📍 Address:</strong>
-              <span>{address}</span>
-            </div>
+            {address && (
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                <strong style={{ minWidth: "95px", color: "#032F2B" }}>📍 Address:</strong>
+                <span>{address}</span>
+              </div>
+            )}
             {website && (
               <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
                 <strong style={{ minWidth: "95px", color: "#032F2B" }}>🌐 Website:</strong>
