@@ -1837,8 +1837,6 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                 onClick={() => {
                   if (onSelectDestination) {
                     onSelectDestination(selectedDistrictInfo.name.toLowerCase());
-                  } else {
-                    window.location.href = `/?q=${encodeURIComponent(selectedDistrictInfo.name)}`;
                   }
                 }}
                 style={{
@@ -1971,7 +1969,7 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
               {/* Direct Facility & Inquiries Contact Strip */}
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "14px" }}>
                 <a
-                  href="tel:+260573506598"
+                  href="tel:+260211229087"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -1990,9 +1988,9 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   📞 Direct Call
                 </a>
                 <a
-                  href={`https://wa.me/260573506598?text=${encodeURIComponent(`Hello, I am inquiring about ${selectedPin.name} in ${selectedPin.provinceName} on ZamRoam.`)}`}
+                  href={`https://wa.me/260777034742?text=${encodeURIComponent(`Hello, I am inquiring about ${selectedPin.name} in ${selectedPin.provinceName} on ZamRoam.`)}`}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -2025,8 +2023,6 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
               onClick={() => {
                 if (onSelectDestination) {
                   onSelectDestination(selectedPin.slug);
-                } else {
-                  window.location.href = `/?q=${encodeURIComponent(selectedPin.name)}`;
                 }
               }}
               style={{
