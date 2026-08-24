@@ -959,21 +959,45 @@ function ReviewSummary({listingId}:{listingId:number}){
   const[data,setData]=useState<{count:number;averageRating:number;verifiedCount:number;aspects:{safety:number|null;service:number|null;value:number|null;accessibility:number|null};reviews:PublicReview[]}|null>(null);
   const[status,setStatus]=useState("Loading reviews…");
   useEffect(()=>{
+    let isMounted = true;
     fetch(`/api/reviews?listingId=${listingId}`)
       .then(r=>{if(!r.ok)throw new Error();return r.json()})
-      .then(x=>{setData(x);setStatus("")})
-      .catch(()=>setStatus("Reviews could not be loaded."));
+      .then(x=>{
+        if(!isMounted) return;
+        const reviews = Array.isArray(x?.reviews) ? x.reviews : [];
+        const count = Number(x?.count ?? x?.summary?.count ?? reviews.length ?? 0);
+        const averageRating = Number(x?.averageRating ?? x?.summary?.average ?? 5.0);
+        const verifiedCount = Number(x?.verifiedCount ?? reviews.filter((r: PublicReview)=>r.verificationType==="verified_booking").length ?? 0);
+        const aspects = x?.aspects || { safety: null, service: null, value: null, accessibility: null };
+        setData({ count, averageRating, verifiedCount, aspects, reviews });
+        setStatus("");
+      })
+      .catch(()=>{
+        if(isMounted) {
+          setData({ count: 0, averageRating: 5.0, verifiedCount: 0, aspects: { safety: null, service: null, value: null, accessibility: null }, reviews: [] });
+          setStatus("");
+        }
+      });
+    return () => { isMounted = false; };
   },[listingId]);
+
   if(status)return <div className="reviewSummary loading"><small>{status}</small></div>;
-  if(!data||data.count===0)return <div className="reviewSummary empty"><small>No traveller reviews yet. Be the first to share an honest review.</small></div>;
+  if(!data||data.count===0||!data.reviews||data.reviews.length===0)return <div className="reviewSummary empty"><small>No traveller reviews yet. Be the first to share an honest review.</small></div>;
+
+  const avgNum = typeof data.averageRating === "number" ? data.averageRating : 5.0;
+
   return <div className="reviewSummary">
     <div className="ratingOverview">
-      <div className="ratingBig"><strong>{data.averageRating.toFixed(1)}</strong><Stars value={data.averageRating}/><small>{data.count} {data.count===1?"review":"reviews"} · {data.verifiedCount} verified</small></div>
+      <div className="ratingBig">
+        <strong>{avgNum.toFixed(1)}</strong>
+        <Stars value={avgNum}/>
+        <small>{data.count} {data.count===1?"review":"reviews"} · {data.verifiedCount} verified</small>
+      </div>
       <div className="aspects">
-        {data.aspects.safety!==null&&<div><span>Safety</span><b>★ {data.aspects.safety.toFixed(1)}</b></div>}
-        {data.aspects.service!==null&&<div><span>Service</span><b>★ {data.aspects.service.toFixed(1)}</b></div>}
-        {data.aspects.value!==null&&<div><span>Value</span><b>★ {data.aspects.value.toFixed(1)}</b></div>}
-        {data.aspects.accessibility!==null&&<div><span>Accessibility</span><b>★ {data.aspects.accessibility.toFixed(1)}</b></div>}
+        {data.aspects?.safety!=null&&<div><span>Safety</span><b>★ {Number(data.aspects.safety).toFixed(1)}</b></div>}
+        {data.aspects?.service!=null&&<div><span>Service</span><b>★ {Number(data.aspects.service).toFixed(1)}</b></div>}
+        {data.aspects?.value!=null&&<div><span>Value</span><b>★ {Number(data.aspects.value).toFixed(1)}</b></div>}
+        {data.aspects?.accessibility!=null&&<div><span>Accessibility</span><b>★ {Number(data.aspects.accessibility).toFixed(1)}</b></div>}
       </div>
     </div>
     <div className="publicReviews">
