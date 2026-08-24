@@ -47,7 +47,11 @@ export async function GET(request:Request){
       p.id AS providerId,
       p.slug AS providerSlug,
       p.trading_name AS providerName,
-      p.source_url AS providerWebsiteUrl
+      COALESCE(p.website_url, p.source_url) AS providerWebsiteUrl,
+      p.phone AS providerPhone,
+      p.email AS providerEmail,
+      p.physical_address AS providerAddress,
+      p.whatsapp_number AS providerWhatsapp
     FROM listings l
     JOIN destinations d ON d.id=l.destination_id
     JOIN provinces pv ON pv.id=d.province_id

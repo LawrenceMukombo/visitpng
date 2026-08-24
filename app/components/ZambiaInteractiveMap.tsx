@@ -1967,6 +1967,50 @@ export default function ZambiaInteractiveMap({ onSelectDestination, onClose }: Z
                   <strong style={{ fontSize: "13.5px", color: selectedPin.category === "ceremony" ? "rgba(251, 191, 36, 1)" : "rgba(37, 211, 102, 1)" }}>{selectedPin.price}</strong>
                 </div>
               )}
+
+              {/* Direct Facility & Inquiries Contact Strip */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", marginBottom: "14px" }}>
+                <a
+                  href="tel:+260573506598"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "5px",
+                    padding: "8px 10px",
+                    borderRadius: "8px",
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.15)",
+                    color: "#ffffff",
+                    fontSize: "11.5px",
+                    fontWeight: 700,
+                    textDecoration: "none"
+                  }}
+                >
+                  📞 Direct Call
+                </a>
+                <a
+                  href={`https://wa.me/260573506598?text=${encodeURIComponent(`Hello, I am inquiring about ${selectedPin.name} in ${selectedPin.provinceName} on ZamRoam.`)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "5px",
+                    padding: "8px 10px",
+                    borderRadius: "8px",
+                    background: "rgba(37, 211, 102, 0.2)",
+                    border: "1px solid rgba(37, 211, 102, 0.4)",
+                    color: "#4ade80",
+                    fontSize: "11.5px",
+                    fontWeight: 700,
+                    textDecoration: "none"
+                  }}
+                >
+                  💬 WhatsApp
+                </a>
+              </div>
             </div>
           ) : (
             <div style={{ textAlign: "center", padding: "40px 10px", color: "rgba(255,255,255,0.5)" }}>

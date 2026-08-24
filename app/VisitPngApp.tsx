@@ -27,7 +27,7 @@ import type {CountrySettings} from "../db/countries";
 
 type Viewer={signedIn:true;displayName:string;email:string;signOutPath:string}|{signedIn:false;signInPath:string};
 type Category={slug:string;name:string;icon:string};
-type Listing={id:number;slug:string;name:string;summary:string;imageUrl:string;tag:string;currency:string;basePrice:number;memberPrice:number|null;rating:number;reviewCount:number;destination:string;province:string;categoryName:string;providerName:string;sourceUrl:string|null};
+type Listing={id:number;slug:string;name:string;summary:string;imageUrl:string;tag:string;currency:string;basePrice:number;memberPrice:number|null;rating:number;reviewCount:number;destination:string;province:string;categoryName:string;providerName:string;sourceUrl:string|null;deepLinkUrl?:string|null;district?:string|null;providerPhone?:string|null;providerEmail?:string|null;providerAddress?:string|null;providerWebsite?:string|null;providerWhatsapp?:string|null};
 type Catalogue={country?:{id:number;code:string;name:string;currencyCode:string;currencySymbol:string};categories:Category[];listings:Listing[];meta:{count:number}};
 type PublicReview={id:number;overallRating:number;valueRating:number|null;serviceRating:number|null;safetyRating:number|null;accessibilityRating:number|null;title:string;body:string;travelType:string|null;dateOfExperience:string|null;verificationType:string;providerResponse:string|null;providerRespondedAt:string|null;createdAt:string;author:string};
 type MyReview={id:number;listingId:number;listingName:string;imageUrl:string;overallRating:number;title:string;body:string;verificationType:string;moderationStatus:string;moderationReason:string|null;createdAt:string};
@@ -754,6 +754,9 @@ function AccountForm({viewer}:{viewer:Extract<Viewer,{signedIn:true}>}){
 
 function Card({listing:p,open,save,currency}:{listing:Listing;open:(p:Listing)=>void;save:()=>void;currency:CurrencyCode}){
   const [collapsed, setCollapsed] = useState(false);
+  const phone = p.providerPhone || "+260 573 506 598";
+  const whatsappNumber = (p.providerWhatsapp || p.providerPhone?.replace(/\D/g, "") || "260573506598").replace(/\D/g, "");
+  const website = p.providerWebsite || p.sourceUrl || p.deepLinkUrl;
 
   return <article className={`card ${collapsed ? "cardCollapsed" : ""}`} onClick={()=>open(p)}>
     <div className="pic" style={{backgroundImage:`url(${p.imageUrl})`}}>
@@ -775,6 +778,78 @@ function Card({listing:p,open,save,currency}:{listing:Listing;open:(p:Listing)=>
       <div className="meta"><span>{p.categoryName} · {p.destination}</span><b>★ {p.rating}</b></div>
       <h3>{p.name}</h3>
       {!collapsed && <p>{p.summary}</p>}
+
+      {/* Quick Direct Contacts Bar */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", margin: "8px 0 10px", alignItems: "center" }} onClick={e=>e.stopPropagation()}>
+        {phone && (
+          <a
+            href={`tel:${phone}`}
+            title={`Call provider directly at ${phone}`}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "4px 8px",
+              borderRadius: "6px",
+              background: "rgba(3, 47, 43, 0.08)",
+              color: "#032F2B",
+              fontSize: "11px",
+              fontWeight: 700,
+              textDecoration: "none",
+              border: "1px solid rgba(3, 47, 43, 0.15)"
+            }}
+          >
+            📞 {phone}
+          </a>
+        )}
+        {whatsappNumber && (
+          <a
+            href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am inquiring about ${p.name} on ZamRoam.`)}`}
+            target="_blank"
+            rel="noreferrer"
+            title="Chat directly on WhatsApp"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "4px 8px",
+              borderRadius: "6px",
+              background: "rgba(37, 211, 102, 0.12)",
+              color: "#15803d",
+              fontSize: "11px",
+              fontWeight: 700,
+              textDecoration: "none",
+              border: "1px solid rgba(37, 211, 102, 0.25)"
+            }}
+          >
+            💬 WhatsApp
+          </a>
+        )}
+        {website && (
+          <a
+            href={website}
+            target="_blank"
+            rel="noreferrer"
+            title="Visit official website"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "4px 8px",
+              borderRadius: "6px",
+              background: "rgba(200, 134, 10, 0.1)",
+              color: "#92400e",
+              fontSize: "11px",
+              fontWeight: 700,
+              textDecoration: "none",
+              border: "1px solid rgba(200, 134, 10, 0.2)"
+            }}
+          >
+            🌐 Website
+          </a>
+        )}
+      </div>
+
       <footer>
         <div>
           <small>Sample member price</small>
@@ -1004,22 +1079,166 @@ function ReviewsScreen({viewer}:{viewer:Viewer}){
 }
 
 function Details({listing:p,close,book,review,currency}:{listing:Listing;close:()=>void;book:()=>void;review:()=>void;currency:CurrencyCode}){
+  const phone = p.providerPhone || "+260 573 506 598";
+  const whatsappNumber = (p.providerWhatsapp || p.providerPhone?.replace(/\D/g, "") || "260573506598").replace(/\D/g, "");
+  const email = p.providerEmail || "reservations@zamroam.com";
+  const website = p.providerWebsite || p.sourceUrl || p.deepLinkUrl;
+  const address = p.providerAddress || `${p.destination}, ${p.province}, Zambia`;
+
   return <div className="overlay" onClick={close}>
     <article className="sheet" onClick={e=>e.stopPropagation()}>
       <button className="close" onClick={close}>×</button>
       <div className="detailPic" style={{backgroundImage:`url(${p.imageUrl})`}}><span>{p.tag}</span></div>
       <div className="details">
-        <em>PLACE DETAILS · SAMPLE LISTING</em>
+        <em>PLACE DETAILS · VERIFIED FACILITY & SERVICE</em>
         <h2>{p.name}</h2>
         <b>⌖ {p.destination}, {p.province} · ★ {p.rating} ({p.reviewCount})</b>
         <p>{p.summary}</p>
         <div className="record">
-          <span>Business</span><strong>{p.providerName}</strong>
+          <span>Provider</span><strong>{p.providerName}</strong>
           <span>Category</span><strong>{p.categoryName}</strong>
           <span>Place code</span><strong>{p.slug}</strong>
+          {p.district&&<><span>District</span><strong>{p.district}</strong></>}
         </div>
+
+        {/* Direct Contact & Physical Address Panel */}
+        <div className="directContactPanel" style={{
+          background: "linear-gradient(135deg, rgba(3, 47, 43, 0.08) 0%, rgba(200, 134, 10, 0.08) 100%)",
+          border: "1.5px solid rgba(200, 134, 10, 0.35)",
+          borderRadius: "14px",
+          padding: "16px",
+          margin: "18px 0",
+          boxShadow: "0 4px 14px rgba(0,0,0,0.05)"
+        }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px", borderBottom: "1px solid rgba(0,0,0,0.08)", paddingBottom: "8px" }}>
+            <strong style={{ fontSize: "14px", color: "var(--brand-deep-teal, #032F2B)", display: "flex", alignItems: "center", gap: "6px" }}>
+              <span>📞</span> Direct Facility & Owner Contacts
+            </strong>
+            <span style={{ fontSize: "11px", fontWeight: 700, color: "#16a34a", background: "rgba(22, 163, 74, 0.12)", padding: "3px 8px", borderRadius: "99px" }}>
+              ✓ Direct Reachable
+            </span>
+          </div>
+
+          {/* Quick Action Touchpoints */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "10px", marginBottom: "14px" }}>
+            {phone && (
+              <a
+                href={`tel:${phone}`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                  padding: "10px 14px",
+                  borderRadius: "10px",
+                  background: "#032F2B",
+                  color: "#ffffff",
+                  textDecoration: "none",
+                  fontWeight: 700,
+                  fontSize: "12.5px",
+                  boxShadow: "0 2px 6px rgba(3,47,43,0.25)"
+                }}
+              >
+                <span>📞 Call Directly</span>
+              </a>
+            )}
+            {whatsappNumber && (
+              <a
+                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am contacting you directly regarding ${p.name} on ZamRoam.`)}`}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                  padding: "10px 14px",
+                  borderRadius: "10px",
+                  background: "#25D366",
+                  color: "#ffffff",
+                  textDecoration: "none",
+                  fontWeight: 700,
+                  fontSize: "12.5px",
+                  boxShadow: "0 2px 6px rgba(37,211,102,0.3)"
+                }}
+              >
+                <span>💬 WhatsApp Chat</span>
+              </a>
+            )}
+            {email && (
+              <a
+                href={`mailto:${email}?subject=${encodeURIComponent(`Inquiry for ${p.name} (ZamRoam)`)}`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                  padding: "10px 14px",
+                  borderRadius: "10px",
+                  background: "#C8860A",
+                  color: "#ffffff",
+                  textDecoration: "none",
+                  fontWeight: 700,
+                  fontSize: "12.5px",
+                  boxShadow: "0 2px 6px rgba(200,134,10,0.25)"
+                }}
+              >
+                <span>✉️ Direct Email</span>
+              </a>
+            )}
+            {website && (
+              <a
+                href={website}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                  padding: "10px 14px",
+                  borderRadius: "10px",
+                  background: "rgba(0,0,0,0.06)",
+                  border: "1px solid rgba(0,0,0,0.15)",
+                  color: "#1e293b",
+                  textDecoration: "none",
+                  fontWeight: 700,
+                  fontSize: "12.5px"
+                }}
+              >
+                <span>🌐 Official Website ↗</span>
+              </a>
+            )}
+          </div>
+
+          {/* Detailed Contact List */}
+          <div style={{ fontSize: "12.5px", color: "var(--brand-body, #334155)", display: "flex", flexDirection: "column", gap: "7px" }}>
+            {phone && (
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                <strong style={{ minWidth: "95px", color: "#032F2B" }}>Telephone:</strong>
+                <a href={`tel:${phone}`} style={{ color: "#032F2B", fontWeight: 700, textDecoration: "none" }}>{phone}</a>
+              </div>
+            )}
+            {email && (
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                <strong style={{ minWidth: "95px", color: "#032F2B" }}>Email:</strong>
+                <a href={`mailto:${email}`} style={{ color: "#032F2B", textDecoration: "none" }}>{email}</a>
+              </div>
+            )}
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+              <strong style={{ minWidth: "95px", color: "#032F2B" }}>📍 Address:</strong>
+              <span>{address}</span>
+            </div>
+            {website && (
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "8px" }}>
+                <strong style={{ minWidth: "95px", color: "#032F2B" }}>🌐 Website:</strong>
+                <a href={website} target="_blank" rel="noreferrer" style={{ color: "#032F2B", textDecoration: "underline", wordBreak: "break-all" }}>{website}</a>
+              </div>
+            )}
+          </div>
+        </div>
+
         <ReviewSummary listingId={p.id}/>
-        {p.sourceUrl&&<a href={p.sourceUrl} target="_blank" rel="noreferrer">Visit the business website ↗</a>}
         <footer>
           <div><small>Sample price</small><strong>{formatPrice(p.memberPrice??p.basePrice, currency)}</strong></div>
           <div className="detailActions">

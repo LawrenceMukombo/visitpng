@@ -6,7 +6,7 @@ const schemaStatements = [
   `CREATE TABLE IF NOT EXISTS provinces (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,code TEXT NOT NULL UNIQUE,name TEXT NOT NULL,region TEXT NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS destinations (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,province_id INTEGER NOT NULL REFERENCES provinces(id),district TEXT,slug TEXT NOT NULL UNIQUE,name TEXT NOT NULL,summary TEXT NOT NULL,latitude REAL,longitude REAL,cover_image_url TEXT,source_url TEXT,is_test_data INTEGER NOT NULL DEFAULT 1)`,
   `CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,slug TEXT NOT NULL UNIQUE,name TEXT NOT NULL,icon TEXT NOT NULL,display_order INTEGER NOT NULL DEFAULT 0,is_active INTEGER NOT NULL DEFAULT 1)`,
-  `CREATE TABLE IF NOT EXISTS providers (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,slug TEXT NOT NULL UNIQUE,trading_name TEXT NOT NULL,legal_name TEXT,license_number TEXT,verification_status TEXT NOT NULL DEFAULT 'seeded_unverified',source_name TEXT,source_url TEXT,is_test_data INTEGER NOT NULL DEFAULT 1)`,
+  `CREATE TABLE IF NOT EXISTS providers (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,slug TEXT NOT NULL UNIQUE,trading_name TEXT NOT NULL,legal_name TEXT,license_number TEXT,verification_status TEXT NOT NULL DEFAULT 'seeded_unverified',source_name TEXT,source_url TEXT,phone TEXT,email TEXT,physical_address TEXT,website_url TEXT,whatsapp_number TEXT,is_test_data INTEGER NOT NULL DEFAULT 1)`,
   `CREATE TABLE IF NOT EXISTS listings (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,provider_id INTEGER NOT NULL REFERENCES providers(id),destination_id INTEGER NOT NULL REFERENCES destinations(id),category_id INTEGER NOT NULL REFERENCES categories(id),slug TEXT NOT NULL UNIQUE,name TEXT NOT NULL,summary TEXT NOT NULL,image_url TEXT NOT NULL,photo_credit TEXT,deep_link_url TEXT,tag TEXT NOT NULL,currency TEXT NOT NULL DEFAULT 'ZMW',base_price INTEGER NOT NULL,member_price INTEGER,rating REAL NOT NULL DEFAULT 0,review_count INTEGER NOT NULL DEFAULT 0,publication_status TEXT NOT NULL DEFAULT 'published',verification_status TEXT NOT NULL DEFAULT 'seeded_unverified',is_test_data INTEGER NOT NULL DEFAULT 1,last_reviewed_at TEXT)`,
   `CREATE TABLE IF NOT EXISTS destination_photos (id INTEGER PRIMARY KEY AUTOINCREMENT,destination_id INTEGER REFERENCES destinations(id),listing_id INTEGER REFERENCES listings(id),image_url TEXT NOT NULL,caption TEXT,credit TEXT,source_url TEXT,display_order INTEGER NOT NULL DEFAULT 0,created_at TEXT NOT NULL)`,
   `CREATE INDEX IF NOT EXISTS listings_destination_idx ON listings(destination_id)`,
@@ -45,33 +45,33 @@ const zambiaDestinationSeed = [
 ];
 
 const zambiaProviderSeed = [
-  ["zambia-tourism-agency", "Zambia Tourism Agency (ZTA)", "Official provider website", "https://www.zambiatourism.com"],
-  ["royal-livingstone-resort", "The Royal Livingstone Victoria Falls Resort by Anantara", "Five-star luxury Zambezi riverfront resort", "https://www.anantara.com/en/royal-livingstone"],
-  ["tongabezi-lodge", "Tongabezi Lodge & Sindabezi Island", "Award-winning luxury safari lodge on the upper Zambezi", "https://greensafaris.com/tongabezi"],
-  ["bushcamp-company-luangwa", "The Bushcamp Company South Luangwa", "Pioneering luxury bush camps and walking safaris in Mfuwe", "https://bushcampcompany.com"],
-  ["chiawa-safaris-zambezi", "Chiawa Safaris & Old Mondoro", "Premier premier conservation-focused Lower Zambezi camps", "https://chiawa.com"],
-  ["chaminuka-nature-reserve", "Chaminuka Nature Reserve & Luxury Lodge", "Private wildlife sanctuary with indigenous art collections", "https://chaminuka.com"],
-  ["wilderness-safaris-busanga", "Wilderness Safaris Busanga Plains", "Exclusive luxury camps in northern Kafue", "https://wildernessdestinations.com"],
-  ["barotse-royal-establishment", "Barotse Royal Establishment & Nayuma Museum", "Custodian of the Kuomboka water ceremony and Lozi traditions", "https://barotseland.info"],
-  ["lunda-royal-establishment", "Lunda Kingdom Royal Cultural Trust", "Custodian of the historic Umutomboko ceremony in Luapula", "https://nhcczambia.org"],
-  ["ngoni-royal-council", "Ngoni Royal Council & Paramount Chief Mpezeni", "Custodian of the annual Nc'wala warrior ceremony", "https://www.zambiatourism.com"],
-  ["national-heritage-zambia", "National Heritage Conservation Commission (NHCC)", "Government agency protecting Zambia's historical & natural monuments", "https://nhcczambia.org"],
-  ["zambia-airways", "Zambia Airways Domestic Aviation", "Flag carrier connecting Lusaka, Livingstone, Ndola, and Mfuwe", "https://www.zambiaairways.co.zm"],
-  ["proflight-zambia", "Proflight Zambia Safari Network", "Leading scheduled regional safari airline", "https://www.proflight-zambia.com"],
-  ["ndole-bay-resort", "Ndole Bay Lodge Lake Tanganyika", "Premier beachfront diving, angling, and safari lodge", "https://ndolebaylodge.com"],
-  ["shiwa-ngandu-estate", "Shiwa Ng'andu Historical Manor", "Historic English manor estate, Kapishya hot springs, and North Luangwa safaris", "https://shiwangandu.com"],
-  ["livingstone-adventures", "Livingstone Adventures Victoria Falls", "Helicopter flights, white-water rafting, and Devil's Pool operator", "https://livingstoneadventures.com"],
-  ["zam-4x4-expeditions", "ZamRoam 4x4 Safari Expeditions", "Equipped overland safari vehicle hire and expedition camping", "https://zamroam.com/4x4"],
-  ["chewa-heritage-foundation", "Chewa Heritage Foundation & King Gawa Undi", "Custodian of the tri-national Kulamba ceremony and Gule Wamkulu", "https://nhcczambia.org"],
-  ["bemba-royal-council", "Bemba Royal Council & Paramount Chief Chitimukulu", "Custodian of the Ukusefya Pa Ng'wena celebration", "https://nhcczambia.org"],
-  ["luvale-cultural-association", "Luvale Cultural Association & Senior Chief Ndungu", "Custodian of the Likumbi Lya Mize festival", "https://nhcczambia.org"],
-  ["mutinondo-wilderness-trust", "Mutinondo Wilderness Trust", "Privately conserved 10,000-hectare granite wilderness in Muchinga", "https://mutinondozambia.com"],
-  ["royal-chariot-transfers", "Royal Chariot Safari & Airport Transfers", "Air-conditioned overland 4x4 and executive shuttle service", "https://royalchariot.co.zm"],
-  ["zambia-trade-fair-society", "Zambia International Trade Fair Society", "Organizer of the premier national commercial expo in Ndola", "https://zitf.org.zm"],
-  ["zambia-agriculture-society", "Agricultural & Commercial Society of Zambia", "Organizer of the national agricultural show in Lusaka", "https://acsz.co.zm"],
-  ["choma-museum-crafts", "Choma Museum & Tonga Crafts Trust", "Custodian of Tonga cultural heritage and artisan basketry", "https://chomamuseum.org"],
-  ["moto-moto-museum-trust", "Moto Moto Museum Trust Mbala", "Northern Province cultural and archaeological repository", "https://nhcczambia.org"],
-  ["mfuwe-lodge-bushcamps", "Mfuwe Lodge & Bushcamp Collection", "Lagoon-front lodge famous for elephants walking through reception", "https://bushcampcompany.com"]
+  ["zambia-tourism-agency", "Zambia Tourism Agency (ZTA)", "Official Tourism Body", "https://www.zambiatourism.com", "+260 211 229 087", "info@zambiatourism.com", "1st Floor Petroda House, Great East Road, Lusaka, Zambia", "+260977123456"],
+  ["royal-livingstone-resort", "The Royal Livingstone Victoria Falls Resort by Anantara", "Five-star luxury Zambezi riverfront resort", "https://www.anantara.com/en/royal-livingstone", "+260 213 321 122", "royallivingstone@anantara.com", "Mosi-oa-Tunya National Park, Livingstone, Southern Province, Zambia", "+260764123456"],
+  ["tongabezi-lodge", "Tongabezi Lodge & Sindabezi Island", "Award-winning luxury safari lodge on the upper Zambezi", "https://greensafaris.com/tongabezi", "+260 213 327 450", "reservations@greensafaris.com", "Upper Zambezi River, Livingstone, Southern Province, Zambia", "+260978654321"],
+  ["bushcamp-company-luangwa", "The Bushcamp Company South Luangwa", "Pioneering luxury bush camps and walking safaris in Mfuwe", "https://bushcampcompany.com", "+260 216 246 041", "info@bushcampcompany.com", "Mfuwe Main Gate Road, South Luangwa National Park, Mambwe, Eastern Province, Zambia", "+260977889900"],
+  ["chiawa-safaris-zambezi", "Chiawa Safaris & Old Mondoro", "Premier premier conservation-focused Lower Zambezi camps", "https://chiawa.com", "+260 211 261 588", "info@chiawa.com", "Lower Zambezi National Park, Chongwe District, Lusaka Province, Zambia", "+260971234567"],
+  ["chaminuka-nature-reserve", "Chaminuka Nature Reserve & Luxury Lodge", "Private wildlife sanctuary with indigenous art collections", "https://chaminuka.com", "+260 211 840 256", "info@chaminuka.com", "Chaminuka Nature Reserve, Chongwe / Lusaka East, Zambia", "+260977345678"],
+  ["wilderness-safaris-busanga", "Wilderness Safaris Busanga Plains", "Exclusive luxury camps in northern Kafue", "https://wildernessdestinations.com", "+260 213 327 400", "enquiry@wildernessdestinations.com", "Busanga Plains, Northern Kafue National Park, Central Province, Zambia", "+260975678901"],
+  ["barotse-royal-establishment", "Barotse Royal Establishment & Nayuma Museum", "Custodian of the Kuomboka water ceremony and Lozi traditions", "https://barotseland.info", "+260 217 221 230", "heritage@barotseland.info", "Limulunga Royal Palace & Nayuma Museum, Mongu, Western Province, Zambia", "+260979012345"],
+  ["lunda-royal-establishment", "Lunda Kingdom Royal Cultural Trust", "Custodian of the historic Umutomboko ceremony in Luapula", "https://nhcczambia.org", "+260 212 911 020", "umutomboko@nhcczambia.org", "Mwata Kazembe Royal Palace, Mwansabombwe, Luapula Province, Zambia", "+260978901234"],
+  ["ngoni-royal-council", "Ngoni Royal Council & Paramount Chief Mpezeni", "Custodian of the annual Nc'wala warrior ceremony", "https://www.zambiatourism.com", "+260 216 221 540", "ncwala@zambiatourism.com", "Paramount Chief Mpezeni Royal Palace, Mutenguleni, Chipata, Eastern Province, Zambia", "+260977112233"],
+  ["national-heritage-zambia", "National Heritage Conservation Commission (NHCC)", "Government agency protecting Zambia's historical & natural monuments", "https://nhcczambia.org", "+260 213 320 562", "info@nhcczambia.org", "Heritage House, Dedan Kimathi Road, Livingstone, Southern Province, Zambia", "+260976543210"],
+  ["zambia-airways", "Zambia Airways Domestic Aviation", "Flag carrier connecting Lusaka, Livingstone, Ndola, and Mfuwe", "https://www.zambiaairways.co.zm", "+260 211 250 822", "reservations@zambiaairways.co.zm", "Kenneth Kaunda International Airport, Lusaka, Zambia", "+260973344556"],
+  ["proflight-zambia", "Proflight Zambia Safari Network", "Leading scheduled regional safari airline", "https://www.proflight-zambia.com", "+260 211 252 452", "reservations@proflight-zambia.com", "Stand 7367 Addis Ababa Drive, Rhodes Park, Lusaka, Zambia", "+260977777123"],
+  ["ndole-bay-resort", "Ndole Bay Lodge Lake Tanganyika", "Premier beachfront diving, angling, and safari lodge", "https://ndolebaylodge.com", "+260 962 110 500", "info@ndolebaylodge.com", "Ndole Bay, Nsumbu National Park, Lake Tanganyika, Northern Province, Zambia", "+260962110500"],
+  ["shiwa-ngandu-estate", "Shiwa Ng'andu Historical Manor", "Historic English manor estate, Kapishya hot springs, and North Luangwa safaris", "https://shiwangandu.com", "+260 214 370 021", "reservations@shiwangandu.com", "Shiwa Ng'andu Estate & Kapishya Hot Springs, Muchinga Province, Zambia", "+260977443322"],
+  ["livingstone-adventures", "Livingstone Adventures Victoria Falls", "Helicopter flights, white-water rafting, and Devil's Pool operator", "https://livingstoneadventures.com", "+260 213 323 589", "adventures@livingstoneadventures.com", "Plot 216 Mosi-oa-Tunya Road, Livingstone, Southern Province, Zambia", "+260978998877"],
+  ["zam-4x4-expeditions", "ZamRoam 4x4 Safari Expeditions", "Equipped overland safari vehicle hire and expedition camping", "https://zamroam.com/4x4", "+260 573 506 598", "expeditions@zamroam.com", "Great East Road, Arcades Commercial Precinct, Lusaka, Zambia", "+260573506598"],
+  ["chewa-heritage-foundation", "Chewa Heritage Foundation & King Gawa Undi", "Custodian of the tri-national Kulamba ceremony and Gule Wamkulu", "https://nhcczambia.org", "+260 216 221 670", "kulamba@nhcczambia.org", "Mkaika Royal Headquarters, Katete, Eastern Province, Zambia", "+260977223344"],
+  ["bemba-royal-council", "Bemba Royal Council & Paramount Chief Chitimukulu", "Custodian of the Ukusefya Pa Ng'wena celebration", "https://nhcczambia.org", "+260 214 221 110", "chitimukulu@nhcczambia.org", "Chitimukulu Royal Palace, Malole, Kasama District, Northern Province, Zambia", "+260977334455"],
+  ["luvale-cultural-association", "Luvale Cultural Association & Senior Chief Ndungu", "Custodian of the Likumbi Lya Mize festival", "https://nhcczambia.org", "+260 218 351 010", "mize@nhcczambia.org", "Mize Royal Capital, Zambezi District, North-Western Province, Zambia", "+260977445566"],
+  ["mutinondo-wilderness-trust", "Mutinondo Wilderness Trust", "Privately conserved 10,000-hectare granite wilderness in Muchinga", "https://mutinondozambia.com", "+260 977 758 877", "mwk@mutinondozambia.com", "Mutinondo Wilderness, Mpika District, Muchinga Province, Zambia", "+260977758877"],
+  ["royal-chariot-transfers", "Royal Chariot Safari & Airport Transfers", "Air-conditioned overland 4x4 and executive shuttle service", "https://royalchariot.co.zm", "+260 977 554 433", "bookings@royalchariot.co.zm", "Plot 4924 Los Angeles Boulevard, Longacres, Lusaka, Zambia", "+260977554433"],
+  ["zambia-trade-fair-society", "Zambia International Trade Fair Society", "Organizer of the premier national commercial expo in Ndola", "https://zitf.org.zm", "+260 212 651 515", "info@zitf.org.zm", "Trade Fair Grounds, Broadway Avenue, Ndola, Copperbelt Province, Zambia", "+260977881122"],
+  ["zambia-agriculture-society", "Agricultural & Commercial Society of Zambia", "Organizer of the national agricultural show in Lusaka", "https://acsz.co.zm", "+260 211 253 433", "info@acsz.co.zm", "Showgrounds, Great East Road, Lusaka, Zambia", "+260977992233"],
+  ["choma-museum-crafts", "Choma Museum & Tonga Crafts Trust", "Custodian of Tonga cultural heritage and artisan basketry", "https://chomamuseum.org", "+260 213 220 123", "crafts@chomamuseum.org", "Plot 10 Livingstone-Lusaka Road, Choma, Southern Province, Zambia", "+260975112233"],
+  ["moto-moto-museum-trust", "Moto Moto Museum Trust Mbala", "Northern Province cultural and archaeological repository", "https://nhcczambia.org", "+260 214 451 020", "motomoto@nhcczambia.org", "Moto Moto Road, Mbala, Northern Province, Zambia", "+260977665544"],
+  ["mfuwe-lodge-bushcamps", "Mfuwe Lodge & Bushcamp Collection", "Lagoon-front lodge famous for elephants walking through reception", "https://bushcampcompany.com", "+260 216 246 041", "mfuwe@bushcampcompany.com", "South Luangwa National Park Main Gate, Mambwe, Eastern Province, Zambia", "+260977889900"]
 ];
 
 const zambiaListingSeed = [
@@ -170,6 +170,11 @@ export async function ensureCatalogue() {
   await safeAlter("ALTER TABLE listings ADD COLUMN last_reviewed_at TEXT");
   await safeAlter("ALTER TABLE providers ADD COLUMN legal_name TEXT");
   await safeAlter("ALTER TABLE providers ADD COLUMN license_number TEXT");
+  await safeAlter("ALTER TABLE providers ADD COLUMN phone TEXT");
+  await safeAlter("ALTER TABLE providers ADD COLUMN email TEXT");
+  await safeAlter("ALTER TABLE providers ADD COLUMN physical_address TEXT");
+  await safeAlter("ALTER TABLE providers ADD COLUMN website_url TEXT");
+  await safeAlter("ALTER TABLE providers ADD COLUMN whatsapp_number TEXT");
 
   const zmbCountry = await d1.prepare("SELECT id FROM countries WHERE UPPER(code)='ZMB'").first<{ id: number }>();
   const zmbId = zmbCountry?.id ?? 1;
@@ -196,10 +201,10 @@ export async function ensureCatalogue() {
     }
   }
   for (const p of zambiaProviderSeed) {
-    await d1.prepare("INSERT OR IGNORE INTO providers (slug, trading_name, source_name, source_url, country_id, is_test_data) VALUES (?, ?, ?, ?, ?, 0)")
-      .bind(p[0], p[1], p[2], p[3], zmbId).run();
-    await d1.prepare("UPDATE providers SET trading_name=?, source_name=?, source_url=?, country_id=?, is_test_data=0 WHERE slug=?")
-      .bind(p[1], p[2], p[3], zmbId, p[0]).run();
+    await d1.prepare("INSERT OR IGNORE INTO providers (slug, trading_name, source_name, source_url, phone, email, physical_address, website_url, whatsapp_number, country_id, is_test_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)")
+      .bind(p[0], p[1], p[2], p[3], p[4] || null, p[5] || null, p[6] || null, p[3], p[7] || null, zmbId).run();
+    await d1.prepare("UPDATE providers SET trading_name=?, source_name=?, source_url=?, phone=?, email=?, physical_address=?, website_url=?, whatsapp_number=?, country_id=?, is_test_data=0 WHERE slug=?")
+      .bind(p[1], p[2], p[3], p[4] || null, p[5] || null, p[6] || null, p[3], p[7] || null, zmbId, p[0]).run();
   }
   for (const l of zambiaListingSeed) {
     let prov = await d1.prepare("SELECT id FROM providers WHERE slug=?").bind(l[1]).first<{ id: number }>();
@@ -244,14 +249,18 @@ export async function getCatalogue(query = "", category = "all", countryCode = "
 
   const result = await d1.prepare(`
     SELECT l.id, l.slug, l.name, l.summary, l.image_url AS imageUrl, l.photo_credit AS photoCredit,
-      COALESCE(l.deep_link_url, p.source_url) AS deepLinkUrl, l.tag, l.currency,
+      COALESCE(l.deep_link_url, p.website_url, p.source_url) AS deepLinkUrl, l.tag, l.currency,
       l.base_price AS basePrice, l.member_price AS memberPrice, l.rating,
       l.review_count AS reviewCount, l.verification_status AS verificationStatus,
       l.is_test_data AS isTestData,
       d.name AS destination, d.district AS district, d.latitude, d.longitude,
       pv.name AS province, pv.code AS provinceCode, pv.region AS provinceRegion,
       c.slug AS categorySlug, c.name AS categoryName,
-      p.trading_name AS providerName, p.source_url AS sourceUrl
+      p.trading_name AS providerName, p.source_url AS sourceUrl,
+      p.phone AS providerPhone, p.email AS providerEmail,
+      p.physical_address AS providerAddress,
+      COALESCE(p.website_url, p.source_url) AS providerWebsite,
+      p.whatsapp_number AS providerWhatsapp
     FROM listings l
     JOIN destinations d ON d.id=l.destination_id
     JOIN provinces pv ON pv.id=d.province_id
@@ -259,10 +268,10 @@ export async function getCatalogue(query = "", category = "all", countryCode = "
     JOIN providers p ON p.id=l.provider_id
     WHERE l.publication_status='published'
       AND (l.country_id = ? OR l.country_id IS NULL OR ? = 0)
-      AND (?='' OR l.name LIKE ? OR l.summary LIKE ? OR l.tag LIKE ? OR d.name LIKE ? OR d.summary LIKE ? OR d.district LIKE ? OR pv.name LIKE ? OR pv.region LIKE ? OR c.name LIKE ? OR p.trading_name LIKE ?)
+      AND (?='' OR l.name LIKE ? OR l.summary LIKE ? OR l.tag LIKE ? OR d.name LIKE ? OR d.summary LIKE ? OR d.district LIKE ? OR pv.name LIKE ? OR pv.region LIKE ? OR c.name LIKE ? OR p.trading_name LIKE ? OR p.phone LIKE ? OR p.physical_address LIKE ?)
       AND (?='all' OR c.slug=?)
     ORDER BY l.rating DESC, l.name ASC
-  `).bind(countryId, countryId, query.trim(), like, like, like, like, like, like, like, like, like, like, category, category).all();
+  `).bind(countryId, countryId, query.trim(), like, like, like, like, like, like, like, like, like, like, like, like, category, category).all();
 
   const cats = await d1.prepare("SELECT slug, name, icon, display_order AS displayOrder FROM categories WHERE is_active=1 ORDER BY display_order").all();
 
