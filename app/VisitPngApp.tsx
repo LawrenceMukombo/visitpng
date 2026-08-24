@@ -20,6 +20,7 @@ import { PartnerLanding } from "./components/PartnerLanding";
 import { AboutPage } from "./components/AboutPage";
 import { AiChatModal, FloatingConciergeWidget } from "./components/AiChatModal";
 import { ZamRoamLogo, ZamRoamHeroBanner, ZamRoamTrustRibbon } from "./components/ZamRoamEmblem";
+import PaymentModal from "./components/PaymentModal";
 import {CurrencyCode, formatPrice} from "../db/currency";
 import {PNG_TRAIL_PACKS, ZAMBIA_TRAIL_PACKS} from "../db/trailPacks";
 import {PNG_FESTIVALS, ZAMBIA_FESTIVALS} from "../db/festivals";
@@ -974,6 +975,8 @@ function BookingSheet({listing,close,openBookings,currency}:{listing:Listing;clo
 function BookingsScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode}){
   const[bookings,setBookings]=useState<Booking[]>([]);
   const[status,setStatus]=useState("Loading bookings…");
+  const[activePaymentBooking,setActivePaymentBooking]=useState<Booking|null>(null);
+
   const load=useCallback(()=>{
     if(!viewer.signedIn)return;
     fetch("/api/bookings")
@@ -981,7 +984,9 @@ function BookingsScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode})
       .then(x=>{setBookings(x.bookings||[]);setStatus("")})
       .catch(()=>setStatus("Bookings could not be loaded."));
   },[viewer]);
+
   useEffect(()=>load(),[load]);
+
   const act=async(action:string,bookingId:number)=>{
     setStatus("Updating booking…");
     const r=await fetch("/api/bookings",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,bookingId})});
@@ -991,11 +996,13 @@ function BookingsScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode})
       setStatus(action==="testConfirm"?"Practice payment finished. Your booking is confirmed, and no real money was charged.":"Booking cancelled.");
     } else setStatus(x.error||"Booking update failed.");
   };
+
   if(!viewer.signedIn)return <section className="accountGuest"><div className="accountMark">▤</div><p className="eyebrow">YOUR BOOKINGS</p><h1>Your reservations, safely together.</h1><p>Sign in to hold dated inventory and manage booking confirmations.</p><a href={viewer.signInPath}>Sign in to view bookings</a></section>;
+
   return <section className="saved bookingsPage">
     <p className="eyebrow">YOUR BOOKINGS & PAYMENTS</p>
     <h1>Your travel bookings.</h1>
-    <p>Practice payments confirm your bookings without real charges.</p>
+    <p>Complete payment securely via PayPal, Zambian Mobile Money, or Credit Card.</p>
     {status&&<p className="formStatus" aria-live="polite">{status}</p>}
     {bookings.length?<div className="bookingList">
       {bookings.map(b=><article className="bookingCard" key={b.id}>
@@ -1009,12 +1016,43 @@ function BookingsScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode})
             <strong>{formatPrice(b.total, currency)}</strong>
           </div>
           <div className="bookingActions">
-            {b.status==="held"&&<button onClick={()=>act("testConfirm",b.id)}>Confirm practice payment</button>}
-            {b.status==="held"&&<button className="cancelBtn" onClick={()=>act("cancel",b.id)}>Cancel hold</button>}
+            {b.status==="held"&&(
+              <>
+                <button
+                  type="button"
+                  style={{ background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)", color: "#000000", fontWeight: 800 }}
+                  onClick={()=>setActivePaymentBooking(b)}
+                >
+                  💳 Pay via PayPal / MoMo / Cards
+                </button>
+                <button type="button" onClick={()=>act("testConfirm",b.id)}>Practice payment</button>
+                <button type="button" className="cancelBtn" onClick={()=>act("cancel",b.id)}>Cancel hold</button>
+              </>
+            )}
           </div>
         </div>
       </article>)}
     </div>:<div className="empty compact"><h2>No bookings yet</h2><p>Find a place and click “Check dates & book” to hold a sample booking.</p></div>}
+
+    {activePaymentBooking&&(
+      <PaymentModal
+        isOpen={Boolean(activePaymentBooking)}
+        onClose={()=>{setActivePaymentBooking(null);load();}}
+        onSuccess={()=>{
+          setActivePaymentBooking(null);
+          load();
+          setStatus("🎉 Payment verified! Your booking is officially confirmed.");
+        }}
+        title="Complete Safari Booking Payment"
+        itemType="booking"
+        itemId={activePaymentBooking.id}
+        itemName={activePaymentBooking.listingName}
+        amount={activePaymentBooking.total}
+        currency={currency}
+        customerName={activePaymentBooking.contactName}
+        customerPhone={activePaymentBooking.contactMobile||""}
+      />
+    )}
   </section>;
 }
 
