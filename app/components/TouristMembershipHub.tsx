@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { formatPrice, type CurrencyCode } from "../../db/currency";
+import PaymentModal from "./PaymentModal";
 
 interface BenefitItem {
   id: number;
@@ -162,6 +163,7 @@ export default function TouristMembershipHub({ countryCode = "ZMB", viewer, curr
   const [isOrderingCard, setIsOrderingCard] = useState(false);
   const [familyForm, setFamilyForm] = useState({ fullName: "", relationship: "Spouse" });
   const [isAddingFamily, setIsAddingFamily] = useState(false);
+  const [activePaymentPlan, setActivePaymentPlan] = useState<{ id: number; name: string; price: number; subscriptionId?: number } | null>(null);
 
   const loadHub = useCallback(() => {
     if (!viewer.signedIn) return;
@@ -392,10 +394,24 @@ export default function TouristMembershipHub({ countryCode = "ZMB", viewer, curr
             {sub?.status === "payment_due" && (
               <div className="paymentDueBanner">
                 <div>
-                  <strong>Practice payment pending</strong>
-                  <p>Activate your membership to unlock your QR card and member rates.</p>
+                  <strong>Membership Payment Pending</strong>
+                  <p>Activate your membership to unlock your live QR card and member rates.</p>
                 </div>
-                <button onClick={() => testPay(Number(sub.id))}>Complete Practice Payment</button>
+                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                  <button
+                    type="button"
+                    style={{ background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)", color: "#000000", fontWeight: 800 }}
+                    onClick={() => setActivePaymentPlan({
+                      id: Number(sub.planId),
+                      name: String(sub.planName || "National Membership"),
+                      price: Number((plans.find(p => p.id === sub.planId)?.price) || 450),
+                      subscriptionId: Number(sub.id)
+                    })}
+                  >
+                    💳 Pay via PayPal / MoMo / Card
+                  </button>
+                  <button type="button" onClick={() => testPay(Number(sub.id))}>Practice Payment</button>
+                </div>
               </div>
             )}
           </div>
@@ -740,18 +756,44 @@ export default function TouristMembershipHub({ countryCode = "ZMB", viewer, curr
                     className="planActionBtn"
                     disabled={isCurrent}
                     onClick={() => {
-                      if (confirm(`Switch to ${p.name}?`)) {
-                        act({ action: "select", planId: p.id });
+                      if (p.price > 0) {
+                        setActivePaymentPlan({ id: p.id, name: p.name, price: p.price });
+                      } else {
+                        if (confirm(`Switch to ${p.name}?`)) {
+                          act({ action: "select", planId: p.id });
+                        }
                       }
                     }}
                   >
-                    {isCurrent ? "Current Plan" : p.price ? `Upgrade to ${p.name}` : "Select Free Plan"}
+                    {isCurrent ? "Current Plan" : p.price ? `Upgrade & Pay for ${p.name}` : "Select Free Plan"}
                   </button>
                 </article>
               );
             })}
           </div>
         </div>
+      )}
+
+      {activePaymentPlan && (
+        <PaymentModal
+          isOpen={Boolean(activePaymentPlan)}
+          onClose={() => {
+            setActivePaymentPlan(null);
+            loadHub();
+          }}
+          onSuccess={() => {
+            setActivePaymentPlan(null);
+            loadHub();
+            setStatus("🎉 Membership payment verified! Your Digital Membership Card is now active.");
+          }}
+          title={`Activate ${activePaymentPlan.name}`}
+          itemType="membership"
+          itemId={Number(activePaymentPlan.subscriptionId || sub?.id || activePaymentPlan.id)}
+          itemName={`ZamRoam ${activePaymentPlan.name}`}
+          amount={activePaymentPlan.price}
+          currency={currency}
+          customerName={typeof data?.memberName === "string" ? data.memberName : "Explorer"}
+        />
       )}
     </section>
   );
