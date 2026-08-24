@@ -413,7 +413,7 @@ export function ZamRoamHeroBanner({
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/icons/zambia_flag_icon.png"
+            src="/icons/zambia_flag.png"
             alt="Flag of Zambia"
             style={{ width: "24px", height: "16px", borderRadius: "3px", objectFit: "cover", boxShadow: "0 1px 4px rgba(0,0,0,0.4)" }}
           />
@@ -478,7 +478,7 @@ export function ZamRoamHeroBanner({
         </div>
       </div>
 
-      {/* Six Main Category Navigation Buttons with Official Icon Pack */}
+      {/* Six Main Category Navigation Buttons with High-Res Styled Badges */}
       <div
         style={{
           display: "grid",
@@ -508,10 +508,10 @@ export function ZamRoamHeroBanner({
               }
             }}
             style={{
-              background: "rgba(255, 255, 255, 0.04)",
+              background: "rgba(255, 255, 255, 0.05)",
               border: "1px solid rgba(255, 255, 255, 0.12)",
-              borderRadius: "10px",
-              padding: "12px 8px",
+              borderRadius: "12px",
+              padding: "14px 10px",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -521,18 +521,29 @@ export function ZamRoamHeroBanner({
               transition: "all 0.2s ease"
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={cat.iconPng}
-              alt={cat.label}
-              style={{ width: "36px", height: "36px", objectFit: "contain", filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.5))" }}
-            />
+            <div
+              style={{
+                width: "42px",
+                height: "42px",
+                borderRadius: "10px",
+                background: "rgba(255, 255, 255, 0.08)",
+                border: "1px solid rgba(255, 255, 255, 0.15)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "22px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
+              }}
+            >
+              {cat.symbol}
+            </div>
             <span
               style={{
                 fontSize: "12px",
                 fontWeight: 800,
                 color: "#FFFFFF",
-                letterSpacing: "0.06em"
+                letterSpacing: "0.06em",
+                textAlign: "center"
               }}
             >
               {cat.label}
