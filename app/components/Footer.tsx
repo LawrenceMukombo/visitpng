@@ -358,45 +358,187 @@ export function Footer({
           alignItems: "center",
           gap: "1.25rem"
         }}>
-          {/* Social Links with Icon Pack Images */}
+          {/* Social Links with Crisp Vector Badges */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
             <span style={{ fontSize: "0.85rem", color: "#a3cfc9", fontWeight: 700, marginRight: "4px" }}>Follow ZamRoam:</span>
-            <a href="https://wa.me/260573506598" target="_blank" rel="noopener noreferrer" title="WhatsApp" style={{ opacity: 0.9 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/whatsapp.png" alt="WhatsApp" style={{ width: "28px", height: "28px" }} />
+            
+            {/* WhatsApp */}
+            <a
+              href="https://wa.me/260573506598"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Chat on WhatsApp"
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#ffffff",
+                fontSize: "15px",
+                boxShadow: "0 2px 8px rgba(37, 211, 102, 0.35)",
+                textDecoration: "none",
+                transition: "transform 0.15s ease"
+              }}
+            >
+              💬
             </a>
-            <a href="https://facebook.com/zamroam" target="_blank" rel="noopener noreferrer" title="Facebook" style={{ opacity: 0.9 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/facebook.png" alt="Facebook" style={{ width: "28px", height: "28px" }} />
+
+            {/* Facebook */}
+            <a
+              href="https://facebook.com/zamroam"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Follow on Facebook"
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                background: "#1877F2",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#ffffff",
+                fontWeight: 900,
+                fontSize: "15px",
+                boxShadow: "0 2px 8px rgba(24, 119, 242, 0.35)",
+                textDecoration: "none",
+                fontFamily: "sans-serif"
+              }}
+            >
+              f
             </a>
-            <a href="https://instagram.com/zamroam" target="_blank" rel="noopener noreferrer" title="Instagram" style={{ opacity: 0.9 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/instagram.png" alt="Instagram" style={{ width: "28px", height: "28px" }} />
+
+            {/* Instagram */}
+            <a
+              href="https://instagram.com/zamroam"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Follow on Instagram"
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                background: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#ffffff",
+                fontSize: "15px",
+                boxShadow: "0 2px 8px rgba(220, 39, 67, 0.35)",
+                textDecoration: "none"
+              }}
+            >
+              📷
             </a>
-            <a href="https://x.com/zamroam" target="_blank" rel="noopener noreferrer" title="X (Twitter)" style={{ opacity: 0.9 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/x_twitter.png" alt="X" style={{ width: "28px", height: "28px" }} />
+
+            {/* X / Twitter */}
+            <a
+              href="https://x.com/zamroam"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Follow on X"
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                background: "#000000",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#ffffff",
+                fontWeight: 900,
+                fontSize: "13px",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.35)",
+                textDecoration: "none",
+                fontFamily: "sans-serif"
+              }}
+            >
+              𝕏
             </a>
-            <a href="https://youtube.com/@zamroam" target="_blank" rel="noopener noreferrer" title="YouTube" style={{ opacity: 0.9 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/youtube.png" alt="YouTube" style={{ width: "28px", height: "28px" }} />
+
+            {/* YouTube */}
+            <a
+              href="https://youtube.com/@zamroam"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Watch on YouTube"
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                background: "#FF0000",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#ffffff",
+                fontSize: "14px",
+                boxShadow: "0 2px 8px rgba(255, 0, 0, 0.35)",
+                textDecoration: "none"
+              }}
+            >
+              ▶
             </a>
-            <a href="https://tiktok.com/@zamroam" target="_blank" rel="noopener noreferrer" title="TikTok" style={{ opacity: 0.9 }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/tiktok.png" alt="TikTok" style={{ width: "28px", height: "28px" }} />
+
+            {/* TikTok */}
+            <a
+              href="https://tiktok.com/@zamroam"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Follow on TikTok"
+              style={{
+                width: "32px",
+                height: "32px",
+                borderRadius: "50%",
+                background: "#010101",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#ffffff",
+                fontSize: "14px",
+                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.35)",
+                textDecoration: "none"
+              }}
+            >
+              🎵
             </a>
           </div>
 
           {/* Trust Badges */}
-          <div style={{ display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.8rem", color: "#c2e2dc" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/trusted_partner_badge.png" alt="Trusted" style={{ width: "22px", height: "22px" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+            <div style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "rgba(16, 185, 129, 0.12)",
+              border: "1px solid rgba(16, 185, 129, 0.3)",
+              padding: "4px 10px",
+              borderRadius: "20px",
+              fontSize: "0.8rem",
+              color: "#34D399",
+              fontWeight: 700
+            }}>
+              <span>🛡️</span>
               <span>ZTA Licensed Partner</span>
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.8rem", color: "#c2e2dc" }}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/icons/top_rated_badge.png" alt="Top Rated" style={{ width: "22px", height: "22px" }} />
+
+            <div style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              background: "rgba(245, 158, 11, 0.12)",
+              border: "1px solid rgba(245, 158, 11, 0.3)",
+              padding: "4px 10px",
+              borderRadius: "20px",
+              fontSize: "0.8rem",
+              color: "#FBBF24",
+              fontWeight: 700
+            }}>
+              <span>⭐</span>
               <span>Top Rated Experiences</span>
             </div>
           </div>
