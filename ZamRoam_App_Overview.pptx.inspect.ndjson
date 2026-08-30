@@ -1,0 +1,125 @@
+{"kind":"deck","id":"pr/4f2s11","name":"Deck"}
+{"kind":"layout","layoutId":"b60a0ea1-874d-4b31-9697-5ebac1ccb8ee","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"743a86d0-73cb-474b-8693-efa3ce6b2a9c","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/qunlm8","slide":1,"title":"ZAMBIA TOURISM, CONNECTED","textShapes":5}
+{"kind":"textbox","id":"sh/1o3etgna","slide":1,"name":"cover-kicker","text":"ZAMBIA TOURISM, CONNECTED","textPreview":"ZAMBIA TOURISM, CONNECTED","textChars":25,"textLines":1,"bbox":[42,42,570,26]}
+{"kind":"textbox","id":"sh/u1cfiloz","slide":1,"name":"cover-title","text":"ZamRoam","textPreview":"ZamRoam","textChars":7,"textLines":1,"bbox":[42,125,560,90]}
+{"kind":"textbox","id":"sh/f2lwr65k","slide":1,"name":"cover-subtitle","text":"Discover Zambia.\nPlan with confidence.\nExperience more.","textPreview":"Discover Zambia. | Plan with confidence. | Experience more.","textChars":55,"textLines":3,"bbox":[42,238,545,190]}
+{"kind":"textbox","id":"sh/oruxov61","slide":1,"name":"cover-body","text":"A single digital platform for visitors, tourism businesses, communities and destination stakeholders.","textPreview":"A single digital platform for visitors, tourism businesses, communities and destination stakeholders.","textChars":101,"textLines":1,"bbox":[42,478,550,105]}
+{"kind":"textbox","id":"sh/2pcfmlov","slide":1,"name":"footer-1","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[1190,670,45,20]}
+{"kind":"image","id":"im/czq90vy5","slide":1,"name":"","alt":"ZamRoam Zambia tourism brand banner","bbox":[658,42,580,588]}
+{"kind":"notes","id":"nt/qunlm8","slide":1,"text":"Open with the platform promise: one place to discover, prepare, book and participate in Zambia tourism.\n[Sources]\nLocal application source and repository assets: C:/visitzambia"}
+{"kind":"slide","id":"sl/ct8ip3","slide":2,"title":"ZAMROAM PLATFORM","textShapes":12}
+{"kind":"textbox","id":"sh/twvupsn2","slide":2,"name":"eyebrow-2","text":"ZAMROAM PLATFORM","textPreview":"ZAMROAM PLATFORM","textChars":16,"textLines":1,"bbox":[42,34,430,24]}
+{"kind":"textbox","id":"sh/6t4bux4r","slide":2,"name":"title-2","text":"One app supports the whole tourism journey","textPreview":"One app supports the whole tourism journey","textChars":42,"textLines":1,"bbox":[42,68,1196,82]}
+{"kind":"textbox","id":"sh/rudcni5w","slide":2,"name":"footer-2","text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[1190,670,45,20]}
+{"kind":"textbox","id":"sh/gzmd07mt","slide":2,"name":"s2-intro","text":"ZamRoam connects inspiration, practical travel support and trusted participation in one responsive experience.","textPreview":"ZamRoam connects inspiration, practical travel support and trusted participation in one responsive experience.","textChars":110,"textLines":1,"bbox":[42,158,1196,52]}
+{"kind":"shape","id":"sh/10futcne","slide":2,"name":"s2-panel-0","bbox":[42,245,574,155]}
+{"kind":"textbox","id":"sh/fydcr258","slide":2,"name":"s2-h-0","text":"Explore","textPreview":"Explore","textChars":7,"textLines":1,"bbox":[174,273,410,34]}
+{"kind":"textbox","id":"sh/w32to3m9","slide":2,"name":"s2-b-0","text":"Places, stays, experiences, categories and destination search","textPreview":"Places, stays, experiences, categories and destination search","textChars":61,"textLines":1,"bbox":[174,317,410,66]}
+{"kind":"shape","id":"sh/h4buh8nu","slide":2,"name":"s2-panel-1","bbox":[654,245,574,155]}
+{"kind":"textbox","id":"sh/gn6hsryp","slide":2,"name":"s2-h-1","text":"Prepare","textPreview":"Prepare","textChars":7,"textLines":1,"bbox":[786,273,410,34]}
+{"kind":"textbox","id":"sh/vmdgj6x4","slide":2,"name":"s2-b-1","text":"Maps, safety guidance, local phrases, permits and offline trails","textPreview":"Maps, safety guidance, local phrases, permits and offline trails","textChars":64,"textLines":1,"bbox":[786,317,410,66]}
+{"kind":"shape","id":"sh/ul4zq1gj","slide":2,"name":"s2-panel-2","bbox":[42,430,574,155]}
+{"kind":"textbox","id":"sh/4b6hwbel","slide":2,"name":"s2-h-2","text":"Plan & transact","textPreview":"Plan & transact","textChars":15,"textLines":1,"bbox":[174,458,410,34]}
+{"kind":"textbox","id":"sh/3qx0n6x0","slide":2,"name":"s2-b-2","text":"Saved lists, collaborative trips, bookings, reviews and member benefits","textPreview":"Saved lists, collaborative trips, bookings, reviews and member benefits","textChars":71,"textLines":1,"bbox":[174,502,410,66]}
+{"kind":"shape","id":"sh/ipozu1wf","slide":2,"name":"s2-panel-3","bbox":[654,430,574,155]}
+{"kind":"textbox","id":"sh/sfqh0vex","slide":2,"name":"s2-h-3","text":"Operate","textPreview":"Operate","textChars":7,"textLines":1,"bbox":[786,458,410,34]}
+{"kind":"textbox","id":"sh/cjy1wzmt","slide":2,"name":"s2-b-3","text":"Provider registration, vetting, redemptions, content management and audit trails","textPreview":"Provider registration, vetting, redemptions, content management and audit trails","textChars":80,"textLines":1,"bbox":[786,502,410,66]}
+{"kind":"image","id":"im/va5ormtg","slide":2,"name":"","alt":"Explore","bbox":[64,278,86,86]}
+{"kind":"image","id":"im/u9czu9g7","slide":2,"name":"","alt":"Prepare","bbox":[676,278,86,86]}
+{"kind":"image","id":"im/ixczytgj","slide":2,"name":"","alt":"Plan & transact","bbox":[64,463,86,86]}
+{"kind":"image","id":"im/y1szmpgz","slide":2,"name":"","alt":"Operate","bbox":[676,463,86,86]}
+{"kind":"notes","id":"nt/ct8ip3","slide":2,"text":"The product is intentionally multi-sided: it serves travellers while giving tourism operators and administrators the tools to keep the ecosystem useful and trusted.\n[Sources]\nLocal application source and repository assets: C:/visitzambia"}
+{"kind":"slide","id":"sl/t4cc62","slide":3,"title":"VISITOR EXPERIENCE","textShapes":8}
+{"kind":"textbox","id":"sh/8ba54vix","slide":3,"name":"eyebrow-3","text":"VISITOR EXPERIENCE","textPreview":"VISITOR EXPERIENCE","textChars":18,"textLines":1,"bbox":[42,34,430,24]}
+{"kind":"textbox","id":"sh/nah4vqhc","slide":3,"name":"title-3","text":"Discovery starts with Zambia","textPreview":"Discovery starts with Zambia","textChars":28,"textLines":1,"bbox":[42,68,1196,82]}
+{"kind":"textbox","id":"sh/m98n2l0r","slide":3,"name":"footer-3","text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[1190,670,45,20]}
+{"kind":"shape","id":"sh/wza58fit","slide":3,"name":"accent-Destination-led search","bbox":[650,185,8,150]}
+{"kind":"textbox","id":"sh/vy14zah8","slide":3,"name":"h-Destination-led search","text":"Destination-led search","textPreview":"Destination-led search","textChars":22,"textLines":1,"bbox":[674,185,526,38]}
+{"kind":"textbox","id":"sh/adsn6503","slide":3,"name":"b-Destination-led search","text":"Find places and stays by name, province, destination or experience category.","textPreview":"Find places and stays by name, province, destination or experience category.","textChars":76,"textLines":1,"bbox":[674,235,526,100]}
+{"kind":"shape","id":"sh/543m5kzq","slide":3,"name":"accent-Rich local context","bbox":[650,365,8,150]}
+{"kind":"textbox","id":"sh/43u5cfi5","slide":3,"name":"h-Rich local context","text":"Rich local context","textPreview":"Rich local context","textChars":18,"textLines":1,"bbox":[674,365,526,38]}
+{"kind":"textbox","id":"sh/qdgv2pcj","slide":3,"name":"b-Rich local context","text":"Move beyond listings into ceremonies, landmarks, safari trails and practical destination knowledge.","textPreview":"Move beyond listings into ceremonies, landmarks, safari trails and practical destination knowledge.","textChars":99,"textLines":1,"bbox":[674,415,526,100]}
+{"kind":"textbox","id":"sh/repcvudo","slide":3,"name":"s3-callout","text":"The result is a guide to the country, not just a storefront.","textPreview":"The result is a guide to the country, not just a storefront.","textChars":60,"textLines":1,"bbox":[650,565,540,54]}
+{"kind":"image","id":"im/sbypg3yt","slide":3,"name":"","alt":"ZamRoam banner showing Zambia travel experiences","bbox":[42,175,560,440]}
+{"kind":"notes","id":"nt/t4cc62","slide":3,"text":"The main Explore experience is Zambia-specific, with Victoria Falls, South Luangwa and local categories embedded in the product copy and data model.\n[Sources]\nLocal application source and repository assets: C:/visitzambia"}
+{"kind":"slide","id":"sl/86y4qa","slide":4,"title":"SMART TRAVEL SUPPORT","textShapes":11}
+{"kind":"textbox","id":"sh/xwrypojm","slide":4,"name":"eyebrow-4","text":"SMART TRAVEL SUPPORT","textPreview":"SMART TRAVEL SUPPORT","textChars":20,"textLines":1,"bbox":[42,34,430,24]}
+{"kind":"textbox","id":"sh/atgze90v","slide":4,"name":"title-4","text":"Preparation stays useful beyond connectivity","textPreview":"Preparation stays useful beyond connectivity","textChars":44,"textLines":1,"bbox":[42,68,1196,82]}
+{"kind":"textbox","id":"sh/bu9gne1g","slide":4,"name":"footer-4","text":"04","textPreview":"04","textChars":2,"textLines":1,"bbox":[1190,670,45,20]}
+{"kind":"textbox","id":"sh/9s7yl4ja","slide":4,"name":"s4-h-0","text":"Interactive map","textPreview":"Interactive map","textChars":15,"textLines":1,"bbox":[152,175,455,38]}
+{"kind":"textbox","id":"sh/mpgfa90z","slide":4,"name":"s4-b-0","text":"Select destinations visually and return directly to relevant places.","textPreview":"Select destinations visually and return directly to relevant places.","textChars":68,"textLines":1,"bbox":[152,227,455,85]}
+{"kind":"shape","id":"sh/nqpgje14","slide":4,"name":"s4-rule-0","bbox":[42,340,555,2]}
+{"kind":"textbox","id":"sh/1o7yh4je","slide":4,"name":"s4-h-1","text":"Safari AI","textPreview":"Safari AI","textChars":9,"textLines":1,"bbox":[764,175,455,38]}
+{"kind":"textbox","id":"sh/twjmd03y","slide":4,"name":"s4-b-1","text":"Get conversational help and move useful ideas into trip planning.","textPreview":"Get conversational help and move useful ideas into trip planning.","textChars":65,"textLines":1,"bbox":[764,227,455,85]}
+{"kind":"shape","id":"sh/svq54vmt","slide":4,"name":"s4-rule-1","bbox":[654,340,555,2]}
+{"kind":"textbox","id":"sh/6t8n2l4n","slide":4,"name":"s4-h-2","text":"SafeTravel","textPreview":"SafeTravel","textChars":10,"textLines":1,"bbox":[152,395,455,38]}
+{"kind":"textbox","id":"sh/5szm9gn2","slide":4,"name":"s4-b-2","text":"Surface practical security guidance within the same journey.","textPreview":"Surface practical security guidance within the same journey.","textChars":60,"textLines":1,"bbox":[152,447,455,85]}
+{"kind":"shape","id":"sh/k7q50vmh","slide":4,"name":"s4-rule-2","bbox":[42,560,555,2]}
+{"kind":"textbox","id":"sh/i58nyl4b","slide":4,"name":"s4-h-3","text":"Offline-ready tools","textPreview":"Offline-ready tools","textChars":19,"textLines":1,"bbox":[764,395,455,38]}
+{"kind":"textbox","id":"sh/x4zm5gn6","slide":4,"name":"s4-b-3","text":"Carry phrase support, permits and downloadable trail packs into the field.","textPreview":"Carry phrase support, permits and downloadable trail packs into the field.","textChars":74,"textLines":1,"bbox":[764,447,455,85]}
+{"kind":"shape","id":"sh/w365wbml","slide":4,"name":"s4-rule-3","bbox":[654,560,555,2]}
+{"kind":"image","id":"im/lczep0jq","slide":4,"name":"","alt":"Interactive map","bbox":[42,175,82,82]}
+{"kind":"image","id":"im/583y1kju","slide":4,"name":"","alt":"Safari AI","bbox":[654,175,82,82]}
+{"kind":"image","id":"im/k7upwbe9","slide":4,"name":"","alt":"SafeTravel","bbox":[42,395,82,82]}
+{"kind":"image","id":"im/cjupsbed","slide":4,"name":"","alt":"Offline-ready tools","bbox":[654,395,82,82]}
+{"kind":"notes","id":"nt/86y4qa","slide":4,"text":"Emphasize the practical layer: the app helps users navigate, communicate, understand risk and carry essential information beyond reliable mobile coverage.\n[Sources]\nLocal application source and repository assets: C:/visitzambia"}
+{"kind":"slide","id":"sl/rq0qdt","slide":5,"title":"CEREMONIES & LOCAL KNOWLEDGE","textShapes":5}
+{"kind":"textbox","id":"sh/03y1wbal","slide":5,"name":"eyebrow-5","text":"CEREMONIES & LOCAL KNOWLEDGE","textPreview":"CEREMONIES & LOCAL KNOWLEDGE","textChars":28,"textLines":1,"bbox":[42,34,430,24]}
+{"kind":"textbox","id":"sh/zip036t0","slide":5,"name":"title-5","text":"Culture is presented as a living part of the journey","textPreview":"Culture is presented as a living part of the journey","textChars":52,"textLines":1,"bbox":[42,68,1196,82]}
+{"kind":"textbox","id":"sh/ehgju1sf","slide":5,"name":"footer-5","text":"05","textPreview":"05","textChars":2,"textLines":1,"bbox":[1190,670,45,20]}
+{"kind":"textbox","id":"sh/qdgjq1sj","slide":5,"name":"s5-body","text":"A dedicated ceremony calendar brings together verified dates, cultural etiquette and access information. Local phrase support adds pronunciation, literal meaning and respectful-use notes.","textPreview":"A dedicated ceremony calendar brings together verified dates, cultural etiquette and access information. Local phrase support adds pronun...","textChars":187,"textLines":1,"bbox":[42,490,820,115]}
+{"kind":"textbox","id":"sh/xcb2d0be","slide":5,"name":"s5-quote","text":"Tourism becomes easier to navigate—and more respectful to participate in.","textPreview":"Tourism becomes easier to navigate—and more respectful to participate in.","textChars":73,"textLines":1,"bbox":[900,490,338,120]}
+{"kind":"image","id":"im/8zqx4zmx","slide":5,"name":"","alt":"Kuomboka flotilla viewed from above","bbox":[42,170,580,285]}
+{"kind":"image","id":"im/90zex43i","slide":5,"name":"","alt":"Likumbi Lya Mize Makishi ceremony","bbox":[650,170,270,285]}
+{"kind":"image","id":"im/mx8f2947","slide":5,"name":"","alt":"Ncwala Ngoni warriors","bbox":[948,170,290,285]}
+{"kind":"notes","id":"nt/rq0qdt","slide":5,"text":"The ceremony and language modules frame culture as context for responsible participation, not simply as a gallery of attractions.\n[Sources]\nLocal application source and repository assets: C:/visitzambia"}
+{"kind":"slide","id":"sl/o3xuuk","slide":6,"title":"CONNECTED TRIP FLOW","textShapes":15}
+{"kind":"textbox","id":"sh/dgfutkne","slide":6,"name":"eyebrow-6","text":"CONNECTED TRIP FLOW","textPreview":"CONNECTED TRIP FLOW","textChars":19,"textLines":1,"bbox":[42,34,430,24]}
+{"kind":"textbox","id":"sh/qdoby54n","slide":6,"name":"title-6","text":"The journey continues from inspiration to action","textPreview":"The journey continues from inspiration to action","textChars":48,"textLines":1,"bbox":[42,68,1196,82]}
+{"kind":"textbox","id":"sh/rexcra58","slide":6,"name":"footer-6","text":"06","textPreview":"06","textChars":2,"textLines":1,"bbox":[1190,670,45,20]}
+{"kind":"shape","id":"sh/0j6d4fmp","slide":6,"name":"s6-line","bbox":[84,535,1112,3]}
+{"kind":"shape","id":"sh/1kfuxkna","slide":6,"name":"s6-panel-0","bbox":[42,170,374,330]}
+{"kind":"textbox","id":"sh/ehov2p4z","slide":6,"name":"s6-num-0","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[70,198,80,45]}
+{"kind":"textbox","id":"sh/zixcva5k","slide":6,"name":"s6-h-0","text":"Discover","textPreview":"Discover","textChars":8,"textLines":1,"bbox":[70,260,310,50]}
+{"kind":"textbox","id":"sh/o7qd8zm1","slide":6,"name":"s6-b-0","text":"Search destinations, listings and experiences.","textPreview":"Search destinations, listings and experiences.","textChars":46,"textLines":1,"bbox":[70,330,310,105]}
+{"kind":"shape","id":"sh/98zu14nm","slide":6,"name":"s6-dot-0","bbox":[74,525,18,18]}
+{"kind":"textbox","id":"sh/l4jet0nm","slide":6,"name":"s6-label-0","text":"Discover","textPreview":"Discover","textChars":8,"textLines":1,"bbox":[70,570,310,38]}
+{"kind":"shape","id":"sh/03axkv6h","slide":6,"name":"s6-panel-1","bbox":[453,170,374,330]}
+{"kind":"textbox","id":"sh/z21wrq5w","slide":6,"name":"s6-num-1","text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[481,198,80,45]}
+{"kind":"textbox","id":"sh/y1sfilob","slide":6,"name":"s6-h-1","text":"Organise","textPreview":"Organise","textChars":8,"textLines":1,"bbox":[481,260,310,50]}
+{"kind":"textbox","id":"sh/98jyx0ny","slide":6,"name":"s6-b-1","text":"Save favourites and build collaborative trips.","textPreview":"Save favourites and build collaborative trips.","textChars":46,"textLines":1,"bbox":[481,330,310,105]}
+{"kind":"shape","id":"sh/87axov6d","slide":6,"name":"s6-dot-1","bbox":[485,525,18,18]}
+{"kind":"textbox","id":"sh/n61gvq5s","slide":6,"name":"s6-label-1","text":"Organise","textPreview":"Organise","textChars":8,"textLines":1,"bbox":[481,570,310,38]}
+{"kind":"shape","id":"sh/m5sfmlo7","slide":6,"name":"s6-panel-2","bbox":[864,170,374,330]}
+{"kind":"textbox","id":"sh/pczelgnu","slide":6,"name":"s6-num-2","text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[892,198,80,45]}
+{"kind":"textbox","id":"sh/obqxcb69","slide":6,"name":"s6-h-2","text":"Book & carry","textPreview":"Book & carry","textChars":12,"textLines":1,"bbox":[892,260,310,50]}
+{"kind":"textbox","id":"sh/gfuxsbe5","slide":6,"name":"s6-b-2","text":"Create bookings, hold references, access permits and member benefits.","textPreview":"Create bookings, hold references, access permits and member benefits.","textChars":69,"textLines":1,"bbox":[892,330,310,105]}
+{"kind":"shape","id":"sh/hg3y1gva","slide":6,"name":"s6-dot-2","bbox":[896,525,18,18]}
+{"kind":"textbox","id":"sh/udsfq1wz","slide":6,"name":"s6-label-2","text":"Book & carry","textPreview":"Book & carry","textChars":12,"textLines":1,"bbox":[892,570,310,38]}
+{"kind":"notes","id":"nt/o3xuuk","slide":6,"text":"Saved items, shared trip planning, bookings, permits and memberships turn discovery into an ongoing relationship rather than a one-time browse.\n[Sources]\nLocal application source and repository assets: C:/visitzambia"}
+{"kind":"slide","id":"sl/sq4jc2","slide":7,"title":"PARTNER ECOSYSTEM","textShapes":13}
+{"kind":"textbox","id":"sh/3u58vypo","slide":7,"name":"eyebrow-7","text":"PARTNER ECOSYSTEM","textPreview":"PARTNER ECOSYSTEM","textChars":17,"textLines":1,"bbox":[42,34,430,24]}
+{"kind":"textbox","id":"sh/4ve9o369","slide":7,"name":"title-7","text":"Operators participate through a trusted layer","textPreview":"Operators participate through a trusted layer","textChars":45,"textLines":1,"bbox":[42,68,1196,82]}
+{"kind":"textbox","id":"sh/pwnqx87u","slide":7,"name":"footer-7","text":"07","textPreview":"07","textChars":2,"textLines":1,"bbox":[1190,670,45,20]}
+{"kind":"textbox","id":"sh/fql8rypc","slide":7,"name":"s7-big","text":"A marketplace is only as strong as the operators behind it.","textPreview":"A marketplace is only as strong as the operators behind it.","textChars":59,"textLines":1,"bbox":[42,455,500,100]}
+{"kind":"textbox","id":"sh/gru9kj6x","slide":7,"name":"s7-n-0","text":"01","textPreview":"01","textChars":2,"textLines":1,"bbox":[620,180,55,35]}
+{"kind":"textbox","id":"sh/hs3qto7i","slide":7,"name":"s7-h-0","text":"Register","textPreview":"Register","textChars":8,"textLines":1,"bbox":[700,180,470,35]}
+{"kind":"textbox","id":"sh/6ls7e9ov","slide":7,"name":"s7-b-0","text":"Businesses submit identity, contact and tourism licence information.","textPreview":"Businesses submit identity, contact and tourism licence information.","textChars":68,"textLines":1,"bbox":[700,225,470,74]}
+{"kind":"textbox","id":"sh/7ml8nepg","slide":7,"name":"s7-n-1","text":"02","textPreview":"02","textChars":2,"textLines":1,"bbox":[620,325,55,35]}
+{"kind":"textbox","id":"sh/fml03ado","slide":7,"name":"s7-h-1","text":"Verify & publish","textPreview":"Verify & publish","textChars":16,"textLines":1,"bbox":[700,325,470,35]}
+{"kind":"textbox","id":"sh/ulcza5c3","slide":7,"name":"s7-b-1","text":"Administrators vet providers and manage listings, categories and content.","textPreview":"Administrators vet providers and manage listings, categories and content.","textChars":73,"textLines":1,"bbox":[700,370,470,74]}
+{"kind":"textbox","id":"sh/h83i5kvu","slide":7,"name":"s7-n-2","text":"03","textPreview":"03","textChars":2,"textLines":1,"bbox":[620,470,55,35]}
+{"kind":"textbox","id":"sh/gnu1cfu9","slide":7,"name":"s7-h-2","text":"Serve & redeem","textPreview":"Serve & redeem","textChars":14,"textLines":1,"bbox":[700,470,470,35]}
+{"kind":"textbox","id":"sh/3al07udk","slide":7,"name":"s7-b-2","text":"Operators handle member redemptions while operations teams manage bookings, reviews and disputes.","textPreview":"Operators handle member redemptions while operations teams manage bookings, reviews and disputes.","textChars":97,"textLines":1,"bbox":[700,515,470,74]}
+{"kind":"image","id":"im/n6tcneh8","slide":7,"name":"","alt":"ZamRoam lion compass identity","bbox":[42,190,500,250]}
+{"kind":"notes","id":"nt/sq4jc2","slide":7,"text":"The partner and admin surfaces include provider applications, licence fields, vetting, publishing, redemption, audit history and customer-operations tooling.\n[Sources]\nLocal application source and repository assets: C:/visitzambia"}
+{"kind":"slide","id":"sl/st6847","slide":8,"title":"BUILT FOR THE NEXT STAGE OF ZAMBIA TOURISM","textShapes":5}
+{"kind":"textbox","id":"sh/294nil07","slide":8,"name":"s8-kicker","text":"BUILT FOR THE NEXT STAGE OF ZAMBIA TOURISM","textPreview":"BUILT FOR THE NEXT STAGE OF ZAMBIA TOURISM","textChars":42,"textLines":1,"bbox":[42,52,750,30]}
+{"kind":"textbox","id":"sh/pcfmd0zi","slide":8,"name":"s8-title","text":"One platform.\nMore confident journeys.\nMore visible local value.","textPreview":"One platform. | More confident journeys. | More visible local value.","textChars":64,"textLines":3,"bbox":[42,145,760,255]}
+{"kind":"textbox","id":"sh/ob65kvix","slide":8,"name":"s8-body","text":"ZamRoam brings visitors, operators, culture and destination intelligence into a single scalable experience—ready to demonstrate, partner, pilot and grow.","textPreview":"ZamRoam brings visitors, operators, culture and destination intelligence into a single scalable experience—ready to demonstrate, partner,...","textChars":153,"textLines":1,"bbox":[42,455,760,118]}
+{"kind":"textbox","id":"sh/adonm503","slide":8,"name":"s8-tech","text":"Responsive web app · Next.js 16 · React 19 · Drizzle data layer","textPreview":"Responsive web app · Next.js 16 · React 19 · Drizzle data layer","textChars":63,"textLines":1,"bbox":[42,635,900,25]}
+{"kind":"textbox","id":"sh/x0f6h0zu","slide":8,"name":"footer-8","text":"08","textPreview":"08","textChars":2,"textLines":1,"bbox":[1190,670,45,20]}
+{"kind":"image","id":"im/2pw765wj","slide":8,"name":"","alt":"ZamRoam Zambia tourism brand banner","bbox":[880,115,335,435]}
+{"kind":"notes","id":"nt/st6847","slide":8,"text":"Close by inviting the audience to experience the product, explore partnership opportunities or identify a pilot use case.\nTechnical foundation verified from package.json and the local data layer.\n[Sources]\nLocal application source and repository assets: C:/visitzambia"}

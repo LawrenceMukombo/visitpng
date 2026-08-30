@@ -1,0 +1,1010 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/ct8ip3",
+    "id": "ct8ip3",
+    "slide": 2,
+    "layoutId": "743a86d0-73cb-474b-8693-efa3ce6b2a9c",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FFFFFF",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Arial"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "743a86d0-73cb-474b-8693-efa3ce6b2a9c",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/twvupsn2",
+      "id": "1",
+      "name": "eyebrow-2",
+      "bbox": [
+        42,
+        34,
+        430,
+        24
+      ],
+      "geometry": "rect",
+      "text": "ZAMROAM PLATFORM",
+      "textPreview": "ZAMROAM PLATFORM",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "fontSize": 15,
+        "typeface": "Arial",
+        "color": "#1B6960",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ZAMROAM PLATFORM"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ZAMROAM PLATFORM",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Arial",
+            "color": "#1B6960",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ZAMROAM PLATFORM",
+              "fontSize": 15,
+              "typeface": "Arial",
+              "color": "#1B6960",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6t4bux4r",
+      "id": "2",
+      "name": "title-2",
+      "bbox": [
+        42,
+        68,
+        1196,
+        82
+      ],
+      "geometry": "rect",
+      "text": "One app supports the whole tourism journey",
+      "textPreview": "One app supports the whole tourism journey",
+      "resolvedFontSize": 46,
+      "resolvedTextStyle": {
+        "fontSize": 46,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "One app supports the whole tourism journey"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "One app supports the whole tourism journey",
+          "resolvedTextStyle": {
+            "fontSize": 46,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "One app supports the whole tourism journey",
+              "fontSize": 46,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/rudcni5w",
+      "id": "3",
+      "name": "footer-2",
+      "bbox": [
+        1190,
+        670,
+        45,
+        20
+      ],
+      "geometry": "rect",
+      "text": "02",
+      "textPreview": "02",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "bold": true,
+        "alignment": "right",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "02"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "02",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "bold": true,
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "02",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "bold": true,
+              "alignment": "right"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gzmd07mt",
+      "id": "4",
+      "name": "s2-intro",
+      "bbox": [
+        42,
+        158,
+        1196,
+        52
+      ],
+      "geometry": "rect",
+      "text": "ZamRoam connects inspiration, practical travel support and trusted participation in one responsive experience.",
+      "textPreview": "ZamRoam connects inspiration, practical travel support and trusted participation in one responsive experience.",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "fontSize": 23,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ZamRoam connects inspiration, practical travel support and trusted participation in one responsive experience."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ZamRoam connects inspiration, practical travel support and trusted participation in one responsive experience.",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ZamRoam connects inspiration, practical travel support and trusted participation in one responsive experience.",
+              "fontSize": 23,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/10futcne",
+      "id": "5",
+      "name": "s2-panel-0",
+      "bbox": [
+        42,
+        245,
+        574,
+        155
+      ],
+      "geometry": "rect",
+      "fillColor": "#FAF7F2",
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/va5ormtg",
+      "id": "6",
+      "bbox": [
+        64,
+        278,
+        86,
+        86
+      ],
+      "alt": "Explore",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "6c851f1d-2364-4ab4-adb7-d7c4e2360d62",
+        "contentType": "image/png",
+        "byteLength": 8763
+      }
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/fydcr258",
+      "id": "7",
+      "name": "s2-h-0",
+      "bbox": [
+        174,
+        273,
+        410,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Explore",
+      "textPreview": "Explore",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Explore"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Explore",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Explore",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/w32to3m9",
+      "id": "8",
+      "name": "s2-b-0",
+      "bbox": [
+        174,
+        317,
+        410,
+        66
+      ],
+      "geometry": "rect",
+      "text": "Places, stays, experiences, categories and destination search",
+      "textPreview": "Places, stays, experiences, categories and destination search",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Places, stays, experiences, categories and"
+          },
+          {
+            "index": 2,
+            "text": "destination search"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Places, stays, experiences, categories and destination search",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Places, stays, experiences, categories and destination search",
+              "fontSize": 20,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/h4buh8nu",
+      "id": "9",
+      "name": "s2-panel-1",
+      "bbox": [
+        654,
+        245,
+        574,
+        155
+      ],
+      "geometry": "rect",
+      "fillColor": "#EDEDED",
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/u9czu9g7",
+      "id": "10",
+      "bbox": [
+        676,
+        278,
+        86,
+        86
+      ],
+      "alt": "Prepare",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "3d4f0a2e-fc31-46e1-a449-140722fce98b",
+        "contentType": "image/png",
+        "byteLength": 7202
+      }
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/gn6hsryp",
+      "id": "11",
+      "name": "s2-h-1",
+      "bbox": [
+        786,
+        273,
+        410,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Prepare",
+      "textPreview": "Prepare",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Prepare"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Prepare",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Prepare",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vmdgj6x4",
+      "id": "12",
+      "name": "s2-b-1",
+      "bbox": [
+        786,
+        317,
+        410,
+        66
+      ],
+      "geometry": "rect",
+      "text": "Maps, safety guidance, local phrases, permits and offline trails",
+      "textPreview": "Maps, safety guidance, local phrases, permits and offline trails",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Maps, safety guidance, local phrases,"
+          },
+          {
+            "index": 2,
+            "text": "permits and offline trails"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Maps, safety guidance, local phrases, permits and offline trails",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Maps, safety guidance, local phrases, permits and offline trails",
+              "fontSize": 20,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ul4zq1gj",
+      "id": "13",
+      "name": "s2-panel-2",
+      "bbox": [
+        42,
+        430,
+        574,
+        155
+      ],
+      "geometry": "rect",
+      "fillColor": "#EDEDED",
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/ixczytgj",
+      "id": "14",
+      "bbox": [
+        64,
+        463,
+        86,
+        86
+      ],
+      "alt": "Plan & transact",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "054d83a0-ec43-414e-a49b-d9c626c10c8a",
+        "contentType": "image/png",
+        "byteLength": 9195
+      }
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/4b6hwbel",
+      "id": "15",
+      "name": "s2-h-2",
+      "bbox": [
+        174,
+        458,
+        410,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Plan & transact",
+      "textPreview": "Plan & transact",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Plan & transact"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Plan & transact",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Plan & transact",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/3qx0n6x0",
+      "id": "16",
+      "name": "s2-b-2",
+      "bbox": [
+        174,
+        502,
+        410,
+        66
+      ],
+      "geometry": "rect",
+      "text": "Saved lists, collaborative trips, bookings, reviews and member benefits",
+      "textPreview": "Saved lists, collaborative trips, bookings, reviews and member benefits",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Saved lists, collaborative trips, bookings,"
+          },
+          {
+            "index": 2,
+            "text": "reviews and member benefits"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Saved lists, collaborative trips, bookings, reviews and member benefits",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Saved lists, collaborative trips, bookings, reviews and member benefits",
+              "fontSize": 20,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ipozu1wf",
+      "id": "17",
+      "name": "s2-panel-3",
+      "bbox": [
+        654,
+        430,
+        574,
+        155
+      ],
+      "geometry": "rect",
+      "fillColor": "#EDEDED",
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/y1szmpgz",
+      "id": "18",
+      "bbox": [
+        676,
+        463,
+        86,
+        86
+      ],
+      "alt": "Operate",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "dd30fc12-2401-413d-8231-4810822e8837",
+        "contentType": "image/png",
+        "byteLength": 7406
+      }
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/sfqh0vex",
+      "id": "19",
+      "name": "s2-h-3",
+      "bbox": [
+        786,
+        458,
+        410,
+        34
+      ],
+      "geometry": "rect",
+      "text": "Operate",
+      "textPreview": "Operate",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Operate"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Operate",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Operate",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 20,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/cjy1wzmt",
+      "id": "20",
+      "name": "s2-b-3",
+      "bbox": [
+        786,
+        502,
+        410,
+        66
+      ],
+      "geometry": "rect",
+      "text": "Provider registration, vetting, redemptions, content management and audit trails",
+      "textPreview": "Provider registration, vetting, redemptions, content management and audit trails",
+      "resolvedFontSize": 20,
+      "resolvedTextStyle": {
+        "fontSize": 20,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Provider registration, vetting, redemptions,"
+          },
+          {
+            "index": 2,
+            "text": "content management and audit trails"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Provider registration, vetting, redemptions, content management and audit trails",
+          "resolvedTextStyle": {
+            "fontSize": 20,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Provider registration, vetting, redemptions, content management and audit trails",
+              "fontSize": 20,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

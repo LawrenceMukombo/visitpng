@@ -1,0 +1,475 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/rq0qdt",
+    "id": "rq0qdt",
+    "slide": 5,
+    "layoutId": "743a86d0-73cb-474b-8693-efa3ce6b2a9c",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FAF7F2",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Arial"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "743a86d0-73cb-474b-8693-efa3ce6b2a9c",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/03y1wbal",
+      "id": "1",
+      "name": "eyebrow-5",
+      "bbox": [
+        42,
+        34,
+        430,
+        24
+      ],
+      "geometry": "rect",
+      "text": "CEREMONIES & LOCAL KNOWLEDGE",
+      "textPreview": "CEREMONIES & LOCAL KNOWLEDGE",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "fontSize": 15,
+        "typeface": "Arial",
+        "color": "#1B6960",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "CEREMONIES & LOCAL KNOWLEDGE"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "CEREMONIES & LOCAL KNOWLEDGE",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Arial",
+            "color": "#1B6960",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "CEREMONIES & LOCAL KNOWLEDGE",
+              "fontSize": 15,
+              "typeface": "Arial",
+              "color": "#1B6960",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/zip036t0",
+      "id": "2",
+      "name": "title-5",
+      "bbox": [
+        42,
+        68,
+        1196,
+        82
+      ],
+      "geometry": "rect",
+      "text": "Culture is presented as a living part of the journey",
+      "textPreview": "Culture is presented as a living part of the journey",
+      "resolvedFontSize": 46,
+      "resolvedTextStyle": {
+        "fontSize": 46,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Culture is presented as a living part of the journey"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Culture is presented as a living part of the journey",
+          "resolvedTextStyle": {
+            "fontSize": 46,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Culture is presented as a living part of the journey",
+              "fontSize": 46,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ehgju1sf",
+      "id": "3",
+      "name": "footer-5",
+      "bbox": [
+        1190,
+        670,
+        45,
+        20
+      ],
+      "geometry": "rect",
+      "text": "05",
+      "textPreview": "05",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "bold": true,
+        "alignment": "right",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "05"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "05",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "bold": true,
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "05",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "bold": true,
+              "alignment": "right"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/8zqx4zmx",
+      "id": "4",
+      "bbox": [
+        42,
+        170,
+        580,
+        285
+      ],
+      "alt": "Kuomboka flotilla viewed from above",
+      "contentType": "image/jpeg",
+      "imageFit": "cover",
+      "asset": {
+        "assetId": "da535c8a-83c3-43a9-8d45-d4769a7df0eb",
+        "contentType": "image/jpeg",
+        "byteLength": 61929
+      }
+    },
+    {
+      "order": 5,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/90zex43i",
+      "id": "5",
+      "bbox": [
+        650,
+        170,
+        270,
+        285
+      ],
+      "alt": "Likumbi Lya Mize Makishi ceremony",
+      "contentType": "image/jpeg",
+      "imageFit": "cover",
+      "asset": {
+        "assetId": "3ef5a095-7498-41d9-8dd2-71a1a0bc530e",
+        "contentType": "image/jpeg",
+        "byteLength": 103660
+      }
+    },
+    {
+      "order": 6,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/mx8f2947",
+      "id": "6",
+      "bbox": [
+        948,
+        170,
+        290,
+        285
+      ],
+      "alt": "Ncwala Ngoni warriors",
+      "contentType": "image/jpeg",
+      "imageFit": "cover",
+      "asset": {
+        "assetId": "805783f8-ee45-4065-b766-c667e2a0ab73",
+        "contentType": "image/jpeg",
+        "byteLength": 99856
+      }
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qdgjq1sj",
+      "id": "7",
+      "name": "s5-body",
+      "bbox": [
+        42,
+        490,
+        820,
+        115
+      ],
+      "geometry": "rect",
+      "text": "A dedicated ceremony calendar brings together verified dates, cultural etiquette and access information. Local phrase support adds pronunciation, literal meaning and respectful-use notes.",
+      "textPreview": "A dedicated ceremony calendar brings together verified dates, cultural etiquette and access information. Local phrase support adds pronun...",
+      "resolvedFontSize": 23,
+      "resolvedTextStyle": {
+        "fontSize": 23,
+        "typeface": "Arial",
+        "color": "#232231",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "A dedicated ceremony calendar brings together verified dates, cultural"
+          },
+          {
+            "index": 2,
+            "text": "etiquette and access information. Local phrase support adds pronunciation,"
+          },
+          {
+            "index": 3,
+            "text": "literal meaning and respectful-use notes."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "A dedicated ceremony calendar brings together verified dates, cultural etiquette and access information. Local phrase support adds pronunciation, literal meaning and respectful-use notes.",
+          "resolvedTextStyle": {
+            "fontSize": 23,
+            "typeface": "Arial",
+            "color": "#232231",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "A dedicated ceremony calendar brings together verified dates, cultural etiquette and access information. Local phrase support adds pronunciation, literal meaning and respectful-use notes.",
+              "fontSize": 23,
+              "typeface": "Arial",
+              "color": "#232231",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xcb2d0be",
+      "id": "8",
+      "name": "s5-quote",
+      "bbox": [
+        900,
+        490,
+        338,
+        120
+      ],
+      "geometry": "rect",
+      "text": "Tourism becomes easier to navigate—and more respectful to participate in.",
+      "textPreview": "Tourism becomes easier to navigate—and more respectful to participate in.",
+      "resolvedFontSize": 25,
+      "resolvedTextStyle": {
+        "fontSize": 25,
+        "typeface": "Arial",
+        "color": "#1B6960",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 4,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Tourism becomes easier"
+          },
+          {
+            "index": 2,
+            "text": "to navigate—and more"
+          },
+          {
+            "index": 3,
+            "text": "respectful to participate"
+          },
+          {
+            "index": 4,
+            "text": "in."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Tourism becomes easier to navigate—and more respectful to participate in.",
+          "resolvedTextStyle": {
+            "fontSize": 25,
+            "typeface": "Arial",
+            "color": "#1B6960",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Tourism becomes easier to navigate—and more respectful to participate in.",
+              "fontSize": 25,
+              "typeface": "Arial",
+              "color": "#1B6960",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

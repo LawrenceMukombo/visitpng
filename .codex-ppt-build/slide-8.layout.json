@@ -1,0 +1,481 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/st6847",
+    "id": "st6847",
+    "slide": 8,
+    "layoutId": "743a86d0-73cb-474b-8693-efa3ce6b2a9c",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#1B6960",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Arial"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "743a86d0-73cb-474b-8693-efa3ce6b2a9c",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/294nil07",
+      "id": "1",
+      "name": "s8-kicker",
+      "bbox": [
+        42,
+        52,
+        750,
+        30
+      ],
+      "geometry": "rect",
+      "text": "BUILT FOR THE NEXT STAGE OF ZAMBIA TOURISM",
+      "textPreview": "BUILT FOR THE NEXT STAGE OF ZAMBIA TOURISM",
+      "resolvedFontSize": 16,
+      "resolvedTextStyle": {
+        "fontSize": 16,
+        "typeface": "Arial",
+        "color": "#A2CECA",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "BUILT FOR THE NEXT STAGE OF ZAMBIA TOURISM"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "BUILT FOR THE NEXT STAGE OF ZAMBIA TOURISM",
+          "resolvedTextStyle": {
+            "fontSize": 16,
+            "typeface": "Arial",
+            "color": "#A2CECA",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "BUILT FOR THE NEXT STAGE OF ZAMBIA TOURISM",
+              "fontSize": 16,
+              "typeface": "Arial",
+              "color": "#A2CECA",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/pcfmd0zi",
+      "id": "2",
+      "name": "s8-title",
+      "bbox": [
+        42,
+        145,
+        760,
+        255
+      ],
+      "geometry": "rect",
+      "text": "One platform.\nMore confident journeys.\nMore visible local value.",
+      "textPreview": "One platform. | More confident journeys. | More visible local value.",
+      "resolvedFontSize": 53,
+      "resolvedTextStyle": {
+        "fontSize": 53,
+        "typeface": "Arial",
+        "color": "#FFFFFF",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "One platform."
+          },
+          {
+            "index": 2,
+            "text": "More confident journeys."
+          },
+          {
+            "index": 3,
+            "text": "More visible local value."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "One platform.",
+          "resolvedTextStyle": {
+            "fontSize": 53,
+            "typeface": "Arial",
+            "color": "#FFFFFF",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "One platform.",
+              "fontSize": 53,
+              "typeface": "Arial",
+              "color": "#FFFFFF",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 2,
+          "text": "More confident journeys.",
+          "resolvedTextStyle": {
+            "fontSize": 53,
+            "typeface": "Arial",
+            "color": "#FFFFFF",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "More confident journeys.",
+              "fontSize": 53,
+              "typeface": "Arial",
+              "color": "#FFFFFF",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        },
+        {
+          "index": 3,
+          "text": "More visible local value.",
+          "resolvedTextStyle": {
+            "fontSize": 53,
+            "typeface": "Arial",
+            "color": "#FFFFFF",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "More visible local value.",
+              "fontSize": 53,
+              "typeface": "Arial",
+              "color": "#FFFFFF",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/ob65kvix",
+      "id": "3",
+      "name": "s8-body",
+      "bbox": [
+        42,
+        455,
+        760,
+        118
+      ],
+      "geometry": "rect",
+      "text": "ZamRoam brings visitors, operators, culture and destination intelligence into a single scalable experience—ready to demonstrate, partner, pilot and grow.",
+      "textPreview": "ZamRoam brings visitors, operators, culture and destination intelligence into a single scalable experience—ready to demonstrate, partner,...",
+      "resolvedFontSize": 24,
+      "resolvedTextStyle": {
+        "fontSize": 24,
+        "typeface": "Arial",
+        "color": "#FFFFFF",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 3,
+        "lines": [
+          {
+            "index": 1,
+            "text": "ZamRoam brings visitors, operators, culture and destination"
+          },
+          {
+            "index": 2,
+            "text": "intelligence into a single scalable experience—ready to demonstrate,"
+          },
+          {
+            "index": 3,
+            "text": "partner, pilot and grow."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "ZamRoam brings visitors, operators, culture and destination intelligence into a single scalable experience—ready to demonstrate, partner, pilot and grow.",
+          "resolvedTextStyle": {
+            "fontSize": 24,
+            "typeface": "Arial",
+            "color": "#FFFFFF",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "ZamRoam brings visitors, operators, culture and destination intelligence into a single scalable experience—ready to demonstrate, partner, pilot and grow.",
+              "fontSize": 24,
+              "typeface": "Arial",
+              "color": "#FFFFFF",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/2pw765wj",
+      "id": "4",
+      "bbox": [
+        880,
+        115,
+        335,
+        435
+      ],
+      "alt": "ZamRoam Zambia tourism brand banner",
+      "contentType": "image/jpeg",
+      "imageCrop": {
+        "left": 0.42,
+        "top": 0,
+        "right": 0,
+        "bottom": 0.28
+      },
+      "imageFit": "cover",
+      "asset": {
+        "assetId": "e58961f3-f27f-4ea6-a5f8-39678d55c059",
+        "contentType": "image/jpeg",
+        "byteLength": 413549
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/adonm503",
+      "id": "5",
+      "name": "s8-tech",
+      "bbox": [
+        42,
+        635,
+        900,
+        25
+      ],
+      "geometry": "rect",
+      "text": "Responsive web app · Next.js 16 · React 19 · Drizzle data layer",
+      "textPreview": "Responsive web app · Next.js 16 · React 19 · Drizzle data layer",
+      "resolvedFontSize": 17,
+      "resolvedTextStyle": {
+        "fontSize": 17,
+        "typeface": "Arial",
+        "color": "#A2CECA",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Responsive web app · Next.js 16 · React 19 · Drizzle data layer"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Responsive web app · Next.js 16 · React 19 · Drizzle data layer",
+          "resolvedTextStyle": {
+            "fontSize": 17,
+            "typeface": "Arial",
+            "color": "#A2CECA",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Responsive web app · Next.js 16 · React 19 · Drizzle data layer",
+              "fontSize": 17,
+              "typeface": "Arial",
+              "color": "#A2CECA",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x0f6h0zu",
+      "id": "6",
+      "name": "footer-8",
+      "bbox": [
+        1190,
+        670,
+        45,
+        20
+      ],
+      "geometry": "rect",
+      "text": "08",
+      "textPreview": "08",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "bold": true,
+        "alignment": "right",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "08"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "08",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "bold": true,
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "08",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "bold": true,
+              "alignment": "right"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

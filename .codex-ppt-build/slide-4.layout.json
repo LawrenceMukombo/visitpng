@@ -1,0 +1,947 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/86y4qa",
+    "id": "86y4qa",
+    "slide": 4,
+    "layoutId": "743a86d0-73cb-474b-8693-efa3ce6b2a9c",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FFFFFF",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Arial"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "743a86d0-73cb-474b-8693-efa3ce6b2a9c",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/xwrypojm",
+      "id": "1",
+      "name": "eyebrow-4",
+      "bbox": [
+        42,
+        34,
+        430,
+        24
+      ],
+      "geometry": "rect",
+      "text": "SMART TRAVEL SUPPORT",
+      "textPreview": "SMART TRAVEL SUPPORT",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "fontSize": 15,
+        "typeface": "Arial",
+        "color": "#1B6960",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "SMART TRAVEL SUPPORT"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "SMART TRAVEL SUPPORT",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Arial",
+            "color": "#1B6960",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "SMART TRAVEL SUPPORT",
+              "fontSize": 15,
+              "typeface": "Arial",
+              "color": "#1B6960",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/atgze90v",
+      "id": "2",
+      "name": "title-4",
+      "bbox": [
+        42,
+        68,
+        1196,
+        82
+      ],
+      "geometry": "rect",
+      "text": "Preparation stays useful beyond connectivity",
+      "textPreview": "Preparation stays useful beyond connectivity",
+      "resolvedFontSize": 46,
+      "resolvedTextStyle": {
+        "fontSize": 46,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Preparation stays useful beyond connectivity"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Preparation stays useful beyond connectivity",
+          "resolvedTextStyle": {
+            "fontSize": 46,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Preparation stays useful beyond connectivity",
+              "fontSize": 46,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/bu9gne1g",
+      "id": "3",
+      "name": "footer-4",
+      "bbox": [
+        1190,
+        670,
+        45,
+        20
+      ],
+      "geometry": "rect",
+      "text": "04",
+      "textPreview": "04",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "bold": true,
+        "alignment": "right",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "04"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "04",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "bold": true,
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "04",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "bold": true,
+              "alignment": "right"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/lczep0jq",
+      "id": "4",
+      "bbox": [
+        42,
+        175,
+        82,
+        82
+      ],
+      "alt": "Interactive map",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "005c6679-5735-4513-b83b-347344e553a2",
+        "contentType": "image/png",
+        "byteLength": 8763
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/9s7yl4ja",
+      "id": "5",
+      "name": "s4-h-0",
+      "bbox": [
+        152,
+        175,
+        455,
+        38
+      ],
+      "geometry": "rect",
+      "text": "Interactive map",
+      "textPreview": "Interactive map",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Interactive map"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Interactive map",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Interactive map",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/mpgfa90z",
+      "id": "6",
+      "name": "s4-b-0",
+      "bbox": [
+        152,
+        227,
+        455,
+        85
+      ],
+      "geometry": "rect",
+      "text": "Select destinations visually and return directly to relevant places.",
+      "textPreview": "Select destinations visually and return directly to relevant places.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Select destinations visually and return directly"
+          },
+          {
+            "index": 2,
+            "text": "to relevant places."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Select destinations visually and return directly to relevant places.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Select destinations visually and return directly to relevant places.",
+              "fontSize": 21,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/nqpgje14",
+      "id": "7",
+      "name": "s4-rule-0",
+      "bbox": [
+        42,
+        340,
+        555,
+        2
+      ],
+      "geometry": "rect",
+      "fillColor": "#A2CECA",
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/583y1kju",
+      "id": "8",
+      "bbox": [
+        654,
+        175,
+        82,
+        82
+      ],
+      "alt": "Safari AI",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "3e4252f2-c55c-4356-be43-5fde2db62acc",
+        "contentType": "image/png",
+        "byteLength": 7303
+      }
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/1o7yh4je",
+      "id": "9",
+      "name": "s4-h-1",
+      "bbox": [
+        764,
+        175,
+        455,
+        38
+      ],
+      "geometry": "rect",
+      "text": "Safari AI",
+      "textPreview": "Safari AI",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Safari AI"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Safari AI",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Safari AI",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/twjmd03y",
+      "id": "10",
+      "name": "s4-b-1",
+      "bbox": [
+        764,
+        227,
+        455,
+        85
+      ],
+      "geometry": "rect",
+      "text": "Get conversational help and move useful ideas into trip planning.",
+      "textPreview": "Get conversational help and move useful ideas into trip planning.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Get conversational help and move useful"
+          },
+          {
+            "index": 2,
+            "text": "ideas into trip planning."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Get conversational help and move useful ideas into trip planning.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Get conversational help and move useful ideas into trip planning.",
+              "fontSize": 21,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/svq54vmt",
+      "id": "11",
+      "name": "s4-rule-1",
+      "bbox": [
+        654,
+        340,
+        555,
+        2
+      ],
+      "geometry": "rect",
+      "fillColor": "#A2CECA",
+      "lineWidth": 0
+    },
+    {
+      "order": 12,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/k7upwbe9",
+      "id": "12",
+      "bbox": [
+        42,
+        395,
+        82,
+        82
+      ],
+      "alt": "SafeTravel",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "33bff7a4-c9c0-4697-afbf-db8572e20cac",
+        "contentType": "image/png",
+        "byteLength": 6801
+      }
+    },
+    {
+      "order": 13,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/6t8n2l4n",
+      "id": "13",
+      "name": "s4-h-2",
+      "bbox": [
+        152,
+        395,
+        455,
+        38
+      ],
+      "geometry": "rect",
+      "text": "SafeTravel",
+      "textPreview": "SafeTravel",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "SafeTravel"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "SafeTravel",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "SafeTravel",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 14,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/5szm9gn2",
+      "id": "14",
+      "name": "s4-b-2",
+      "bbox": [
+        152,
+        447,
+        455,
+        85
+      ],
+      "geometry": "rect",
+      "text": "Surface practical security guidance within the same journey.",
+      "textPreview": "Surface practical security guidance within the same journey.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Surface practical security guidance within the"
+          },
+          {
+            "index": 2,
+            "text": "same journey."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Surface practical security guidance within the same journey.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Surface practical security guidance within the same journey.",
+              "fontSize": 21,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 15,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/k7q50vmh",
+      "id": "15",
+      "name": "s4-rule-2",
+      "bbox": [
+        42,
+        560,
+        555,
+        2
+      ],
+      "geometry": "rect",
+      "fillColor": "#A2CECA",
+      "lineWidth": 0
+    },
+    {
+      "order": 16,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/cjupsbed",
+      "id": "16",
+      "bbox": [
+        654,
+        395,
+        82,
+        82
+      ],
+      "alt": "Offline-ready tools",
+      "contentType": "image/png",
+      "imageFit": "contain",
+      "asset": {
+        "assetId": "44cc273d-fe3b-4d0b-8793-2c644bbebffe",
+        "contentType": "image/png",
+        "byteLength": 7202
+      }
+    },
+    {
+      "order": 17,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/i58nyl4b",
+      "id": "17",
+      "name": "s4-h-3",
+      "bbox": [
+        764,
+        395,
+        455,
+        38
+      ],
+      "geometry": "rect",
+      "text": "Offline-ready tools",
+      "textPreview": "Offline-ready tools",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Offline-ready tools"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Offline-ready tools",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Offline-ready tools",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 18,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/x4zm5gn6",
+      "id": "18",
+      "name": "s4-b-3",
+      "bbox": [
+        764,
+        447,
+        455,
+        85
+      ],
+      "geometry": "rect",
+      "text": "Carry phrase support, permits and downloadable trail packs into the field.",
+      "textPreview": "Carry phrase support, permits and downloadable trail packs into the field.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Carry phrase support, permits and"
+          },
+          {
+            "index": 2,
+            "text": "downloadable trail packs into the field."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Carry phrase support, permits and downloadable trail packs into the field.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Carry phrase support, permits and downloadable trail packs into the field.",
+              "fontSize": 21,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 19,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/w365wbml",
+      "id": "19",
+      "name": "s4-rule-3",
+      "bbox": [
+        654,
+        560,
+        555,
+        2
+      ],
+      "geometry": "rect",
+      "fillColor": "#E77522",
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}

@@ -1,0 +1,19 @@
+Communication job: By the end, a broad audience should understand ZamRoam as a connected Zambia tourism platform because it unifies discovery, trip planning, trusted transactions, cultural context, visitor support, and operator tools.
+
+Primary product sources:
+- C:\visitzambia\app\VisitPngApp.tsx
+- C:\visitzambia\app\admin\AdminDashboard.tsx
+- C:\visitzambia\app\components\PassLanding.tsx
+- C:\visitzambia\app\components\PartnerLanding.tsx
+- C:\visitzambia\docs\design-system.md
+- C:\visitzambia\package.json
+
+Local visual sources:
+- C:\visitzambia\public\branding\zamroam_hero_banner.jpg
+- C:\visitzambia\public\ceremonies\kuomboka_flotilla_aerial.jpg
+- C:\visitzambia\public\ceremonies\likumbi_lya_mize_makishi.jpg
+- C:\visitzambia\public\ceremonies\ncwala_ngoni_warriors.jpg
+- C:\visitzambia\public\destinations\zambezi_source\zambezi_source_spring.jpg
+- C:\visitzambia\ZamRoam_Icons_Pack\*.png
+
+No external research was used. All claims describe capabilities visible in the local application source.

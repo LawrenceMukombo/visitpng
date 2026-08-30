@@ -1,0 +1,660 @@
+{
+  "schema": "openai.presentation.layout/v4",
+  "unit": "px",
+  "slide": {
+    "aid": "sl/t4cc62",
+    "id": "t4cc62",
+    "slide": 3,
+    "layoutId": "743a86d0-73cb-474b-8693-efa3ce6b2a9c",
+    "layoutName": "Title Slide",
+    "layoutType": "title",
+    "masterLayoutId": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+    "masterLayoutName": "Master",
+    "backgroundColor": "#FAF7F2",
+    "frame": {
+      "left": 0,
+      "top": 0,
+      "width": 1280,
+      "height": 720
+    }
+  },
+  "theme": {
+    "colorSchemeName": "ChatGPT",
+    "colors": {
+      "accent1": "#156082",
+      "accent2": "#E97132",
+      "accent3": "#196B24",
+      "accent4": "#0F9ED5",
+      "accent5": "#A02B93",
+      "accent6": "#4EA72E",
+      "bg1": "#FFFFFF",
+      "bg2": "#000000",
+      "tx1": "#1F1F1F",
+      "tx2": "#FFFFFF",
+      "dk1": "#000000",
+      "lt1": "#FFFFFF",
+      "dk2": "#0E2841",
+      "lt2": "#E8E8E8",
+      "hlink": "#467886",
+      "folHlink": "#96607D"
+    },
+    "typefaces": [
+      "Arial"
+    ]
+  },
+  "inheritedLayers": [
+    {
+      "scope": "layout",
+      "id": "743a86d0-73cb-474b-8693-efa3ce6b2a9c",
+      "name": "Title Slide",
+      "type": "title",
+      "parentLayoutId": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+      "elements": []
+    },
+    {
+      "scope": "master",
+      "id": "b60a0ea1-874d-4b31-9697-5ebac1ccb8ee",
+      "name": "Master",
+      "type": "master",
+      "elements": []
+    }
+  ],
+  "elements": [
+    {
+      "order": 1,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/8ba54vix",
+      "id": "1",
+      "name": "eyebrow-3",
+      "bbox": [
+        42,
+        34,
+        430,
+        24
+      ],
+      "geometry": "rect",
+      "text": "VISITOR EXPERIENCE",
+      "textPreview": "VISITOR EXPERIENCE",
+      "resolvedFontSize": 15,
+      "resolvedTextStyle": {
+        "fontSize": 15,
+        "typeface": "Arial",
+        "color": "#1B6960",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "VISITOR EXPERIENCE"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "VISITOR EXPERIENCE",
+          "resolvedTextStyle": {
+            "fontSize": 15,
+            "typeface": "Arial",
+            "color": "#1B6960",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "VISITOR EXPERIENCE",
+              "fontSize": 15,
+              "typeface": "Arial",
+              "color": "#1B6960",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 2,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/nah4vqhc",
+      "id": "2",
+      "name": "title-3",
+      "bbox": [
+        42,
+        68,
+        1196,
+        82
+      ],
+      "geometry": "rect",
+      "text": "Discovery starts with Zambia",
+      "textPreview": "Discovery starts with Zambia",
+      "resolvedFontSize": 46,
+      "resolvedTextStyle": {
+        "fontSize": 46,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Discovery starts with Zambia"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Discovery starts with Zambia",
+          "resolvedTextStyle": {
+            "fontSize": 46,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Discovery starts with Zambia",
+              "fontSize": 46,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 3,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/m98n2l0r",
+      "id": "3",
+      "name": "footer-3",
+      "bbox": [
+        1190,
+        670,
+        45,
+        20
+      ],
+      "geometry": "rect",
+      "text": "03",
+      "textPreview": "03",
+      "resolvedFontSize": 14,
+      "resolvedTextStyle": {
+        "fontSize": 14,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "bold": true,
+        "alignment": "right",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "03"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "03",
+          "resolvedTextStyle": {
+            "fontSize": 14,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "bold": true,
+            "alignment": "right"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "03",
+              "fontSize": 14,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "bold": true,
+              "alignment": "right"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 4,
+      "kind": "image",
+      "scope": "slide",
+      "aid": "im/sbypg3yt",
+      "id": "4",
+      "bbox": [
+        42,
+        175,
+        560,
+        440
+      ],
+      "alt": "ZamRoam banner showing Zambia travel experiences",
+      "contentType": "image/jpeg",
+      "imageCrop": {
+        "left": 0,
+        "top": 0,
+        "right": 0,
+        "bottom": 0.34
+      },
+      "imageFit": "cover",
+      "asset": {
+        "assetId": "f13fe1fc-c386-4e3c-a9f9-35d970b4cb61",
+        "contentType": "image/jpeg",
+        "byteLength": 413549
+      }
+    },
+    {
+      "order": 5,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/wza58fit",
+      "id": "5",
+      "name": "accent-Destination-led search",
+      "bbox": [
+        650,
+        185,
+        8,
+        150
+      ],
+      "geometry": "rect",
+      "fillColor": "#1B6960",
+      "lineWidth": 0
+    },
+    {
+      "order": 6,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/vy14zah8",
+      "id": "6",
+      "name": "h-Destination-led search",
+      "bbox": [
+        674,
+        185,
+        526,
+        38
+      ],
+      "geometry": "rect",
+      "text": "Destination-led search",
+      "textPreview": "Destination-led search",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Destination-led search"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Destination-led search",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Destination-led search",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 7,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/adsn6503",
+      "id": "7",
+      "name": "b-Destination-led search",
+      "bbox": [
+        674,
+        235,
+        526,
+        100
+      ],
+      "geometry": "rect",
+      "text": "Find places and stays by name, province, destination or experience category.",
+      "textPreview": "Find places and stays by name, province, destination or experience category.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Find places and stays by name, province, destination"
+          },
+          {
+            "index": 2,
+            "text": "or experience category."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Find places and stays by name, province, destination or experience category.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Find places and stays by name, province, destination or experience category.",
+              "fontSize": 21,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 8,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/543m5kzq",
+      "id": "8",
+      "name": "accent-Rich local context",
+      "bbox": [
+        650,
+        365,
+        8,
+        150
+      ],
+      "geometry": "rect",
+      "fillColor": "#E77522",
+      "lineWidth": 0
+    },
+    {
+      "order": 9,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/43u5cfi5",
+      "id": "9",
+      "name": "h-Rich local context",
+      "bbox": [
+        674,
+        365,
+        526,
+        38
+      ],
+      "geometry": "rect",
+      "text": "Rich local context",
+      "textPreview": "Rich local context",
+      "resolvedFontSize": 27,
+      "resolvedTextStyle": {
+        "fontSize": 27,
+        "typeface": "Arial",
+        "color": "#232231",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 1,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Rich local context"
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Rich local context",
+          "resolvedTextStyle": {
+            "fontSize": 27,
+            "typeface": "Arial",
+            "color": "#232231",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Rich local context",
+              "fontSize": 27,
+              "typeface": "Arial",
+              "color": "#232231",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 10,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/qdgv2pcj",
+      "id": "10",
+      "name": "b-Rich local context",
+      "bbox": [
+        674,
+        415,
+        526,
+        100
+      ],
+      "geometry": "rect",
+      "text": "Move beyond listings into ceremonies, landmarks, safari trails and practical destination knowledge.",
+      "textPreview": "Move beyond listings into ceremonies, landmarks, safari trails and practical destination knowledge.",
+      "resolvedFontSize": 21,
+      "resolvedTextStyle": {
+        "fontSize": 21,
+        "typeface": "Arial",
+        "color": "#85848A",
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "Move beyond listings into ceremonies, landmarks,"
+          },
+          {
+            "index": 2,
+            "text": "safari trails and practical destination knowledge."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "Move beyond listings into ceremonies, landmarks, safari trails and practical destination knowledge.",
+          "resolvedTextStyle": {
+            "fontSize": 21,
+            "typeface": "Arial",
+            "color": "#85848A",
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "Move beyond listings into ceremonies, landmarks, safari trails and practical destination knowledge.",
+              "fontSize": 21,
+              "typeface": "Arial",
+              "color": "#85848A",
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    },
+    {
+      "order": 11,
+      "kind": "shape",
+      "scope": "slide",
+      "aid": "sh/repcvudo",
+      "id": "11",
+      "name": "s3-callout",
+      "bbox": [
+        650,
+        565,
+        540,
+        54
+      ],
+      "geometry": "rect",
+      "text": "The result is a guide to the country, not just a storefront.",
+      "textPreview": "The result is a guide to the country, not just a storefront.",
+      "resolvedFontSize": 25,
+      "resolvedTextStyle": {
+        "fontSize": 25,
+        "typeface": "Arial",
+        "color": "#1B6960",
+        "bold": true,
+        "alignment": "left",
+        "insets": {
+          "top": 4.8,
+          "right": 9.6,
+          "bottom": 4.8,
+          "left": 9.6
+        }
+      },
+      "textLayout": {
+        "lineCount": 2,
+        "lines": [
+          {
+            "index": 1,
+            "text": "The result is a guide to the country, not just"
+          },
+          {
+            "index": 2,
+            "text": "a storefront."
+          }
+        ]
+      },
+      "paragraphs": [
+        {
+          "index": 1,
+          "text": "The result is a guide to the country, not just a storefront.",
+          "resolvedTextStyle": {
+            "fontSize": 25,
+            "typeface": "Arial",
+            "color": "#1B6960",
+            "bold": true,
+            "alignment": "left"
+          },
+          "runs": [
+            {
+              "index": 1,
+              "text": "The result is a guide to the country, not just a storefront.",
+              "fontSize": 25,
+              "typeface": "Arial",
+              "color": "#1B6960",
+              "bold": true,
+              "alignment": "left"
+            }
+          ],
+          "marginLeft": 0
+        }
+      ],
+      "lineWidth": 0
+    }
+  ],
+  "composeRuns": []
+}
