@@ -272,12 +272,13 @@ export default function PngInteractiveMap({
   // Map View State (WGS84 Coordinates)
   const [center, setCenter] = useState<{ lat: number; lng: number }>({ lat: -6.3, lng: 147.0 });
   const [zoom, setZoom] = useState<number>(6);
-  const [tileLayer, setTileLayer] = useState<"osm" | "voyager" | "topo">("voyager");
+  const [tileLayer, setTileLayer] = useState<"osm" | "esriStreet" | "esriTopo">("osm");
 
   // Selection & Layer States
   const [mapLevel, setMapLevel] = useState<"country" | "provinces" | "districts" | "trail">("provinces");
   const [selectedRegion, setSelectedRegion] = useState<PngRegion | "All">("All");
   const [hoveredProvince, setHoveredProvince] = useState<ProvinceBoundaryProps | null>(null);
+  const [hoverPos, setHoverPos] = useState<{ x: number; y: number } | null>(null);
   const [selectedProvince, setSelectedProvince] = useState<ProvinceBoundaryProps | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<DistrictBoundaryProps | null>(null);
   const [activePin, setActivePin] = useState<DestinationPin | null>(PNG_DESTINATION_PINS[0]);
@@ -306,8 +307,8 @@ export default function PngInteractiveMap({
   const visibleTiles = useMemo(() => {
     const tileTemplates = {
       osm: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-      voyager: "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png",
-      topo: "https://a.tile.opentopomap.org/{z}/{x}/{y}.png"
+      esriStreet: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+      esriTopo: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
     };
     return getVisibleOsmTiles(
       center.lat,
@@ -319,7 +320,7 @@ export default function PngInteractiveMap({
     );
   }, [center.lat, center.lng, zoom, dimensions.width, dimensions.height, tileLayer]);
 
-  // Handle Drag / Pan
+  // Handle Drag / Pan Mouse
   const handleMouseDown = (e: React.MouseEvent) => {
     setIsDragging(true);
     setDragStart({ x: e.clientX, y: e.clientY });
@@ -344,9 +345,45 @@ export default function PngInteractiveMap({
 
   const handleMouseUp = () => setIsDragging(false);
 
+  // Handle Touch Pan for Mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 1) {
+      setIsDragging(true);
+      setDragStart({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+    }
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging || e.touches.length !== 1) return;
+    const dx = e.touches[0].clientX - dragStart.x;
+    const dy = e.touches[0].clientY - dragStart.y;
+    setDragStart({ x: e.touches[0].clientX, y: e.touches[0].clientY });
+
+    const scale = 256 * Math.pow(2, zoom);
+    const dLng = (-dx / scale) * 360;
+    const dLat = (dy / scale) * 180;
+
+    setCenter(prev => ({
+      lat: Math.max(-13, Math.min(-0.5, prev.lat + dLat)),
+      lng: Math.max(139, Math.min(158, prev.lng + dLng))
+    }));
+  };
+
+  const handleTouchEnd = () => setIsDragging(false);
+
   // Zoom Helpers
   const zoomIn = () => setZoom(z => Math.min(13, z + 1));
   const zoomOut = () => setZoom(z => Math.max(5, z - 1));
+
+  // Wheel Zoom
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    if (e.deltaY < 0) {
+      zoomIn();
+    } else if (e.deltaY > 0) {
+      zoomOut();
+    }
+  };
 
   // Level Presets
   const handleSetLevel = (level: "country" | "provinces" | "districts" | "trail") => {
@@ -388,6 +425,17 @@ export default function PngInteractiveMap({
     setZoom(10);
     if (onSelectDestination) onSelectDestination(pin.id);
   }, [onSelectDestination]);
+
+  // Regional styling helpers
+  const getRegionTheme = (region: PngRegion) => {
+    switch (region) {
+      case "Highlands": return { stroke: "#F59E0B", fill: "rgba(245, 158, 11, 0.16)", glow: "rgba(245, 158, 11, 0.4)" };
+      case "Southern": return { stroke: "#10B981", fill: "rgba(16, 185, 129, 0.16)", glow: "rgba(16, 185, 129, 0.4)" };
+      case "Momase": return { stroke: "#06B6D4", fill: "rgba(6, 182, 212, 0.16)", glow: "rgba(6, 182, 212, 0.4)" };
+      case "Islands": return { stroke: "#F97316", fill: "rgba(249, 115, 22, 0.16)", glow: "rgba(249, 115, 22, 0.4)" };
+      default: return { stroke: "#CBD5E1", fill: "rgba(255, 255, 255, 0.1)", glow: "rgba(255, 255, 255, 0.3)" };
+    }
+  };
 
   // Project GeoJSON geometry to SVG path on OSM tile canvas
   const renderGeoJsonToSvgPath = useCallback((geom: GeoJsonGeometry) => {
@@ -451,52 +499,58 @@ export default function PngInteractiveMap({
               WGS84 EPSG:3857 · All Administrative Levels
             </span>
           </div>
-          <h2 style={{ margin: 0, fontSize: "1.35rem", fontWeight: 900, color: "#FFFFFF" }}>
+          <h2 style={{ margin: 0, fontSize: "1.35rem", fontWeight: 900, color: "#FFFFFF", letterSpacing: "-0.01em" }}>
             Papua New Guinea OpenStreetMap & Shapefile Explorer
           </h2>
-          <p style={{ margin: "2px 0 0 0", fontSize: "0.8rem", color: "#CBD5E1" }}>
+          <p style={{ margin: "4px 0 0 0", fontSize: "0.82rem", color: "#94A3B8" }}>
             Real OSM tile cartography with interactive ADM0 Country, ADM1 22 Provinces, ADM2 Districts, and 96km Kokoda Trail route.
           </p>
         </div>
 
-        {/* Layer & Tile Selector */}
+        {/* Tile Layers & Visibility Toggles */}
         <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-          <div style={{ display: "flex", gap: "4px", background: "rgba(0,0,0,0.3)", padding: "3px", borderRadius: "8px" }}>
-            {(["voyager", "osm", "topo"] as const).map(l => (
+          {/* Tile Layer Selector */}
+          <div style={{ display: "flex", background: "rgba(0,0,0,0.4)", padding: "3px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.15)" }}>
+            {[
+              { id: "osm", label: "🗺️ Standard OSM" },
+              { id: "esriStreet", label: "🌍 Street" },
+              { id: "esriTopo", label: "⛰️ Topo" }
+            ].map(l => (
               <button
-                key={l}
+                key={l.id}
                 type="button"
-                onClick={() => setTileLayer(l)}
+                onClick={() => setTileLayer(l.id as "osm" | "esriStreet" | "esriTopo")}
                 style={{
-                  padding: "4px 8px",
+                  padding: "5px 10px",
                   borderRadius: "6px",
                   border: "none",
-                  background: tileLayer === l ? "#EA580C" : "transparent",
+                  background: tileLayer === l.id ? "#EA580C" : "transparent",
                   color: "#FFFFFF",
-                  fontSize: "0.72rem",
+                  fontSize: "0.74rem",
                   fontWeight: 700,
-                  cursor: "pointer"
+                  cursor: "pointer",
+                  transition: "all 0.2s ease"
                 }}
               >
-                {l === "voyager" ? "🗺️ Detailed" : l === "osm" ? "🌍 Standard OSM" : "⛰️ Topo"}
+                {l.label}
               </button>
             ))}
           </div>
 
-          <label style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "0.74rem", color: "#FDBA74", cursor: "pointer" }}>
+          <label style={{ display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "0.74rem", color: "#6EE7B7", cursor: "pointer", background: "rgba(0,0,0,0.3)", padding: "5px 10px", borderRadius: "6px", border: "1px solid rgba(52, 211, 153, 0.3)" }}>
             <input
               type="checkbox"
               checked={showDistrictsLayer}
-              onChange={e => setShowDistrictsLayer(e.target.checked)}
+              onChange={(e) => setShowDistrictsLayer(e.target.checked)}
             />
             District Hubs
           </label>
 
-          <label style={{ display: "inline-flex", alignItems: "center", gap: "4px", fontSize: "0.74rem", color: "#34D399", cursor: "pointer" }}>
+          <label style={{ display: "inline-flex", alignItems: "center", gap: "5px", fontSize: "0.74rem", color: "#FDBA74", cursor: "pointer", background: "rgba(0,0,0,0.3)", padding: "5px 10px", borderRadius: "6px", border: "1px solid rgba(234, 88, 12, 0.3)" }}>
             <input
               type="checkbox"
               checked={showKokodaRoute}
-              onChange={e => setShowKokodaRoute(e.target.checked)}
+              onChange={(e) => setShowKokodaRoute(e.target.checked)}
             />
             Kokoda 96km GPS
           </label>
@@ -617,9 +671,23 @@ export default function PngInteractiveMap({
         <div
           ref={mapContainerRef}
           onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
+          onMouseMove={(e) => {
+            handleMouseMove(e);
+            if (mapContainerRef.current) {
+              const rect = mapContainerRef.current.getBoundingClientRect();
+              setHoverPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+            }
+          }}
           onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseUp}
+          onMouseLeave={() => {
+            handleMouseUp();
+            setHoveredProvince(null);
+            setHoverPos(null);
+          }}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          onWheel={handleWheel}
           style={{
             position: "relative",
             background: "#081E1A",
@@ -629,7 +697,8 @@ export default function PngInteractiveMap({
             height: `${dimensions.height}px`,
             cursor: isDragging ? "grabbing" : "grab",
             boxShadow: "inset 0 0 40px rgba(0,0,0,0.6)",
-            userSelect: "none"
+            userSelect: "none",
+            touchAction: "none"
           }}
         >
           {/* 1. Real OpenStreetMap Raster Tiles Layer */}
@@ -665,6 +734,7 @@ export default function PngInteractiveMap({
             {/* Province Boundary Polygons */}
             {provinceFeatures.map(f => {
               const p = f.properties;
+              const theme = getRegionTheme(p.region);
               const isSelected = selectedProvince?.code === p.code;
               const isHovered = hoveredProvince?.code === p.code;
               const pathData = renderGeoJsonToSvgPath(f.geometry);
@@ -673,10 +743,10 @@ export default function PngInteractiveMap({
                 <path
                   key={p.code}
                   d={pathData}
-                  fill={isSelected ? "rgba(234, 88, 12, 0.35)" : isHovered ? "rgba(52, 211, 153, 0.3)" : "rgba(11, 43, 37, 0.45)"}
-                  stroke={isSelected ? "#EA580C" : isHovered ? "#34D399" : "rgba(255,255,255,0.4)"}
-                  strokeWidth={isSelected ? 3 : isHovered ? 2 : 1.2}
-                  strokeDasharray={isSelected ? "none" : undefined}
+                  fill={isSelected ? "rgba(234, 88, 12, 0.38)" : isHovered ? theme.glow : theme.fill}
+                  stroke={isSelected ? "#EA580C" : isHovered ? "#FFFFFF" : theme.stroke}
+                  strokeWidth={isSelected ? 3 : isHovered ? 2.5 : 1.4}
+                  strokeOpacity={isSelected ? 1 : isHovered ? 1 : 0.85}
                   style={{ cursor: "pointer", transition: "all 0.15s ease" }}
                   onMouseEnter={() => setHoveredProvince(p)}
                   onMouseLeave={() => setHoveredProvince(null)}
@@ -695,10 +765,10 @@ export default function PngInteractiveMap({
               <path
                 d={renderGeoJsonToSvgPath(KOKODA_TRACK_ROUTE_GEOJSON.geometry)}
                 fill="none"
-                stroke="#EA580C"
-                strokeWidth={3.5}
+                stroke="#DC2626"
+                strokeWidth={4}
                 strokeDasharray="6 3"
-                style={{ filter: "drop-shadow(0 0 4px #EA580C)" }}
+                style={{ filter: "drop-shadow(0 0 6px rgba(220, 38, 38, 0.8))" }}
               >
                 <title>Kokoda Track 96km Historical Route</title>
               </path>
@@ -712,9 +782,9 @@ export default function PngInteractiveMap({
 
               return (
                 <g key={d.id} transform={`translate(${px}, ${py})`} onClick={(e) => { e.stopPropagation(); handleDistrictClick(d); }} style={{ cursor: "pointer" }}>
-                  <circle r={zoom >= 9 ? 5 : 3.5} fill="#059669" stroke="#FFFFFF" strokeWidth={1.2} />
+                  <circle r={zoom >= 9 ? 6 : 4} fill="#10B981" stroke="#FFFFFF" strokeWidth={1.5} />
                   {zoom >= 9 && (
-                    <text y={-8} textAnchor="middle" fill="#FFFFFF" fontSize="9px" fontWeight="700" style={{ textShadow: "0 1px 3px #000000" }}>
+                    <text y={-9} textAnchor="middle" fill="#FFFFFF" fontSize="9.5px" fontWeight="800" style={{ textShadow: "0 2px 4px #000000" }}>
                       {d.name}
                     </text>
                   )}
@@ -738,15 +808,38 @@ export default function PngInteractiveMap({
                   }}
                   style={{ cursor: "pointer" }}
                 >
-                  <circle r={isPinActive ? 16 : 11} fill={isPinActive ? "#EA580C" : "#0D9488"} opacity={0.35} />
-                  <circle r={isPinActive ? 10 : 7} fill={isPinActive ? "#EA580C" : "#14B8A6"} stroke="#FFFFFF" strokeWidth={2} />
-                  <text y={isPinActive ? -14 : -10} textAnchor="middle" fill="#FFFFFF" fontSize={isPinActive ? "11px" : "9px"} fontWeight="800" style={{ textShadow: "0 2px 4px rgba(0,0,0,0.9)" }}>
+                  <circle r={isPinActive ? 18 : 12} fill={isPinActive ? "#EA580C" : "#0D9488"} opacity={0.4} />
+                  <circle r={isPinActive ? 11 : 8} fill={isPinActive ? "#EA580C" : "#14B8A6"} stroke="#FFFFFF" strokeWidth={2} />
+                  <text y={isPinActive ? -16 : -12} textAnchor="middle" fill="#FFFFFF" fontSize={isPinActive ? "11px" : "9px"} fontWeight="800" style={{ textShadow: "0 2px 5px rgba(0,0,0,0.95)" }}>
                     {pin.name.split(" ")[0]}
                   </text>
                 </g>
               );
             })}
           </svg>
+
+          {/* Floating Hover Tooltip */}
+          {hoveredProvince && hoverPos && (
+            <div
+              style={{
+                position: "absolute",
+                left: `${Math.min(dimensions.width - 200, Math.max(10, hoverPos.x + 15))}px`,
+                top: `${Math.min(dimensions.height - 80, Math.max(10, hoverPos.y - 45))}px`,
+                background: "rgba(5, 22, 19, 0.94)",
+                color: "#FFFFFF",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                border: "1px solid #EA580C",
+                boxShadow: "0 6px 20px rgba(0,0,0,0.6)",
+                pointerEvents: "none",
+                zIndex: 10,
+                fontSize: "0.74rem"
+              }}
+            >
+              <div style={{ fontWeight: 800, color: "#FDBA74" }}>{hoveredProvince.name}</div>
+              <div style={{ color: "#34D399", fontSize: "0.68rem" }}>Capital: {hoveredProvince.capital} · {hoveredProvince.districtsCount} Districts</div>
+            </div>
+          )}
 
           {/* Map Overlay On-Screen Navigation Controls */}
           <div style={{ position: "absolute", top: "12px", right: "12px", display: "flex", flexDirection: "column", gap: "6px" }}>
