@@ -10,10 +10,11 @@ export interface InvoiceModalProps {
 
 export function InvoiceModal({
   invoice,
-  brandName = "ZamRoam",
+  brandName = "VisitPNG",
   onClose
 }: InvoiceModalProps) {
-  const currencySymbol = invoice.currency === "ZMW" ? "ZK" : "K";
+  const currencySymbol = invoice.currency === "PGK" ? "K " : invoice.currency === "USD" ? "$ " : "K ";
+  const effectiveTaxRate = invoice.subtotal > 0 ? Math.round((invoice.taxAmount / invoice.subtotal) * 100) : 10;
 
   return (
     <div style={{
@@ -48,20 +49,23 @@ export function InvoiceModal({
           marginBottom: "1.5rem"
         }}>
           <div>
-            <div style={{ fontSize: "1.2rem", fontWeight: "900", color: "#1B6960" }}>
-              LAMTON INVESTMENTS LTD
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.25rem" }}>
+              <span style={{ fontSize: "1.4rem" }}>🇵🇬</span>
+              <strong style={{ fontSize: "1.2rem", color: "#EA580C" }}>{invoice.organizationName || "VisitPNG Tourism Services Ltd"}</strong>
             </div>
-            <div style={{ fontSize: "0.85rem", color: "#666", marginTop: "0.2rem" }}>
-              Operating {brandName}
+            <div style={{ fontSize: "0.8rem", color: "#666" }}>
+              Operating {brandName} Platform · Port Moresby, Papua New Guinea
             </div>
-            <div style={{ fontSize: "0.75rem", color: "#888" }}>
-              Plot 10444, Great East Road, Rhodes Park, Lusaka, Zambia • Tel: +260573506598 • info@lamtoninvestments.com
+            <div style={{ fontSize: "0.8rem", color: "#666" }}>
+              Email: info@visitpng.com · Support: +675 321 4188
             </div>
           </div>
+
           <div style={{ textAlign: "right" }}>
             <span style={{
-              background: "#e8f5e9",
-              color: "#2e7d32",
+              display: "inline-block",
+              background: "#dcfce7",
+              color: "#15803d",
               padding: "0.3rem 0.8rem",
               borderRadius: "12px",
               fontWeight: "800",
@@ -74,17 +78,17 @@ export function InvoiceModal({
               {invoice.invoiceNumber}
             </div>
             <div style={{ fontSize: "0.75rem", color: "#888" }}>
-              {new Date(invoice.createdAt).toLocaleDateString()}
+              {invoice.issuedAt ? new Date(invoice.issuedAt).toLocaleDateString() : new Date().toLocaleDateString()}
             </div>
           </div>
         </div>
 
         {/* Bill To */}
         <div style={{ marginBottom: "1.5rem", fontSize: "0.9rem" }}>
-          <strong style={{ color: "#1B6960" }}>Billed To:</strong>
+          <strong style={{ color: "#032F2B" }}>Billed To:</strong>
           <div>{invoice.customerName}</div>
           <div style={{ color: "#666" }}>{invoice.customerEmail}</div>
-          {invoice.customerPhone && <div style={{ color: "#666" }}>{invoice.customerPhone}</div>}
+          {invoice.billingAddress && <div style={{ color: "#666" }}>{invoice.billingAddress}</div>}
         </div>
 
         {/* Items Table */}
@@ -106,15 +110,15 @@ export function InvoiceModal({
             </tr>
             <tr>
               <td style={{ padding: "0.5rem 0.8rem", color: "#666" }}>
-                VAT ({Math.round(invoice.taxRate * 100)}%)
+                GST ({effectiveTaxRate}%)
               </td>
               <td style={{ padding: "0.5rem 0.8rem", textAlign: "right", color: "#666" }}>
                 {currencySymbol}{invoice.taxAmount.toFixed(2)}
               </td>
             </tr>
-            <tr style={{ fontWeight: "800", fontSize: "1.05rem", borderTop: "2px solid #1B6960" }}>
-              <td style={{ padding: "0.75rem 0.8rem", color: "#1B6960" }}>Total Paid ({invoice.currency})</td>
-              <td style={{ padding: "0.75rem 0.8rem", textAlign: "right", color: "#1B6960" }}>
+            <tr style={{ fontWeight: "800", fontSize: "1.05rem", borderTop: "2px solid #032F2B" }}>
+              <td style={{ padding: "0.75rem 0.8rem", color: "#032F2B" }}>Total Paid ({invoice.currency})</td>
+              <td style={{ padding: "0.75rem 0.8rem", textAlign: "right", color: "#EA580C" }}>
                 {currencySymbol}{invoice.totalAmount.toFixed(2)}
               </td>
             </tr>
@@ -131,13 +135,13 @@ export function InvoiceModal({
           marginBottom: "1.5rem",
           border: "1px solid #e0eeea"
         }}>
-          <div><strong>Transaction ID:</strong> {invoice.transactionNumber}</div>
-          <div><strong>Payment Method:</strong> {invoice.paymentMethod}</div>
+          <div><strong>Transaction ID:</strong> {invoice.transactionRef}</div>
+          <div><strong>Payment Method:</strong> {invoice.paymentMethod.replace(/_/g, " ").toUpperCase()}</div>
         </div>
 
         {/* Legal Footer Note */}
         <div style={{ fontSize: "0.75rem", color: "#888", textAlign: "center", lineHeight: "1.4", marginBottom: "1.5rem" }}>
-          Thank you for choosing {brandName}. This official commercial receipt is issued by Lamton Investments Ltd.
+          Thank you for choosing {brandName}. This official commercial receipt is issued by VisitPNG Tourism Services Ltd.
         </div>
 
         {/* Action Buttons */}
@@ -146,7 +150,7 @@ export function InvoiceModal({
             onClick={() => window.print()}
             style={{
               background: "#e8f3f1",
-              color: "#1B6960",
+              color: "#032F2B",
               border: "none",
               padding: "0.6rem 1.2rem",
               borderRadius: "8px",
@@ -159,7 +163,7 @@ export function InvoiceModal({
           <button
             onClick={onClose}
             style={{
-              background: "#1B6960",
+              background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
               color: "#ffffff",
               border: "none",
               padding: "0.6rem 1.2rem",

@@ -2,8 +2,8 @@
 
 import React, { useState, useSyncExternalStore } from "react";
 import {
-  ZAMBIA_PERMIT_TYPES,
-  ZAMBIA_PARK_FEE_SCHEDULE,
+  PNG_PERMIT_TYPES,
+  PNG_PARK_FEE_SCHEDULE,
   PermitType,
   IssuedPermit,
   createPermit
@@ -23,7 +23,7 @@ function subscribe(callback: () => void) {
 
 function getOfflinePermitsSnapshot(): string {
   if (typeof window === "undefined") return "[]";
-  return localStorage.getItem("zamroam_digital_permits") || "[]";
+  return localStorage.getItem("visitpng_digital_permits") || "[]";
 }
 
 function getServerSnapshot(): string {
@@ -31,8 +31,8 @@ function getServerSnapshot(): string {
 }
 
 export default function DigitalPermitPass({ currency }: DigitalPermitPassProps) {
-  const permitTypes = ZAMBIA_PERMIT_TYPES;
-  const [selectedParkId, setSelectedParkId] = useState<string>("south-luangwa-entry-pass");
+  const permitTypes = PNG_PERMIT_TYPES;
+  const [selectedParkId, setSelectedParkId] = useState<string>("kokoda-track-permit");
   const [activeTab, setActiveTab] = useState<"directory" | "schedule" | "wallet">("directory");
   const [filterTier, setFilterTier] = useState<string>("all");
 
@@ -43,8 +43,8 @@ export default function DigitalPermitPass({ currency }: DigitalPermitPassProps) 
   const [showIssueModal, setShowIssueModal] = useState(false);
   const [holderName, setHolderName] = useState("");
   const [passportOrId, setPassportOrId] = useState("");
-  const [visitorTier, setVisitorTier] = useState<"Citizen" | "SADC Resident" | "International" | "Self-Drive">("International");
-  const [countryOfOrigin, setCountryOfOrigin] = useState("United States");
+  const [visitorTier, setVisitorTier] = useState<"Citizen" | "PNG Resident" | "International" | "Trekking Expedition">("International");
+  const [countryOfOrigin, setCountryOfOrigin] = useState("Australia");
   const [startDate, setStartDate] = useState(new Date().toISOString().slice(0, 10));
   const [activePermitView, setActivePermitView] = useState<IssuedPermit | null>(null);
   const [statusMessage, setStatusMessage] = useState("");
@@ -59,396 +59,391 @@ export default function DigitalPermitPass({ currency }: DigitalPermitPassProps) 
 
   const handleIssuePermit = (e: React.FormEvent) => {
     e.preventDefault();
-    const newPermit = createPermit(
-      selectedPark.id,
-      holderName,
-      passportOrId,
-      visitorTier,
-      countryOfOrigin || "Zambia",
-      startDate,
-      currency
-    );
-
-    const updated = [newPermit, ...issuedPermits];
-    try {
-      localStorage.setItem("zamroam_digital_permits", JSON.stringify(updated));
-      window.dispatchEvent(new Event("storage"));
-    } catch {}
-
-    setStatusMessage(`🎉 Official Pass ${newPermit.reference} issued for ${selectedPark.parkName}! Saved to offline wallet.`);
-    setShowIssueModal(false);
-    setActivePermitView(newPermit);
-    setActiveTab("wallet");
-    setHolderName("");
-    setPassportOrId("");
-    setTimeout(() => setStatusMessage(""), 5000);
-  };
-
-  const filteredParks = permitTypes.filter((park) => {
-    if (filterTier === "all") return true;
-    return park.categoryTier === filterTier;
-  });
-
-  const renderSvgQr = (token: string) => {
-    const size = 160;
-    const grid = 9;
-    const cellSize = size / grid;
-    const cells = [];
-    for (let r = 0; r < grid; r++) {
-      for (let c = 0; c < grid; c++) {
-        const isCorner =
-          (r < 3 && c < 3) ||
-          (r < 3 && c >= grid - 3) ||
-          (r >= grid - 3 && c < 3);
-        const charCode = token.charCodeAt((r * grid + c) % token.length) || 0;
-        const fill = isCorner || charCode % 2 === 0;
-        if (fill) {
-          cells.push({ x: c * cellSize, y: r * cellSize, w: cellSize - 1, h: cellSize - 1 });
-        }
-      }
+    if (!holderName.trim() || !passportOrId.trim()) {
+      setStatusMessage("Please provide full name and passport / National ID.");
+      return;
     }
 
-    return (
-      <svg viewBox={`0 0 ${size} ${size}`} className="permitQrSvg" style={{ width: "130px", height: "130px", background: "var(--brand-white)", padding: "6px", borderRadius: "8px" }}>
-        <rect width={size} height={size} fill="var(--brand-white)" rx="8" />
-        {cells.map((cell, idx) => (
-          <rect
-            key={idx}
-            x={cell.x}
-            y={cell.y}
-            width={cell.w}
-            height={cell.h}
-            fill="var(--action-primary)"
-            rx="1"
-          />
-        ))}
-      </svg>
+    const newPermit = createPermit(
+      selectedPark.id,
+      holderName.trim(),
+      passportOrId.trim(),
+      visitorTier,
+      countryOfOrigin,
+      startDate,
+      "PGK"
     );
+
+    try {
+      const existing: IssuedPermit[] = JSON.parse(localStorage.getItem("visitpng_digital_permits") || "[]");
+      existing.unshift(newPermit);
+      localStorage.setItem("visitpng_digital_permits", JSON.stringify(existing));
+      window.dispatchEvent(new Event("storage"));
+      setActivePermitView(newPermit);
+      setShowIssueModal(false);
+      setStatusMessage(`✨ Official Digital Permit Pass issued for ${holderName}! Ref: ${newPermit.reference}`);
+      setActiveTab("wallet");
+    } catch {
+      setStatusMessage("Permit generated and saved to offline wallet session.");
+    }
   };
 
+  const filteredPermits = permitTypes.filter(p => {
+    if (filterTier === "all") return true;
+    return p.category.toLowerCase() === filterTier.toLowerCase();
+  });
+
   return (
-    <div className="permitsSection" style={{ padding: "0 4px" }}>
-      {/* Header */}
-      <div className="permitsHeader" style={{ marginBottom: "16px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-          <span style={{ fontSize: "22px" }}>🎫</span>
-          <div>
-            <p className="eyebrow" style={{ color: "#C86428", fontSize: "10px", margin: 0, letterSpacing: "0.12em", fontWeight: 800 }}>
-              OFFICIAL DNPW ZAMBIA PARK ENTRY FEES & ACCESS PASSES
-            </p>
-            <h2 style={{ fontSize: "20px", margin: "2px 0 4px", fontWeight: 700 }}>
-              National Park Permits & Tariffs
-            </h2>
-          </div>
+    <div
+      style={{
+        background: "linear-gradient(180deg, #09211C 0%, #051613 100%)",
+        borderRadius: "20px",
+        padding: "32px 24px",
+        color: "#FFFFFF",
+        border: "1px solid rgba(234, 88, 12, 0.25)",
+        boxShadow: "0 20px 50px rgba(0,0,0,0.4)"
+      }}
+    >
+      {/* Top Banner Header */}
+      <div style={{ marginBottom: "24px", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "20px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px", flexWrap: "wrap" }}>
+          <span style={{ background: "#EA580C", color: "#FFFFFF", padding: "4px 10px", borderRadius: "6px", fontSize: "0.72rem", fontWeight: 800, letterSpacing: "0.08em" }}>
+            OFFICIAL STATUTORY CLEARANCES
+          </span>
+          <span style={{ color: "#34D399", fontSize: "0.8rem", fontWeight: 700 }}>
+            🏛️ Kokoda Track Authority (KTA) · CEPA Varirata · Mount Wilhelm Eco-Trust
+          </span>
         </div>
-        <p style={{ fontSize: "12px", color: "var(--text-secondary)", lineHeight: "1.45", margin: 0 }}>
-          Direct Department of National Parks & Wildlife (DNPW) conservation passes, daily entrance rates, vehicle tariffs, and verified lodge facilities across Zambia&apos;s iconic safari circuits.
+        <h2 style={{ margin: "0 0 6px 0", fontSize: "1.85rem", fontWeight: 900, color: "#FFFFFF", letterSpacing: "-0.02em" }}>
+          PNG National Parks, Kokoda Track & Conservation Passes
+        </h2>
+        <p style={{ margin: 0, fontSize: "0.92rem", color: "#94A3B8", maxWidth: "800px", lineHeight: 1.5 }}>
+          Secure mandated statutory trekking clearances with offline dynamic QR validation. Official permits fund local landowner communities, ranger checkpoints, and trail conservation across Papua New Guinea.
         </p>
-      </div>
-
-      {/* Navigation View Switcher */}
-      <div style={{ display: "flex", gap: "6px", marginBottom: "16px", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", gap: "6px" }}>
-          {[
-            { id: "directory", label: "🏞️ Park Directory & Facilities" },
-            { id: "schedule", label: "📊 Official 2025/2026 Fee Schedule" },
-            { id: "wallet", label: `🎫 My Passes (${issuedPermits.length})` }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id as "directory" | "schedule" | "wallet")}
-              style={{
-                padding: "7px 12px",
-                borderRadius: "8px",
-                border: activeTab === tab.id ? "1px solid #0A4D3C" : "1px solid var(--border-default)",
-                background: activeTab === tab.id ? "#0A4D3C" : "var(--surface-card)",
-                color: activeTab === tab.id ? "#FFFFFF" : "var(--text-primary)",
-                fontSize: "11px",
-                fontWeight: activeTab === tab.id ? 700 : 500,
-                cursor: "pointer",
-                transition: "all 0.15s ease"
-              }}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setShowIssueModal(true)}
-          style={{
-            background: "#C86428",
-            color: "#FFFFFF",
-            border: "none",
-            borderRadius: "8px",
-            padding: "7px 14px",
-            fontSize: "11px",
-            fontWeight: 700,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: "5px"
-          }}
-        >
-          ➕ Issue Digital Permit
-        </button>
       </div>
 
       {statusMessage && (
         <div
           style={{
-            background: "rgba(10, 77, 60, 0.1)",
-            border: "1px solid #0A4D3C",
-            color: "#0A4D3C",
-            padding: "10px 14px",
-            borderRadius: "8px",
-            fontSize: "12px",
-            fontWeight: 600,
-            marginBottom: "16px"
+            background: "rgba(16, 185, 129, 0.15)",
+            border: "1px solid #10B981",
+            color: "#6EE7B7",
+            padding: "12px 18px",
+            borderRadius: "10px",
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            marginBottom: "20px"
           }}
-          role="status"
-          aria-live="polite"
         >
           {statusMessage}
         </div>
       )}
 
-      {/* Advisory Banner on Gate Payments */}
-      <div
-        style={{
-          background: "rgba(200, 100, 40, 0.08)",
-          border: "1px solid rgba(200, 100, 40, 0.3)",
-          borderRadius: "10px",
-          padding: "10px 14px",
-          marginBottom: "16px"
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "3px" }}>
-          <span style={{ fontSize: "14px" }}>⚠️</span>
-          <strong style={{ fontSize: "11px", color: "#C86428", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            Important DNPW Gate Payment & Currency Protocol:
-          </strong>
-        </div>
-        <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "11px", color: "var(--text-primary)", lineHeight: "1.4" }}>
-          <li><strong>Cash-Only at Most Gates:</strong> Credit card terminals and ATMs are not available at remote park gates. Always carry sufficient cash in USD or ZMW before departure.</li>
-          <li><strong>US Dollar Bill Series:</strong> USD banknotes must be crisp, unblemished, and from <strong>Series 2013 or newer</strong>. Older banknotes are refused by park revenue collectors.</li>
-          <li><strong>Citizen Verification:</strong> Zambian Citizens must present their original National Registration Card (NRC) or Passport at the entry gate.</li>
-        </ul>
+      {/* Navigation Mode Tabs */}
+      <div style={{ display: "flex", gap: "8px", marginBottom: "24px", flexWrap: "wrap" }}>
+        {[
+          { id: "directory", label: `🌿 National Parks & Track Directory (${permitTypes.length})` },
+          { id: "schedule", label: "📋 Tariff Schedule & Vehicle Regulations" },
+          { id: "wallet", label: `🎫 My Digital Permits Wallet (${issuedPermits.length})` }
+        ].map(tab => {
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveTab(tab.id as "directory" | "schedule" | "wallet")}
+              style={{
+                padding: "10px 18px",
+                borderRadius: "10px",
+                border: "1.5px solid",
+                borderColor: isActive ? "#EA580C" : "rgba(255,255,255,0.12)",
+                background: isActive ? "linear-gradient(135deg, #EA580C 0%, #F97316 100%)" : "rgba(0,0,0,0.3)",
+                color: "#FFFFFF",
+                fontSize: "0.82rem",
+                fontWeight: 800,
+                cursor: "pointer",
+                transition: "all 0.15s ease",
+                boxShadow: isActive ? "0 4px 14px rgba(234,88,12,0.35)" : "none"
+              }}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
 
-      {/* TAB 1: PARK DIRECTORY & FACILITIES */}
+      {/* TAB 1: DIRECTORY & PERMIT SELECTOR */}
       {activeTab === "directory" && (
         <div>
-          {/* Tier Filters */}
-          <div style={{ display: "flex", gap: "6px", marginBottom: "14px", overflowX: "auto" }}>
+          {/* Category Filter Pills */}
+          <div style={{ display: "flex", gap: "6px", marginBottom: "18px", flexWrap: "wrap" }}>
             {[
-              { id: "all", label: "All National Parks" },
-              { id: "Category A", label: "⭐ Category A (Premium Parks)" },
-              { id: "Category B", label: "🌿 Category B (Wilderness Parks)" },
-              { id: "Special Heritage", label: "🌊 World Heritage (Victoria Falls)" }
-            ].map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setFilterTier(cat.id)}
-                style={{
-                  padding: "5px 10px",
-                  borderRadius: "6px",
-                  border: "1px solid var(--border-default)",
-                  background: filterTier === cat.id ? "#0A4D3C" : "var(--surface-card)",
-                  color: filterTier === cat.id ? "#FFFFFF" : "var(--text-secondary)",
-                  fontSize: "10px",
-                  fontWeight: filterTier === cat.id ? 700 : 500,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap"
-                }}
-              >
-                {cat.label}
-              </button>
-            ))}
+              { id: "all", label: "All Permits (5)" },
+              { id: "trek", label: "🥾 Kokoda & Peaks" },
+              { id: "park", label: "🌿 National Parks" },
+              { id: "marine", label: "🤿 Marine Sanctuaries" },
+              { id: "cultural", label: "♨ Spirit Corridors" }
+            ].map(t => {
+              const isActive = filterTier === t.id;
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setFilterTier(t.id)}
+                  style={{
+                    padding: "6px 14px",
+                    borderRadius: "20px",
+                    border: "1px solid",
+                    borderColor: isActive ? "#34D399" : "rgba(255,255,255,0.15)",
+                    background: isActive ? "rgba(52, 211, 153, 0.2)" : "rgba(0,0,0,0.25)",
+                    color: isActive ? "#6EE7B7" : "#CBD5E1",
+                    fontSize: "0.76rem",
+                    fontWeight: 700,
+                    cursor: "pointer"
+                  }}
+                >
+                  {t.label}
+                </button>
+              );
+            })}
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "14px", marginBottom: "20px" }}>
-            {filteredParks.map((park) => (
-              <div
-                key={park.id}
-                style={{
-                  background: "var(--surface-card)",
-                  border: selectedPark.id === park.id ? "2px solid #0A4D3C" : "1px solid var(--border-default)",
-                  borderRadius: "12px",
-                  padding: "14px",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between"
-                }}
-              >
-                <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "8px", marginBottom: "6px" }}>
-                    <div>
-                      <span style={{ fontSize: "9px", background: park.categoryTier === "Category A" ? "rgba(200, 100, 40, 0.15)" : "rgba(10, 77, 60, 0.12)", color: park.categoryTier === "Category A" ? "#C86428" : "#0A4D3C", padding: "2px 6px", borderRadius: "4px", fontWeight: 800, textTransform: "uppercase" }}>
-                        {park.categoryTier}
+          {/* 2-Column Layout with fluid responsive wrapping */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "24px", maxWidth: "100%" }}>
+            {/* Left: Park Cards List */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px", maxHeight: "680px", overflowY: "auto", paddingRight: "4px" }}>
+              {filteredPermits.map(p => {
+                const isSelected = p.id === selectedPark.id;
+                return (
+                  <div
+                    key={p.id}
+                    onClick={() => setSelectedParkId(p.id)}
+                    style={{
+                      background: isSelected ? "rgba(234, 88, 12, 0.2)" : "rgba(15, 48, 42, 0.6)",
+                      border: "1.5px solid",
+                      borderColor: isSelected ? "#EA580C" : "rgba(255,255,255,0.1)",
+                      borderRadius: "12px",
+                      padding: "14px 16px",
+                      cursor: "pointer",
+                      transition: "all 0.15s ease",
+                      position: "relative"
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                      <span style={{ background: "rgba(0,0,0,0.3)", color: "#FDBA74", padding: "2px 8px", borderRadius: "4px", fontSize: "0.68rem", fontWeight: 800, textTransform: "uppercase" }}>
+                        {p.categoryTier}
                       </span>
-                      <h3 style={{ fontSize: "15px", margin: "4px 0 2px", fontWeight: 700, color: "var(--text-primary)" }}>
-                        {park.parkName}
-                      </h3>
-                      <small style={{ fontSize: "10px", color: "var(--text-secondary)" }}>
-                        📍 {park.province} · {park.region}
-                      </small>
+                      <span style={{ fontSize: "0.72rem", color: "#34D399", fontWeight: 700 }}>
+                        {p.province}
+                      </span>
                     </div>
-                    <span style={{ fontSize: "10px", background: "var(--surface-subtle)", padding: "3px 6px", borderRadius: "6px", fontWeight: 600, color: "var(--text-secondary)" }}>
-                      🕒 {park.gateHours}
-                    </span>
-                  </div>
 
-                  <p style={{ fontSize: "11px", color: "var(--text-primary)", lineHeight: "1.4", margin: "0 0 10px" }}>
-                    {park.description}
+                    <h4 style={{ margin: "0 0 4px 0", fontSize: "0.95rem", fontWeight: 800, color: "#FFFFFF" }}>
+                      {p.parkName}
+                    </h4>
+                    <p style={{ margin: "0 0 8px 0", fontSize: "0.72rem", color: "#94A3B8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      🏛️ {p.authority}
+                    </p>
+
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "6px" }}>
+                      <span style={{ fontSize: "0.72rem", color: "#CBD5E1" }}>Base Digital Fee:</span>
+                      <strong style={{ fontSize: "0.88rem", color: "#EA580C" }}>{formatPrice(p.feePgk, currency)}</strong>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Right: Selected Park Deep Detail Card */}
+            <div
+              style={{
+                background: "radial-gradient(ellipse at top left, #164E44 0%, #0D332D 100%)",
+                borderRadius: "16px",
+                border: "1px solid rgba(234, 88, 12, 0.35)",
+                padding: "26px",
+                boxShadow: "0 12px 35px rgba(0,0,0,0.35)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
+                minWidth: 0
+              }}
+            >
+              {/* Header Box */}
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "16px" }}>
+                <div>
+                  <span style={{ background: "#EA580C", color: "#FFFFFF", padding: "4px 12px", borderRadius: "6px", fontSize: "0.72rem", fontWeight: 800, textTransform: "uppercase", display: "inline-block", marginBottom: "8px" }}>
+                    {selectedPark.categoryTier}
+                  </span>
+                  <h3 style={{ margin: "0 0 6px 0", fontSize: "1.35rem", fontWeight: 900, color: "#FFFFFF", lineHeight: 1.25 }}>
+                    {selectedPark.name}
+                  </h3>
+                  <p style={{ margin: 0, fontSize: "0.82rem", color: "#34D399", fontWeight: 700 }}>
+                    🏛️ Official Custodian: {selectedPark.authority}
                   </p>
-
-                  {/* Official Fee Matrix Card */}
-                  <div style={{ background: "rgba(10, 77, 60, 0.04)", border: "1px solid rgba(10, 77, 60, 0.15)", borderRadius: "8px", padding: "8px 10px", marginBottom: "10px" }}>
-                    <small style={{ fontSize: "9px", fontWeight: 800, color: "#0A4D3C", textTransform: "uppercase", display: "block", marginBottom: "4px" }}>
-                      💰 Daily Entry Fees (06:00 – 18:00):
-                    </small>
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px", fontSize: "10px" }}>
-                      <div>
-                        <span style={{ color: "var(--text-secondary)" }}>🇿🇲 Zambian Citizen:</span>
-                        <strong style={{ display: "block", color: "#0A4D3C" }}>K{park.feeCitizenZmw.toFixed(2)} ZMW</strong>
-                      </div>
-                      <div>
-                        <span style={{ color: "var(--text-secondary)" }}>🌍 SADC Resident:</span>
-                        <strong style={{ display: "block", color: "#0A4D3C" }}>${park.feeSadcUsd}.00 USD</strong>
-                      </div>
-                      <div>
-                        <span style={{ color: "var(--text-secondary)" }}>🌐 International:</span>
-                        <strong style={{ display: "block", color: "#0A4D3C" }}>${park.feeInternationalUsd}.00 USD</strong>
-                      </div>
-                      <div>
-                        <span style={{ color: "var(--text-secondary)" }}>🚙 Self-Driver:</span>
-                        <strong style={{ display: "block", color: "#0A4D3C" }}>${park.feeSelfDriveUsd}.00 USD</strong>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Facilities list */}
-                  <div style={{ marginBottom: "10px" }}>
-                    <small style={{ fontSize: "9px", fontWeight: 800, color: "var(--text-secondary)", textTransform: "uppercase", display: "block", marginBottom: "3px" }}>
-                      🏕️ Verified Facilities & Bush Camps:
-                    </small>
-                    <ul style={{ margin: 0, paddingLeft: "14px", fontSize: "10px", color: "var(--text-primary)", lineHeight: "1.35" }}>
-                      {park.facilities.slice(0, 4).map((f, i) => (
-                        <li key={i}>{f}</li>
-                      ))}
-                    </ul>
-                  </div>
                 </div>
 
                 <button
                   type="button"
-                  onClick={() => {
-                    setSelectedParkId(park.id);
-                    setShowIssueModal(true);
-                  }}
+                  onClick={() => setShowIssueModal(true)}
                   style={{
-                    width: "100%",
-                    padding: "8px",
-                    background: "#0A4D3C",
+                    background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
                     color: "#FFFFFF",
                     border: "none",
-                    borderRadius: "6px",
-                    fontSize: "11px",
-                    fontWeight: 700,
+                    borderRadius: "10px",
+                    padding: "14px 20px",
+                    fontSize: "0.92rem",
+                    fontWeight: 800,
                     cursor: "pointer",
-                    marginTop: "6px"
+                    boxShadow: "0 4px 15px rgba(234, 88, 12, 0.4)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    width: "100%"
                   }}
                 >
-                  Issue Entry Pass for {park.parkName} →
+                  🎫 Issue Digital Permit ➔
                 </button>
               </div>
-            ))}
+
+              <p style={{ margin: 0, fontSize: "0.88rem", color: "#CBD5E1", lineHeight: 1.55 }}>
+                {selectedPark.description}
+              </p>
+
+              {/* 3-Column Fee Breakdown Matrix */}
+              <div>
+                <div style={{ fontSize: "0.78rem", fontWeight: 800, color: "#FDBA74", textTransform: "uppercase", marginBottom: "8px" }}>
+                  Official Statutory Fee Schedule ({currency})
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 140px), 1fr))", gap: "10px" }}>
+                  <div style={{ background: "rgba(0,0,0,0.3)", padding: "12px", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.08)" }}>
+                    <span style={{ fontSize: "0.7rem", color: "#94A3B8", display: "block" }}>PNG Citizen / NID</span>
+                    <strong style={{ fontSize: "1.1rem", color: "#34D399", display: "block", margin: "2px 0" }}>
+                      {formatPrice(selectedPark.feeCitizenPgk, currency)}
+                    </strong>
+                    <small style={{ fontSize: "0.68rem", color: "#6EE7B7" }}>Valid with NID / Passport</small>
+                  </div>
+
+                  <div style={{ background: "rgba(0,0,0,0.3)", padding: "12px", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.08)" }}>
+                    <span style={{ fontSize: "0.7rem", color: "#94A3B8", display: "block" }}>PNG Resident / Work Permit</span>
+                    <strong style={{ fontSize: "1.1rem", color: "#FDBA74", display: "block", margin: "2px 0" }}>
+                      {formatPrice(Math.round(selectedPark.feePgk * 0.6), currency)}
+                    </strong>
+                    <small style={{ fontSize: "0.68rem", color: "#FED7AA" }}>Resident permit holder</small>
+                  </div>
+
+                  <div style={{ background: "rgba(0,0,0,0.3)", padding: "12px", borderRadius: "10px", border: "1px solid rgba(234,88,12,0.3)" }}>
+                    <span style={{ fontSize: "0.7rem", color: "#94A3B8", display: "block" }}>International Tourist</span>
+                    <strong style={{ fontSize: "1.1rem", color: "#EA580C", display: "block", margin: "2px 0" }}>
+                      {formatPrice(selectedPark.feePgk, currency)}
+                    </strong>
+                    <small style={{ fontSize: "0.68rem", color: "#FCA5A5" }}>14-Day Full Clearance</small>
+                  </div>
+                </div>
+              </div>
+
+              {/* Park Facilities & Gate Info */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 200px), 1fr))", gap: "12px" }}>
+                <div style={{ background: "rgba(0,0,0,0.25)", padding: "12px 14px", borderRadius: "10px" }}>
+                  <h4 style={{ margin: "0 0 4px 0", fontSize: "0.8rem", color: "#FDBA74" }}>
+                    🕒 Gate Hours & Ranger Checkposts
+                  </h4>
+                  <p style={{ margin: 0, fontSize: "0.78rem", color: "#CBD5E1" }}>
+                    {selectedPark.gateHours}
+                  </p>
+                </div>
+                <div style={{ background: "rgba(0,0,0,0.25)", padding: "12px 14px", borderRadius: "10px" }}>
+                  <h4 style={{ margin: "0 0 4px 0", fontSize: "0.8rem", color: "#FDBA74" }}>
+                    ⛺ Camping & Landowner Overnight Fees
+                  </h4>
+                  <p style={{ margin: 0, fontSize: "0.78rem", color: "#CBD5E1" }}>
+                    {selectedPark.campingFee}
+                  </p>
+                </div>
+              </div>
+
+              {/* Facilities Checklist */}
+              <div>
+                <h4 style={{ margin: "0 0 8px 0", fontSize: "0.82rem", color: "#34D399", textTransform: "uppercase" }}>
+                  🛡️ Ranger Stations, Medical Posts & Facilities
+                </h4>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                  {selectedPark.facilities.map((f, i) => (
+                    <span
+                      key={i}
+                      style={{
+                        background: "rgba(52, 211, 153, 0.15)",
+                        border: "1px solid rgba(52, 211, 153, 0.3)",
+                        color: "#6EE7B7",
+                        padding: "4px 10px",
+                        borderRadius: "6px",
+                        fontSize: "0.74rem",
+                        fontWeight: 600
+                      }}
+                    >
+                      ✓ {f}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Regulations */}
+              <div style={{ background: "rgba(0,0,0,0.2)", borderRadius: "10px", padding: "14px" }}>
+                <h4 style={{ margin: "0 0 8px 0", fontSize: "0.82rem", color: "#FCA5A5", textTransform: "uppercase" }}>
+                  📜 Mandatory Regulations & Protocol
+                </h4>
+                <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "0.76rem", color: "#CBD5E1", display: "flex", flexDirection: "column", gap: "5px" }}>
+                  {selectedPark.rulesAndRegulations.map((r, i) => (
+                    <li key={i}>{r}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
-      {/* TAB 2: OFFICIAL 2025/2026 FEE SCHEDULE */}
+      {/* TAB 2: SCHEDULE & VEHICLE REGULATIONS */}
       {activeTab === "schedule" && (
-        <div style={{ background: "var(--surface-card)", border: "1px solid var(--border-default)", borderRadius: "12px", padding: "16px", marginBottom: "20px" }}>
-          <h3 style={{ fontSize: "16px", margin: "0 0 4px", fontWeight: 700, color: "#0A4D3C" }}>
-            Official Statutory Park Entry Fees (Per Person, Per Day)
+        <div
+          style={{
+            background: "rgba(15, 48, 42, 0.7)",
+            borderRadius: "16px",
+            border: "1px solid rgba(255,255,255,0.12)",
+            padding: "26px"
+          }}
+        >
+          <h3 style={{ margin: "0 0 16px 0", fontSize: "1.3rem", fontWeight: 800, color: "#FFFFFF" }}>
+            Papua New Guinea National Park Regulations & Guidelines
           </h3>
-          <p style={{ fontSize: "11px", color: "var(--text-secondary)", margin: "0 0 14px" }}>
-            Published by the Zambian Department of National Parks and Wildlife (DNPW). Valid 06:00 to 18:00.
-          </p>
-
-          <div style={{ overflowX: "auto", marginBottom: "16px" }}>
-            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "11px", textAlign: "left" }}>
-              <thead>
-                <tr style={{ background: "rgba(10, 77, 60, 0.08)", borderBottom: "2px solid #0A4D3C" }}>
-                  <th style={{ padding: "8px 10px", color: "#0A4D3C" }}>Park Category & Examples</th>
-                  <th style={{ padding: "8px 10px", color: "#0A4D3C" }}>Zambian Citizens</th>
-                  <th style={{ padding: "8px 10px", color: "#0A4D3C" }}>SADC Nationals / Residents</th>
-                  <th style={{ padding: "8px 10px", color: "#0A4D3C" }}>International Non-Residents</th>
-                  <th style={{ padding: "8px 10px", color: "#0A4D3C" }}>Self-Drive Visitors</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr style={{ borderBottom: "1px solid var(--border-default)" }}>
-                  <td style={{ padding: "10px" }}>
-                    <strong style={{ color: "var(--text-primary)", display: "block" }}>Category A (Premium)</strong>
-                    <small style={{ color: "var(--text-secondary)" }}>South Luangwa, Lower Zambezi</small>
-                  </td>
-                  <td style={{ padding: "10px", fontWeight: 700, color: "#0A4D3C" }}>K55.60 ZMW</td>
-                  <td style={{ padding: "10px" }}>$20.00 USD</td>
-                  <td style={{ padding: "10px", fontWeight: 700 }}>$25.00 USD</td>
-                  <td style={{ padding: "10px" }}>$30.00 USD</td>
-                </tr>
-                <tr style={{ borderBottom: "1px solid var(--border-default)", background: "rgba(0,0,0,0.01)" }}>
-                  <td style={{ padding: "10px" }}>
-                    <strong style={{ color: "var(--text-primary)", display: "block" }}>Category B (Wilderness)</strong>
-                    <small style={{ color: "var(--text-secondary)" }}>Kafue, North Luangwa, Kasanka, Liuwa Plain, Nsumbu, Lochinvar</small>
-                  </td>
-                  <td style={{ padding: "10px", fontWeight: 700, color: "#0A4D3C" }}>K44.80 ZMW</td>
-                  <td style={{ padding: "10px" }}>$15.00 USD</td>
-                  <td style={{ padding: "10px", fontWeight: 700 }}>$20.00 USD</td>
-                  <td style={{ padding: "10px" }}>$20.00 USD</td>
-                </tr>
-                <tr style={{ borderBottom: "1px solid var(--border-default)" }}>
-                  <td style={{ padding: "10px" }}>
-                    <strong style={{ color: "var(--text-primary)", display: "block" }}>Victoria Falls Rainforest</strong>
-                    <small style={{ color: "var(--text-secondary)" }}>Mosi-oa-Tunya UNESCO World Heritage</small>
-                  </td>
-                  <td style={{ padding: "10px", fontWeight: 700, color: "#0A4D3C" }}>K33.60 ZMW</td>
-                  <td style={{ padding: "10px" }}>$10.00 USD</td>
-                  <td style={{ padding: "10px", fontWeight: 700 }}>$15.00 USD</td>
-                  <td style={{ padding: "10px" }}>$15.00 USD</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "12px" }}>
-            {/* Vehicle Tariffs */}
-            <div style={{ background: "var(--surface-subtle)", borderRadius: "8px", padding: "10px 12px" }}>
-              <h4 style={{ fontSize: "12px", margin: "0 0 6px", fontWeight: 700, color: "#0A4D3C" }}>
-                🚙 Vehicle Entry Fees (Per Day)
-              </h4>
-              <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "10px", color: "var(--text-primary)", lineHeight: "1.45" }}>
-                {ZAMBIA_PARK_FEE_SCHEDULE.vehicleTariffs.map((v, i) => (
-                  <li key={i}><strong>{v.type}:</strong> {v.rate}</li>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "16px" }}>
+            <div style={{ background: "rgba(0,0,0,0.25)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <h4 style={{ margin: "0 0 10px 0", fontSize: "0.9rem", color: "#34D399" }}>General Park & Trekker Rules</h4>
+              <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "0.78rem", color: "#CBD5E1", display: "flex", flexDirection: "column", gap: "6px" }}>
+                {PNG_PARK_FEE_SCHEDULE.generalRules.map((r, i) => (
+                  <li key={i}>{r}</li>
                 ))}
               </ul>
             </div>
 
-            {/* Activities Tariffs */}
-            <div style={{ background: "var(--surface-subtle)", borderRadius: "8px", padding: "10px 12px" }}>
-              <h4 style={{ fontSize: "12px", margin: "0 0 6px", fontWeight: 700, color: "#C86428" }}>
-                🎣 Activity & Camping Tariffs
-              </h4>
-              <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "10px", color: "var(--text-primary)", lineHeight: "1.45" }}>
-                {ZAMBIA_PARK_FEE_SCHEDULE.activityTariffs.map((a, i) => (
-                  <li key={i}><strong>{a.activity}:</strong> {a.rate}</li>
+            <div style={{ background: "rgba(0,0,0,0.25)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <h4 style={{ margin: "0 0 10px 0", fontSize: "0.9rem", color: "#FDBA74" }}>Vehicle Tariffs</h4>
+              <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "0.78rem", color: "#CBD5E1", display: "flex", flexDirection: "column", gap: "6px" }}>
+                {PNG_PARK_FEE_SCHEDULE.vehicleTariffs.map((v, i) => (
+                  <li key={i}>
+                    <strong>{v.type}:</strong> {v.rate}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div style={{ background: "rgba(0,0,0,0.25)", padding: "16px", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.08)" }}>
+              <h4 style={{ margin: "0 0 10px 0", fontSize: "0.9rem", color: "#60A5FA" }}>Activity & Conservation Tariffs</h4>
+              <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "0.78rem", color: "#CBD5E1", display: "flex", flexDirection: "column", gap: "6px" }}>
+                {PNG_PARK_FEE_SCHEDULE.activityTariffs.map((a, i) => (
+                  <li key={i}>
+                    <strong>{a.activity}:</strong> {a.rate}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -456,84 +451,115 @@ export default function DigitalPermitPass({ currency }: DigitalPermitPassProps) 
         </div>
       )}
 
-      {/* TAB 3: USER OFFLINE WALLET */}
+      {/* TAB 3: DIGITAL PERMIT WALLET */}
       {activeTab === "wallet" && (
-        <div>
+        <div
+          style={{
+            background: "rgba(15, 48, 42, 0.7)",
+            borderRadius: "16px",
+            border: "1px solid rgba(255,255,255,0.12)",
+            padding: "26px"
+          }}
+        >
+          <h3 style={{ margin: "0 0 16px 0", fontSize: "1.3rem", fontWeight: 800, color: "#FFFFFF" }}>
+            My Issued Digital Permits & Official Clearances ({issuedPermits.length})
+          </h3>
+
           {issuedPermits.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px 20px", background: "var(--surface-card)", border: "1px dashed var(--border-default)", borderRadius: "12px" }}>
-              <span style={{ fontSize: "36px", display: "block", marginBottom: "8px" }}>🎫</span>
-              <h4 style={{ margin: "0 0 4px", fontSize: "15px" }}>No Digital Passes in Wallet</h4>
-              <p style={{ margin: "0 0 14px", fontSize: "11px", color: "var(--text-secondary)" }}>
-                Issue your official digital conservation pass to carry on your device with 100% offline verification at park gates.
+            <div style={{ textAlign: "center", padding: "40px 20px", background: "rgba(0,0,0,0.2)", borderRadius: "12px" }}>
+              <p style={{ margin: "0 0 16px 0", fontSize: "0.9rem", color: "#94A3B8" }}>
+                No digital permits issued in this session yet.
               </p>
               <button
                 type="button"
-                onClick={() => setShowIssueModal(true)}
+                onClick={() => {
+                  setActiveTab("directory");
+                  setShowIssueModal(true);
+                }}
                 style={{
-                  background: "#0A4D3C",
+                  background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
                   color: "#FFFFFF",
                   border: "none",
                   borderRadius: "8px",
-                  padding: "8px 16px",
-                  fontSize: "11px",
-                  fontWeight: 700,
+                  padding: "10px 20px",
+                  fontSize: "0.85rem",
+                  fontWeight: 800,
                   cursor: "pointer"
                 }}
               >
-                ➕ Issue Park Pass Now
+                + Issue Your First PNG Permit
               </button>
             </div>
           ) : (
-            <div style={{ display: "grid", gap: "12px" }}>
-              {issuedPermits.map((permit) => (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "16px" }}>
+              {issuedPermits.map(permit => (
                 <div
                   key={permit.id}
                   style={{
-                    background: "var(--surface-card)",
-                    border: "1px solid var(--border-default)",
-                    borderRadius: "12px",
-                    padding: "14px",
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "10px"
+                    background: "linear-gradient(135deg, #103630 0%, #08211D 100%)",
+                    borderRadius: "14px",
+                    border: "1.5px solid #EA580C",
+                    padding: "20px",
+                    position: "relative",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.3)"
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "10px", flexWrap: "wrap" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "12px" }}>
                     <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "2px" }}>
-                        <span style={{ fontSize: "11px", fontWeight: 800, color: "#0A4D3C" }}>{permit.reference}</span>
-                        <span style={{ fontSize: "9px", background: "rgba(10, 77, 60, 0.1)", color: "#0A4D3C", padding: "1px 5px", borderRadius: "4px", fontWeight: 700 }}>
-                          ● {permit.status.toUpperCase()}
-                        </span>
-                      </div>
-                      <h4 style={{ fontSize: "15px", margin: "2px 0 3px", color: "var(--text-primary)" }}>{permit.permitName}</h4>
-                      <small style={{ fontSize: "10px", color: "var(--text-secondary)" }}>🏛️ {permit.authority}</small>
+                      <span style={{ background: "#EA580C", color: "#FFFFFF", padding: "2px 8px", borderRadius: "4px", fontSize: "0.68rem", fontWeight: 800 }}>
+                        OFFICIAL CLEARANCE PASS
+                      </span>
+                      <h4 style={{ margin: "6px 0 2px 0", fontSize: "1.1rem", fontWeight: 800, color: "#FFFFFF" }}>
+                        {permit.permitName}
+                      </h4>
+                      <span style={{ fontSize: "0.72rem", color: "#34D399" }}>Ref: {permit.reference}</span>
                     </div>
 
-                    <div style={{ textAlign: "right" }}>
-                      <span style={{ fontSize: "13px", fontWeight: 800, color: "#0A4D3C" }}>
-                        {formatPrice(permit.feePaidZmw, currency)}
-                      </span>
-                      <small style={{ fontSize: "9px", color: "var(--text-secondary)", display: "block" }}>
-                        Tier: {permit.visitorTier}
-                      </small>
+                    {/* QR Stamp Simulation */}
+                    <div style={{ background: "#FFFFFF", padding: "6px", borderRadius: "6px", textAlign: "center" }}>
+                      <div style={{ width: "48px", height: "48px", background: "#0D2B27", display: "grid", placeItems: "center", color: "#34D399", fontSize: "0.7rem", fontWeight: 900 }}>
+                        QR PASS
+                      </div>
                     </div>
                   </div>
 
-                  <div style={{ display: "flex", gap: "16px", alignItems: "center", borderTop: "1px solid var(--border-default)", paddingTop: "10px", flexWrap: "wrap" }}>
-                    <div style={{ flexShrink: 0 }}>
-                      {renderSvgQr(permit.validationQrToken)}
+                  <div style={{ background: "rgba(0,0,0,0.3)", padding: "10px", borderRadius: "8px", fontSize: "0.75rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px", marginBottom: "12px" }}>
+                    <div>
+                      <span style={{ color: "#94A3B8" }}>Holder:</span>
+                      <strong style={{ display: "block", color: "#FFFFFF" }}>{permit.holderName}</strong>
                     </div>
-                    <div style={{ flex: 1, minWidth: "160px", fontSize: "10px", color: "var(--text-primary)", lineHeight: "1.45" }}>
-                      <p style={{ margin: "0 0 2px" }}><strong>Holder:</strong> {permit.holderName}</p>
-                      <p style={{ margin: "0 0 2px" }}><strong>ID / Passport:</strong> {permit.passportOrId}</p>
-                      <p style={{ margin: "0 0 2px" }}><strong>Valid From:</strong> {permit.startDate} to {permit.expiryDate}</p>
-                      <p style={{ margin: "0 0 4px" }}><strong>Verification Hash:</strong> <code style={{ fontSize: "9px", background: "var(--surface-subtle)", padding: "1px 4px" }}>{permit.offlineVerificationHash}</code></p>
-                      <span style={{ fontSize: "9px", color: "#0A4D3C", fontWeight: 700 }}>
-                        📶 100% Offline Validated at DNPW Gate Checkpoints
-                      </span>
+                    <div>
+                      <span style={{ color: "#94A3B8" }}>Passport / NID:</span>
+                      <strong style={{ display: "block", color: "#FFFFFF" }}>{permit.passportOrId}</strong>
                     </div>
+                    <div>
+                      <span style={{ color: "#94A3B8" }}>Tier:</span>
+                      <strong style={{ display: "block", color: "#FDBA74" }}>{permit.visitorTier}</strong>
+                    </div>
+                    <div>
+                      <span style={{ color: "#94A3B8" }}>Valid From:</span>
+                      <strong style={{ display: "block", color: "#34D399" }}>{permit.startDate}</strong>
+                    </div>
+                  </div>
+
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontSize: "0.72rem", color: "#94A3B8" }}>Status: <strong style={{ color: "#34D399" }}>ACTIVE & VALID</strong></span>
+                    <button
+                      type="button"
+                      onClick={() => setActivePermitView(permit)}
+                      style={{
+                        padding: "6px 12px",
+                        borderRadius: "6px",
+                        background: "rgba(255,255,255,0.1)",
+                        border: "1px solid rgba(255,255,255,0.2)",
+                        color: "#FFFFFF",
+                        fontSize: "0.75rem",
+                        fontWeight: 700,
+                        cursor: "pointer"
+                      }}
+                    >
+                      View Full Pass 🔍
+                    </button>
                   </div>
                 </div>
               ))}
@@ -544,209 +570,180 @@ export default function DigitalPermitPass({ currency }: DigitalPermitPassProps) 
 
       {/* ISSUE PERMIT MODAL */}
       {showIssueModal && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0,0,0,0.65)",
-            zIndex: 9999,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "16px"
-          }}
-        >
-          <div
-            style={{
-              background: "var(--surface-card)",
-              borderRadius: "14px",
-              padding: "20px",
-              maxWidth: "480px",
-              width: "100%",
-              maxHeight: "90vh",
-              overflowY: "auto",
-              boxShadow: "0 10px 30px rgba(0,0,0,0.3)"
-            }}
-          >
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-              <h3 style={{ margin: 0, fontSize: "16px", color: "#0A4D3C", fontWeight: 700 }}>
-                🎫 Issue Digital Conservation Pass
-              </h3>
-              <button
-                type="button"
-                onClick={() => setShowIssueModal(false)}
-                style={{ background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "var(--text-secondary)" }}
-              >
-                ×
-              </button>
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 99999, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }} onClick={() => setShowIssueModal(false)}>
+          <div style={{ background: "#0E3831", color: "#FFFFFF", borderRadius: "18px", maxWidth: "540px", width: "100%", maxHeight: "90vh", overflowY: "auto", padding: "26px", border: "1.5px solid #EA580C" }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "12px" }}>
+              <div>
+                <span style={{ background: "#EA580C", color: "#FFFFFF", padding: "2px 8px", borderRadius: "4px", fontSize: "0.68rem", fontWeight: 800 }}>
+                  STATUTORY REGISTRATION
+                </span>
+                <h3 style={{ margin: "4px 0 0 0", fontSize: "1.2rem", fontWeight: 800, color: "#FFFFFF" }}>
+                  Issue {selectedPark.name}
+                </h3>
+              </div>
+              <button onClick={() => setShowIssueModal(false)} style={{ background: "none", border: "none", color: "#CBD5E1", fontSize: "1.4rem", cursor: "pointer" }}>✕</button>
             </div>
 
-            <form onSubmit={handleIssuePermit} style={{ display: "grid", gap: "10px" }}>
+            <form onSubmit={handleIssuePermit} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
               <div>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, marginBottom: "3px", color: "var(--text-primary)" }}>
-                  Select National Park:
-                </label>
-                <select
-                  value={selectedParkId}
-                  onChange={(e) => setSelectedParkId(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid var(--border-default)",
-                    background: "var(--surface-subtle)",
-                    fontSize: "11px"
-                  }}
-                >
-                  {permitTypes.map((p) => (
-                    <option key={p.id} value={p.id}>
-                      {p.parkName} ({p.categoryTier})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, marginBottom: "3px", color: "var(--text-primary)" }}>
-                  Visitor Category / Resident Tier:
-                </label>
-                <select
-                  value={visitorTier}
-                  onChange={(e) => setVisitorTier(e.target.value as "Citizen" | "SADC Resident" | "International" | "Self-Drive")}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid var(--border-default)",
-                    background: "var(--surface-subtle)",
-                    fontSize: "11px"
-                  }}
-                >
-                  <option value="International">International Visitor (${selectedPark.feeInternationalUsd}.00 USD)</option>
-                  <option value="SADC Resident">SADC National / Resident (${selectedPark.feeSadcUsd}.00 USD)</option>
-                  <option value="Citizen">Zambian Citizen (K{selectedPark.feeCitizenZmw.toFixed(2)} ZMW)</option>
-                  <option value="Self-Drive">Self-Drive Explorer (${selectedPark.feeSelfDriveUsd}.00 USD)</option>
-                </select>
-              </div>
-
-              <div>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, marginBottom: "3px", color: "var(--text-primary)" }}>
-                  Full Name (as per Passport / NRC):
+                <label style={{ display: "block", fontSize: "0.76rem", color: "#FDBA74", fontWeight: 700, marginBottom: "4px" }}>
+                  Primary Trekker / Visitor Full Name *
                 </label>
                 <input
-                  type="text"
                   required
+                  placeholder="e.g. Samuel Gari or David Alexander Scott"
                   value={holderName}
-                  onChange={(e) => setHolderName(e.target.value)}
-                  placeholder="e.g. Dr. Mwamba Chileshe / Sarah Jenkins"
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid var(--border-default)",
-                    background: "var(--surface-subtle)",
-                    fontSize: "11px"
-                  }}
+                  onChange={e => setHolderName(e.target.value)}
+                  style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.2)", background: "rgba(0,0,0,0.3)", color: "#FFFFFF", fontSize: "0.85rem" }}
                 />
               </div>
 
-              <div>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, marginBottom: "3px", color: "var(--text-primary)" }}>
-                  Passport Number / National Registration (NRC):
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={passportOrId}
-                  onChange={(e) => setPassportOrId(e.target.value)}
-                  placeholder="e.g. ZM984124 / 349120/11/1"
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid var(--border-default)",
-                    background: "var(--surface-subtle)",
-                    fontSize: "11px"
-                  }}
-                />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "0.76rem", color: "#FDBA74", fontWeight: 700, marginBottom: "4px" }}>
+                    Passport / National ID (NID) *
+                  </label>
+                  <input
+                    required
+                    placeholder="e.g. NID 1092834 or PA892301"
+                    value={passportOrId}
+                    onChange={e => setPassportOrId(e.target.value)}
+                    style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.2)", background: "rgba(0,0,0,0.3)", color: "#FFFFFF", fontSize: "0.85rem" }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: "0.76rem", color: "#FDBA74", fontWeight: 700, marginBottom: "4px" }}>
+                    Country of Origin / Residence
+                  </label>
+                  <input
+                    value={countryOfOrigin}
+                    onChange={e => setCountryOfOrigin(e.target.value)}
+                    style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.2)", background: "rgba(0,0,0,0.3)", color: "#FFFFFF", fontSize: "0.85rem" }}
+                  />
+                </div>
               </div>
 
-              <div>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, marginBottom: "3px", color: "var(--text-primary)" }}>
-                  Country of Residence:
-                </label>
-                <input
-                  type="text"
-                  value={countryOfOrigin}
-                  onChange={(e) => setCountryOfOrigin(e.target.value)}
-                  placeholder="e.g. Zambia, United Kingdom, South Africa"
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid var(--border-default)",
-                    background: "var(--surface-subtle)",
-                    fontSize: "11px"
-                  }}
-                />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+                <div>
+                  <label style={{ display: "block", fontSize: "0.76rem", color: "#FDBA74", fontWeight: 700, marginBottom: "4px" }}>
+                    Visitor Category
+                  </label>
+                  <select
+                    value={visitorTier}
+                    onChange={e => setVisitorTier(e.target.value as "Citizen" | "PNG Resident" | "International" | "Trekking Expedition")}
+                    style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.2)", background: "rgba(0,0,0,0.3)", color: "#FFFFFF", fontSize: "0.85rem" }}
+                  >
+                    <option value="International">International Tourist</option>
+                    <option value="PNG Resident">PNG Resident (Work Permit)</option>
+                    <option value="Citizen">PNG Citizen (NID Holder)</option>
+                    <option value="Trekking Expedition">Guided Trekking Expedition</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: "block", fontSize: "0.76rem", color: "#FDBA74", fontWeight: 700, marginBottom: "4px" }}>
+                    Entry Date
+                  </label>
+                  <input
+                    type="date"
+                    value={startDate}
+                    onChange={e => setStartDate(e.target.value)}
+                    style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.2)", background: "rgba(0,0,0,0.3)", color: "#FFFFFF", fontSize: "0.85rem" }}
+                  />
+                </div>
               </div>
 
-              <div>
-                <label style={{ display: "block", fontSize: "11px", fontWeight: 700, marginBottom: "3px", color: "var(--text-primary)" }}>
-                  Date of Entry:
-                </label>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  style={{
-                    width: "100%",
-                    padding: "8px",
-                    borderRadius: "6px",
-                    border: "1px solid var(--border-default)",
-                    background: "var(--surface-subtle)",
-                    fontSize: "11px"
-                  }}
-                />
+              <div style={{ background: "rgba(0,0,0,0.3)", padding: "12px", borderRadius: "8px", fontSize: "0.78rem", color: "#CBD5E1" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                  <span>Statutory Conservation Levy:</span>
+                  <strong>{formatPrice(selectedPark.feePgk, currency)}</strong>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", color: "#34D399" }}>
+                  <span>Landowner Community Benefit:</span>
+                  <strong>100% Retained by Landowner Eco-Trust</strong>
+                </div>
               </div>
 
-              <div style={{ marginTop: "10px", display: "flex", gap: "8px" }}>
-                <button
-                  type="button"
-                  onClick={() => setShowIssueModal(false)}
-                  style={{
-                    flex: 1,
-                    padding: "9px",
-                    border: "1px solid var(--border-default)",
-                    background: "transparent",
-                    borderRadius: "6px",
-                    fontSize: "11px",
-                    cursor: "pointer"
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  style={{
-                    flex: 2,
-                    padding: "9px",
-                    background: "#0A4D3C",
-                    color: "#FFFFFF",
-                    border: "none",
-                    borderRadius: "6px",
-                    fontSize: "11px",
-                    fontWeight: 700,
-                    cursor: "pointer"
-                  }}
-                >
-                  Confirm & Issue Offline Pass →
-                </button>
-              </div>
+              <button
+                type="submit"
+                style={{
+                  background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
+                  color: "#FFFFFF",
+                  border: "none",
+                  borderRadius: "10px",
+                  padding: "14px",
+                  fontSize: "0.92rem",
+                  fontWeight: 800,
+                  cursor: "pointer",
+                  boxShadow: "0 6px 20px rgba(234, 88, 12, 0.4)",
+                  marginTop: "6px"
+                }}
+              >
+                Confirm & Generate Official Digital Permit 🚀
+              </button>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* FULL PERMIT TICKET VIEW MODAL */}
+      {activePermitView && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", zIndex: 99999, display: "flex", alignItems: "center", justifyContent: "center", padding: "1rem" }} onClick={() => setActivePermitView(null)}>
+          <div style={{ background: "#FFFFFF", color: "#0B2621", borderRadius: "18px", maxWidth: "480px", width: "100%", padding: "26px", border: "3px solid #EA580C", boxShadow: "0 25px 60px rgba(0,0,0,0.5)" }} onClick={e => e.stopPropagation()}>
+            <div style={{ textAlign: "center", borderBottom: "2px dashed #CBD5E1", paddingBottom: "16px", marginBottom: "16px" }}>
+              <div style={{ fontSize: "1.8rem" }}>🇵🇬</div>
+              <h3 style={{ margin: "4px 0 2px 0", fontSize: "1.2rem", fontWeight: 900, color: "#0B2621" }}>
+                OFFICIAL CONSERVATION CLEARANCE
+              </h3>
+              <p style={{ margin: 0, fontSize: "0.78rem", color: "#64748B", fontWeight: 700 }}>
+                INDEPENDENT STATE OF PAPUA NEW GUINEA
+              </p>
+            </div>
+
+            <div style={{ marginBottom: "16px" }}>
+              <div style={{ fontSize: "0.72rem", color: "#EA580C", fontWeight: 800, textTransform: "uppercase" }}>
+                {activePermitView.permitName}
+              </div>
+              <h4 style={{ margin: "2px 0 10px 0", fontSize: "1.15rem", fontWeight: 900 }}>
+                {activePermitView.holderName}
+              </h4>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px", fontSize: "0.78rem", background: "#F1F5F9", padding: "10px", borderRadius: "8px" }}>
+                <div>
+                  <span style={{ color: "#64748B" }}>Permit Ref:</span>
+                  <strong style={{ display: "block", color: "#0B2621" }}>{activePermitView.reference}</strong>
+                </div>
+                <div>
+                  <span style={{ color: "#64748B" }}>Passport / NID:</span>
+                  <strong style={{ display: "block", color: "#0B2621" }}>{activePermitView.passportOrId}</strong>
+                </div>
+                <div>
+                  <span style={{ color: "#64748B" }}>Valid From:</span>
+                  <strong style={{ display: "block", color: "#059669" }}>{activePermitView.startDate}</strong>
+                </div>
+                <div>
+                  <span style={{ color: "#64748B" }}>Valid Until:</span>
+                  <strong style={{ display: "block", color: "#059669" }}>{activePermitView.expiryDate}</strong>
+                </div>
+              </div>
+            </div>
+
+            {/* Offline QR Scanner Code */}
+            <div style={{ textAlign: "center", background: "#F8FAFC", padding: "16px", borderRadius: "10px", border: "1px solid #E2E8F0", marginBottom: "16px" }}>
+              <div style={{ width: "120px", height: "120px", margin: "0 auto 8px auto", background: "#0B2621", display: "grid", placeItems: "center", color: "#34D399", fontSize: "0.85rem", fontWeight: 900, borderRadius: "8px" }}>
+                VALID QR
+              </div>
+              <span style={{ fontSize: "0.7rem", color: "#64748B", display: "block" }}>
+                Ranger verification signature: {activePermitView.validationQrToken.slice(0, 24)}...
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setActivePermitView(null)}
+              style={{ width: "100%", padding: "10px", borderRadius: "8px", background: "#0B2621", color: "#FFFFFF", border: "none", fontWeight: 800, fontSize: "0.85rem", cursor: "pointer" }}
+            >
+              Close Pass
+            </button>
           </div>
         </div>
       )}

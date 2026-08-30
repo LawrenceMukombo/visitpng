@@ -16,37 +16,39 @@ interface ProviderRegistrationModalProps {
   onClose: () => void;
 }
 
-const ZAMBIA_PROVIDER_CATEGORIES = [
-  { id: "tour_guide", label: "🥾 Safari Guide & Wildlife Walking Leader", desc: "South Luangwa walking safaris, Victoria Falls, Lower Zambezi canoe trails" },
-  { id: "hotel_lodge", label: "🏡 Safari Lodge, Tented Camp & Chalet", desc: "Riverfront luxury camps, wilderness bush suites, beach chalets" },
-  { id: "transport_charter", label: "🚐 4x4 Safari Transport & River Charter", desc: "Bush airport shuttles, Zambezi water taxis, self-drive Land Cruisers" },
-  { id: "aviation_airline", label: "✈️ Bush Aviation & Scenic Air Charters", desc: "Proflight safari hops, Victoria Falls helicopter & microlight flights" },
-  { id: "scuba_diving", label: "🌊 Lake Tanganyika Marine & Water Tours", desc: "Ndole Bay dive charters, Kalambo Falls gorge cruises, freshwater sports" },
-  { id: "cultural_artifacts", label: "🎨 Master Woodcarvings & Zambian Crafts", desc: "Kabwata woodcarvings, Tonga baskets & beadwork, Chitenge fashion" },
-  { id: "restaurant_dining", label: "🍽️ Zambian Cuisine & Boma Bush Dining", desc: "Traditional Nshima & Zambezi bream, outdoor boma braai, bush dinners" },
-  { id: "cultural_performer", label: "🎭 Traditional Ceremony Troupe & Dancers", desc: "Makishi masquerade, Ngoni warrior dancers, royal drum ensembles" }
+const PNG_PROVIDER_CATEGORIES = [
+  { id: "tour_guide", label: "🥾 Trekking & Expedition Leader", desc: "Kokoda Track, Mount Wilhelm alpine summits, Black Cat Trail, Sepik canoe treks" },
+  { id: "hotel_lodge", label: "🏡 Eco-Lodge, Resort & Village Guesthouse", desc: "Walindi Plantation Resort, Tawali Dive Resort, highland eco-lodges, village stays" },
+  { id: "transport_charter", label: "🚐 PMV, 4x4 & Coastal Banana Boat Charter", desc: "Highland 4x4 transfers, coastal sea taxis, river expedition canoes" },
+  { id: "aviation_airline", label: "✈️ PNG Bush Aviation & Scenic Helicopter", desc: "Air Niugini / PNG Air connections, remote airstrip charters, scenic aerial flights" },
+  { id: "scuba_diving", label: "🤿 Coral Triangle Scuba & Marine Sanctuary", desc: "Kimbe Bay, Milne Bay muck diving, Kavieng pelagic passes, Tufi volcanic fjords" },
+  { id: "cultural_artifacts", label: "🎨 Master Woodcarvings & Cultural Bilas", desc: "Sepik River spirit masks, Kundu drums, woven Bilum bags, highland headdresses" },
+  { id: "restaurant_dining", label: "🍽️ Traditional Mumu Feast & PNG Cuisine", desc: "Earth-oven Mumu dining, fresh seafood, Goroka organic coffee, tropical produce" },
+  { id: "cultural_performer", label: "🎭 Cultural Sing-Sing Troupe & Dancers", desc: "Asaro Mudmen, Melpa Bird of Paradise dancers, Baining Fire Dancers, Huli Wigmen" }
 ];
 
-const DEFAULT_ZAMBIA_PROVINCES: ProvinceOption[] = [
-  { id: 2344, code: "ZM-LUS", name: "Lusaka Province", region: "Southern & Lusaka" },
-  { id: 2343, code: "ZM-SOU", name: "Southern Province", region: "Southern & Lusaka" },
-  { id: 2347, code: "ZM-COP", name: "Copperbelt Province", region: "Copperbelt & North-Western" },
-  { id: 2351, code: "ZM-NW", name: "North-Western Province", region: "Copperbelt & North-Western" },
-  { id: 2346, code: "ZM-CEN", name: "Central Province", region: "Central & Eastern" },
-  { id: 2345, code: "ZM-EAS", name: "Eastern Province", region: "Central & Eastern" },
-  { id: 2348, code: "ZM-NOR", name: "Northern Province", region: "Northern & Luapula" },
-  { id: 2349, code: "ZM-LUA", name: "Luapula Province", region: "Northern & Luapula" },
-  { id: 2352, code: "ZM-MUC", name: "Muchinga Province", region: "Northern & Luapula" },
-  { id: 2350, code: "ZM-WES", name: "Western Province", region: "Western" }
+const DEFAULT_PNG_PROVINCES: ProvinceOption[] = [
+  { id: 101, code: "NCD", name: "National Capital District", region: "Southern" },
+  { id: 102, code: "CEN", name: "Central Province", region: "Southern" },
+  { id: 103, code: "ORO", name: "Oro (Northern) Province", region: "Southern" },
+  { id: 104, code: "MBA", name: "Milne Bay Province", region: "Southern" },
+  { id: 105, code: "EHP", name: "Eastern Highlands Province", region: "Highlands" },
+  { id: 106, code: "WHP", name: "Western Highlands Province", region: "Highlands" },
+  { id: 107, code: "CHM", name: "Simbu (Chimbu) Province", region: "Highlands" },
+  { id: 108, code: "ENB", name: "East New Britain Province", region: "Islands" },
+  { id: 109, code: "WNB", name: "West New Britain Province", region: "Islands" },
+  { id: 110, code: "MAD", name: "Madang Province", region: "Momase" },
+  { id: 111, code: "MOR", name: "Morobe Province", region: "Momase" },
+  { id: 112, code: "ESP", name: "East Sepik Province", region: "Momase" }
 ];
 
 export default function ProviderRegistrationModal({
   provinces,
   onClose
 }: ProviderRegistrationModalProps) {
-  const activeProvinces = provinces || DEFAULT_ZAMBIA_PROVINCES;
-  const categories = ZAMBIA_PROVIDER_CATEGORIES;
-  const currencyCode = "ZMW";
+  const activeProvinces = provinces || DEFAULT_PNG_PROVINCES;
+  const categories = PNG_PROVIDER_CATEGORIES;
+  const currencyCode = "PGK";
 
   const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [form, setForm] = useState({
@@ -55,7 +57,7 @@ export default function ProviderRegistrationModal({
     applicantPhone: "",
     businessName: "",
     providerType: "tour_guide",
-    provinceId: activeProvinces[0]?.id || 2344,
+    provinceId: activeProvinces[0]?.id || 101,
     villageOrTown: "",
     description: "",
     experienceYears: 2,
@@ -80,9 +82,9 @@ export default function ProviderRegistrationModal({
   const [error, setError] = useState("");
   const [submittedRef, setSubmittedRef] = useState("");
 
-  const vatRate = 0.16;
+  const gstRate = 0.10;
   const commissionExample = useMemo(() => {
-    return calculateCommissionBreakdown(sampleAmount, 0.05, vatRate);
+    return calculateCommissionBreakdown(sampleAmount, 0.05, gstRate);
   }, [sampleAmount]);
 
   const handleFileUpload = (
@@ -114,19 +116,19 @@ export default function ProviderRegistrationModal({
 
   const handleNextToStep4 = () => {
     if (!form.licenseOrTpaNumber.trim()) {
-      setError("Mandatory Anti-Scam Check: Please enter your ZTA License Number or PACRA Registration Number.");
+      setError("Mandatory Anti-Scam Check: Please enter your PNGTPA Operator License, KTA Tour Permit, or IPA Registration Number.");
       return;
     }
     if (!form.clanOrReferenceContact.trim()) {
-      setError("Mandatory Anti-Scam Check: Please provide your Traditional Authority / Chiefdom Council / Community Reference.");
+      setError("Mandatory Anti-Scam Check: Please provide your Ward Councillor, Village Clan Leader, or Local Community Reference.");
       return;
     }
     if (!form.nrcDocumentUrl) {
-      setError("Mandatory Document Upload: Please attach a copy of your National Registration Card (NRC) or Passport.");
+      setError("Mandatory Document Upload: Please attach a copy of your National ID (NID) Card or PNG Passport.");
       return;
     }
     if (!form.licenseDocumentUrl) {
-      setError("Mandatory Document Upload: Please attach a copy of your ZTA Tourism License or PACRA Registration Certificate.");
+      setError("Mandatory Document Upload: Please attach a copy of your PNGTPA / KTA License or IPA Registration Certificate.");
       return;
     }
     if (!form.antiFraudDeclared) {
@@ -157,7 +159,7 @@ export default function ProviderRegistrationModal({
       const data = await res.json();
 
       if (res.ok) {
-        setSubmittedRef(data.applicationReference || "APP-ZMB-REGISTERED");
+        setSubmittedRef(data.applicationReference || "APP-PNG-REGISTERED");
         setStep(5);
       } else {
         setError(data.error || "Failed to submit application. Please check your inputs.");
@@ -204,11 +206,11 @@ export default function ProviderRegistrationModal({
         {step < 5 && (
           <div className="wizardStepHeader" style={{ marginBottom: "24px" }}>
             <span className="destinationPill" style={{ background: "rgba(16, 185, 129, 0.12)", color: "#059669", padding: "4px 12px", borderRadius: "20px", fontSize: "12px", fontWeight: 700, display: "inline-block", marginBottom: "8px" }}>
-              🤝 PARTNER WITH VISIT ZAMBIA
+              🇵🇬 PARTNER WITH VISITPNG
             </span>
             <h2 style={{ fontSize: "24px", color: "var(--brand-deep-teal, #0d3838)", margin: "0 0 8px", fontWeight: 800 }}>Register as a Verified Tourism Provider</h2>
             <p className="wizardLead" style={{ fontSize: "14px", color: "var(--text-secondary, #64748b)", margin: "0 0 20px", lineHeight: 1.5 }}>
-              Publish your safari lodges, guided tours, cultural crafts, and transport services to connect with global travellers. Every Zambian provider is vetted for safety and authenticity.
+              Publish your eco-lodges, Kokoda Track trekking expeditions, cultural sing-sings, and scuba charters to connect with global travellers. Every Papua New Guinea provider is vetted for safety and authenticity.
             </p>
 
             {/* Stepper Navigation */}
@@ -230,8 +232,8 @@ export default function ProviderRegistrationModal({
                     textAlign: "center",
                     padding: "10px 4px",
                     borderRadius: "10px",
-                    border: step === s.num ? "2px solid #10b981" : "1px solid transparent",
-                    background: step === s.num ? "var(--brand-deep-teal, #0d3838)" : step > s.num ? "#10b981" : "rgba(0,0,0,0.04)",
+                    border: step === s.num ? "2px solid #EA580C" : "1px solid transparent",
+                    background: step === s.num ? "var(--brand-deep-teal, #0d3838)" : step > s.num ? "#059669" : "rgba(0,0,0,0.04)",
                     color: step === s.num || step > s.num ? "#fff" : "#64748b",
                     cursor: "pointer",
                     transition: "all 0.2s",
@@ -256,7 +258,7 @@ export default function ProviderRegistrationModal({
           {step === 1 && (
             <div className="wizardStepContent">
               <h3 style={{ fontSize: "18px", color: "var(--brand-deep-teal, #0d3838)", margin: "0 0 6px", fontWeight: 700 }}>Step 1: Business Profile & Service Category</h3>
-              <p style={{ fontSize: "13px", color: "var(--text-secondary, #64748b)", margin: "0 0 16px" }}>Select what type of tourism experiences or products you provide in Zambia.</p>
+              <p style={{ fontSize: "13px", color: "var(--text-secondary, #64748b)", margin: "0 0 16px" }}>Select what type of tourism experiences or products you provide in Papua New Guinea.</p>
 
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "10px", marginBottom: "20px" }}>
                 {categories.map((cat) => (
@@ -267,8 +269,8 @@ export default function ProviderRegistrationModal({
                       textAlign: "left",
                       padding: "12px 14px",
                       borderRadius: "12px",
-                      border: form.providerType === cat.id ? "2px solid #10b981" : "1.5px solid rgba(0,0,0,0.1)",
-                      background: form.providerType === cat.id ? "rgba(16, 185, 129, 0.08)" : "#fff",
+                      border: form.providerType === cat.id ? "2px solid #EA580C" : "1.5px solid rgba(0,0,0,0.1)",
+                      background: form.providerType === cat.id ? "rgba(234, 88, 12, 0.08)" : "#fff",
                       cursor: "pointer",
                       display: "flex",
                       flexDirection: "column",
@@ -287,7 +289,7 @@ export default function ProviderRegistrationModal({
                 <input
                   required
                   style={inputStyle}
-                  placeholder="e.g. South Luangwa Walking Guides, Mukambi Safari Lodge, or Royal Chariot Tours"
+                  placeholder="e.g. Kokoda Trail Expeditions, Walindi Resort, Asaro Cultural Homestays, or Sepik Eco-Treks"
                   value={form.businessName}
                   onChange={(e) => setForm({ ...form, businessName: e.target.value })}
                 />
@@ -299,7 +301,7 @@ export default function ProviderRegistrationModal({
                   <input
                     required
                     style={inputStyle}
-                    placeholder="e.g. Mwansa Banda or Lawrence Mukombo"
+                    placeholder="e.g. Kila Nou or Samuel Gari"
                     value={form.applicantName}
                     onChange={(e) => setForm({ ...form, applicantName: e.target.value })}
                   />
@@ -320,7 +322,7 @@ export default function ProviderRegistrationModal({
               <div style={{ marginTop: "24px", display: "flex", justifyContent: "flex-end" }}>
                 <button
                   type="button"
-                  style={{ background: "linear-gradient(135deg, #10b981 0%, #059669 100%)", color: "#fff", border: "none", padding: "12px 24px", borderRadius: "10px", fontSize: "14px", fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 12px rgba(16,185,129,0.3)" }}
+                  style={{ background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)", color: "#fff", border: "none", padding: "12px 24px", borderRadius: "10px", fontSize: "14px", fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 12px rgba(234,88,12,0.3)" }}
                   disabled={!form.businessName.trim() || !form.applicantName.trim()}
                   onClick={() => {
                     if (!form.businessName.trim() || !form.applicantName.trim()) {
@@ -341,7 +343,7 @@ export default function ProviderRegistrationModal({
           {step === 2 && (
             <div className="wizardStepContent">
               <h3 style={{ fontSize: "18px", color: "var(--brand-deep-teal, #0d3838)", margin: "0 0 6px", fontWeight: 700 }}>Step 2: Operating Base & Contact Channels</h3>
-              <p style={{ fontSize: "13px", color: "var(--text-secondary, #64748b)", margin: "0 0 16px" }}>Where do you welcome safari guests or craft your products in Zambia?</p>
+              <p style={{ fontSize: "13px", color: "var(--text-secondary, #64748b)", margin: "0 0 16px" }}>Where do you welcome expedition guests or craft your products in Papua New Guinea?</p>
 
               <div style={formGroupStyle}>
                 <label style={labelStyle}>Primary Operating Province *</label>
@@ -359,11 +361,11 @@ export default function ProviderRegistrationModal({
               </div>
 
               <div style={formGroupStyle}>
-                <label style={labelStyle}>Village, Town, or District Base *</label>
+                <label style={labelStyle}>Village, Station, or District Base *</label>
                 <input
                   required
                   style={inputStyle}
-                  placeholder="e.g. Mfuwe, Livingstone, Siavonga, Solwezi, Kasama, or Lusaka Urban"
+                  placeholder="e.g. Sogeri Plateau, Owers' Corner, Kokoda Station, Kimbe Bay, Goroka, Mount Hagen, or Alotau"
                   value={form.villageOrTown}
                   onChange={(e) => setForm({ ...form, villageOrTown: e.target.value })}
                 />
@@ -371,12 +373,12 @@ export default function ProviderRegistrationModal({
 
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "16px" }}>
                 <div style={formGroupStyle}>
-                  <label style={labelStyle}>Contact Phone (MTN / Airtel / Zamtel) *</label>
+                  <label style={labelStyle}>Contact Phone (Digicel / Telikom / Vodafone PNG) *</label>
                   <input
                     required
                     type="tel"
                     style={inputStyle}
-                    placeholder="+260 97XXXXXXX or +260 96XXXXXXX"
+                    placeholder="+675 7XXXXXXX or +675 8XXXXXXX"
                     value={form.applicantPhone}
                     onChange={(e) => setForm({ ...form, applicantPhone: e.target.value })}
                   />
@@ -387,7 +389,7 @@ export default function ProviderRegistrationModal({
                     required
                     type="email"
                     style={inputStyle}
-                    placeholder="operator@company.zm"
+                    placeholder="operator@visitpng.com.pg"
                     value={form.applicantEmail}
                     onChange={(e) => setForm({ ...form, applicantEmail: e.target.value })}
                   />
@@ -400,7 +402,7 @@ export default function ProviderRegistrationModal({
                   rows={3}
                   required
                   style={{ ...inputStyle, minHeight: "85px", fontFamily: "inherit" }}
-                  placeholder="Describe your safari itineraries, lodge accommodation, walking packages, or vehicle transport services..."
+                  placeholder="Describe your Kokoda treks, dive charters, cultural sing-sing packages, lodge accommodation, or river boat transfers..."
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
                 />
@@ -412,7 +414,7 @@ export default function ProviderRegistrationModal({
                 </button>
                 <button
                   type="button"
-                  style={{ background: "linear-gradient(135deg, #10b981 0%, #059669 100%)", color: "#fff", border: "none", padding: "12px 24px", borderRadius: "10px", fontSize: "14px", fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 12px rgba(16,185,129,0.3)" }}
+                  style={{ background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)", color: "#fff", border: "none", padding: "12px 24px", borderRadius: "10px", fontSize: "14px", fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 12px rgba(234,88,12,0.3)" }}
                   onClick={handleNextToStep3}
                 >
                   Continue to Anti-Scam Check →
@@ -426,7 +428,7 @@ export default function ProviderRegistrationModal({
             <div className="wizardStepContent">
               <h3 style={{ fontSize: "18px", color: "var(--brand-deep-teal, #0d3838)", margin: "0 0 6px", fontWeight: 700 }}>Step 3: Anti-Scam & Legal Trust Credentials</h3>
               <p style={{ fontSize: "13px", color: "var(--text-secondary, #64748b)", margin: "0 0 16px" }}>
-                To protect tourists and authentic Zambian operators from fraud, all credentials and document copies are mandatory and fact-checked before listings go live.
+                To protect tourists and authentic Papua New Guinea operators from fraud, all credentials and document copies are mandatory and fact-checked before listings go live.
               </p>
 
               {/* Strict Legal Warning Banner */}
@@ -437,32 +439,32 @@ export default function ProviderRegistrationModal({
                     STRICT ANTI-FRAUD NOTICE & LEGAL DECLARATION
                   </h4>
                   <p style={{ margin: "0 0 6px", fontSize: "12px", color: "#881337", lineHeight: 1.45 }}>
-                    Submission of forged, counterfeit, altered, or misleading documentation is a serious criminal offense under the Penal Code Act (Cap 87) and Tourism and Hospitality Act No. 13 of the Laws of Zambia.
+                    Submission of forged, counterfeit, altered, or misleading documentation is a serious criminal offense under the Criminal Code Act (Chapter 262) and Tourism Promotion Authority Act of Papua New Guinea.
                   </p>
                   <p style={{ margin: 0, fontSize: "12px", color: "#881337", fontWeight: 700, lineHeight: 1.45 }}>
-                    ⚠️ <strong>Enforcement Action:</strong> Any provider submitting fake details or fraudulent documents will face <strong>immediate permanent blacklisting</strong> and will be <strong>reported directly to the Zambia Police Service (Cyber & Fraud Unit), Drug Enforcement Commission (DEC), and the Zambia Tourism Agency (ZTA) for criminal prosecution</strong>.
+                    ⚠️ <strong>Enforcement Action:</strong> Any provider submitting fake details or fraudulent documents will face <strong>immediate permanent blacklisting</strong> and will be <strong>reported directly to the Royal Papua New Guinea Constabulary (RPNGC Fraud & Cyber Unit) and PNG Tourism Promotion Authority (PNGTPA) for criminal prosecution</strong>.
                   </p>
                 </div>
               </div>
 
               {/* Mandatory Credentials Inputs */}
               <div style={formGroupStyle}>
-                <label style={labelStyle}>ZTA License Number / PACRA Registration Certificate Number *</label>
+                <label style={labelStyle}>PNGTPA Operator License / KTA Permit / IPA Registration Number *</label>
                 <input
                   required
                   style={inputStyle}
-                  placeholder="e.g. ZTA-2026-089 or PACRA 1202600123"
+                  placeholder="e.g. PNGTPA-2026-042, KTA-PERMIT-889, or IPA 1-102948"
                   value={form.licenseOrTpaNumber}
                   onChange={(e) => setForm({ ...form, licenseOrTpaNumber: e.target.value })}
                 />
               </div>
 
               <div style={formGroupStyle}>
-                <label style={labelStyle}>Community Reference / Royal Chiefdom / Local Leader (Name & Phone) *</label>
+                <label style={labelStyle}>Community Reference / Ward Councillor / Village Clan Leader (Name & Phone) *</label>
                 <input
                   required
                   style={inputStyle}
-                  placeholder="e.g. Headman Tembo (+260 977 123456, Kakumbi Chiefdom Mfuwe)"
+                  placeholder="e.g. Ward Member Kila (+675 7234 5678, Sogeri / Kokoda Community Council)"
                   value={form.clanOrReferenceContact}
                   onChange={(e) => setForm({ ...form, clanOrReferenceContact: e.target.value })}
                 />
@@ -472,7 +474,7 @@ export default function ProviderRegistrationModal({
                 <label style={labelStyle}>Sample Standard Pricing Structure ({currencyCode})</label>
                 <input
                   style={inputStyle}
-                  placeholder="e.g. 450 ZMW/day guide, 2400 ZMW/night chalet, 350 ZMW/transfer"
+                  placeholder="e.g. 150 PGK/day guide, 550 PGK/night eco-lodge, 120 PGK/boat transfer"
                   value={form.pricingSample}
                   onChange={(e) => setForm({ ...form, pricingSample: e.target.value })}
                 />
@@ -484,35 +486,35 @@ export default function ProviderRegistrationModal({
                   📁 Mandatory Verification Document Copies (Upload PDF or Image)
                 </strong>
 
-                {/* Upload 1: NRC / Passport */}
+                {/* Upload 1: NID / Passport */}
                 <div style={{ marginBottom: "12px", background: "#fff", padding: "10px 14px", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.1)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
                   <div>
-                    <label style={{ fontSize: "12px", fontWeight: 700, color: "#1e293b", display: "block" }}>1. National Registration Card (NRC) / Passport Copy *</label>
+                    <label style={{ fontSize: "12px", fontWeight: 700, color: "#1e293b", display: "block" }}>1. National ID (NID) Card / PNG Passport Copy *</label>
                     <small style={{ fontSize: "11px", color: "#64748b" }}>{nrcFileName ? `Attached: ${nrcFileName}` : "Format: PDF, JPG, PNG (Max 5MB)"}</small>
                   </div>
                   <label style={{ background: "var(--brand-deep-teal, #0d3838)", color: "#fff", padding: "6px 14px", borderRadius: "6px", fontSize: "12px", fontWeight: 700, cursor: "pointer" }}>
-                    {nrcFileName ? "Change File" : "Upload NRC / Passport"}
+                    {nrcFileName ? "Change File" : "Upload NID / Passport"}
                     <input type="file" accept="image/*,application/pdf" style={{ display: "none" }} onChange={(e) => handleFileUpload(e, "nrcDocumentUrl", setNrcFileName)} />
                   </label>
                 </div>
 
-                {/* Upload 2: ZTA / PACRA Certificate */}
+                {/* Upload 2: PNGTPA / KTA / IPA Certificate */}
                 <div style={{ marginBottom: "12px", background: "#fff", padding: "10px 14px", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.1)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
                   <div>
-                    <label style={{ fontSize: "12px", fontWeight: 700, color: "#1e293b", display: "block" }}>2. ZTA License / PACRA Registration Document *</label>
+                    <label style={{ fontSize: "12px", fontWeight: 700, color: "#1e293b", display: "block" }}>2. PNGTPA License / KTA Permit / IPA Registration Certificate *</label>
                     <small style={{ fontSize: "11px", color: "#64748b" }}>{licenseFileName ? `Attached: ${licenseFileName}` : "Format: PDF, JPG, PNG (Max 5MB)"}</small>
                   </div>
                   <label style={{ background: "var(--brand-deep-teal, #0d3838)", color: "#fff", padding: "6px 14px", borderRadius: "6px", fontSize: "12px", fontWeight: 700, cursor: "pointer" }}>
-                    {licenseFileName ? "Change File" : "Upload License / PACRA"}
+                    {licenseFileName ? "Change File" : "Upload License / IPA"}
                     <input type="file" accept="image/*,application/pdf" style={{ display: "none" }} onChange={(e) => handleFileUpload(e, "licenseDocumentUrl", setLicenseFileName)} />
                   </label>
                 </div>
 
-                {/* Upload 3: Proof of Location / Chiefdom Letter */}
+                {/* Upload 3: Proof of Location / Clan Endorsement Letter */}
                 <div style={{ background: "#fff", padding: "10px 14px", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.1)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "8px" }}>
                   <div>
-                    <label style={{ fontSize: "12px", fontWeight: 700, color: "#1e293b", display: "block" }}>3. Proof of Operating Location / Chiefdom Endorsement Letter</label>
-                    <small style={{ fontSize: "11px", color: "#64748b" }}>{endorsementFileName ? `Attached: ${endorsementFileName}` : "Utility bill, lease, or chiefdom letter (Recommended)"}</small>
+                    <label style={{ fontSize: "12px", fontWeight: 700, color: "#1e293b", display: "block" }}>3. Proof of Operating Location / Ward Council Endorsement Letter</label>
+                    <small style={{ fontSize: "11px", color: "#64748b" }}>{endorsementFileName ? `Attached: ${endorsementFileName}` : "Utility bill, land agreement, or ward council letter (Recommended)"}</small>
                   </div>
                   <label style={{ background: "rgba(0,0,0,0.08)", color: "#1e293b", padding: "6px 14px", borderRadius: "6px", fontSize: "12px", fontWeight: 700, cursor: "pointer" }}>
                     {endorsementFileName ? "Change File" : "Upload Proof"}
@@ -532,7 +534,7 @@ export default function ProviderRegistrationModal({
                     style={{ marginTop: "3px", width: "18px", height: "18px" }}
                   />
                   <span style={{ fontSize: "12px", color: "#78350f", lineHeight: 1.45 }}>
-                    <strong>Legal Declaration & Truthfulness Certification:</strong> I solemnly declare and certify under penalty of immediate permanent platform ban and criminal prosecution that all business details, licenses, and document copies uploaded are 100% genuine, authentic, and legally registered in the Republic of Zambia.
+                    <strong>Legal Declaration & Truthfulness Certification:</strong> I solemnly declare and certify under penalty of immediate permanent platform ban and criminal prosecution that all business details, licenses, and document copies uploaded are 100% genuine, authentic, and legally registered in the Independent State of Papua New Guinea.
                   </span>
                 </label>
               </div>
@@ -543,7 +545,7 @@ export default function ProviderRegistrationModal({
                 </button>
                 <button
                   type="button"
-                  style={{ background: "linear-gradient(135deg, #10b981 0%, #059669 100%)", color: "#fff", border: "none", padding: "12px 24px", borderRadius: "10px", fontSize: "14px", fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 12px rgba(16,185,129,0.3)" }}
+                  style={{ background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)", color: "#fff", border: "none", padding: "12px 24px", borderRadius: "10px", fontSize: "14px", fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 12px rgba(234,88,12,0.3)" }}
                   onClick={handleNextToStep4}
                 >
                   Continue to Commission Agreement →
@@ -552,20 +554,20 @@ export default function ProviderRegistrationModal({
             </div>
           )}
 
-          {/* STEP 4: PAYOUT & 5% + VAT COMMISSION AGREEMENT */}
+          {/* STEP 4: PAYOUT & 5% + GST COMMISSION AGREEMENT */}
           {step === 4 && (
             <div className="wizardStepContent">
-              <h3 style={{ fontSize: "18px", color: "var(--brand-deep-teal, #0d3838)", margin: "0 0 6px", fontWeight: 700 }}>Step 4: Payout Details & 5% + VAT Commission Terms</h3>
+              <h3 style={{ fontSize: "18px", color: "var(--brand-deep-teal, #0d3838)", margin: "0 0 6px", fontWeight: 700 }}>Step 4: Payout Details & 5% + GST Commission Terms</h3>
               <p style={{ fontSize: "13px", color: "var(--text-secondary, #64748b)", margin: "0 0 16px" }}>Transparent pricing. No monthly listing fees. We only earn when you receive verified guest bookings.</p>
 
               {/* Commission Calculator Interactive Card */}
               <div style={{ background: "#f8fafc", border: "1.5px solid rgba(0,0,0,0.1)", borderRadius: "14px", padding: "16px 20px", marginBottom: "20px" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "8px" }}>
                   <strong style={{ fontSize: "14px", color: "var(--brand-deep-teal, #0d3838)" }}>💰 Platform Commission Breakdown</strong>
-                  <span style={{ background: "#10b981", color: "#fff", padding: "3px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: 700 }}>5% + 16% VAT</span>
+                  <span style={{ background: "#10b981", color: "#fff", padding: "3px 8px", borderRadius: "6px", fontSize: "11px", fontWeight: 700 }}>5% + GST</span>
                 </div>
                 <p style={{ fontSize: "12px", color: "#64748b", margin: "0 0 14px", lineHeight: 1.45 }}>
-                  Visit Zambia charges a <strong>5% base platform commission</strong> + <strong>16% Zambia VAT</strong> on the commission (total 5.8% platform fee). You keep <strong>94.2%</strong> of every traveler booking or product sale!
+                  VisitPNG charges a <strong>5% base platform commission</strong> + <strong>10% PNG GST</strong> on the commission (total 5.5% platform fee). You keep <strong>94.5%</strong> of every traveler booking or product sale!
                 </p>
 
                 <div style={{ background: "#fff", border: "1px solid rgba(0,0,0,0.08)", borderRadius: "10px", padding: "12px 16px" }}>
@@ -591,11 +593,11 @@ export default function ProviderRegistrationModal({
                       <span>- {commissionExample.baseCommission.toFixed(2)} {currencyCode}</span>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", color: "#dc2626" }}>
-                      <span>Zambia VAT (16% on fee):</span>
+                      <span>PNG GST (10% on fee):</span>
                       <span>- {commissionExample.gstOnCommission.toFixed(2)} {currencyCode}</span>
                     </div>
                     <div style={{ borderTop: "1.5px solid #e2e8f0", paddingTop: "6px", display: "flex", justifyContent: "space-between", fontSize: "13px", fontWeight: 800, color: "#10b981" }}>
-                      <span>Your Net Payout (94.2%):</span>
+                      <span>Your Net Payout (94.5%):</span>
                       <span>{commissionExample.netProviderPayout.toFixed(2)} {currencyCode}</span>
                     </div>
                   </div>
@@ -610,8 +612,8 @@ export default function ProviderRegistrationModal({
                   value={form.payoutMethod}
                   onChange={(e) => setForm({ ...form, payoutMethod: e.target.value })}
                 >
-                  <option value="bank_transfer">Commercial Bank Transfer (Stanbic, Absa, Zanaco, Standard Chartered, FNB)</option>
-                  <option value="mobile_money">Mobile Money (Airtel Money / MTN MoMo Merchant / Zamtel Kwacha)</option>
+                  <option value="bank_transfer">Commercial Bank Transfer (BSP Financial Group, Kina Bank, ANZ PNG, Westpac PNG)</option>
+                  <option value="mobile_money">Mobile Money (Digicel CellMoni / Vodafone M-PAiSA / BSP Pay Direct)</option>
                 </select>
               </div>
 
@@ -621,7 +623,7 @@ export default function ProviderRegistrationModal({
                   rows={2}
                   required
                   style={{ ...inputStyle, minHeight: "65px", fontFamily: "inherit" }}
-                  placeholder="e.g. Stanbic Bank Zambia · Account Name: Mukambi Safaris Ltd · Account: 913000452109 · Lusaka Branch"
+                  placeholder="e.g. BSP Financial Group · Account Name: Kokoda Trail Expeditions Ltd · Account: 1002345678 · Port Moresby Main Branch"
                   value={form.payoutAccountDetails}
                   onChange={(e) => setForm({ ...form, payoutAccountDetails: e.target.value })}
                 />
@@ -637,7 +639,7 @@ export default function ProviderRegistrationModal({
                     style={{ marginTop: "3px", width: "18px", height: "18px" }}
                   />
                   <span style={{ fontSize: "12px", color: "#14532d", lineHeight: 1.45 }}>
-                    <strong>I agree to the 5% + 16% VAT Platform Commission Terms</strong> and authorize ZamRoam / Visit Zambia to settle net booking proceeds directly to my registered Zambian bank or mobile money account.
+                    <strong>I agree to the 5% + 10% GST Platform Commission Terms</strong> and authorize VisitPNG to settle net booking proceeds directly to my registered Papua New Guinea bank or mobile money account.
                   </span>
                 </label>
               </div>
@@ -649,7 +651,7 @@ export default function ProviderRegistrationModal({
                 <button
                   type="submit"
                   disabled={isSubmitting || !form.agreedToCommission || !form.payoutAccountDetails.trim()}
-                  style={{ background: "linear-gradient(135deg, #10b981 0%, #059669 100%)", color: "#fff", border: "none", padding: "12px 28px", borderRadius: "10px", fontSize: "14px", fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 12px rgba(16,185,129,0.3)" }}
+                  style={{ background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)", color: "#fff", border: "none", padding: "12px 28px", borderRadius: "10px", fontSize: "14px", fontWeight: 800, cursor: "pointer", boxShadow: "0 4px 12px rgba(234,88,12,0.3)" }}
                 >
                   {isSubmitting ? "Submitting Application…" : "Submit Official Provider Application 🚀"}
                 </button>
@@ -663,7 +665,7 @@ export default function ProviderRegistrationModal({
               <div style={{ width: "64px", height: "64px", borderRadius: "50%", background: "#10b981", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "32px", margin: "0 auto 16px" }}>✓</div>
               <h2 style={{ fontSize: "24px", color: "var(--brand-deep-teal, #0d3838)", fontWeight: 800, margin: "0 0 8px" }}>Application Received Successfully!</h2>
               <p style={{ fontSize: "14px", color: "var(--text-secondary, #64748b)", margin: "0 0 20px" }}>
-                Your provider registration and anti-scam credentials have been queued for fact-checking by our Lusaka & Livingstone verification desk.
+                Your provider registration and anti-scam credentials have been queued for fact-checking by our Port Moresby verification desk.
               </p>
 
               <div style={{ background: "#f8fafc", border: "1.5px solid rgba(0,0,0,0.08)", borderRadius: "12px", padding: "16px 20px", display: "inline-block", textAlign: "left", marginBottom: "24px" }}>

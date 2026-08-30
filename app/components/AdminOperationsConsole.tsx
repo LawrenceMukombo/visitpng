@@ -62,7 +62,7 @@ interface AdminOperationsConsoleProps {
   currency?: CurrencyCode;
 }
 
-export default function AdminOperationsConsole({ initialTab = "bookings", currency = "ZMW" }: AdminOperationsConsoleProps) {
+export default function AdminOperationsConsole({ initialTab = "bookings", currency = "PGK" }: AdminOperationsConsoleProps) {
   const [activeTab, setActiveTab] = useState<"bookings" | "reviews" | "disputes">(initialTab);
   const [bookings, setBookings] = useState<BookingRecord[]>([]);
   const [reviews, setReviews] = useState<ReviewRecord[]>([]);

@@ -5,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const country = url.searchParams.get("country")?.toLowerCase() || "zmb";
+  const country = url.searchParams.get("country")?.toLowerCase() || "png";
   const zone = url.searchParams.get("zone")?.toLowerCase();
   const category = url.searchParams.get("category");
   const q = url.searchParams.get("q");

@@ -19,12 +19,11 @@ interface AiChatModalProps {
   supportPhone?: string;
 }
 
-const WHATSAPP_PHONE = "260573506598";
-const WHATSAPP_DISPLAY = "+260 573 506 598";
+const WHATSAPP_PHONE = "6753214188";
+const WHATSAPP_DISPLAY = "+675 321 4188";
 
 // Rich text message formatter for AI responses
 function FormattedAiText({ text }: { text: string }) {
-  // Split into lines
   const lines = text.split("\n");
 
   return (
@@ -35,12 +34,12 @@ function FormattedAiText({ text }: { text: string }) {
           return <div key={idx} style={{ height: "4px" }} />;
         }
 
-        // Bullet point line (starts with • or - or *)
+        // Bullet point line
         if (trimmed.startsWith("•") || trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
           const content = trimmed.replace(/^[•\-\*]\s*/, "");
           return (
             <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "8px", paddingLeft: "4px" }}>
-              <span style={{ color: "rgba(37, 211, 102, 1)", fontSize: "14px", lineHeight: "1.2" }}>▸</span>
+              <span style={{ color: "rgba(249, 115, 22, 1)", fontSize: "14px", lineHeight: "1.2" }}>▸</span>
               <span style={{ flex: 1, fontSize: "13px", lineHeight: "1.5" }}>
                 {renderFormattedInline(content)}
               </span>
@@ -48,7 +47,7 @@ function FormattedAiText({ text }: { text: string }) {
           );
         }
 
-        // Numbered item (e.g. "1. Victoria Falls")
+        // Numbered item
         if (/^\d+\.\s/.test(trimmed)) {
           return (
             <div key={idx} style={{ display: "flex", alignItems: "flex-start", gap: "8px", paddingLeft: "4px" }}>
@@ -62,10 +61,19 @@ function FormattedAiText({ text }: { text: string }) {
           );
         }
 
-        // Header or regular line
+        // Heading line
+        if (trimmed.startsWith("### ") || (trimmed.startsWith("**") && trimmed.endsWith("**") && !trimmed.slice(2, -2).includes("**"))) {
+          const content = trimmed.replace(/^###\s*/, "").replace(/^\*\*/, "").replace(/\*\*$/, "");
+          return (
+            <div key={idx} style={{ fontWeight: 800, color: "rgba(251, 191, 36, 1)", fontSize: "13.5px", marginTop: "4px" }}>
+              {content}
+            </div>
+          );
+        }
+
         return (
-          <div key={idx} style={{ fontSize: "13.5px", lineHeight: "1.5" }}>
-            {renderFormattedInline(line)}
+          <div key={idx} style={{ fontSize: "13px", lineHeight: "1.5" }}>
+            {renderFormattedInline(trimmed)}
           </div>
         );
       })}
@@ -73,8 +81,7 @@ function FormattedAiText({ text }: { text: string }) {
   );
 }
 
-// Parses inline bold **text** and highlights
-function renderFormattedInline(text: string): React.ReactNode {
+function renderFormattedInline(text: string) {
   const parts = text.split(/(\*\*.*?\*\*)/g);
   return parts.map((part, i) => {
     if (part.startsWith("**") && part.endsWith("**")) {
@@ -92,15 +99,15 @@ function renderFormattedInline(text: string): React.ReactNode {
 export function AiChatModal({
   isOpen,
   onClose,
-  countryCode = "ZMB",
-  brandName = "ZamRoam",
-  supportPhone = "+260 573 506 598"
+  countryCode = "PNG",
+  brandName = "VisitPNG",
+  supportPhone = "+675 321 4188"
 }: AiChatModalProps) {
   const [messages, setMessages] = useState<AiChatMessage[]>(() => [
     {
       id: "welcome-1",
       sender: "ai",
-      text: `Mwapoleni! 👋 I am the **${brandName} AI Safari & Cultural Concierge** for ${countryCode === "ZMB" ? "Zambia" : "PNG"}.\n\nAsk me anything about:\n• **Traditional Ceremonies**: Kuomboka, Nc'wala, Likumbi Lya Mize, Umutomboko\n• **National Parks**: South Luangwa walking safaris, Lower Zambezi canoe trails, Kafue\n• **Wonders**: Victoria Falls & Livingstone adventure bookings\n• **Passes & Support**: Instant assistance on WhatsApp (${supportPhone})`,
+      text: `Halo Olgeta! 👋 I am the **${brandName} AI Travel & Cultural Concierge** for Papua New Guinea (${countryCode}).\n\nAsk me anything about:\n• **Kokoda Track**: 96km historic trek, KTA permits, fitness & porters\n• **Cultural Shows**: Goroka Show, Mount Hagen Sing-Sing, Rabaul Mask & Baining Fire Dance\n• **Alpine Summits**: Mount Wilhelm (4,509m) climb logistics\n• **Coral Reefs**: Kimbe Bay & Milne Bay Coral Triangle scuba diving\n• **Passes & Support**: Instant assistance on WhatsApp (${supportPhone})`,
       timestamp: "Just now"
     }
   ]);
@@ -123,11 +130,11 @@ export function AiChatModal({
   if (!isOpen) return null;
 
   const quickPrompts = [
-    "👑 When is the Kuomboka Ceremony?",
-    "🦁 Best time for South Luangwa Walking Safaris?",
-    "🌊 Victoria Falls Devil's Pool & Activities",
-    "📅 Plan a 5-Day Zambia Safari Itinerary",
-    "💬 Talk to Human Concierge on WhatsApp"
+    "🥾 How do I prepare for the Kokoda Track?",
+    "♨ When is the Goroka Cultural Show?",
+    "🤿 Best season for Kimbe Bay Diving?",
+    "⛰️ How do I climb Mount Wilhelm (4,509m)?",
+    "📅 Plan a 7-Day PNG Itinerary"
   ];
 
   const generateAiReply = (query: string): { reply: string; showWhatsApp?: boolean } => {
@@ -135,109 +142,104 @@ export function AiChatModal({
 
     if (q.includes("whatsapp") || q.includes("human") || q.includes("agent") || q.includes("phone") || q.includes("contact") || q.includes("call")) {
       return {
-        reply: `You can reach our dedicated ZamRoam 24/7 Concierge team directly on WhatsApp at **${WHATSAPP_DISPLAY}** or email **info@zamroam.com**.\n\nClick the button below to start a live WhatsApp chat!`,
+        reply: `You can reach our dedicated VisitPNG 24/7 Concierge team directly on WhatsApp / Phone at **${WHATSAPP_DISPLAY}** or email **info@visitpng.com**.\n\nClick the button below to start a direct consultation!`,
         showWhatsApp: true
       };
     }
 
-    if (q.includes("kuomboka") || q.includes("litunga") || q.includes("nalikwanda") || q.includes("mongu") || q.includes("barotse")) {
+    if (q.includes("kokoda") || q.includes("track") || q.includes("owers") || q.includes("kta") || q.includes("fuzz")) {
       return {
-        reply: `👑 **Kuomboka Traditional Ceremony (Western Province / Barotseland)**:\n• **Royal Host**: His Majesty The Litunga & the Barotse Royal Establishment.\n• **When**: Annually between March & April when the Zambezi River floods the plains.\n• **Experience**: The Litunga moves from the summer palace in Lealui to Limulunga in the 100-oarsmen Nalikwanda barge accompanied by the booming Royal Maoma drums.\n• **Dress Code**: Traditional Siziba (men) & Musisi (women).\n• **Access**: Public attendance is free; VIP grandstand tickets start from ZMW 1,800.`,
+        reply: `🥾 **Kokoda Track 96km Pilgrimage (Central & Oro Provinces)**:\n• **Overview**: 8-to-10 day mountain pilgrimage between Owers' Corner and Kokoda Station across the Owen Stanley Range.\n• **Mandatory Clearance**: Official Kokoda Track Authority (KTA) Trekker Permit (K 650).\n• **Best Season**: Dry trekking window from April to October (Anzac Day in April is peak).\n• **Fitness**: High cardiovascular endurance required; always hire an accredited local carrier/porter to support landowner communities.`,
         showWhatsApp: true
       };
     }
 
-    if (q.includes("nc'wala") || q.includes("ncwala") || q.includes("mpezeni") || q.includes("ngoni") || q.includes("chipata")) {
+    if (q.includes("goroka") || q.includes("asaro") || q.includes("mudmen") || q.includes("sing-sing") || q.includes("show")) {
       return {
-        reply: `🛡️ **Nc'wala Traditional Ceremony (Eastern Province / Chipata)**:\n• **Royal Host**: Paramount Chief Mpezeni of the Ngoni people.\n• **When**: Last Saturday of February at Mutenguleni arena.\n• **Highlight**: Thousands of warrior impis in leopard skins dancing the thunderous Ingoma dance, followed by the tasting of the fresh harvest maize.\n• **Nearby**: Combine your trip with a walking safari in South Luangwa National Park!`,
+        reply: `♨ **Goroka Cultural Show (Eastern Highlands Province)**:\n• **When**: Annual PNG Independence weekend (Mid-September).\n• **Highlight**: Over 100 highland and coastal tribes performing simultaneous sing-sings in authentic bilas feathers, face-paint, and Kundu drums.\n• **Iconic Group**: The mystical Asaro Mudmen with heavy clay masks and bamboo finger spears.\n• **Access**: General arena passes (K 100) or VIP Photographers packages (K 350).`,
         showWhatsApp: true
       };
     }
 
-    if (q.includes("likumbi") || q.includes("mize") || q.includes("makishi") || q.includes("zambezi") || q.includes("luvale")) {
+    if (q.includes("hagen") || q.includes("melpa") || q.includes("wahgi")) {
       return {
-        reply: `🎭 **Likumbi Lya Mize Cultural Festival (North-Western Province)**:\n• **UNESCO Masterpiece**: Inscribed by UNESCO as a Masterpiece of Oral and Intangible Heritage.\n• **When**: Last week of August at Mize Palace across the Zambezi River.\n• **Highlight**: Over 50 sacred Makishi masked spirit dancers (Kayipu, Mwana Pwevo, Chizaluke) celebrating the Mukanda initiation rites.`,
+        reply: `👑 **Mount Hagen Cultural Show (Western Highlands)**:\n• **When**: Mid-August annually at Rabiamul grounds.\n• **Highlight**: Flamboyant Melpa warrior sing-sings, giant Bird of Paradise feather headdresses, and shell trade currency traditions.\n• **Stays**: Rondon Ridge Lodge, Highlander Hotel.`,
         showWhatsApp: true
       };
     }
 
-    if (q.includes("victoria falls") || q.includes("livingstone") || q.includes("mosi") || q.includes("devil")) {
+    if (q.includes("wilhelm") || q.includes("summit") || q.includes("climb") || q.includes("mountain") || q.includes("simbu")) {
       return {
-        reply: `🌊 **Victoria Falls & Livingstone (Southern Province)**:\n• **Status**: UNESCO World Heritage Wonder (Mosi-oa-Tunya — "The Smoke that Thunders").\n• **Top Highlights**: Devil's Pool swim on Livingstone Island (Aug–Jan), Helicopter Flight of Angels, Zambezi sunset cruises, and white-water rafting in Batoka Gorge.\n• **Getting There**: Fly into Harry Mwaanga Nkumbula International Airport (LVI) or 6 hours drive from Lusaka.`,
+        reply: `⛰️ **Mount Wilhelm Alpine Expedition (Simbu / Chimbu Province)**:\n• **Elevation**: 4,509 meters (14,793 ft) — the highest peak in Papua New Guinea.\n• **Basecamp**: Keglsugl village at 2,800m elevation.\n• **Trek Route**: Ascent via glacial tarns Lake Piunde and Lake Aunde; summit push begins at 1:00 AM.\n• **Climb Permit**: CEPA / Simbu Provincial Conservation Pass (K 220).`,
         showWhatsApp: true
       };
     }
 
-    if (q.includes("south luangwa") || q.includes("luangwa") || q.includes("walking") || q.includes("leopard") || q.includes("mfuwe")) {
+    if (q.includes("kimbe") || q.includes("dive") || q.includes("scuba") || q.includes("coral") || q.includes("walindi") || q.includes("rabaul") || q.includes("tufi")) {
       return {
-        reply: `🦁 **South Luangwa National Park & Mfuwe**:\n• **Reputation**: The undisputed birthplace of the African Walking Safari and Africa's top leopard destination.\n• **Best Time to Visit**: Dry season from June to October for exceptional game concentration along the Luangwa river lagoons.\n• **Experiences**: Morning bush walks led by armed scouts, nocturnal spotlight drives, and luxury tented camps.`,
+        reply: `🤿 **Coral Triangle Scuba Diving & Marine Sanctuaries**:\n• **Kimbe Bay (West New Britain)**: Over 860 reef fish species, emerald seamounts, and Walindi Plantation Resort.\n• **Tufi Fjords (Oro Province)**: Volcanic calderas plunging into coral drop-offs with hammerhead sharks.\n• **Milne Bay & Tawali**: World-famous muck diving, manta rays, and Kenu war canoe regattas.\n• **Rabaul (East New Britain)**: WWII warship and aircraft wrecks alongside active Mount Tavurvur volcano views.`,
         showWhatsApp: true
       };
     }
 
-    if (q.includes("itinerary") || q.includes("plan") || q.includes("5 day") || q.includes("7 day") || q.includes("days")) {
+    if (q.includes("sepik") || q.includes("crocodile") || q.includes("tambaran") || q.includes("river")) {
       return {
-        reply: `🧭 **Recommended 5-Day Classic Zambia Highlights Itinerary**:\n• **Day 1**: Arrive in Lusaka (LUN) → Connect to Livingstone → Sunset cruise on the upper Zambezi River.\n• **Day 2**: Guided Victoria Falls rainforest walk + Helicopter Flight of Angels + High tea at Royal Livingstone.\n• **Day 3**: Fly to Mfuwe (South Luangwa) → Check-in to river lodge → Afternoon sunset game drive.\n• **Day 4**: Dawn walking safari with master guide + Evening spotlight leopard drive along Luangwa lagoons.\n• **Day 5**: Morning birding & photography safari → Return flight to Lusaka for international connection.\n\nWould you like our concierge to customize this for your dates?`,
+        reply: `🐊 **Sepik River Cultural Expedition (East Sepik Province)**:\n• **Highlights**: Grand Sepik River canoe journeys, towering Haus Tambaran sacred spirit houses, and master woodcarvers.\n• **August Special**: Sepik River Crocodile Festival in Ambunti celebrating the sacred river crocodile bond.`,
         showWhatsApp: true
       };
     }
 
-    if (q.includes("lower zambezi") || q.includes("canoe") || q.includes("tiger fish")) {
+    if (q.includes("itinerary") || q.includes("plan") || q.includes("7 day") || q.includes("days")) {
       return {
-        reply: `🛶 **Lower Zambezi National Park**:\n• **Highlights**: Multi-day canoe safaris drifting past elephant herds, catch-and-release tiger fishing, and luxury riverfront lodges.\n• **Access**: 30-minute charter flight from Lusaka or 3-hour transfer via Chirundu / Royal airstrip.`,
+        reply: `🧭 **Recommended 7-Day Papua New Guinea Highlights Itinerary**:\n• **Day 1**: Arrive Port Moresby (POM) → National Museum & Nature Park → Sunset at Ela Beach.\n• **Day 2**: Fly to Mount Hagen → Melpa village sing-sing & coffee plantation tour.\n• **Day 3**: Scenic highland drive to Goroka → Asaro Mudmen performance → J.K. McCarthy Museum.\n• **Day 4**: Fly to Hoskins (Kimbe Bay) → Check-in to Walindi Resort → Afternoon reef snorkel.\n• **Day 5**: 2-Tank scuba dive on Inglis Shoal & Bradford Seamount.\n• **Day 6**: Hot springs trek & Bird of Paradise canopy walk in West New Britain.\n• **Day 7**: Morning flight back to Port Moresby for international connection.\n\nWould you like our Wantok AI Concierge to customize this for your dates?`,
         showWhatsApp: true
       };
     }
 
     if (q.includes("pass") || q.includes("membership") || q.includes("discount") || q.includes("rates") || q.includes("price")) {
       return {
-        reply: `🎟️ **ZamRoam Pass & Membership Privileges**:\n• Unlock up to 25% off verified safari lodges, Victoria Falls helicopter tours, car rentals, and ceremony VIP grandstand seating across Zambia.\n• Digital QR Pass is stored directly in your wallet for instant offline verification!`,
+        reply: `🎟️ **VisitPNG Pass & Membership Privileges**:\n• Unlock up to 20% off verified eco-lodges, dive operators, Kokoda expeditions, and cultural show VIP passes across all 22 provinces.\n• Dynamic QR pass is saved directly on your mobile device for offline verification in remote areas!`,
         showWhatsApp: true
       };
     }
 
     return {
-      reply: `Zambia is an extraordinary destination with 10 peaceful provinces, 20 national parks, and over 60 traditional ceremonies!\n\nWhether you are looking for:\n1. **Victoria Falls & Livingstone Adventures**\n2. **South Luangwa & Lower Zambezi Safaris**\n3. **Kuomboka & Royal Traditional Ceremonies**\n4. **Lake Tanganyika & Bangweulu Wetlands**\n5. **Direct assistance on WhatsApp (${WHATSAPP_DISPLAY})**\n\nFeel free to ask a specific question, or chat with our team on WhatsApp!`,
+      reply: `Papua New Guinea is an extraordinary destination across 22 provinces, 4 regions, and over 800 indigenous cultures!\n\nWhether you are looking for:\n1. **Kokoda Track & Mount Wilhelm Treks**\n2. **Goroka, Mount Hagen & Rabaul Sing-Sing Festivals**\n3. **Kimbe Bay, Tufi & Milne Bay Coral Reef Diving**\n4. **Sepik River Spirit Houses & Crocodile Culture**\n5. **Direct assistance on WhatsApp (${WHATSAPP_DISPLAY})**\n\nFeel free to ask a specific question, or chat directly with our team!`,
       showWhatsApp: true
     };
   };
 
   const handleSend = (textToSend?: string) => {
-    const text = textToSend || inputValue.trim();
-    if (!text) return;
+    const query = (textToSend || inputValue).trim();
+    if (!query) return;
 
-    const nextId = msgCounter + 1;
+    const msgId = `user-msg-${msgCounter}`;
     const userMsg: AiChatMessage = {
-      id: `user-msg-${nextId}`,
+      id: msgId,
       sender: "user",
-      text,
-      timestamp: "Today"
+      text: query,
+      timestamp: "Just now"
     };
 
-    setMsgCounter(nextId + 1);
-    setMessages((prev) => [...prev, userMsg]);
-    if (!textToSend) setInputValue("");
+    setMessages(prev => [...prev, userMsg]);
+    setInputValue("");
+    setMsgCounter(prev => prev + 1);
     setIsTyping(true);
 
     setTimeout(() => {
-      const { reply, showWhatsApp } = generateAiReply(text);
+      const { reply, showWhatsApp } = generateAiReply(query);
       const aiMsg: AiChatMessage = {
-        id: `ai-msg-${nextId + 1}`,
+        id: `ai-msg-${msgCounter + 1}`,
         sender: "ai",
         text: reply,
-        timestamp: "Today",
+        timestamp: "Just now",
         whatsappPrompt: showWhatsApp
       };
-      setMessages((prev) => [...prev, aiMsg]);
-      setIsTyping(false);
-    }, 700);
-  };
 
-  const openWhatsApp = (customText?: string) => {
-    const text = encodeURIComponent(
-      customText || "Hello ZamRoam Concierge! I would like assistance planning my trip and ceremony visits in Zambia."
-    );
-    window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${text}`, "_blank");
+      setMessages(prev => [...prev, aiMsg]);
+      setIsTyping(false);
+      setMsgCounter(prev => prev + 1);
+    }, 600);
   };
 
   return (
@@ -245,158 +247,126 @@ export function AiChatModal({
       style={{
         position: "fixed",
         inset: 0,
-        background: "rgba(0, 0, 0, 0.75)",
-        backdropFilter: "blur(6px)",
-        zIndex: 99999,
+        background: "rgba(3, 47, 43, 0.82)",
+        backdropFilter: "blur(8px)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        zIndex: 99999,
         padding: "16px"
       }}
       onClick={onClose}
     >
       <div
+        onClick={e => e.stopPropagation()}
         style={{
-          background: "linear-gradient(180deg, rgba(16, 44, 44, 1) 0%, rgba(8, 26, 26, 1) 100%)",
-          color: "var(--brand-white)",
-          borderRadius: "20px",
-          maxWidth: "520px",
           width: "100%",
-          height: "82vh",
+          maxWidth: "540px",
+          height: "640px",
+          maxHeight: "90vh",
+          background: "#0D2B27",
+          border: "1.5px solid rgba(234, 88, 12, 0.45)",
+          borderRadius: "20px",
           display: "flex",
           flexDirection: "column",
-          boxShadow: "0 24px 60px rgba(0, 0, 0, 0.7)",
-          border: "1px solid rgba(255, 255, 255, 0.15)",
           overflow: "hidden",
+          boxShadow: "0 25px 50px -12px rgba(0,0,0,0.7)",
+          color: "#ffffff",
           fontFamily: "Ubuntu, sans-serif"
         }}
-        onClick={(e) => e.stopPropagation()}
       >
-        {/* Chat Header */}
+        {/* Modal Header */}
         <div
           style={{
             padding: "16px 20px",
-            background: "rgba(6, 20, 20, 0.95)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+            background: "linear-gradient(135deg, #103630 0%, #164E44 100%)",
+            borderBottom: "1px solid rgba(255,255,255,0.1)",
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between"
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <div
               style={{
-                width: "42px",
-                height: "42px",
+                width: "36px",
+                height: "36px",
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, rgba(37, 211, 102, 1) 0%, rgba(16, 185, 129, 1) 100%)",
+                background: "#EA580C",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "22px",
-                boxShadow: "0 4px 12px rgba(37, 211, 102, 0.3)"
+                fontSize: "18px",
+                boxShadow: "0 0 12px rgba(234, 88, 12, 0.5)"
               }}
             >
-              🦁
+              🧠
             </div>
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 800, color: "var(--brand-white)" }}>
-                  {brandName} AI Concierge
-                </h3>
-                <span
-                  style={{
-                    display: "inline-block",
-                    width: "8px",
-                    height: "8px",
-                    borderRadius: "50%",
-                    background: "rgba(37, 211, 102, 1)",
-                    boxShadow: "0 0 8px rgba(37, 211, 102, 1)"
-                  }}
-                />
-              </div>
-              <p style={{ margin: "2px 0 0", fontSize: "11px", color: "rgba(255, 255, 255, 0.7)" }}>
-                Instant Safari & Ceremony Assistant · 24/7
-              </p>
+              <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 800, color: "#ffffff" }}>
+                Wantok AI Concierge
+              </h3>
+              <span style={{ fontSize: "11px", color: "#FDBA74", display: "flex", alignItems: "center", gap: "4px" }}>
+                <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#22C55E" }} />
+                Online · Papua New Guinea Travel Intelligence
+              </span>
             </div>
           </div>
 
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <button
-              type="button"
-              onClick={() => openWhatsApp()}
-              style={{
-                background: "rgba(37, 211, 102, 0.2)",
-                border: "1px solid rgba(37, 211, 102, 0.5)",
-                color: "rgba(37, 211, 102, 1)",
-                padding: "6px 12px",
-                borderRadius: "20px",
-                fontSize: "12px",
-                fontWeight: 700,
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px"
-              }}
-            >
-              <span>💬 WhatsApp</span>
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              style={{
-                background: "rgba(255, 255, 255, 0.1)",
-                border: "none",
-                color: "var(--brand-white)",
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                cursor: "pointer",
-                fontSize: "15px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
-            >
-              ✕
-            </button>
-          </div>
-        </div>
-
-        {/* WhatsApp Banner */}
-        <div
-          style={{
-            background: "linear-gradient(90deg, rgba(18, 140, 126, 0.25) 0%, rgba(37, 211, 102, 0.25) 100%)",
-            padding: "8px 16px",
-            borderBottom: "1px solid rgba(37, 211, 102, 0.2)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            fontSize: "12px"
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", color: "rgba(255, 255, 255, 0.9)" }}>
-            <span style={{ fontSize: "14px" }}>📱</span>
-            <span>
-              Official Support: <strong>{WHATSAPP_DISPLAY}</strong>
-            </span>
-          </div>
-          <a
-            href={`https://wa.me/${WHATSAPP_PHONE}`}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            onClick={onClose}
             style={{
-              color: "rgba(37, 211, 102, 1)",
-              fontWeight: 800,
-              textDecoration: "underline",
-              cursor: "pointer"
+              background: "rgba(255,255,255,0.1)",
+              border: "none",
+              color: "#ffffff",
+              width: "30px",
+              height: "30px",
+              borderRadius: "50%",
+              cursor: "pointer",
+              fontSize: "16px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center"
             }}
           >
-            Chat Live →
-          </a>
+            ✕
+          </button>
         </div>
 
-        {/* Chat Messages Body */}
+        {/* Quick Suggestion Pills */}
+        <div
+          style={{
+            padding: "8px 16px",
+            background: "rgba(0,0,0,0.2)",
+            borderBottom: "1px solid rgba(255,255,255,0.05)",
+            overflowX: "auto",
+            whiteSpace: "nowrap",
+            display: "flex",
+            gap: "6px"
+          }}
+        >
+          {quickPrompts.map((p, i) => (
+            <button
+              key={i}
+              onClick={() => handleSend(p)}
+              style={{
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                color: "#E2E8F0",
+                borderRadius: "16px",
+                padding: "4px 10px",
+                fontSize: "11px",
+                fontWeight: 600,
+                cursor: "pointer",
+                flexShrink: 0
+              }}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+
+        {/* Messages Scroll Area */}
         <div
           style={{
             flex: 1,
@@ -404,157 +374,119 @@ export function AiChatModal({
             overflowY: "auto",
             display: "flex",
             flexDirection: "column",
-            gap: "14px"
+            gap: "12px"
           }}
         >
-          {messages.map((m) => {
-            const isAi = m.sender === "ai";
-            return (
+          {messages.map(msg => (
+            <div
+              key={msg.id}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: msg.sender === "user" ? "flex-end" : "flex-start"
+              }}
+            >
               <div
-                key={m.id}
                 style={{
-                  alignSelf: isAi ? "flex-start" : "flex-end",
-                  maxWidth: "88%",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: isAi ? "flex-start" : "flex-end"
+                  maxWidth: "85%",
+                  padding: "12px 16px",
+                  borderRadius: msg.sender === "user" ? "16px 16px 2px 16px" : "16px 16px 16px 2px",
+                  background: msg.sender === "user" ? "linear-gradient(135deg, #EA580C 0%, #F97316 100%)" : "rgba(255,255,255,0.08)",
+                  border: msg.sender === "user" ? "none" : "1px solid rgba(255,255,255,0.1)",
+                  color: "#ffffff"
                 }}
               >
-                <div
-                  style={{
-                    background: isAi ? "rgba(255, 255, 255, 0.08)" : "rgba(37, 211, 102, 0.95)",
-                    color: isAi ? "rgba(255, 255, 255, 0.95)" : "rgba(0, 0, 0, 1)",
-                    borderRadius: isAi ? "16px 16px 16px 4px" : "16px 16px 4px 16px",
-                    padding: "12px 16px",
-                    fontSize: "13.5px",
-                    lineHeight: 1.55,
-                    border: isAi ? "1px solid rgba(255, 255, 255, 0.12)" : "none",
-                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)"
-                  }}
-                >
-                  {isAi ? <FormattedAiText text={m.text} /> : m.text}
+                {msg.sender === "ai" ? (
+                  <FormattedAiText text={msg.text} />
+                ) : (
+                  <div style={{ fontSize: "13.5px", lineHeight: 1.4 }}>{msg.text}</div>
+                )}
 
-                  {/* WhatsApp escalation button within message */}
-                  {m.whatsappPrompt && (
-                    <div style={{ marginTop: "12px", paddingTop: "10px", borderTop: "1px solid rgba(255, 255, 255, 0.15)" }}>
-                      <button
-                        type="button"
-                        onClick={() => openWhatsApp(`Hello! I am inquiring regarding: ${m.text.slice(0, 60)}...`)}
-                        style={{
-                          background: "rgba(37, 211, 102, 1)",
-                          color: "rgba(0, 0, 0, 1)",
-                          border: "none",
-                          padding: "8px 14px",
-                          borderRadius: "8px",
-                          fontSize: "12px",
-                          fontWeight: 800,
-                          cursor: "pointer",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "6px"
-                        }}
-                      >
-                        <span>💬 Chat on WhatsApp ({WHATSAPP_DISPLAY})</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <span style={{ fontSize: "10px", color: "rgba(255, 255, 255, 0.45)", marginTop: "4px", padding: "0 4px" }}>
-                  {m.timestamp}
-                </span>
+                {msg.whatsappPrompt && (
+                  <div style={{ marginTop: "10px", borderTop: "1px solid rgba(255,255,255,0.15)", paddingTop: "8px" }}>
+                    <a
+                      href={`https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent("Hello VisitPNG Team, I need travel assistance.")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "6px",
+                        background: "#25D366",
+                        color: "#ffffff",
+                        padding: "6px 12px",
+                        borderRadius: "6px",
+                        fontSize: "12px",
+                        fontWeight: 700,
+                        textDecoration: "none"
+                      }}
+                    >
+                      💬 Chat with Human Specialist on WhatsApp
+                    </a>
+                  </div>
+                )}
               </div>
-            );
-          })}
+              <span style={{ fontSize: "10px", color: "rgba(255,255,255,0.4)", marginTop: "4px", marginInline: "6px" }}>
+                {msg.timestamp}
+              </span>
+            </div>
+          ))}
 
           {isTyping && (
-            <div style={{ alignSelf: "flex-start", display: "flex", alignItems: "center", gap: "8px", padding: "10px 16px", background: "rgba(255,255,255,0.06)", borderRadius: "16px 16px 16px 4px" }}>
-              <span style={{ fontSize: "12px", color: "rgba(37, 211, 102, 1)" }}>🦁 ZamRoam AI is formulating response...</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#FDBA74", fontSize: "12px", padding: "8px" }}>
+              <span className="typingDot">●</span>
+              <span className="typingDot">●</span>
+              <span className="typingDot">●</span>
+              <span>Wantok AI is thinking…</span>
             </div>
           )}
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Quick Suggestion Chips */}
-        <div
-          style={{
-            padding: "8px 14px",
-            background: "rgba(0, 0, 0, 0.3)",
-            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
-            display: "flex",
-            gap: "8px",
-            overflowX: "auto",
-            whiteSpace: "nowrap"
-          }}
-        >
-          {quickPrompts.map((prompt, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => handleSend(prompt)}
-              style={{
-                background: "rgba(255, 255, 255, 0.08)",
-                border: "1px solid rgba(255, 255, 255, 0.15)",
-                color: "rgba(255, 255, 255, 0.85)",
-                padding: "5px 11px",
-                borderRadius: "14px",
-                fontSize: "11px",
-                cursor: "pointer",
-                flexShrink: 0
-              }}
-            >
-              {prompt}
-            </button>
-          ))}
-        </div>
-
-        {/* Chat Input Field */}
+        {/* Input Bar */}
         <form
-          onSubmit={(e) => {
+          onSubmit={e => {
             e.preventDefault();
             handleSend();
           }}
           style={{
             padding: "12px 16px",
-            background: "rgba(6, 20, 20, 0.95)",
-            borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+            background: "rgba(0,0,0,0.3)",
+            borderTop: "1px solid rgba(255,255,255,0.1)",
             display: "flex",
-            alignItems: "center",
-            gap: "10px"
+            gap: "8px"
           }}
         >
           <input
             type="text"
+            placeholder="Ask about Kokoda, Goroka Show, diving, permits…"
             value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Ask about Victoria Falls, Kuomboka, safaris, passes..."
+            onChange={e => setInputValue(e.target.value)}
             style={{
               flex: 1,
-              background: "rgba(255, 255, 255, 0.08)",
-              border: "1px solid rgba(255, 255, 255, 0.15)",
-              color: "var(--brand-white)",
-              borderRadius: "12px",
               padding: "10px 14px",
+              borderRadius: "10px",
+              background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.2)",
+              color: "#ffffff",
               fontSize: "13px",
               outline: "none"
             }}
           />
           <button
             type="submit"
-            disabled={!inputValue.trim()}
             style={{
-              background: inputValue.trim()
-                ? "linear-gradient(135deg, rgba(37, 211, 102, 1) 0%, rgba(16, 185, 129, 1) 100%)"
-                : "rgba(255, 255, 255, 0.1)",
-              color: inputValue.trim() ? "rgba(0, 0, 0, 1)" : "rgba(255, 255, 255, 0.4)",
+              background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
+              color: "#ffffff",
               border: "none",
-              borderRadius: "12px",
-              padding: "10px 16px",
-              fontWeight: 800,
-              fontSize: "13px",
-              cursor: inputValue.trim() ? "pointer" : "default"
+              borderRadius: "10px",
+              padding: "0 18px",
+              fontSize: "13.5px",
+              fontWeight: 700,
+              cursor: "pointer"
             }}
           >
-            Send
+            Send ➜
           </button>
         </form>
       </div>
@@ -562,110 +494,32 @@ export function AiChatModal({
   );
 }
 
-// Floating Quick Action Widget on screen with Auto-Hide / Auto-Collapse
 export function FloatingConciergeWidget({ onOpenAiChat }: { onOpenAiChat: () => void }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  useEffect(() => {
-    // Show expanded briefly on initial load for 3.5s, then collapse to discreet floating icon badges
-    const initialTimer = setTimeout(() => {
-      setIsExpanded(false);
-    }, 3500);
-
-    let scrollTimeout: NodeJS.Timeout;
-    const handleActivity = () => {
-      setIsExpanded(true);
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        setIsExpanded(false);
-      }, 3000);
-    };
-
-    window.addEventListener("scroll", handleActivity, { passive: true });
-    return () => {
-      clearTimeout(initialTimer);
-      clearTimeout(scrollTimeout);
-      window.removeEventListener("scroll", handleActivity);
-    };
-  }, []);
-
-  const openWhatsApp = () => {
-    const text = encodeURIComponent("Hello ZamRoam team! I need assistance with Zambia travel and safari bookings.");
-    window.open(`https://wa.me/${WHATSAPP_PHONE}?text=${text}`, "_blank");
-  };
-
   return (
-    <aside
-      aria-label="Concierge and WhatsApp support"
-      onMouseEnter={() => setIsExpanded(true)}
-      onMouseLeave={() => setIsExpanded(false)}
-      style={{
-        position: "fixed",
-        bottom: "84px",
-        right: "16px",
-        zIndex: 9000,
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-        alignItems: "flex-end",
-        transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-      }}
-    >
-      {/* WhatsApp Quick Button */}
-      <button
-        type="button"
-        onClick={openWhatsApp}
-        title="Chat on WhatsApp (+260 573 506 598)"
-        style={{
-          background: "linear-gradient(135deg, rgba(37, 211, 102, 1) 0%, rgba(18, 140, 126, 1) 100%)",
-          color: "rgba(255, 255, 255, 1)",
-          border: "none",
-          borderRadius: "28px",
-          padding: isExpanded ? "9px 15px" : "9px 12px",
-          display: "flex",
-          alignItems: "center",
-          gap: isExpanded ? "8px" : "0px",
-          fontWeight: 800,
-          fontSize: "12px",
-          boxShadow: "0 4px 14px rgba(37, 211, 102, 0.35)",
-          cursor: "pointer",
-          transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-          fontFamily: "Ubuntu, sans-serif",
-          whiteSpace: "nowrap",
-          opacity: 0.95
-        }}
-      >
-        <span style={{ fontSize: "16px" }}>💬</span>
-        {isExpanded && <span>WhatsApp Support</span>}
-      </button>
-
-      {/* AI Safari Concierge Button */}
+    <div style={{ position: "fixed", bottom: "76px", right: "20px", zIndex: 999 }}>
       <button
         type="button"
         onClick={onOpenAiChat}
-        title="Ask ZamRoam AI Safari Concierge"
+        aria-label="Open Wantok AI Concierge"
         style={{
-          background: "linear-gradient(135deg, rgba(16, 52, 52, 1) 0%, rgba(6, 24, 24, 1) 100%)",
-          color: "var(--brand-white)",
-          border: "1.5px solid rgba(37, 211, 102, 0.7)",
-          borderRadius: "28px",
-          padding: isExpanded ? "9px 15px" : "9px 12px",
+          background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
+          color: "#ffffff",
+          border: "2px solid rgba(255,255,255,0.4)",
+          borderRadius: "99px",
+          padding: "10px 16px",
           display: "flex",
           alignItems: "center",
-          gap: isExpanded ? "8px" : "0px",
+          gap: "8px",
           fontWeight: 800,
-          fontSize: "12px",
-          boxShadow: "0 4px 14px rgba(0, 0, 0, 0.35)",
-          cursor: "pointer",
-          transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-          fontFamily: "Ubuntu, sans-serif",
-          whiteSpace: "nowrap",
-          opacity: 0.95
+          fontSize: "13px",
+          boxShadow: "0 8px 24px rgba(234, 88, 12, 0.45)",
+          cursor: "pointer"
         }}
       >
-        <span style={{ fontSize: "16px" }}>🦁</span>
-        {isExpanded && <span>Ask Safari AI</span>}
+        <span style={{ fontSize: "16px" }}>🤖</span>
+        <span>Wantok AI</span>
       </button>
-    </aside>
+    </div>
   );
 }
+

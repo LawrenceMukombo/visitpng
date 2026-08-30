@@ -2,55 +2,55 @@
 
 import React, { useState } from "react";
 
-export function CountryIntroBanner({ countryCode = "ZMB" }: { countryCode?: string }) {
+export function CountryIntroBanner({ countryCode = "PNG" }: { countryCode?: string }) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   return (
-    <div className="countryShowcaseBanner" style={{ borderLeft: "4px solid #DE7739" }}>
+    <div className="countryShowcaseBanner" style={{ borderLeft: "4px solid #EA580C" }}>
       {/* Intro Top Pill & Title */}
       <div className="showcaseHeader">
-        <span className="destinationPill" style={{ background: "#DE7739", color: "#fff" }}>
-          🦁 Welcome to Zambia — The Real Africa
+        <span className="destinationPill" style={{ background: "#EA580C", color: "#fff" }}>
+          🇵🇬 Welcome to Papua New Guinea ({countryCode}) — Land of a Million Journeys
         </span>
-        <h2>The Home of Victoria Falls & Legendary Walking Safaris</h2>
+        <h2>The Home of the Kokoda Track, Coral Triangle Diving & 800+ Living Cultures</h2>
         <p className="showcaseLead">
-          Positioned in the warm heart of Southern Africa, Zambia is one of the world&apos;s premier safari destinations.
-          Home to the majestic Victoria Falls (Mosi-oa-Tunya), the wildlife-rich Luangwa Valley, peaceful Zambezi waterways,
-          and legendary African hospitality across 10 peaceful provinces.
+          Positioned in the vibrant heart of the South Pacific, Papua New Guinea is one of Earth&apos;s last great frontiers.
+          Home to the historic 96km Kokoda Track, alpine summits of Mount Wilhelm, world-class Coral Triangle scuba diving,
+          and celebrated sing-sing cultural festivals across 22 provinces.
         </p>
       </div>
 
       {/* Fast Facts Grid */}
       <div className="fastFactsGrid">
         <div className="fastFactCard">
-          <span className="factIcon">🌊</span>
+          <span className="factIcon">🥾</span>
           <div className="factText">
-            <strong>Victoria Falls</strong>
-            <small>Mosi-oa-Tunya World Wonder</small>
+            <strong>Kokoda Track</strong>
+            <small>Historic 96km Owen Stanley pilgrimage</small>
           </div>
         </div>
 
         <div className="fastFactCard">
-          <span className="factIcon">🦁</span>
+          <span className="factIcon">⛰️</span>
           <div className="factText">
-            <strong>South Luangwa</strong>
-            <small>Birthplace of walking safaris</small>
+            <strong>Mount Wilhelm</strong>
+            <small>Highest summit in PNG (4,509m)</small>
           </div>
         </div>
 
         <div className="fastFactCard">
-          <span className="factIcon">🛶</span>
+          <span className="factIcon">🤿</span>
           <div className="factText">
-            <strong>Lower Zambezi</strong>
-            <small>World-class river & canoe trails</small>
+            <strong>Kimbe Bay Reefs</strong>
+            <small>World-renowned Coral Triangle biodiversity</small>
           </div>
         </div>
 
         <div className="fastFactCard">
           <span className="factIcon">✈️</span>
           <div className="factText">
-            <strong>Kenneth Kaunda (LUN)</strong>
-            <small>Direct flights from Addis, JNB, DXB, DOH</small>
+            <strong>Jacksons Intl (POM)</strong>
+            <small>Direct flights from Brisbane, Sydney, Singapore, Manila</small>
           </div>
         </div>
       </div>
@@ -58,20 +58,20 @@ export function CountryIntroBanner({ countryCode = "ZMB" }: { countryCode?: stri
       {/* Visitor Traveler Match */}
       <div className="visitorAudienceSplit">
         <div className="audienceCard firstTimeCard">
-          <div className="audienceBadge" style={{ background: "#DE7739", color: "#fff" }}>🌱 For First-Time Safari Travellers</div>
-          <h4>Your Classic Zambia Safari</h4>
+          <div className="audienceBadge" style={{ background: "#EA580C", color: "#fff" }}>🌱 For First-Time Travellers</div>
+          <h4>Your Essential PNG Highlights</h4>
           <p>
-            Start in <strong>Livingstone</strong> with the thunder of Victoria Falls, Devil&apos;s Pool, and a sunset cruise on the Zambezi. Fly into
-            <strong>South Luangwa</strong> for intimate walking safaris with legendary guides and lodge-side wildlife viewing.
+            Start in <strong>Port Moresby</strong> with the National Museum and Varirata National Park. Fly into
+            <strong>Goroka & Mount Hagen</strong> for unforgettable Melpa & Asaro sing-sing festivals and highland coffee estates.
           </p>
         </div>
 
         <div className="audienceCard returnCard">
-          <div className="audienceBadge" style={{ background: "#1B6960", color: "#fff" }}>🧭 For Seasoned African Explorers</div>
-          <h4>Beyond the Classic Circuits</h4>
+          <div className="audienceBadge" style={{ background: "#1B6960", color: "#fff" }}>🧭 For Extreme Trekkers & Divers</div>
+          <h4>Beyond the Beaten Path</h4>
           <p>
-            Venture to the remote floodplains of <strong>Kafue & Busanga</strong> for tree-climbing lions, witness 10 million fruit bats in
-            <strong>Kasanka</strong>, see the Shoebill stork in <strong>Bangweulu</strong>, or dive crystal-clear <strong>Lake Tanganyika</strong>.
+            Trek the rugged <strong>Kokoda Track</strong> across Owen Stanley ridges, dive volcanic calderas in <strong>Tufi & Rabaul</strong>,
+            explore sacred Haus Tambaran spirit houses on the <strong>Sepik River</strong>, or encounter the Huli Wigmen in <strong>Tari Valley</strong>.
           </p>
         </div>
       </div>
@@ -81,87 +81,91 @@ export function CountryIntroBanner({ countryCode = "ZMB" }: { countryCode?: stri
         <button
           className="toggleDeepDiveBtn"
           onClick={() => setIsExpanded(!isExpanded)}
-          style={{ borderColor: "#DE7739", color: "#1B6960" }}
+          style={{ borderColor: "#EA580C", color: "#1B6960" }}
         >
-          {isExpanded ? "▲ Hide Detailed Country Guide" : "▼ Explore Zambia's 4 Iconic Safari & Cultural Circuits"}
+          {isExpanded ? "▲ Hide Detailed Country Guide" : "▼ Explore Papua New Guinea's 4 Geographic Regions"}
         </button>
       </div>
 
       {isExpanded && (
         <div className="expandedCountryGuide">
           <div className="regionsHighlightGrid">
-            <div className="regionSpotlightCard">
-              <span className="regionTag">🌊 Victoria Falls & Southern Zambezi</span>
-              <h5>Livingstone, Siavonga & Lake Kariba</h5>
+            <div className="regionSpotlightCard" style={{ overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <div style={{ height: "110px", backgroundImage: "url('https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=600&q=80')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "8px 8px 0 0", margin: "-12px -12px 10px -12px" }} />
+              <span className="regionTag">🌿 Southern (Papua) Region</span>
+              <h5>Port Moresby, Kokoda Track, Varirata & Milne Bay</h5>
               <p>
-                Adventure capital of Africa featuring bungee jumping, microlight flights, luxury Zambezi river lodges,
-                and relaxing houseboat holidays on Lake Kariba.
+                National gateway featuring Ela Beach, Sogeri Plateau rainforests, the historic Kokoda pilgrimage trail,
+                and Tawali muck diving in Milne Bay.
               </p>
             </div>
 
-            <div className="regionSpotlightCard">
-              <span className="regionTag">🐾 The Luangwa Valley & Eastern Highlands</span>
-              <h5>South & North Luangwa, Chipata & Luambe</h5>
+            <div className="regionSpotlightCard" style={{ overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <div style={{ height: "110px", backgroundImage: "url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=600&q=80')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "8px 8px 0 0", margin: "-12px -12px 10px -12px" }} />
+              <span className="regionTag">⛰️ The Highlands Region</span>
+              <h5>Goroka, Mount Hagen, Simbu & Tari Valley</h5>
               <p>
-                The walking safari capital of Africa boasting dense leopard populations, endemic Thornicroft&apos;s giraffes,
-                and vibrant Ngoni cultural ceremonies at Mutenguleni.
+                Alpine summits of Mount Wilhelm (4,509m), flamboyant Huli Wigmen, Asaro clay mask warriors,
+                and the world-famous Goroka Cultural Show.
               </p>
             </div>
 
-            <div className="regionSpotlightCard">
-              <span className="regionTag">🛶 The Lower Zambezi & Central Plateau</span>
-              <h5>Lower Zambezi, Lusaka Capital, Kafue National Park</h5>
+            <div className="regionSpotlightCard" style={{ overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <div style={{ height: "110px", backgroundImage: "url('https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "8px 8px 0 0", margin: "-12px -12px 10px -12px" }} />
+              <span className="regionTag">🏝️ Islands Region</span>
+              <h5>East New Britain (Rabaul & Kokopo), Kimbe Bay, New Ireland & Bougainville</h5>
               <p>
-                Pristine riverine canoeing alongside elephant herds, tree-climbing lions in the Busanga Plains,
-                and cosmopolitan dining in Lusaka.
+                Active volcanic caldera of Mount Tavurvur, mystical Baining Fire Dancers, hammerhead sharks in Kimbe Bay,
+                and pristine surfing along the Boluminski Highway.
               </p>
             </div>
 
-            <div className="regionSpotlightCard">
-              <span className="regionTag">🦅 Northern Waterfalls & Great Rift Lakes</span>
-              <h5>Bangweulu, Kasanka, Lake Tanganyika & Lumangwe</h5>
+            <div className="regionSpotlightCard" style={{ overflow: "hidden", display: "flex", flexDirection: "column" }}>
+              <div style={{ height: "110px", backgroundImage: "url('https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=600&q=80')", backgroundSize: "cover", backgroundPosition: "center", borderRadius: "8px 8px 0 0", margin: "-12px -12px 10px -12px" }} />
+              <span className="regionTag">🐊 Momase Region</span>
+              <h5>East & West Sepik River, Madang Harbor & Morobe</h5>
               <p>
-                The Great Bat Migration, prehistoric Shoebill storks, deep freshwater diving in Lake Tanganyika,
-                and cascading waterfalls of Luapula.
+                The grand Sepik River waterway lined with sacred Haus Tambaran spirit houses, master woodcarvers,
+                flying fox colonies, and coral atolls of Madang.
               </p>
             </div>
           </div>
 
           {/* Official External Resources */}
           <div className="officialLinksSection">
-            <h4>Official Travel & Tourism Portals</h4>
+            <h4>Official PNG Travel & Tourism Portals</h4>
             <div className="externalLinksRow">
               <a
-                href="https://www.zambiatourism.com"
+                href="https://www.papuanewguinea.travel"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="officialLinkBadge"
               >
-                🌐 Zambia Tourism Agency (Official ZTA) ↗
+                🌐 PNG Tourism Promotion Authority (PNGTPA) ↗
               </a>
               <a
-                href="https://eservices.zambiaimmigration.gov.zm"
+                href="https://evisa.ica.gov.pg"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="officialLinkBadge"
               >
-                🛂 Zambia Immigration & eVisa Portal ↗
+                🛂 PNG eVisa & Immigration Portal ↗
               </a>
               <a
-                href="https://www.zambiaairways.co.zm"
+                href="https://www.airniugini.com.pg"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="officialLinkBadge"
               >
-                ✈️ Zambia Airways Domestic Network ↗
+                ✈️ Air Niugini National Carrier ↗
               </a>
               <a
-                href="https://nhcczambia.org"
+                href="https://www.kokodatrack.com.pg"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="officialLinkBadge"
               >
-                🏛️ National Heritage Conservation Commission ↗
+                🏛️ Kokoda Track Authority (KTA) Permits ↗
               </a>
             </div>
           </div>

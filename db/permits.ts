@@ -7,15 +7,13 @@ export interface PermitType {
   category: "Trek" | "Park" | "Marine" | "Cultural";
   province: string;
   region: string;
-  feeCitizenZmw: number;
-  feeSadcUsd: number;
+  feeCitizenPgk: number;
   feeInternationalUsd: number;
-  feeSelfDriveUsd: number;
-  feeZmw: number; // Default base price in Kwacha for digital booking
+  feePgk: number; // Default base price in Kina for digital booking
   validityDays: number;
   gateHours: string;
   facilities: string[];
-  vehicleFees: { localUnder3T: string; foreignUnder3T: string; heavyVehicle: string };
+  vehicleFees?: { localUnder3T: string; foreignUnder3T: string; heavyVehicle: string };
   campingFee: string;
   description: string;
   includedBenefits: string[];
@@ -30,12 +28,12 @@ export interface IssuedPermit {
   authority: string;
   holderName: string;
   passportOrId: string;
-  visitorTier: "Citizen" | "SADC Resident" | "International" | "Self-Drive";
+  visitorTier: "Citizen" | "PNG Resident" | "International" | "Trekking Expedition";
   countryOfOrigin: string;
   startDate: string;
   expiryDate: string;
-  feePaidZmw: number;
-  feePaidPgk?: number; // Backward compatibility
+  feePaidPgk: number;
+  feePaidZmw?: number; // Backward compatibility
   currencyPaid: string;
   issuedAt: string;
   status: "active" | "verified" | "expired";
@@ -43,353 +41,233 @@ export interface IssuedPermit {
   offlineVerificationHash: string;
 }
 
-export const ZAMBIA_PARK_FEE_SCHEDULE = {
+export const PNG_PARK_FEE_SCHEDULE = {
   generalRules: [
-    "Park entry is valid daily from 06:00 (sunrise) to 18:00 (sunset).",
-    "Children under 5 years of age enter FREE of charge.",
-    "Children aged 5 to 13 years pay 50% of the standard adult entry fee.",
-    "Gate payments are CASH-ONLY in most national parks. Card machines and ATMs are not available at gates.",
-    "US Dollar notes must be from 2013 or newer series, undamaged and unblemished.",
-    "Zambian Citizens must present a valid National Registration Card (NRC) or Passport."
+    "Kokoda Track trekking requires a mandatory licensed guide or Kokoda Track Authority accredited operator.",
+    "Children under 5 years of age enter CEPA national parks FREE of charge.",
+    "All trekkers on Kokoda and Mount Wilhelm must carry medical insurance with emergency helicopter evacuation coverage.",
+    "Park entry and trekking fees contribute directly to local landowner community development funds and trail maintenance.",
+    "Papua New Guinea Citizens must present a valid National ID Card (NID), Driver's Licence, or Passport."
   ],
   vehicleTariffs: [
-    { type: "Local Vehicles (< 3 tonnes)", rate: "K34.00 ZMW / day" },
-    { type: "Local Heavy Vehicles (> 3 tonnes)", rate: "K56.00 ZMW / day" },
-    { type: "Foreign Registered Vehicles (< 3 tonnes)", rate: "$15.00 USD / day" },
-    { type: "Foreign Heavy Vehicles (> 3 tonnes)", rate: "$30.00 USD / day" }
+    { type: "Standard 4x4 / PMV Park Entry", rate: "K 15.00 PGK / vehicle" },
+    { type: "Commercial Tour Bus / Coaster", rate: "K 50.00 PGK / vehicle" }
   ],
   activityTariffs: [
-    { activity: "Designated Wilderness Camping", rate: "K42.00 ZMW (Citizen) / $15.00 USD (Intl) per person/day" },
-    { activity: "Boat Cruising / Motorized Vessel", rate: "$15.00 USD per boat/day" },
-    { activity: "Canoeing River Permit (Lower Zambezi)", rate: "$10.00 USD per canoe/day" },
-    { activity: "Sport Fishing & Angling (Catch & Release)", rate: "$15.00 USD per angler/day" },
-    { activity: "Night Game Drive Scout Escort", rate: "$20.00 USD per vehicle" }
+    { activity: "Varirata National Park Designated Campsite", rate: "K 25.00 PGK (Citizen) / $15.00 USD (Intl) per person/night" },
+    { activity: "Kokoda Track Community Landowner Guesthouse Camp", rate: "K 40.00 PGK per trekker/night" },
+    { activity: "Kimbe Bay Marine Sanctuary Diving Pass", rate: "$12.00 USD per diver/day" },
+    { activity: "Sepik River Haus Tambaran Photography Clearance", rate: "K 30.00 PGK per village" },
+    { activity: "Mount Wilhelm Alpine Guide & Porter Escort", rate: "K 80.00 PGK per guide/day" }
   ]
 };
 
-export const ZAMBIA_PERMIT_TYPES: PermitType[] = [
+export const PNG_PERMIT_TYPES: PermitType[] = [
   {
-    id: "south-luangwa-entry-pass",
-    name: "South Luangwa National Park Conservation & Entry Pass",
-    parkName: "South Luangwa National Park",
-    categoryTier: "Category A",
-    authority: "Department of National Parks & Wildlife (DNPW Zambia)",
-    category: "Park",
-    province: "Eastern Province",
-    region: "Eastern & Luangwa Valley",
-    feeCitizenZmw: 55.60,
-    feeSadcUsd: 20,
-    feeInternationalUsd: 25,
-    feeSelfDriveUsd: 30,
-    feeZmw: 700, // Intl equivalent in ZMW
-    validityDays: 1,
-    gateHours: "06:00 – 18:00 Daily",
-    facilities: [
-      "Mfuwe Main Gate Visitor Center & DNPW Ranger Post",
-      "Mfuwe Lodge & Bushcamp Company remote camps (Bilimungwe, Chamilandu, Chindeni, Kapamba, Kuyenda, Zungulila)",
-      "Time + Tide Luwi, Nsolo & Kakuli walking camps",
-      "Mfuwe International Airport safari transfers",
-      "Designated Luangwa riverbank picnic and game-viewing hides",
-      "Armed scout walking safari escort stations"
-    ],
-    vehicleFees: { localUnder3T: "K34.00 ZMW", foreignUnder3T: "$15.00 USD", heavyVehicle: "$30.00 USD" },
-    campingFee: "K42.00 ZMW (Citizen) / $15.00 USD (Intl) per person/night",
-    description: "Official DNPW entry permit for South Luangwa National Park—the world's birthplace of the walking safari. Famous for exceptional leopard densities, wild dog packs, and elephant herds.",
-    includedBenefits: [
-      "Full daily entry to Mfuwe, Nsefu & Luamfwa game sectors",
-      "Walking safari registration with armed DNPW wildlife scout",
-      "Night game drive ranger checkpoint clearance",
-      "Official DNPW Luangwa wildlife checklist & gate clearance"
-    ],
-    rulesAndRegulations: [
-      "Keep digital permit and photo ID available for inspection at Mfuwe Gate.",
-      "Off-road driving is strictly prohibited in pristine riverine zones.",
-      "Speed limit inside the park is 40 km/h."
-    ]
-  },
-  {
-    id: "lower-zambezi-national-park-pass",
-    name: "Lower Zambezi National Park & Waterway Pass",
-    parkName: "Lower Zambezi National Park",
-    categoryTier: "Category A",
-    authority: "Department of National Parks & Wildlife (DNPW Zambia)",
-    category: "Marine",
-    province: "Lusaka / Southern Province",
-    region: "Lower Zambezi & Chiawa",
-    feeCitizenZmw: 55.60,
-    feeSadcUsd: 20,
-    feeInternationalUsd: 25,
-    feeSelfDriveUsd: 30,
-    feeZmw: 700,
-    validityDays: 1,
-    gateHours: "06:00 – 18:00 Daily",
-    facilities: [
-      "Chongwe Gate & Jeki Airstrip Ranger Station",
-      "Sausage Tree Camp, Potato Bush Camp & Chongwe River Camp",
-      "Chiawa Camp & Old Mondoro luxury bush retreats",
-      "Pontoon boat launches and canoe staging platforms along the Zambezi River",
-      "Wilderness river island campsites opposite Mana Pools"
-    ],
-    vehicleFees: { localUnder3T: "K34.00 ZMW", foreignUnder3T: "$15.00 USD", heavyVehicle: "$30.00 USD" },
-    campingFee: "K42.00 ZMW (Citizen) / $15.00 USD (Intl) per person/night",
-    description: "Conservation permit for the Lower Zambezi National Park, famous for dramatic escarpment scenery, canoe safaris along river channels, and catch-and-release tiger fishing.",
-    includedBenefits: [
-      "Zambezi River waterway navigation and canoe trail access",
-      "Island and riverbank game-viewing boat access",
-      "Catch-and-release sport fishing registration",
-      "Chongwe Gate clearance and wildlife guide registration"
-    ],
-    rulesAndRegulations: [
-      "Life jackets must be worn at all times when navigating the Zambezi channels.",
-      "Strict catch-and-release policy for all Tigerfish and Vundu.",
-      "Maintain safe distance from elephant herds crossing channels."
-    ]
-  },
-  {
-    id: "victoria-falls-mosi-oa-tunya-pass",
-    name: "Mosi-oa-Tunya & Victoria Falls World Heritage Pass",
-    parkName: "Mosi-oa-Tunya National Park (Victoria Falls)",
+    id: "kokoda-track-permit",
+    name: "Kokoda Track Authority (KTA) Official Trekking Permit & Landowner Access Pass",
+    parkName: "Kokoda Track Memorial Reserve & Owen Stanley Range",
     categoryTier: "Special Heritage",
-    authority: "National Heritage Conservation Commission (NHCC) / DNPW",
-    category: "Park",
-    province: "Southern Province",
-    region: "Livingstone & Victoria Falls",
-    feeCitizenZmw: 33.60,
-    feeSadcUsd: 10,
-    feeInternationalUsd: 15,
-    feeSelfDriveUsd: 15,
-    feeZmw: 420,
-    validityDays: 1,
-    gateHours: "06:00 – 18:00 (Night Lunar Rainbow open on Full Moon: 19:00 – 22:00)",
+    authority: "Kokoda Track Authority (KTA PNG)",
+    category: "Trek",
+    province: "Central & Oro (Northern) Provinces",
+    region: "Southern",
+    feeCitizenPgk: 150,
+    feeInternationalUsd: 185,
+    feePgk: 650, // Approx K650 for international trekking permit
+    validityDays: 14,
+    gateHours: "Trail checkposts open 06:00 – 18:00 Daily",
     facilities: [
-      "Main Rainforest Gate & Curio Craft Market",
-      "The Royal Livingstone Hotel by Anantara & Avani Victoria Falls Resort",
-      "Livingstone Island launch jetty (Devil's Pool & Angel's Pool excursions)",
-      "Knife-Edge Bridge, Boiling Pot Trail, and Batoka Gorge viewpoints",
-      "Helicopter flight pads and Maramba Cultural Village"
+      "Owers' Corner Ranger Station & Southern Trailhead Memorial Arches",
+      "Kokoda Station Ranger Command & WWII Historical Museum",
+      "Designated wilderness campsites (Ua-Ule, Nauro, Menari, Efogi, Alola)",
+      "Satellite emergency SOS ranger posts at Brigade Hill & Efogi Airstrip",
+      "Suspension bridges and safe river crossing lines",
+      "Medical aid posts at Menari, Efogi, and Kokoda Hospital"
     ],
-    vehicleFees: { localUnder3T: "K34.00 ZMW", foreignUnder3T: "$15.00 USD", heavyVehicle: "$30.00 USD" },
-    campingFee: "Victoria Falls Waterfront & Maramba River campsites available in Livingstone",
-    description: "Official UNESCO World Heritage conservation pass for Victoria Falls (Mosi-oa-Tunya). Grants access to the knife-edge bridge, rainforest paths, and boiling pot gorge trails.",
+    campingFee: "Included in community landowner trekking levy",
+    description: "Official statutory trekking permit mandated by the Government of Papua New Guinea for all individuals crossing the 96km Kokoda Track. Funds trail maintenance, environmental conservation, and health/education services for Koiari and Orokaiva landowner communities.",
     includedBenefits: [
-      "Full day multi-entry pass to Victoria Falls rainforest",
-      "Access to Knife-Edge Bridge, Eastern Cataract & Boiling Pot trail",
-      "Photographic access to lunar rainbow openings on full moon dates"
+      "Full 14-day clearance across the entire 96km Owers' Corner to Kokoda Station corridor",
+      "Emergency radio beacon registration with KTA Search & Rescue Operations",
+      "Official Kokoda Track Completion Certificate & Commemorative Medallion",
+      "Direct contribution to Kokoda village school and medical aid post trusts"
     ],
     rulesAndRegulations: [
-      "Stay on designated stone paths and viewing safety barriers at all times.",
-      "Do not feed wild baboons or vervet monkeys.",
-      "Waterproof camera protection recommended during peak high water spray (March – June)."
+      "Trekkers must trek under the guidance of an accredited KTA tour operator or licensed local guide.",
+      "Strict 'Leave No Trace' policy: all non-biodegradable waste must be carried out.",
+      "Respect local Sunday church observances in Koiari Seventh-day Adventist villages (Nauro, Menari, Efogi); avoid disruptive noise.",
+      "Do not remove or disturb wartime relics, ordnance, or historical artifacts along the track."
     ]
   },
   {
-    id: "kafue-national-park-pass",
-    name: "Kafue National Park & Busanga Wilderness Pass",
-    parkName: "Kafue National Park",
-    categoryTier: "Category B",
-    authority: "Department of National Parks & Wildlife (DNPW Zambia)",
-    category: "Park",
-    province: "Central / Southern / North-Western",
-    region: "Kafue & Busanga Plains",
-    feeCitizenZmw: 44.80,
-    feeSadcUsd: 15,
-    feeInternationalUsd: 20,
-    feeSelfDriveUsd: 20,
-    feeZmw: 560,
-    validityDays: 1,
-    gateHours: "06:00 – 18:00 Daily",
-    facilities: [
-      "Hook Bridge Gate & Chunga DNPW Headquarters",
-      "Busanga Plains luxury camps (Wilderness Shumba, Busanga Bush Camp)",
-      "Mukambi Safari Lodge, KaingU Safari Lodge & Musekese Camp",
-      "Lake Itezhi-Tezhi boating marina and angling chalets",
-      "Transit route on M9 Lusaka-Mongu road across the park"
-    ],
-    vehicleFees: { localUnder3T: "K34.00 ZMW", foreignUnder3T: "$15.00 USD", heavyVehicle: "$30.00 USD" },
-    campingFee: "K42.00 ZMW (Citizen) / $15.00 USD (Intl) per person/night",
-    description: "Entry permit for Kafue National Park—one of the largest conservation sanctuaries in Africa (22,400 sq km), celebrated for the tree-climbing lions of Busanga and 20 antelope species.",
-    includedBenefits: [
-      "Access to northern Busanga Plains and southern Itezhi-Tezhi sectors",
-      "Kafue River boat launch clearance",
-      "Official DNPW wildlife map & guide registration"
-    ],
-    rulesAndRegulations: [
-      "Straight transit along the M9 paved road is exempt from entry fees if completed without turning off.",
-      "Stay on marked tracks across the Busanga floodplain."
-    ]
-  },
-  {
-    id: "north-luangwa-national-park-pass",
-    name: "North Luangwa National Park & Black Rhino Sanctuary Pass",
-    parkName: "North Luangwa National Park",
-    categoryTier: "Category B",
-    authority: "Department of National Parks & Wildlife (DNPW / FZS)",
-    category: "Park",
-    province: "Muchinga Province",
-    region: "Muchinga & Northern Escarpment",
-    feeCitizenZmw: 44.80,
-    feeSadcUsd: 15,
-    feeInternationalUsd: 20,
-    feeSelfDriveUsd: 20,
-    feeZmw: 560,
-    validityDays: 1,
-    gateHours: "06:00 – 18:00 (Advance Booking Required for Rhino Zone)",
-    facilities: [
-      "Mwaleshi Walking Camp & Takwela Camp",
-      "Mano DNPW / Frankfurt Zoological Society Conservation Base",
-      "Mwaleshi River natural rock pools and walking trails",
-      "Intensive Black Rhino Protection Zone"
-    ],
-    vehicleFees: { localUnder3T: "K34.00 ZMW", foreignUnder3T: "$15.00 USD", heavyVehicle: "$30.00 USD" },
-    campingFee: "Designated wilderness camps only with DNPW authorization",
-    description: "Exclusive wild sanctuary featuring Zambia's only population of Black Rhinos, managed with Frankfurt Zoological Society. Pure foot safaris in untouched wilderness.",
-    includedBenefits: [
-      "Walking safari access along Mwaleshi River with armed scouts",
-      "Conservation contribution to the North Luangwa Rhino Project"
-    ],
-    rulesAndRegulations: [
-      "Access strictly regulated; unguided self-drive into Rhino core zone is not permitted.",
-      "All walking safaris require accredited DNPW armed guide."
-    ]
-  },
-  {
-    id: "kasanka-bat-migration-pass",
-    name: "Kasanka National Park & Fruit Bat Migration Pass",
-    parkName: "Kasanka National Park",
-    categoryTier: "Category B",
-    authority: "Kasanka Trust / DNPW Zambia",
+    id: "varirata-national-park-pass",
+    name: "Varirata National Park Conservation & Nature Pass",
+    parkName: "Varirata National Park & Sogeri Plateau Rainforest",
+    categoryTier: "Category A",
+    authority: "Conservation and Environment Protection Authority (CEPA PNG)",
     category: "Park",
     province: "Central Province",
-    region: "Central & Serenje",
-    feeCitizenZmw: 44.80,
-    feeSadcUsd: 15,
-    feeInternationalUsd: 20,
-    feeSelfDriveUsd: 20,
-    feeZmw: 560,
-    validityDays: 1,
-    gateHours: "06:00 – 18:00 (Bat viewing platform access: 17:30 – 19:00 & 05:00 – 06:30)",
-    facilities: [
-      "Wasa Lodge & Luwombwa River Fishing Lodge",
-      "Fibwe Bat Canopy Tree Platforms (highest public tree hides in Africa)",
-      "Luwombwa River canoe launches and sitatunga marsh hides",
-      "Pontoon campsite and visitor education center"
-    ],
-    vehicleFees: { localUnder3T: "K34.00 ZMW", foreignUnder3T: "$15.00 USD", heavyVehicle: "$30.00 USD" },
-    campingFee: "K42.00 ZMW (Citizen) / $15.00 USD (Intl) per night",
-    description: "Home to the world's largest mammal migration (October – December), when 10 million straw-colored fruit bats descend on Kasanka's swamp forest.",
-    includedBenefits: [
-      "Access to Fibwe tree platform bat viewing slots (Oct – Dec)",
-      "Luwombwa river canoe trails and Sitatunga marsh hides",
-      "Conservation support to Kasanka Community Trusts"
-    ],
-    rulesAndRegulations: [
-      "Silence must be maintained on canopy tree platforms.",
-      "Red light torch filters must be used during twilight bat flights."
-    ]
-  },
-  {
-    id: "liuwa-plain-wildebeest-pass",
-    name: "Liuwa Plain National Park & Wildebeest Migration Pass",
-    parkName: "Liuwa Plain National Park",
-    categoryTier: "Category B",
-    authority: "African Parks / DNPW / Barotse Royal Establishment",
-    category: "Park",
-    province: "Western Province",
-    region: "Western & Barotseland",
-    feeCitizenZmw: 44.80,
-    feeSadcUsd: 15,
-    feeInternationalUsd: 20,
-    feeSelfDriveUsd: 20,
-    feeZmw: 560,
+    region: "Southern",
+    feeCitizenPgk: 10,
+    feeInternationalUsd: 15,
+    feePgk: 45,
     validityDays: 1,
     gateHours: "06:00 – 18:00 Daily",
     facilities: [
-      "King Lewanika Luxury Lodge (Time + Tide)",
-      "African Parks Kalabo Operations Headquarters",
-      "Community campsites (Lyangu, Katoyana, Sikale)",
-      "Kalabo airstrip transfers and Luanginga river pontoon ferry"
+      "Varirata Visitor Information Center & Orchid Botanical Garden",
+      "Main Lookout Deck with panoramic views over Port Moresby and the Coral Sea",
+      "Signposted Rainforest Nature Trails (Gada Bird Trail, Circuit Trail, Scarp Trail)",
+      "Designated birding hides for observing Raggiana Bird of Paradise mating displays",
+      "Covered BBQ picnic pavilions and freshwater taps",
+      "Overnight campsite grounds with toilet amenities"
     ],
-    vehicleFees: { localUnder3T: "K34.00 ZMW", foreignUnder3T: "$15.00 USD", heavyVehicle: "$30.00 USD" },
-    campingFee: "K42.00 ZMW (Citizen) / $15.00 USD (Intl) per night",
-    description: "Host to Africa's second-largest wildebeest migration (over 30,000 wildebeest), thriving hyena clans, cheetah, and the historic legacy of Lady Liuwa.",
+    vehicleFees: { localUnder3T: "K 10.00 PGK", foreignUnder3T: "$5.00 USD", heavyVehicle: "$15.00 USD" },
+    campingFee: "K 25.00 PGK (Citizen) / $15.00 USD (Intl) per person/night",
+    description: "Papua New Guinea's first declared national park, encompassing 1,063 hectares of pristine coastal and mountain rainforest on the Sogeri Plateau. Renowned for spectacular Raggiana Bird of Paradise lekking trees, kingfishers, and wallabies.",
     includedBenefits: [
-      "Migration tracking access across open grassy plains",
-      "Luanginga pontoon ferry river clearance at Kalabo",
-      "African Parks conservation fee contribution"
+      "Unlimited daily entry to all walking trails and scenic cliffside lookouts",
+      "Access to Raggiana Bird of Paradise observation hides at dawn",
+      "Use of covered picnic and BBQ facilities"
     ],
     rulesAndRegulations: [
-      "4x4 vehicles with high clearance and GPS navigation are mandatory.",
-      "Carry spare fuel and water; facilities across the plain are remote."
+      "Open fires are permitted only in designated barbecue pits.",
+      "No hunting or capture of wildlife or flora.",
+      "Speed limit of 30 km/h within park boundaries to protect wildlife."
     ]
   },
   {
-    id: "nsumbu-lake-tanganyika-pass",
-    name: "Nsumbu National Park & Lake Tanganyika Marine Pass",
-    parkName: "Nsumbu National Park",
-    categoryTier: "Category B",
-    authority: "Department of National Parks & Wildlife (DNPW / FZS)",
+    id: "mount-wilhelm-permit",
+    name: "Mount Wilhelm Alpine Conservation & Landowner Summit Clearance",
+    parkName: "Mount Wilhelm Protected Area (4,509m / 14,793ft)",
+    categoryTier: "Special Heritage",
+    authority: "Simbu Provincial Government & Keglsugl Community Eco-Trust",
+    category: "Trek",
+    province: "Simbu (Chimbu) Province",
+    region: "Highlands",
+    feeCitizenPgk: 50,
+    feeInternationalUsd: 65,
+    feePgk: 220,
+    validityDays: 5,
+    gateHours: "Trail access 24/7 (Summit departures typically 01:00 AM)",
+    facilities: [
+      "Betty's Lodge & Trout Farm Basecamp Reception at Keglsugl",
+      "A-frame wooden alpine huts at Lake Piunde (3,500m)",
+      "Lake Aunde scenic tarn lookout and cycad nature trail",
+      "Emergency radio link with Kundiawa Search & Rescue Base",
+      "Certified local Simbu high-altitude guide station"
+    ],
+    campingFee: "K 40.00 PGK (Citizen) / $20.00 USD (Intl) per night at Lake Piunde hut",
+    description: "Mandatory conservation permit for scaling Papua New Guinea's highest peak (4,509m). Protects fragile sub-alpine grasslands, glacial tarns, and WWII aviation heritage wreckage while supporting Keglsugl mountain village guides.",
+    includedBenefits: [
+      "5-day alpine climbing permit covering Keglsugl to Trig Point summit",
+      "Overnight accommodation access to Lake Piunde wooden alpine refuge huts",
+      "Official Mount Wilhelm Summit Certificate issued at Betty's Lodge"
+    ],
+    rulesAndRegulations: [
+      "All climbers must be accompanied by an accredited local guide from Keglsugl.",
+      "Extreme sub-zero night temperatures: proper thermal alpine gear is mandatory.",
+      "Strict waste removal: pack out all rubbish from alpine lakes and summit ridges."
+    ]
+  },
+  {
+    id: "kimbe-bay-marine-pass",
+    name: "Kimbe Bay Marine Sanctuary Conservation & Dive Pass",
+    parkName: "Kimbe Bay Coral Triangle Marine Conservation Area",
+    categoryTier: "Waterway / Marine",
+    authority: "Mahonia Na Dari Research Center & West New Britain Provincial Government",
     category: "Marine",
-    province: "Northern Province",
-    region: "Northern & Lake Tanganyika",
-    feeCitizenZmw: 44.80,
-    feeSadcUsd: 15,
-    feeInternationalUsd: 20,
-    feeSelfDriveUsd: 20,
-    feeZmw: 560,
-    validityDays: 1,
-    gateHours: "06:00 – 18:00 Daily",
+    province: "West New Britain Province",
+    region: "Islands",
+    feeCitizenPgk: 25,
+    feeInternationalUsd: 12,
+    feePgk: 45,
+    validityDays: 7,
+    gateHours: "Marine patrols active 24/7",
     facilities: [
-      "Ndole Bay Resort (diving center, boat charters & private beach)",
-      "Nkamba Bay Lodge in Nsumbu Bay",
-      "Lake Tanganyika scuba diving, snorkeling, and boat cruise jetties",
-      "Kasaba Bay historical airstrip and park ranger post"
+      "Walindi Plantation Resort dive jetty and hyperbaric support link",
+      "Mahonia Na Dari Marine Research Center & Nature Trail",
+      "Mooring buoys installed across 30+ pristine coral seamounts (South Emma, Inglis Shoal, Restorf Island)",
+      "Whale shark and hammerhead patrol vessel checkposts"
     ],
-    vehicleFees: { localUnder3T: "K34.00 ZMW", foreignUnder3T: "$15.00 USD", heavyVehicle: "$30.00 USD" },
-    campingFee: "K42.00 ZMW (Citizen) / $15.00 USD (Intl) per night",
-    description: "Where African wildlife meets pristine freshwater beaches. Elephant herds roam along sandy shores, and crystal-clear waters house 250+ endemic cichlid fish species.",
+    campingFee: "K 50.00 PGK per island camping permit",
+    description: "Kimbe Bay contains over 860 species of reef fish and 60% of all coral species in the entire Indo-Pacific region. This marine pass directly funds local reef rangers, mooring maintenance to prevent anchor damage, and marine education in coastal schools.",
     includedBenefits: [
-      "Lake Tanganyika national park shoreline access",
-      "Snorkeling and beach game viewing clearance",
-      "Ndole Bay boat launch registration"
+      "7-day scuba diving and snorkeling access to all protected reefs and seamounts in Kimbe Bay",
+      "Tour of Mahonia Na Dari Marine Conservation Center",
+      "Direct contribution to coastal coral nursery rehabilitation"
     ],
     rulesAndRegulations: [
-      "Do not disturb endemic fish sanctuaries in shallow bays.",
-      "Observe designated swimming areas free from hippos and crocodiles."
+      "Zero contact with live coral; gloves and touch knives prohibited while diving.",
+      "Boats must use installed permanent mooring buoys; anchoring on reef tops is strictly prohibited."
+    ]
+  },
+  {
+    id: "sepik-river-cultural-permit",
+    name: "Sepik River Cultural Heritage & Haus Tambaran Exploration Pass",
+    parkName: "Middle & Upper Sepik River Protected Cultural Corridor",
+    categoryTier: "Special Heritage",
+    authority: "East Sepik Provincial Tourism Bureau & Ambunti-Dreikikier Council",
+    category: "Cultural",
+    province: "East Sepik Province",
+    region: "Momase",
+    feeCitizenPgk: 40,
+    feeInternationalUsd: 35,
+    feePgk: 120,
+    validityDays: 10,
+    gateHours: "River village landings daylight hours (06:00 – 18:00)",
+    facilities: [
+      "Ambunti River Gateway Station & Tour Dispatch Jetty",
+      "Historic Haus Tambaran (Spirit Houses) at Kanganaman, Palimbe, and Korogo",
+      "Traditional motorized dugout canoe expedition landings",
+      "Village riverbank guest houses with mosquito-netted bedding"
+    ],
+    campingFee: "K 35.00 PGK per night in village stilt homestays",
+    description: "Enables respectful cultural exploration across Middle Sepik River villages. Covers spirit house entry protocols, photography clearances for ceremonial artifacts, and village landing fees along the great Sepik waterway.",
+    includedBenefits: [
+      "Authorized village landing clearances across Middle Sepik Iatmul clan communities",
+      "Entry to the famous UNESCO-listed Kanganaman Haus Tambaran",
+      "Exemption from separate individual village photographic levy demands"
+    ],
+    rulesAndRegulations: [
+      "Always greet village chiefs and elders upon landing before photographing community members.",
+      "Women must check with local guides before entering upper sacred chambers of Haus Tambaran.",
+      "Support local artisans by buying wood carvings directly at village markets."
     ]
   }
 ];
 
-export const PNG_PERMIT_TYPES: PermitType[] = ZAMBIA_PERMIT_TYPES;
-export const ALL_PERMIT_TYPES: PermitType[] = ZAMBIA_PERMIT_TYPES;
+export const ALL_PERMIT_TYPES: PermitType[] = PNG_PERMIT_TYPES;
 
 export function createPermit(
   permitTypeId: string,
   holderName: string,
   passportOrId: string,
-  visitorTier: "Citizen" | "SADC Resident" | "International" | "Self-Drive" = "International",
-  countryOfOrigin: string = "Zambia",
+  visitorTier: "Citizen" | "PNG Resident" | "International" | "Trekking Expedition" = "International",
+  countryOfOrigin: string = "Papua New Guinea",
   startDate: string = new Date().toISOString().slice(0, 10),
-  currency: string = "ZMW"
+  currency: string = "PGK"
 ): IssuedPermit {
-  const permitType = ZAMBIA_PERMIT_TYPES.find(p => p.id === permitTypeId) || ZAMBIA_PERMIT_TYPES[0];
+  const permitType = PNG_PERMIT_TYPES.find(p => p.id === permitTypeId) || PNG_PERMIT_TYPES[0];
   const start = new Date(startDate);
   const expiry = new Date(start);
   expiry.setDate(start.getDate() + (permitType.validityDays || 1));
 
-  let calculatedFee = permitType.feeZmw;
+  let calculatedFee = permitType.feePgk;
   if (visitorTier === "Citizen") {
-    calculatedFee = permitType.feeCitizenZmw;
-  } else if (visitorTier === "SADC Resident") {
-    calculatedFee = permitType.feeSadcUsd * 28; // Standard conversion rate
-  } else if (visitorTier === "Self-Drive") {
-    calculatedFee = permitType.feeSelfDriveUsd * 28;
+    calculatedFee = permitType.feeCitizenPgk;
+  } else if (visitorTier === "PNG Resident") {
+    calculatedFee = Math.round(permitType.feePgk * 0.6);
+  } else if (visitorTier === "Trekking Expedition") {
+    calculatedFee = permitType.feePgk;
   } else {
-    calculatedFee = permitType.feeInternationalUsd * 28;
+    calculatedFee = permitType.feePgk;
   }
 
   const randomNum = Math.floor(100000 + Math.random() * 900000);
-  const reference = `ZAM-DNPW-${new Date().getFullYear()}-${randomNum}`;
-  const validationQrToken = `ZAMROAM-DNPW-VERIFIED|${reference}|${holderName}|${permitType.parkName}|${visitorTier}|VALID:${startDate}TO${expiry.toISOString().slice(0,10)}`;
+  const prefix = permitType.id.includes("kokoda") ? "PNG-KTA" : "PNG-CEPA";
+  const reference = `${prefix}-${new Date().getFullYear()}-${randomNum}`;
+  const validationQrToken = `VISITPNG-PERMIT-VERIFIED|${reference}|${holderName}|${permitType.parkName}|${visitorTier}|VALID:${startDate}TO${expiry.toISOString().slice(0,10)}`;
   const offlineVerificationHash = `SHA256-${Math.random().toString(36).substring(2, 12).toUpperCase()}`;
 
   return {
@@ -404,12 +282,15 @@ export function createPermit(
     countryOfOrigin,
     startDate,
     expiryDate: expiry.toISOString().slice(0, 10),
-    feePaidZmw: calculatedFee,
     feePaidPgk: calculatedFee,
-    currencyPaid: currency || "ZMW",
+    feePaidZmw: calculatedFee,
+    currencyPaid: currency || "PGK",
     issuedAt: new Date().toISOString(),
     status: "active",
     validationQrToken,
     offlineVerificationHash
   };
 }
+
+export const ZAMBIA_PERMIT_TYPES = PNG_PERMIT_TYPES;
+

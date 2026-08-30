@@ -42,8 +42,8 @@ export default function PaymentModal({
   customerPhone = ""
 }: PaymentModalProps) {
   const [selectedMethod, setSelectedMethod] = useState<"paypal" | "momo" | "card">("paypal");
-  const [momoOperator, setMomoOperator] = useState<"mtn" | "airtel" | "zamtel">("mtn");
-  const [momoPhone, setMomoPhone] = useState(customerPhone || "097");
+  const [momoOperator, setMomoOperator] = useState<"digicel" | "vodafone" | "bsp">("digicel");
+  const [momoPhone, setMomoPhone] = useState(customerPhone || "+675 7");
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successReceipt, setSuccessReceipt] = useState<PaymentReceipt | null>(null);
@@ -56,8 +56,8 @@ export default function PaymentModal({
 
   if (!isOpen) return null;
 
-  // Approx USD conversion for PayPal if paying in ZMW
-  const approxUsd = currency === "ZMW" ? (amount / 28).toFixed(2) : amount.toFixed(2);
+  // Approx USD conversion for PayPal if paying in PGK
+  const approxUsd = currency === "PGK" ? (amount / 3.8).toFixed(2) : amount.toFixed(2);
 
   const handleCloseModal = () => {
     setErrorMessage("");
@@ -81,7 +81,7 @@ export default function PaymentModal({
           currency,
           itemType,
           itemId,
-          description: `${itemName} - ZamRoam Official Reservation`
+          description: `${itemName} - VisitPNG Official Reservation`
         })
       });
 
@@ -127,7 +127,7 @@ export default function PaymentModal({
     }
   };
 
-  // Mobile Money Flow
+  // Mobile Money & BSP Direct Flow
   const handleMomoCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
@@ -149,12 +149,13 @@ export default function PaymentModal({
 
       if (!res.ok) {
         const err = await res.json();
-        throw new Error(err.error || "Mobile Money transaction failed");
+        throw new Error(err.error || "Mobile / BSP transaction failed");
       }
 
       const data = await res.json();
+      const operatorName = momoOperator === "digicel" ? "Digicel CellMoni" : momoOperator === "vodafone" ? "Vodafone M-PAiSA" : "Bank South Pacific (BSP Pay)";
       setSuccessReceipt({
-        provider: `${momoOperator.toUpperCase()} Mobile Money`,
+        provider: operatorName,
         reference: data.reference,
         amount,
         currency,
@@ -163,7 +164,7 @@ export default function PaymentModal({
       });
       onSuccess(data);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Mobile Money payment could not be processed.";
+      const msg = err instanceof Error ? err.message : "Mobile payment could not be processed.";
       setErrorMessage(msg);
     } finally {
       setIsProcessing(false);
@@ -223,7 +224,7 @@ export default function PaymentModal({
           width: "100%",
           maxWidth: "480px",
           background: "#0D2B27",
-          border: "1.5px solid rgba(245, 158, 11, 0.35)",
+          border: "1.5px solid rgba(234, 88, 12, 0.45)",
           borderRadius: "20px",
           color: "#ffffff",
           overflow: "hidden",
@@ -233,8 +234,8 @@ export default function PaymentModal({
         {/* Header */}
         <div style={{ padding: "18px 20px", borderBottom: "1px solid rgba(255, 255, 255, 0.1)", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div>
-            <span style={{ fontSize: "10.5px", fontWeight: 800, color: "#F59E0B", textTransform: "uppercase", letterSpacing: "0.08em", display: "block" }}>
-              SECURE ZAMROAM GATEWAY
+            <span style={{ fontSize: "10.5px", fontWeight: 800, color: "#F97316", textTransform: "uppercase", letterSpacing: "0.08em", display: "block" }}>
+              SECURE VISITPNG GATEWAY
             </span>
             <h3 style={{ margin: "2px 0 0", fontSize: "17px", fontWeight: 800, color: "#ffffff" }}>
               {title || "Complete Reservation & Payment"}
@@ -262,7 +263,7 @@ export default function PaymentModal({
             <div style={{ background: "rgba(255,255,255,0.06)", borderRadius: "12px", padding: "16px", textAlign: "left", marginBottom: "24px", fontSize: "12.5px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
                 <span style={{ color: "rgba(255,255,255,0.6)" }}>Receipt Reference:</span>
-                <strong style={{ color: "#F59E0B" }}>{successReceipt.reference}</strong>
+                <strong style={{ color: "#F97316" }}>{successReceipt.reference}</strong>
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "8px" }}>
                 <span style={{ color: "rgba(255,255,255,0.6)" }}>Payment Channel:</span>
@@ -284,7 +285,7 @@ export default function PaymentModal({
                 width: "100%",
                 padding: "13px",
                 borderRadius: "10px",
-                background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
                 color: "#ffffff",
                 border: "none",
                 fontSize: "14px",
@@ -305,10 +306,10 @@ export default function PaymentModal({
                 <strong style={{ fontSize: "13.5px", color: "#ffffff" }}>Total Payable</strong>
               </div>
               <div style={{ textAlign: "right" }}>
-                <strong style={{ fontSize: "18px", color: "#F59E0B", display: "block" }}>
+                <strong style={{ fontSize: "18px", color: "#F97316", display: "block" }}>
                   {formatPrice(amount, currency)}
                 </strong>
-                {currency === "ZMW" && (
+                {currency === "PGK" && (
                   <small style={{ fontSize: "10.5px", color: "#94a3b8" }}>≈ ${approxUsd} USD</small>
                 )}
               </div>
@@ -322,9 +323,9 @@ export default function PaymentModal({
                 style={{
                   padding: "10px 6px",
                   borderRadius: "10px",
-                  border: selectedMethod === "paypal" ? "1.5px solid #F59E0B" : "1px solid rgba(255,255,255,0.15)",
-                  background: selectedMethod === "paypal" ? "rgba(245, 158, 11, 0.15)" : "rgba(255,255,255,0.04)",
-                  color: selectedMethod === "paypal" ? "#F59E0B" : "#ffffff",
+                  border: selectedMethod === "paypal" ? "1.5px solid #F97316" : "1px solid rgba(255,255,255,0.15)",
+                  background: selectedMethod === "paypal" ? "rgba(234, 88, 12, 0.2)" : "rgba(255,255,255,0.04)",
+                  color: selectedMethod === "paypal" ? "#FDBA74" : "#ffffff",
                   fontSize: "11.5px",
                   fontWeight: 700,
                   cursor: "pointer"
@@ -347,7 +348,7 @@ export default function PaymentModal({
                   cursor: "pointer"
                 }}
               >
-                📱 Mobile Money
+                📱 Mobile / BSP Pay
               </button>
 
               <button
@@ -412,75 +413,75 @@ export default function PaymentModal({
               </div>
             )}
 
-            {/* Method 2: Mobile Money */}
+            {/* Method 2: Mobile Money / BSP Direct */}
             {selectedMethod === "momo" && (
               <form onSubmit={handleMomoCheckout} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 <div>
                   <label style={{ fontSize: "11.5px", color: "#a3cfc9", display: "block", marginBottom: "4px" }}>
-                    Select Network Operator:
+                    Select PNG Payment Network:
                   </label>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px" }}>
                     <button
                       type="button"
-                      onClick={() => setMomoOperator("mtn")}
+                      onClick={() => setMomoOperator("digicel")}
                       style={{
                         padding: "8px",
                         borderRadius: "8px",
-                        border: momoOperator === "mtn" ? "1.5px solid #FBBF24" : "1px solid rgba(255,255,255,0.15)",
-                        background: momoOperator === "mtn" ? "rgba(251, 191, 36, 0.2)" : "rgba(255,255,255,0.04)",
-                        color: momoOperator === "mtn" ? "#FBBF24" : "#ffffff",
+                        border: momoOperator === "digicel" ? "1.5px solid #EF4444" : "1px solid rgba(255,255,255,0.15)",
+                        background: momoOperator === "digicel" ? "rgba(239, 68, 68, 0.2)" : "rgba(255,255,255,0.04)",
+                        color: momoOperator === "digicel" ? "#F87171" : "#ffffff",
                         fontSize: "11.5px",
                         fontWeight: 700,
                         cursor: "pointer"
                       }}
                     >
-                      🟡 MTN MoMo
+                      🔴 Digicel CellMoni
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => setMomoOperator("airtel")}
+                      onClick={() => setMomoOperator("vodafone")}
                       style={{
                         padding: "8px",
                         borderRadius: "8px",
-                        border: momoOperator === "airtel" ? "1.5px solid #EF4444" : "1px solid rgba(255,255,255,0.15)",
-                        background: momoOperator === "airtel" ? "rgba(239, 68, 68, 0.2)" : "rgba(255,255,255,0.04)",
-                        color: momoOperator === "airtel" ? "#F87171" : "#ffffff",
+                        border: momoOperator === "vodafone" ? "1.5px solid #EF4444" : "1px solid rgba(255,255,255,0.15)",
+                        background: momoOperator === "vodafone" ? "rgba(239, 68, 68, 0.2)" : "rgba(255,255,255,0.04)",
+                        color: momoOperator === "vodafone" ? "#FCA5A5" : "#ffffff",
                         fontSize: "11.5px",
                         fontWeight: 700,
                         cursor: "pointer"
                       }}
                     >
-                      🔴 Airtel Money
+                      ⚪ Vodafone
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => setMomoOperator("zamtel")}
+                      onClick={() => setMomoOperator("bsp")}
                       style={{
                         padding: "8px",
                         borderRadius: "8px",
-                        border: momoOperator === "zamtel" ? "1.5px solid #10B981" : "1px solid rgba(255,255,255,0.15)",
-                        background: momoOperator === "zamtel" ? "rgba(16, 185, 129, 0.2)" : "rgba(255,255,255,0.04)",
-                        color: momoOperator === "zamtel" ? "#34D399" : "#ffffff",
+                        border: momoOperator === "bsp" ? "1.5px solid #10B981" : "1px solid rgba(255,255,255,0.15)",
+                        background: momoOperator === "bsp" ? "rgba(16, 185, 129, 0.2)" : "rgba(255,255,255,0.04)",
+                        color: momoOperator === "bsp" ? "#34D399" : "#ffffff",
                         fontSize: "11.5px",
                         fontWeight: 700,
                         cursor: "pointer"
                       }}
                     >
-                      🟢 Zamtel
+                      🟢 BSP Pay Direct
                     </button>
                   </div>
                 </div>
 
                 <div>
                   <label style={{ fontSize: "11.5px", color: "#a3cfc9", display: "block", marginBottom: "4px" }}>
-                    Registered Mobile Number:
+                    Mobile Number / BSP Account Number:
                   </label>
                   <input
                     type="tel"
                     required
-                    placeholder="e.g. 0977 123456"
+                    placeholder="e.g. +675 7123 4567"
                     value={momoPhone}
                     onChange={(e) => setMomoPhone(e.target.value)}
                     style={{
@@ -495,7 +496,7 @@ export default function PaymentModal({
                     }}
                   />
                   <small style={{ fontSize: "10.5px", color: "rgba(255,255,255,0.5)", display: "block", marginTop: "3px" }}>
-                    An instant USSD prompt will be sent to this phone to enter your PIN.
+                    An instant confirmation prompt will be sent to authorize payment.
                   </small>
                 </div>
 
@@ -506,7 +507,7 @@ export default function PaymentModal({
                     width: "100%",
                     padding: "13px",
                     borderRadius: "10px",
-                    background: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+                    background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
                     color: "#ffffff",
                     border: "none",
                     fontSize: "13.5px",
@@ -515,7 +516,7 @@ export default function PaymentModal({
                     marginTop: "6px"
                   }}
                 >
-                  {isProcessing ? "Prompting Mobile Phone…" : `Pay ${formatPrice(amount, currency)} via ${momoOperator.toUpperCase()}`}
+                  {isProcessing ? "Prompting Authorization…" : `Pay ${formatPrice(amount, currency)} via ${momoOperator.toUpperCase()}`}
                 </button>
               </form>
             )}
@@ -530,7 +531,7 @@ export default function PaymentModal({
                   <input
                     type="text"
                     required
-                    placeholder="e.g. Mukombo Chileshe"
+                    placeholder="e.g. David Alexander Scott"
                     value={cardHolder}
                     onChange={(e) => setCardHolder(e.target.value)}
                     style={{

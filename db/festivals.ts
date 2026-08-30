@@ -11,230 +11,210 @@ export interface FestivalEvent {
   coverImage: string;
   description: string;
   featuredTribes: string[];
-  ticketPriceZmw: number;
-  ticketPricePgk?: number; // Backward compatibility
-  vipPackagePriceZmw: number;
-  vipPackagePricePgk?: number; // Backward compatibility
+  ticketPricePgk: number;
+  ticketPriceZmw?: number; // Backward compatibility
+  vipPackagePricePgk: number;
+  vipPackagePriceZmw?: number; // Backward compatibility
   etiquetteTips: string[];
   scheduleHighlights: { day: string; event: string; time: string }[];
 }
 
-export const ZAMBIA_FESTIVALS: FestivalEvent[] = [
+export const PNG_FESTIVALS: FestivalEvent[] = [
   {
-    id: "kuomboka-ceremony",
-    name: "Kuomboka Royal Ceremony",
-    subtitle: "The majestic migration of the Litunga (King of the Lozi) across the flooded Zambezi plains",
-    month: "April",
-    dates: "April 11 – 13",
-    year: 2026,
-    location: "Lealui to Limulunga, Mongu District",
-    province: "Western Province",
-    region: "Western",
-    coverImage: "/ceremonies/kuomboka_nalikwanda_barge.jpg",
-    description: "One of Africa's most ancient and magnificent royal pageants. When the Zambezi floodwaters rise, the Litunga boards the Nalikwanda, an enormous black-and-white striped barge rowed by 100 men in traditional red berets, accompanied by roaring royal Maoma war drums.",
-    featuredTribes: ["Lozi / Barotse Nation", "Royal Nalikwanda Paddlers", "Mongu Traditional Troupe"],
-    ticketPriceZmw: 450,
-    ticketPricePgk: 450,
-    vipPackagePriceZmw: 1200,
-    vipPackagePricePgk: 1200,
-    etiquetteTips: [
-      "Wear the traditional Siziba (men) or Musisi (women) attire or respectful conservative clothing.",
-      "Never turn your back on the Litunga when the royal barge approaches the high palace.",
-      "Book flights to Mongu and river cruiser viewing boats months in advance."
-    ],
-    scheduleHighlights: [
-      { day: "Day 1", event: "Royal Maoma Drums Awakened at Lealui Palace", time: "10:00 PM" },
-      { day: "Day 2", event: "Nalikwanda Royal Barge Flotilla Departs across Floodplain", time: "08:00 AM" },
-      { day: "Day 3", event: "Triumphant Arrival at Limulunga High Capital & Royal Dances", time: "03:00 PM" }
-    ]
-  },
-  {
-    id: "ncwala-ceremony",
-    name: "Nc'wala Harvest Ceremony",
-    subtitle: "Thanksgiving first-fruits harvest and warrior dances of the Ngoni nation",
-    month: "February",
-    dates: "February 27 – 28",
-    year: 2026,
-    location: "Mtenguleni Arena, Chipata",
-    province: "Eastern Province",
-    region: "Eastern",
-    coverImage: "/ceremonies/ncwala_ngoni_warriors.jpg",
-    description: "Led by Paramount Chief Mpezeni, Ngoni warriors dressed in leopard skins and wielding shields and spears gather at Mtenguleni to celebrate the first harvest with the thunderous Ingoma warrior dance.",
-    featuredTribes: ["Ngoni Impis", "Eastern Province Cultural Guild", "Luangwa Traditional Choirs"],
-    ticketPriceZmw: 350,
-    ticketPricePgk: 350,
-    vipPackagePriceZmw: 850,
-    vipPackagePricePgk: 850,
-    etiquetteTips: [
-      "Follow designated spectator boundaries during warrior spear demonstrations.",
-      "Support local artisans selling handmade beaded headbands and animal skin crafts."
-    ],
-    scheduleHighlights: [
-      { day: "Saturday Morning", event: "Ngoni Warrior Procession & Chief Mpezeni Royal Inspection", time: "09:30 AM" },
-      { day: "Saturday Afternoon", event: "Tasting of the First Harvest Sugarcane & Bull Sacrifice Rites", time: "01:30 PM" },
-      { day: "Saturday Evening", event: "Mass Ingoma Dance & Cultural Chants", time: "04:00 PM" }
-    ]
-  },
-  {
-    id: "likumbi-lya-mize",
-    name: "Likumbi Lya Mize Masked Festival",
-    subtitle: "UNESCO-inscribed ancient Luvale Makishi masquerade dancers and cultural rites",
-    month: "August",
-    dates: "August 20 – 23",
-    year: 2026,
-    location: "Mize Capital, Zambezi District",
-    province: "North-Western Province",
-    region: "North-Western",
-    coverImage: "/ceremonies/likumbi_lya_mize_makishi.jpg",
-    description: "A world-renowned UNESCO cultural masterpiece. Features over 40 distinct Makishi masked spirit dancers representing ancestral protectors, performing acrobatics and pole-climbing dances along the banks of the Zambezi River.",
-    featuredTribes: ["Luvale Mask Masters", "Makishi Spirit Dancers", "North-Western Drum Troupe"],
-    ticketPriceZmw: 300,
-    ticketPricePgk: 300,
-    vipPackagePriceZmw: 750,
-    vipPackagePricePgk: 750,
-    etiquetteTips: [
-      "Respect sacred Makishi mask traditions; do not touch ceremonial costumes.",
-      "Photography is welcomed at open public arenas."
-    ],
-    scheduleHighlights: [
-      { day: "Thursday", event: "Makishi Spirits Resurrect from the Zambezi River Banks", time: "02:00 PM" },
-      { day: "Friday", event: "Acrobatic Pole Climbing & Sacred Initiation Dances", time: "10:00 AM – 04:00 PM" },
-      { day: "Saturday", event: "Grand Royal Arena Showcase before Senior Chief Ndungu", time: "09:00 AM – 05:00 PM" }
-    ]
-  },
-  {
-    id: "umutomboko-ceremony",
-    name: "Umutomboko Royal Ceremony",
-    subtitle: "The triumphant royal victory dance of Mwata Kazembe and the Lunda Kingdom",
-    month: "July",
-    dates: "July 24 – 26",
-    year: 2026,
-    location: "Mwansabombwe Royal Capital, Kawambwa District",
-    province: "Luapula Province",
-    region: "Luapula",
-    coverImage: "/ceremonies/umutomboko_mwata_kazembe.jpg",
-    description: "Commemorating the great Lunda migration and conquest from the Mwata Yamvo Empire. The climax features the reigning Mwata Kazembe dressed in flowing Mukonzo robes wielding the sacred royal sword (Mpoko) in the thunderous Mutomboko victory dance.",
-    featuredTribes: ["Lunda Kingdom", "Mwansabombwe Royal Drummers", "Luapula Cultural Guild"],
-    ticketPriceZmw: 320,
-    ticketPricePgk: 320,
-    vipPackagePriceZmw: 800,
-    vipPackagePricePgk: 800,
-    etiquetteTips: [
-      "Visitors must stand and remove hats when the Mwata Kazembe enters the main royal arena.",
-      "Traditional clapping protocols must be observed when addressing palace elders."
-    ],
-    scheduleHighlights: [
-      { day: "Friday", event: "Palace Homage & Sacred Chishingiliko Purification at Ng'ona River", time: "10:00 AM" },
-      { day: "Saturday Morning", event: "Musumba Royal Palace Procession & Cannon Salute", time: "09:00 AM" },
-      { day: "Saturday Afternoon", event: "The Grand Mutomboko Sword Dance by Mwata Kazembe", time: "02:30 PM" }
-    ]
-  },
-  {
-    id: "shimunenga-ceremony",
-    name: "Shimunenga Cattle Ceremony",
-    subtitle: "Spectacular traditional cattle drive across the Kafue Flats by the Ba-Ila warriors",
+    id: "goroka-show",
+    name: "Goroka Cultural Show",
+    subtitle: "Papua New Guinea's oldest and grandest sing-sing gathering over 100 highland and coastal tribes",
     month: "September",
-    dates: "September 12 – 14",
+    dates: "September 18 – 20",
     year: 2026,
-    location: "Maala, Namwala District",
-    province: "Southern Province",
+    location: "National Sports Institute Grounds, Goroka",
+    province: "Eastern Highlands Province",
+    region: "Highlands",
+    coverImage: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1100&q=82",
+    description: "First held in 1957, the Goroka Show is an astonishing cultural spectacle where over 1,000 warriors, dancers, and musicians from across 100+ tribes assemble in elaborate bilas (traditional adornment), bird-of-paradise feather headdresses, and shell ornaments to sing, drum, and celebrate national identity during Independence weekend.",
+    featuredTribes: ["Asaro Mudmen (Holosa)", "Orokolo Dancers", "Simbu Skeleton Dancers", "Huli Wigmen", "Bena Bena Cane Swallowers"],
+    ticketPricePgk: 100,
+    ticketPriceZmw: 100,
+    vipPackagePricePgk: 350,
+    vipPackagePriceZmw: 350,
+    etiquetteTips: [
+      "Always ask politely before taking close-up portraits of performers during preparation.",
+      "Stay outside the active sing-sing dance circles to avoid obstructing ceremonial rhythms.",
+      "Wear sturdy walking shoes, a sun hat, and apply high-SPF sunscreen; highland sun is intense.",
+      "Support local artisans selling hand-woven Bilum string bags and traditional wood carvings."
+    ],
+    scheduleHighlights: [
+      { day: "Friday Morning", event: "Early Morning Bilas Adornment & Asaro Mudmen Prelude", time: "07:30 AM" },
+      { day: "Saturday All-Day", event: "Grand Arena Sing-Sing Procession & 100 Tribe Choreography", time: "09:00 AM – 04:30 PM" },
+      { day: "Sunday Afternoon", event: "Traditional Archery, Bamboo Flute Melodies & Closing Ceremony", time: "01:00 PM – 05:00 PM" }
+    ]
+  },
+  {
+    id: "mount-hagen-show",
+    name: "Mount Hagen Cultural Show",
+    subtitle: "Vibrant Melpa warrior pageantry, Kundu drumming, and breathtaking highlands billas",
+    month: "August",
+    dates: "August 15 – 16",
+    year: 2026,
+    location: "Kagamuga Showgrounds, Mount Hagen",
+    province: "Western Highlands Province",
+    region: "Highlands",
+    coverImage: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=82",
+    description: "Staged against the misty backdrop of Mount Hagen in the Wahgi Valley, this world-renowned show brings together rival tribes in an explosion of color, thundering kundu drums, Bird of Paradise plumes, and charcoal-painted Melpa warrior columns.",
+    featuredTribes: ["Melpa Warriors of Western Highlands", "Huli Wigmen of Tari", "Jiwaka Feather Dancers", "Enga Sand Art Performers"],
+    ticketPricePgk: 120,
+    ticketPriceZmw: 120,
+    vipPackagePricePgk: 400,
+    vipPackagePriceZmw: 400,
+    etiquetteTips: [
+      "VIP passes provide early access from 07:30 AM to photograph performers applying natural face pigments.",
+      "Do not touch delicate Bird of Paradise headdresses or ceremonial cassowary bone daggers.",
+      "Keep valuable items secure in zippered bags amidst large spectator crowds."
+    ],
+    scheduleHighlights: [
+      { day: "Saturday Dawn", event: "Photographers' Early Access & Traditional Face Painting", time: "07:30 AM" },
+      { day: "Saturday Main Arena", event: "Thunderous Melpa Kundu Drum Entry & Mass Sing-Sing", time: "10:00 AM – 04:00 PM" },
+      { day: "Sunday Finale", event: "Tribal Chants, Mumu Earth-Oven Feast & Artisan Awards", time: "09:30 AM – 03:30 PM" }
+    ]
+  },
+  {
+    id: "rabaul-mask-festival",
+    name: "National Mask & Warwagira Festival",
+    subtitle: "Mystical Tolai Duk-Duk and Tubuan mask spirits and exhilarating night-time Baining Fire Dancers",
+    month: "July",
+    dates: "July 8 – 12",
+    year: 2026,
+    location: "Kokopo Foreshore & Bainings Mountain Villages",
+    province: "East New Britain Province",
+    region: "Islands",
+    coverImage: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82",
+    description: "Celebrates the secret society rituals and mask-making traditions of the Gazelle Peninsula. The festival opens with the Kinavai dawn canoe arrival of sacred Duk-Duk and Tubuan spirit masks from Blanche Bay, and culminates in high mountain villages with the hypnotic Baining Fire Dance, where barefoot men leap through blazing bonfire embers.",
+    featuredTribes: ["Tolai Duk-Duk Secret Society", "Tolai Tubuan Matriarch Spirits", "Baining Fire Dancers (Kavat & Vungvung Masks)", "Sulka Painted Bark-Cloth Masters"],
+    ticketPricePgk: 150,
+    ticketPriceZmw: 150,
+    vipPackagePricePgk: 450,
+    vipPackagePriceZmw: 450,
+    etiquetteTips: [
+      "Observe deep silence and respect during the dawn Kinavai spirit arrival on the beach.",
+      "Do not attempt to touch the sacred Duk-Duk or Tubuan masks; they are living ancestral spirits in Tolai custom.",
+      "Bring protective eyewear for ash drift when attending the Baining Fire Dance at night."
+    ],
+    scheduleHighlights: [
+      { day: "Day 1 (05:00 AM)", event: "Kinavai Dawn Flotilla & Arrival of Tubuan Spirit Canoes on Kokopo Beach", time: "05:00 AM" },
+      { day: "Day 2 & 3", event: "National Mask Exhibition, Traditional Bamboo Band Melodies & Shell Money Exchanges", time: "09:00 AM – 04:00 PM" },
+      { day: "Day 4 Night", event: "Exhilarating Baining Fire Dance in Mountain Jungle Clearing", time: "07:30 PM – 11:00 PM" }
+    ]
+  },
+  {
+    id: "kenu-kundu-festival",
+    name: "Kenu & Kundu Canoe Festival",
+    subtitle: "War canoe racing, conch shell horn calls, and island dances across the azure waters of Milne Bay",
+    month: "November",
+    dates: "November 6 – 8",
+    year: 2026,
+    location: "Alotau Waterfront, Discovery Bay",
+    province: "Milne Bay Province",
     region: "Southern",
-    coverImage: "/ceremonies/shimunenga_baila_warriors.jpg",
-    description: "Celebrated by the Ba-Ila people on the Kafue Flats. Thousands of cattle are driven through flooded channels while spear-wielding warriors chant heroic poems honoring their ancestors.",
-    featuredTribes: ["Ba-Ila Cattlemen", "Namwala Cultural Troupe", "Kafue River Choirs"],
-    ticketPriceZmw: 280,
-    ticketPricePgk: 280,
-    vipPackagePriceZmw: 650,
-    vipPackagePricePgk: 650,
+    coverImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82",
+    description: "A maritime extravaganza celebrating ancient seafaring skills and Kula ring trade voyages. Spectacularly carved 40-man war canoes (Kenu) with towering prow splashboard carvings race across Alotau bay propelled by warriors chanting to synchronized Kundu drum beats.",
+    featuredTribes: ["Suau Island Seafarers", "Trobriand Islands Yam Masters", "Misima Island Paddlers", "Dobu Island Dancers"],
+    ticketPricePgk: 80,
+    ticketPriceZmw: 80,
+    vipPackagePricePgk: 280,
+    vipPackagePriceZmw: 280,
     etiquetteTips: [
-      "Keep clear of cattle crossing paths during the river drive.",
-      "Photography is welcome during the grand warrior assembly."
+      "Cheer enthusiastically from shorelines during the competitive war canoe heats.",
+      "Sample local Milne Bay delicacies like fresh sago, coconut mud crab, and roasted reef fish.",
+      "Respect Kula ring exchange ceremonies and traditional shell valuables."
     ],
     scheduleHighlights: [
-      { day: "Day 1", event: "Shrine Prayers & Ancient Chants at Maala Sacred Grove", time: "09:00 AM" },
-      { day: "Day 2", event: "Spectacular Cattle Drive & River Crossing Showcase", time: "08:30 AM – 02:00 PM" },
-      { day: "Day 3", event: "Warrior Dances & Traditional Poetry Recitation", time: "10:00 AM – 03:30 PM" }
+      { day: "Friday Morning", event: "Arrival of Ocean-Going War Canoes & Conch Shell Trumpet Fanfare", time: "08:30 AM" },
+      { day: "Saturday", event: "Milne Bay War Canoe Racing Heats & Traditional Sailing Regatta", time: "10:00 AM – 03:30 PM" },
+      { day: "Sunday Evening", event: "Trobriand Island Dances, Kundu Drum Symphonies & Trophy Presentation", time: "02:00 PM – 06:00 PM" }
     ]
   },
   {
-    id: "ukusefya-pa-ngwena-ceremony",
-    name: "Ukusefya Pa Ng'wena Ceremony",
-    subtitle: "Sacred Bemba royal celebration of victory and migration from Kola",
+    id: "sepik-crocodile-festival",
+    name: "Sepik River Crocodile Festival",
+    subtitle: "Sacred crocodile worship, spirit house (Haus Tambaran) ceremonies, and dugout canoe pageantry",
     month: "August",
-    dates: "August 28 – 30",
+    dates: "August 5 – 7",
     year: 2026,
-    location: "Ng'wena Arena, Kasama District",
-    province: "Northern Province",
-    region: "Northern",
-    coverImage: "/ceremonies/ukusefya_pa_ngwena_chitimukulu.jpg",
-    description: "Spectacular royal gathering of the Bemba nation led by Paramount Chief Chitimukulu. Features reenactment of the crocodile totem discovery and royal court ceremonies.",
-    featuredTribes: ["Bemba Royal Impis", "Kasama Cultural Dancers", "Northern Choirs"],
-    ticketPriceZmw: 300,
-    ticketPricePgk: 300,
-    vipPackagePriceZmw: 700,
-    vipPackagePricePgk: 700,
+    location: "Ambunti River Station, Middle Sepik",
+    province: "East Sepik Province",
+    region: "Momase",
+    coverImage: "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82",
+    description: "Celebrates the mystical bond between the Sepik people and the saltwater & freshwater crocodiles that rule their river ecosystem. Features canoe races, sacred Haus Tambaran flutes, intricate crocodile scarification presentations, and master woodcarver markets.",
+    featuredTribes: ["Iatmul Crocodile Clan of Middle Sepik", "Ambunti River Dancers", "Kanganaman Spirit Guardians", "Blackwater Lagoon Tribes"],
+    ticketPricePgk: 120,
+    ticketPriceZmw: 120,
+    vipPackagePricePgk: 380,
+    vipPackagePriceZmw: 380,
     etiquetteTips: [
-      "Pay respect to Chitimukulu's royal court protocol.",
-      "Sample traditional Bemba finger millet brew and dishes."
+      "Never enter a Haus Tambaran (Spirit House) uninvited or without permission from village elders.",
+      "Women should check with local guides regarding male-initiation spirit house zones.",
+      "Purchase authentic Sepik masks and ancestral figures directly from master carvers."
     ],
     scheduleHighlights: [
-      { day: "Friday", event: "Royal Fire Lighting & Kola Migration Chants", time: "06:00 PM" },
-      { day: "Saturday", event: "Grand Crocodile Litter Procession & Royal Dances", time: "10:00 AM – 04:30 PM" }
+      { day: "Day 1", event: "Grand Flotilla of Carved Crocodile Prow Canoes on the Sepik River", time: "09:00 AM" },
+      { day: "Day 2", event: "Sacred Crocodile Clan Dances, Scarification Exhibits & Kundu Chants", time: "10:00 AM – 04:00 PM" },
+      { day: "Day 3", event: "Sepik Master Woodcarving Exhibition & Riverbank Farewell Feast", time: "09:30 AM – 03:00 PM" }
     ]
   },
   {
-    id: "kulamba-ceremony",
-    name: "Kulamba Traditional Ceremony",
-    subtitle: "Tri-national gathering of Chewa chiefs honoring King Kalonga Gawa Undi",
+    id: "enga-cultural-show",
+    name: "Enga Cultural Show",
+    subtitle: "Ancient sacred Sili Muli female dances, unique sand paintings, and highland oral epics",
     month: "August",
-    dates: "August 29 – 31",
+    dates: "August 7 – 9",
     year: 2026,
-    location: "Mkaika Royal Capital, Katete",
-    province: "Eastern Province",
-    region: "Eastern",
-    coverImage: "/ceremonies/kulamba_gawa_undi.jpg",
-    description: "Over 130 Chewa subordinate chiefs from Zambia, Malawi, and Mozambique assemble at Mkaika to pay tribute to King Gawa Undi with sacred Gule Wamkulu masked spirit dances.",
-    featuredTribes: ["Chewa Kingdom", "Gule Wamkulu Masked Dancers", "Katete Troupe"],
-    ticketPriceZmw: 350,
-    ticketPricePgk: 350,
-    vipPackagePriceZmw: 850,
-    vipPackagePricePgk: 850,
+    location: "Wabag Primary School Showgrounds, Wabag",
+    province: "Enga Province",
+    region: "Highlands",
+    coverImage: "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82",
+    description: "Enga Province is famous for preserving unique cultural practices not found anywhere else in PNG: the breathtaking Sili Muli dance performed by women wearing giant towering black-feather headdresses, intricate indigenous sand painting, and sacred ritual storytelling.",
+    featuredTribes: ["Sili Muli Dancers of Enga", "Lagaip Valley Warriors", "Porgera Mountain Clans", "Wabag Traditional Guild"],
+    ticketPricePgk: 90,
+    ticketPriceZmw: 90,
+    vipPackagePricePgk: 300,
+    vipPackagePriceZmw: 300,
     etiquetteTips: [
-      "Respect sacred Gule Wamkulu masked performers; do not obstruct dance circles."
+      "Enga people are deeply proud of their cultural authenticity; appreciate performances respectfully.",
+      "Witness the master sand painters create geometric ancestral art using crushed natural minerals."
     ],
     scheduleHighlights: [
-      { day: "Saturday", event: "Arrival of International Chewa Delegations", time: "09:00 AM" },
-      { day: "Sunday", event: "Grand Gule Wamkulu Masquerade & King's Address", time: "10:00 AM – 05:00 PM" }
+      { day: "Friday", event: "Live Indigenous Sand Painting Demonstrations & Traditional Flute Melodies", time: "10:00 AM" },
+      { day: "Saturday", event: "Grand Sili Muli Synchronized Dance & Warrior Column Parade", time: "09:30 AM – 04:00 PM" },
+      { day: "Sunday", event: "Tee Ceremonial Gift Exchange Reenactment & Cultural Awards", time: "10:00 AM – 03:00 PM" }
     ]
   },
   {
-    id: "lunda-lubanza-ceremony",
-    name: "Lunda Lubanza Traditional Ceremony",
-    subtitle: "Sacred annual royal gathering and heritage celebration of the Lunda people under Senior Chief Ishindi",
-    month: "August",
-    dates: "August 14 – 16",
+    id: "hiri-moale-festival",
+    name: "Hiri Moale Festival",
+    subtitle: "Celebration of Motuan maritime trading voyages across the Gulf of Papua and the Hiri Hanenamo queen pageant",
+    month: "September",
+    dates: "September 15 – 16",
     year: 2026,
-    location: "Mukandakunda Royal Capital, Zambezi District",
-    province: "North-Western Province",
-    region: "North-Western",
-    coverImage: "/ceremonies/lunda_lubanza_senior_chief_ishindi.jpg",
-    description: "Celebrated annually by the Lunda people of Northwestern Zambia at Mukandakunda. Led by His Royal Highness Senior Chief Ishindi, the ceremony features vibrant royal processions, traditional Lunda drumming, cultural exhibits, and homage to ancestral heritage.",
-    featuredTribes: ["Lunda of Senior Chief Ishindi", "Mukandakunda Royal Drummers", "North-Western Cultural Troupe"],
-    ticketPriceZmw: 300,
-    ticketPricePgk: 300,
-    vipPackagePriceZmw: 750,
-    vipPackagePricePgk: 750,
+    location: "Ela Beach Waterfront & Sir Hubert Murray Stadium, Port Moresby",
+    province: "National Capital District",
+    region: "Southern",
+    coverImage: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82",
+    description: "Commemorates the historic trading voyages undertaken by the Motu people of Central & NCD in massive multi-hulled lakatoi sailing canoes, trading clay pots for sago in the Gulf of Papua. Features lakatoi canoe arrivals at Ela Beach and the prestigious Hiri Hanenamo cultural pageant.",
+    featuredTribes: ["Motu-Koitabu People of Hanuabada & Tubusereia", "Hiri Coastal Dancers", "Gulf Province Sago Traders"],
+    ticketPricePgk: 60,
+    ticketPriceZmw: 60,
+    vipPackagePricePgk: 200,
+    vipPackagePriceZmw: 200,
     etiquetteTips: [
-      "Observe royal court etiquette and traditional salutations before Senior Chief Ishindi.",
-      "Support local North-Western artisans selling traditional baskets and copper crafts."
+      "Ela Beach viewing is free and open to the public; VIP seating is available for the cultural stage.",
+      "Watch for the arrival of the grand Lakatoi canoe sailing through Walter Bay onto Ela Beach."
     ],
     scheduleHighlights: [
-      { day: "Day 1", event: "Palace Purification & Royal Fire Kindling at Mukandakunda", time: "06:00 PM" },
-      { day: "Day 2", event: "Grand Procession of Senior Chief Ishindi & Royal Lunda War Dances", time: "09:30 AM – 04:00 PM" },
-      { day: "Day 3", event: "Tribute by Subordinate Chiefs & Cultural Performances", time: "10:00 AM – 03:00 PM" }
+      { day: "Saturday Morning", event: "Spectacular Arrival of the Lakatoi Canoe at Ela Beach", time: "09:00 AM" },
+      { day: "Saturday Evening", event: "Hiri Hanenamo Cultural Pageant & Traditional Bilas Judging", time: "06:30 PM" },
+      { day: "Sunday", event: "Motu Cultural Dances, Craft Stalls & Canoe Paddling Competitions", time: "10:00 AM – 04:30 PM" }
     ]
   }
 ];
 
-export const PNG_FESTIVALS: FestivalEvent[] = ZAMBIA_FESTIVALS;
-export const ALL_FESTIVALS: FestivalEvent[] = ZAMBIA_FESTIVALS;
+export const ALL_FESTIVALS: FestivalEvent[] = PNG_FESTIVALS;

@@ -37,15 +37,17 @@ interface TouristMembershipHubProps {
   onOpenRedemptionTerminal?: () => void;
 }
 
-const ZAMBIA_PASSPORT_STAMPS = [
-  { name: "Victoria Falls", prov: "Southern", icon: "🌊", desc: "Mosi-oa-Tunya & Devil's Pool Wonder" },
-  { name: "South Luangwa", prov: "Eastern", icon: "🦁", desc: "Birthplace of the African Walking Safari" },
-  { name: "Lower Zambezi", prov: "Lusaka", icon: "🛶", desc: "Canoe Safaris & Tiger Fishing Trails" },
-  { name: "Kafue National Park", prov: "Central", icon: "🎈", desc: "Busanga Plains Hot Air Ballooning" },
-  { name: "Lake Tanganyika", prov: "Northern", icon: "🤿", desc: "Ndole Bay & Kalambo Falls Gorge" },
-  { name: "Barotseland", prov: "Western", icon: "👑", desc: "Kuomboka Water Pageant & Liuwa Plain" },
-  { name: "Lake Bangweulu", prov: "Luapula", icon: "🦩", desc: "Shoebill Storks & Kasanka Bat Migration" },
-  { name: "Shiwa Ng'andu", prov: "Muchinga", icon: "🏰", desc: "Historic Africa House & Kapishya Hot Springs" }
+const PNG_PASSPORT_STAMPS = [
+  { name: "Kokoda Track", prov: "Central & Oro", icon: "🥾", desc: "Historic 96km Owen Stanley Pilgrimage" },
+  { name: "Mount Wilhelm", prov: "Simbu", icon: "⛰️", desc: "Highest Peak in Papua New Guinea (4,509m)" },
+  { name: "Goroka Valley", prov: "Eastern Highlands", icon: "♨", desc: "Asaro Mudmen & Cultural Sing-Sing" },
+  { name: "Mount Hagen", prov: "Western Highlands", icon: "👑", desc: "Melpa Warrior Sing-Sing & Wahgi Valley" },
+  { name: "Kimbe Bay", prov: "West New Britain", icon: "🤿", desc: "Coral Triangle Biodiversity Sanctuary" },
+  { name: "Rabaul Volcano", prov: "East New Britain", icon: "🌋", desc: "Mount Tavurvur & Baining Fire Dancers" },
+  { name: "Sepik River", prov: "East Sepik", icon: "🐊", desc: "Sacred Haus Tambaran & Crocodile Clans" },
+  { name: "Tufi Fjords", prov: "Oro", icon: "⛵", desc: "Volcanic Calderas & Hammerhead Diving" },
+  { name: "Milne Bay", prov: "Milne Bay", icon: "🌊", desc: "Tawali Coral Drop-offs & Kenu Regatta" },
+  { name: "Varirata Park", prov: "Central", icon: "🦜", desc: "Raggiana Bird of Paradise Rainforest" }
 ];
 
 function DigitalQrVisual({ token }: { token: string }) {
@@ -150,7 +152,7 @@ function DynamicQrSecurityBox({ dynamicQr, onRefresh }: { dynamicQr: { token: st
   );
 }
 
-export default function TouristMembershipHub({ countryCode = "ZMB", viewer, currency, onOpenRedemptionTerminal }: TouristMembershipHubProps) {
+export default function TouristMembershipHub({ countryCode = "PNG", viewer, currency, onOpenRedemptionTerminal }: TouristMembershipHubProps) {
   const isZambia = (countryCode || "").toUpperCase() === "ZMB" || (countryCode || "").toUpperCase() === "ZM";
   const [data, setData] = useState<Record<string, unknown> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -271,8 +273,8 @@ export default function TouristMembershipHub({ countryCode = "ZMB", viewer, curr
 
   const isUsable = sub && ["active", "complimentary"].includes(sub.status as string);
   const currentTier = (sub?.planCode as string) || "visitor-free";
-  const passportList = ZAMBIA_PASSPORT_STAMPS;
-  const currencySymbol = "ZK";
+  const passportList = PNG_PASSPORT_STAMPS;
+  const currencySymbol = "K";
 
   const getTierGradient = (code: string) => {
     if (code.includes("elite")) return "linear-gradient(135deg, var(--brand-deep-teal), var(--brand-charcoal))";
@@ -631,7 +633,7 @@ export default function TouristMembershipHub({ countryCode = "ZMB", viewer, curr
           </div>
 
           <div className="passportStampsGrid">
-            {passportList.map((dest, i) => {
+            {passportList.map((dest: { name: string; prov: string; icon: string; desc: string }, i: number) => {
               const hasStamp = stamps.some(s => String(s.destinationName).toLowerCase().includes(dest.name.toLowerCase()));
               return (
                 <div key={i} className={`passportStampCard ${hasStamp ? "unlocked" : "locked"}`}>

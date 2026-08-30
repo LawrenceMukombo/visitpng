@@ -104,8 +104,8 @@ export default function SignInForm({ returnTo }: SignInFormProps) {
     <main className="nativeAuth">
       <section className="authContainer">
         <Link href="/" className="authBrand">
-          <i>Z</i>
-          <span>ZAMROAM · DISCOVER ZAMBIA</span>
+          <i>P</i>
+          <span>VISITPNG · DISCOVER PAPUA NEW GUINEA</span>
         </Link>
 
         {isAdminDestination && (
@@ -127,13 +127,13 @@ export default function SignInForm({ returnTo }: SignInFormProps) {
           {mode === "signin"
             ? isAdminDestination
               ? "Sign in to Admin Dashboard"
-              : "Sign in to ZamRoam"
-            : "Start planning your Zambia journey"}
+              : "Sign in to VisitPNG"
+            : "Start planning your Papua New Guinea journey"}
         </h1>
 
         <p className="authSubtext">
           {mode === "signin"
-            ? "Your trips, saved places, bookings and administrative rights stay together on your ZamRoam account."
+            ? "Your trips, saved places, bookings and administrative rights stay together on your VisitPNG account."
             : "Create your secure account to manage bookings, offline maps, and custom itineraries."}
         </p>
 

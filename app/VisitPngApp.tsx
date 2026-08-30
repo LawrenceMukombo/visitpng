@@ -2,16 +2,16 @@
 import {useCallback,useEffect,useState} from "react";
 import CurrencySelector from "./components/CurrencySelector";
 import CountrySelector from "./components/CountrySelector";
+import { ProvinceQuickNavigator } from "./components/ProvinceQuickNavigator";
 import TrailMapViewer from "./components/TrailMapViewer";
 import FestivalCalendar from "./components/FestivalCalendar";
 import DigitalPermitPass from "./components/DigitalPermitPass";
 import WantokConcierge from "./components/WantokConcierge";
 import TokPisinPhrasebook from "./components/TokPisinPhrasebook";
-import ZambianPhrasebook from "./components/ZambianPhrasebook";
 import ProviderRegistrationModal from "./components/ProviderRegistrationModal";
 import TouristMembershipHub from "./components/TouristMembershipHub";
 import ProviderRedemptionTerminal from "./components/ProviderRedemptionTerminal";
-import ZambiaInteractiveMap from "./components/ZambiaInteractiveMap";
+import PngInteractiveMap from "./components/PngInteractiveMap";
 import { CountryIntroBanner } from "./components/CountryIntroBanner";
 import { SecurityAdvisory } from "./components/SecurityAdvisory";
 import { Footer } from "./components/Footer";
@@ -19,11 +19,11 @@ import { PassLanding } from "./components/PassLanding";
 import { PartnerLanding } from "./components/PartnerLanding";
 import { AboutPage } from "./components/AboutPage";
 import { AiChatModal, FloatingConciergeWidget } from "./components/AiChatModal";
-import { ZamRoamLogo, ZamRoamHeroBanner, ZamRoamTrustRibbon } from "./components/ZamRoamEmblem";
+import { VisitPngLogo, VisitPngHeroBanner, VisitPngTrustRibbon } from "./components/VisitPngEmblem";
 import PaymentModal from "./components/PaymentModal";
 import {CurrencyCode, formatPrice} from "../db/currency";
-import {PNG_TRAIL_PACKS, ZAMBIA_TRAIL_PACKS} from "../db/trailPacks";
-import {PNG_FESTIVALS, ZAMBIA_FESTIVALS} from "../db/festivals";
+import {PNG_TRAIL_PACKS} from "../db/trailPacks";
+import {PNG_FESTIVALS} from "../db/festivals";
 import type {CountrySettings} from "../db/countries";
 
 type Viewer={signedIn:true;displayName:string;email:string;signOutPath:string}|{signedIn:false;signInPath:string};
@@ -44,7 +44,7 @@ type Plan={id:number;code:string;name:string;audience:string;billingPeriod:strin
 type MembershipData={plans:Plan[];subscription:null|{id:number;memberNumber:string;status:string;startDate:string;expiryDate:string|null;autoRenew:number;cancelAtPeriodEnd:number;planId:number;planName:string;planCode:string};points:number;history:{token:string;status:string;redeemedAt:string|null;createdAt:string;benefitName:string}[];memberName:string};
 
 export default function VisitPngApp({viewer}:{viewer:Viewer}){
-  const[countryCode,setCountryCode]=useState<string>("ZMB");
+  const[countryCode,setCountryCode]=useState<string>("PNG");
   const[countrySettings,setCountrySettings]=useState<CountrySettings|null>(null);
   const[data,setData]=useState<Catalogue|null>(null);
   const[error,setError]=useState("");
@@ -57,7 +57,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   const[bookingListing,setBookingListing]=useState<Listing|null>(null);
   const[reviewListing,setReviewListing]=useState<Listing|null>(null);
   const[tab,setTab]=useState<"Explore"|"Bookings"|"Reviews"|"Saved"|"Trips"|"Membership"|"Profile">("Explore");
-  const[currency,setCurrency]=useState<CurrencyCode>("ZMW");
+  const[currency,setCurrency]=useState<CurrencyCode>("PGK");
   const[exploreMode,setExploreMode]=useState<"places"|"map"|"wantok"|"phrasebook"|"security"|"festivals"|"permits"|"trails">("places");
   const[showProviderModal,setShowProviderModal]=useState(false);
   const[showRedemptionTerminal,setShowRedemptionTerminal]=useState(false);
@@ -69,13 +69,13 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
   useEffect(()=>{
     if(new URLSearchParams(window.location.search).has("wishlist"))setTab("Saved");
     try{
-      setCountryCode("ZMB");
-      const savedCurr=localStorage.getItem("zamroam_currency")as CurrencyCode|null;
-      if(savedCurr&&["ZMW","USD","EUR","GBP","AUD","JPY"].includes(savedCurr)) {
+      setCountryCode("PNG");
+      const savedCurr=localStorage.getItem("visitpng_currency")as CurrencyCode|null;
+      if(savedCurr&&["PGK","USD","AUD","EUR","GBP","JPY","NZD"].includes(savedCurr)) {
         setCurrency(savedCurr);
       } else {
-        setCurrency("ZMW");
-        try{localStorage.setItem("zamroam_currency","ZMW")}catch{}
+        setCurrency("PGK");
+        try{localStorage.setItem("visitpng_currency","PGK")}catch{}
       }
     }catch{}
   },[]);
@@ -93,21 +93,21 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
     const normalized=newCountry.toUpperCase();
     setCountryCode(normalized);
     try{localStorage.setItem("visit_country",normalized)}catch{}
-    setCurrency("ZMW" as CurrencyCode);
-    try{localStorage.setItem("zamroam_currency","ZMW")}catch{}
+    setCurrency("PGK" as CurrencyCode);
+    try{localStorage.setItem("visitpng_currency","PGK")}catch{}
   };
 
   const handleCurrencyChange=(newCurr:CurrencyCode)=>{
     setCurrency(newCurr);
-    try{localStorage.setItem("zamroam_currency",newCurr)}catch{}
+    try{localStorage.setItem("visitpng_currency",newCurr)}catch{}
   };
 
   const load=useCallback(async(signal?:AbortSignal)=>{
     setError("");
     try{
       const [catRes, countryRes] = await Promise.all([
-        fetch(`/api/catalogue?q=${encodeURIComponent(debouncedQ)}&category=${encodeURIComponent(category)}&country=ZMB`,{signal}),
-        fetch(`/api/countries?code=ZMB`,{signal})
+        fetch(`/api/catalogue?q=${encodeURIComponent(debouncedQ)}&category=${encodeURIComponent(category)}&country=PNG`,{signal}),
+        fetch(`/api/countries?code=PNG`,{signal})
       ]);
       if(!catRes.ok)throw new Error();
       const payload:Catalogue=await catRes.json();
@@ -131,28 +131,27 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
     return()=>ctrl.abort();
   },[load]);
 
-  const heroEyebrow = countrySettings?.heroEyebrow || "THE REAL AFRICA";
+  const heroEyebrow = countrySettings?.heroEyebrow || "LAND OF A MILLION JOURNEYS";
   const heroTitle = countrySettings?.heroTitle ? (
     <span style={{whiteSpace:"pre-line"}}>{countrySettings.heroTitle}</span>
   ) : (
-    <>Discover the wonders<br/>of Zambia.</>
+    <>Discover the wonders<br/>of Papua New Guinea.</>
   );
-  const heroSubtitle = countrySettings?.heroSubtitle || "Experience the majestic Victoria Falls, world-class walking safaris in South Luangwa, and legendary African hospitality.";
+  const heroSubtitle = countrySettings?.heroSubtitle || "Experience the historic Kokoda Track, Mount Wilhelm summits, Coral Triangle diving, and 800+ indigenous cultures.";
 
-  const isZambia = countryCode === "ZMB";
-  const activeFestivals = ZAMBIA_FESTIVALS;
-  const activeTrails = ZAMBIA_TRAIL_PACKS;
+  const activeFestivals = PNG_FESTIVALS;
+  const activeTrails = PNG_TRAIL_PACKS;
 
   const switcherNav = (
     <div className="exploreModeSwitcher">
       <button className={exploreMode==="places"?"active":""} onClick={()=>setExploreMode("places")}>🌴 Places & Stays</button>
       <button className={exploreMode==="map"?"active":""} onClick={()=>setExploreMode("map")}>🗺️ Interactive Map</button>
-      <button className={exploreMode==="wantok"?"active":""} onClick={()=>setExploreMode("wantok")}>{isZambia ? "🦁 Safari AI" : "🤖 Wantok AI"}</button>
+      <button className={exploreMode==="wantok"?"active":""} onClick={()=>setExploreMode("wantok")}>🤖 Wantok AI</button>
       <button className={exploreMode==="security"?"active":""} onClick={()=>setExploreMode("security")}>🛡️ SafeTravel</button>
-      <button className={exploreMode==="phrasebook"?"active":""} onClick={()=>setExploreMode("phrasebook")}>{isZambia ? "🗣️ Local Phrases" : "🗣️ Tok Pisin"}</button>
-      <button className={exploreMode==="festivals"?"active":""} onClick={()=>setExploreMode("festivals")}>{isZambia ? `🎭 Ceremonies (${activeFestivals.length})` : `🎭 Festivals (${activeFestivals.length})`}</button>
-      <button className={exploreMode==="permits"?"active":""} onClick={()=>setExploreMode("permits")}>{isZambia ? "🎫 Park Permits" : "🎫 Permits"}</button>
-      <button className={exploreMode==="trails"?"active":""} onClick={()=>setExploreMode("trails")}>{isZambia ? `🗺️ Safari Trails (${activeTrails.length})` : `🗺️ Trails (${activeTrails.length})`}</button>
+      <button className={exploreMode==="phrasebook"?"active":""} onClick={()=>setExploreMode("phrasebook")}>🗣️ Tok Pisin</button>
+      <button className={exploreMode==="festivals"?"active":""} onClick={()=>setExploreMode("festivals")}>🎭 Festivals ({activeFestivals.length})</button>
+      <button className={exploreMode==="permits"?"active":""} onClick={()=>setExploreMode("permits")}>🎫 Permits</button>
+      <button className={exploreMode==="trails"?"active":""} onClick={()=>setExploreMode("trails")}>🗺️ Trails ({activeTrails.length})</button>
       <button className="partnerRegisterPill" onClick={()=>setShowProviderModal(true)}>🤝 Partner / Register Service</button>
     </div>
   );
@@ -175,17 +174,29 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       countryCode={countryCode}
       onCountryChange={handleCountryChange}
       onHome={handleGoHome}
+      selectedProvince={q || null}
+      onSelectProvince={(prov) => {
+        setQ(prov || "");
+        if (exploreMode !== "places") setExploreMode("places");
+        window.scrollTo({ top: 380, behavior: "smooth" });
+      }}
+      onOpenMap={() => {
+        setTab("Explore");
+        setExploreMode("map");
+        window.scrollTo({ top: 380, behavior: "smooth" });
+      }}
     />
+    <VisitPngTrustRibbon/>
     {tab==="Explore"?<>
       <section className="hero">
         <p className="eyebrow lime">{heroEyebrow}</p>
         <h1>{heroTitle}</h1>
         <p>{heroSubtitle}</p>
         <div className="search">
-          <label htmlFor="catalogue-search">Where do you want to go in {countryCode === "ZMB" ? "Zambia" : "PNG"}?</label>
+          <label htmlFor="catalogue-search">Where do you want to go in Papua New Guinea?</label>
           <div>
             <span>⌕</span>
-            <input id="catalogue-search" value={q} onFocus={()=>setSearchOpen(true)} onBlur={()=>setTimeout(()=>setSearchOpen(false),150)} onChange={e=>{setQ(e.target.value);setSearchOpen(true)}} placeholder={countryCode === "ZMB" ? "Search Livingstone, Victoria Falls, South Luangwa or Stays" : "Search places, provinces or experiences"} autoComplete="off"/>
+            <input id="catalogue-search" value={q} onFocus={()=>setSearchOpen(true)} onBlur={()=>setTimeout(()=>setSearchOpen(false),150)} onChange={e=>{setQ(e.target.value);setSearchOpen(true)}} placeholder="Search Kokoda, Goroka, Kimbe Bay, Rabaul, Mount Wilhelm or Stays" autoComplete="off"/>
             <button aria-label="Clear search" onClick={()=>{setQ("");setSearchOpen(false)}}>×</button>
           </div>
           {searchOpen&&q.trim()&&data&&<div className="suggestions" role="listbox" aria-label="Search suggestions">
@@ -197,24 +208,15 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
 
       {exploreMode==="places"?<section className="content">
         {switcherNav}
-        <ZamRoamHeroBanner
-          onSelectCategory={(slug)=>{
-            setCategory(slug);
-            const el = document.getElementById("places-explore-heading");
-            if (el) el.scrollIntoView({ behavior: "smooth" });
-          }}
-          onOpenMap={()=>setExploreMode("map")}
-          onOpenPass={()=>setShowPassModal(true)}
-          onOpenPartner={()=>setShowPartnerModal(true)}
-          onOpenFestivals={()=>setExploreMode("festivals")}
-          onOpenProvider={()=>setShowProviderModal(true)}
+        <VisitPngHeroBanner
+          onExploreClick={()=>setExploreMode("map")}
         />
         <CountryIntroBanner countryCode={countryCode}/>
         <div className="cats">
           {data?.categories.map(c=><button key={c.slug} className={category===c.slug?"active":""} onClick={()=>setCategory(category===c.slug?"all":c.slug)}><span>{c.icon}</span>{c.name}</button>)}
         </div>
         <div id="places-explore-heading" className="title">
-          <div><p className="eyebrow">PLACES TO EXPLORE IN {countryCode === "ZMB" ? "ZAMBIA" : "PAPUA NEW GUINEA"}</p><h2>{q?`Results for “${q}”`:"Discover something remarkable"}</h2></div>
+          <div><p className="eyebrow">PLACES TO EXPLORE IN PAPUA NEW GUINEA</p><h2>{q?`Results for “${q}”`:"Discover something remarkable"}</h2></div>
           {data&&<span className="resultCount">{data.meta.count} found</span>}
         </div>
         {(!data && loading)?<Loading/>:(!data && error)?<ErrorState message={error} retry={()=>load()}/>:data&&data.listings.length?<div className="cards">
@@ -224,7 +226,7 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       </section>:exploreMode==="map"?<section className="content mapContentSection">
         {switcherNav}
         <div style={{ marginTop: "16px" }}>
-          <ZambiaInteractiveMap onSelectDestination={(slug)=>{setQ(slug.replace(/-/g," "));setExploreMode("places");window.scrollTo({ top: 400, behavior: "smooth" });}}/>
+          <PngInteractiveMap onSelectDestination={(slug)=>{setQ(slug.replace(/-/g," "));setExploreMode("places");window.scrollTo({ top: 400, behavior: "smooth" });}}/>
         </div>
       </section>:exploreMode==="wantok"?<section className="content wantokContentSection">
         {switcherNav}
@@ -234,17 +236,15 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
         <SecurityAdvisory countryCode={countryCode}/>
       </section>:exploreMode==="phrasebook"?<section className="content phrasebookContentSection">
         {switcherNav}
-        {isZambia ? <ZambianPhrasebook/> : <TokPisinPhrasebook/>}
+        <TokPisinPhrasebook/>
       </section>:exploreMode==="festivals"?<section className="content festivalContentSection">
         {switcherNav}
         <div className="title">
-          <div><p className="eyebrow lime">{isZambia ? "TRADITIONAL CEREMONIES & ROYAL PAGEANTS" : "ANNUAL SINGSING & CULTURAL SHOWS"}</p><h2>{isZambia ? "Zambia Cultural Ceremony Calendar" : "Cultural Festival Calendar"}</h2></div>
-          <span className="resultCount">{activeFestivals.length} {isZambia ? "royal ceremonies" : "major festivals"}</span>
+          <div><p className="eyebrow lime">ANNUAL SINGSING & CULTURAL SHOWS</p><h2>Papua New Guinea Cultural Festival Calendar</h2></div>
+          <span className="resultCount">{activeFestivals.length} major festivals</span>
         </div>
         <p className="trailsIntro">
-          {isZambia
-            ? "Explore verified dates for Kuomboka, Nc'wala, Likumbi Lya Mize, cultural etiquette, and access passes."
-            : "Explore verified schedules, tribe traditions, photography etiquette, and reserve official festival entry passes with 100% offline access."}
+          Explore verified schedules, tribe traditions, photography etiquette, and reserve official festival entry passes with 100% offline access.
         </p>
         <FestivalCalendar currency={currency} countryCode={countryCode}/>
       </section>:exploreMode==="permits"?<section className="content permitsContentSection">
@@ -253,13 +253,11 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       </section>:<section className="content trailsContentSection">
         {switcherNav}
         <div className="title">
-          <div><p className="eyebrow lime">{isZambia ? "SAFARI & WILDERNESS TRAILS" : "WILDERNESS & ADVENTURE MAPS"}</p><h2>{isZambia ? "Safari Walking & River Trail Packs" : "Expedition & Trail Packs"}</h2></div>
+          <div><p className="eyebrow lime">WILDERNESS & EXPEDITION TRAILS</p><h2>Papua New Guinea Expedition & Trail Packs</h2></div>
           <span className="resultCount">{activeTrails.length} ready</span>
         </div>
         <p className="trailsIntro">
-          {isZambia
-            ? "Download topographic trail packs, Luangwa walking safari maps, and Victoria Falls GPX waypoints to explore safely."
-            : "Download topographic trail packs, elevation profiles, campsite waypoints, and GPX coordinates to navigate safely in Papua New Guinea without cellular reception."}
+          Download topographic trail packs, elevation profiles, campsite waypoints, and GPX coordinates to navigate safely in Papua New Guinea without cellular reception.
         </p>
         <div className="trailPacksGrid">
           {activeTrails.map(trail=><TrailMapViewer key={trail.id} trail={trail}/>)}
@@ -268,9 +266,9 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
     </>:tab==="Bookings"?<BookingsScreen viewer={viewer} currency={currency}/>:tab==="Reviews"?<ReviewsScreen viewer={viewer}/>:tab==="Saved"?<SavedScreen viewer={viewer}/>:tab==="Trips"?<TripsScreen viewer={viewer} currency={currency}/>:tab==="Membership"?<TouristMembershipHub countryCode={countryCode} viewer={viewer} currency={currency} onOpenRedemptionTerminal={()=>setShowRedemptionTerminal(true)}/>:<ProfileScreen viewer={viewer}/>}
     <Footer
       countryCode={countryCode}
-      brandName={countryCode === "ZMB" ? "ZamRoam" : "VisitPNG"}
-      tagline={countryCode === "ZMB" ? "Roam Zambia. Experience More." : "The Land of a Million Journeys"}
-      legalOwner="Lamton Investments Ltd"
+      brandName="VisitPNG"
+      tagline="Discover Papua New Guinea · Land of a Million Journeys"
+      legalOwner="VisitPNG Tourism Services Ltd"
       onOpenPass={() => setShowPassModal(true)}
       onOpenPartnerRegistration={() => setShowProviderModal(true)}
       onOpenFoundingPartners={() => setShowPartnerModal(true)}
@@ -317,8 +315,8 @@ export default function VisitPngApp({viewer}:{viewer:Viewer}){
       isOpen={showAiChatModal}
       onClose={()=>setShowAiChatModal(false)}
       countryCode={countryCode}
-      brandName={countryCode === "ZMB" ? "ZamRoam" : "VisitPNG"}
-      supportPhone="+260 573 506 598"
+      brandName="VisitPNG"
+      supportPhone="+675 321 4188"
     />
   </main>;
 }
@@ -329,7 +327,10 @@ function Header({
   currency,
   onCurrencyChange,
   countryCode: _countryCode,
-  onHome
+  onHome,
+  selectedProvince,
+  onSelectProvince,
+  onOpenMap
 }: {
   viewer: Viewer;
   profile: () => void;
@@ -338,6 +339,9 @@ function Header({
   countryCode: string;
   onCountryChange?: (c: string) => void;
   onHome?: () => void;
+  selectedProvince?: string | null;
+  onSelectProvince?: (prov: string | null, name?: string) => void;
+  onOpenMap?: () => void;
 }) {
   const initials = viewer.signedIn
     ? viewer.displayName.split(/\s|@/).filter(Boolean).slice(0, 2).map(x => x[0]).join("").toUpperCase()
@@ -357,7 +361,7 @@ function Header({
         }}
         style={{ background: "none", border: "none", padding: 0, cursor: "pointer", display: "inline-flex", alignItems: "center", flexShrink: 0 }}
       >
-        <ZamRoamLogo size="small" showTagline={false} />
+        <VisitPngLogo size="small" showTagline={false} />
       </button>
 
       <nav style={{ display: "inline-flex", alignItems: "center", gap: "6px", height: "34px", flexShrink: 0 }}>
@@ -404,28 +408,13 @@ function Header({
           </button>
         )}
 
-        <span
-          className="destinationPill"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "34px",
-            padding: "0 10px",
-            borderRadius: "99px",
-            background: "rgba(255, 255, 255, 0.14)",
-            border: "1px solid rgba(255, 255, 255, 0.25)",
-            color: "#ffffff",
-            fontSize: "11.5px",
-            fontWeight: 700,
-            whiteSpace: "nowrap",
-            boxSizing: "border-box",
-            lineHeight: 1,
-            verticalAlign: "middle"
+        <ProvinceQuickNavigator
+          selectedProvince={selectedProvince}
+          onSelectProvince={(prov) => {
+            if (onSelectProvince) onSelectProvince(prov);
           }}
-        >
-          🇿🇲 Zambia
-        </span>
+          onOpenMap={onOpenMap}
+        />
         <CurrencySelector currentCurrency={currency} onChange={onCurrencyChange}/>
         {!viewer.signedIn && (
           <a
@@ -461,11 +450,11 @@ function Header({
 
 function ProfileScreen({viewer}:{viewer:Viewer}){
   if(!viewer.signedIn)return <section className="accountGuest">
-    <div className="accountMark">🇿🇲</div>
+    <div className="accountMark">🇵🇬</div>
     <p className="eyebrow">YOUR ACCOUNT</p>
     <h1>Your journeys, in one secure place.</h1>
-    <p>Sign in to create your traveller profile. Use your Visit Zambia account to keep your journeys and safari plans together.</p>
-    <a href={viewer.signInPath}>Sign in to Visit Zambia</a>
+    <p>Sign in to create your traveller profile. Use your VisitPNG account to keep your journeys and expedition plans together.</p>
+    <a href={viewer.signInPath}>Sign in to VisitPNG</a>
     <small>You can still browse places without signing in.</small>
   </section>;
   return <AccountForm viewer={viewer}/>;
@@ -497,7 +486,7 @@ function MembershipScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode
     const x=await r.json();
     if(r.ok){setData(x);setStatus("Membership saved.")}else setStatus(x.error||"Membership update failed.");
   };
-  if(!viewer.signedIn)return <section className="accountGuest"><div className="accountMark">★</div><p className="eyebrow">MEMBERSHIP</p><h1>More access. More Zambia.</h1><p>Sign in to compare plans, manage your membership card and track reward points.</p><a href={viewer.signInPath}>Sign in to view membership</a></section>;
+  if(!viewer.signedIn)return <section className="accountGuest"><div className="accountMark">★</div><p className="eyebrow">MEMBERSHIP</p><h1>More access. More Papua New Guinea.</h1><p>Sign in to compare plans, manage your membership card and track reward points.</p><a href={viewer.signInPath}>Sign in to view membership</a></section>;
   const currentPlan=data?.plans.find(p=>p.id===data.subscription?.planId);
   const usable=data?.subscription&&["active","complimentary"].includes(data.subscription.status);
   return <section className="saved membershipPage">
@@ -506,7 +495,7 @@ function MembershipScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode
     <p>Choose the membership that suits you. Practice payments never charge real money.</p>
     {status&&<p className="formStatus" aria-live="polite">{status}</p>}
     {data?.subscription&&<article className="memberCard">
-      <div className="memberCardTop"><span>ZAMROAM</span><b>{data.subscription.status.replaceAll("_"," ")}</b></div>
+      <div className="memberCardTop"><span>VISITPNG</span><b>{data.subscription.status.replaceAll("_"," ")}</b></div>
       <p>MEMBER</p>
       <h2>{data.memberName}</h2>
       <strong>{data.subscription.memberNumber}</strong>
@@ -705,7 +694,7 @@ function SavedScreen({viewer}:{viewer:Viewer}){
   const current=lists.find(l=>l.id===active)||lists[0];
   return <section className="saved">
     <p className="eyebrow">SAVED PLACES</p>
-    <h1>Your Zambia wishlists.</h1>
+    <h1>Your Papua New Guinea wishlists.</h1>
     <p>Organise places into custom wishlists, add travel notes and move places between lists.</p>
     <form className="newList" onSubmit={e=>{e.preventDefault();if(newListName.trim()){mutate("POST",{action:"create",name:newListName.trim()});setNewListName("")}}}>
       <input placeholder="New wishlist name" value={newListName} onChange={e=>setNewListName(e.target.value)}/>
@@ -849,7 +838,7 @@ function Card({listing:p,open,save,currency}:{listing:Listing;open:(p:Listing)=>
       <h3>{p.name}</h3>
       {!collapsed && <p>{p.summary}</p>}
 
-      {/* Quick Direct Contacts Bar (Only when verified channels exist) */}
+      {/* Quick Direct Contacts Bar */}
       {(phone || whatsappNumber || website) && (
         <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", margin: "8px 0 10px", alignItems: "center" }} onClick={e=>e.stopPropagation()}>
           {phone && (
@@ -875,7 +864,7 @@ function Card({listing:p,open,save,currency}:{listing:Listing;open:(p:Listing)=>
           )}
           {whatsappNumber && (
             <a
-              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am inquiring about ${p.name} on ZamRoam.`)}`}
+              href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am inquiring about ${p.name} on VisitPNG.`)}`}
               target="_blank"
               rel="noopener noreferrer"
               title="Chat directly on WhatsApp"
@@ -908,12 +897,12 @@ function Card({listing:p,open,save,currency}:{listing:Listing;open:(p:Listing)=>
                 gap: "4px",
                 padding: "4px 8px",
                 borderRadius: "6px",
-                background: "rgba(200, 134, 10, 0.1)",
-                color: "#92400e",
+                background: "rgba(234, 88, 12, 0.1)",
+                color: "#EA580C",
                 fontSize: "11px",
                 fontWeight: 700,
                 textDecoration: "none",
-                border: "1px solid rgba(200, 134, 10, 0.2)"
+                border: "1px solid rgba(234, 88, 12, 0.2)"
               }}
             >
               🌐 Website
@@ -1002,7 +991,7 @@ function BookingsScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode})
   return <section className="saved bookingsPage">
     <p className="eyebrow">YOUR BOOKINGS & PAYMENTS</p>
     <h1>Your travel bookings.</h1>
-    <p>Complete payment securely via PayPal, Zambian Mobile Money, or Credit Card.</p>
+    <p>Complete payment securely via PayPal, Papua New Guinea Digicel/Vodafone/BSP Pay, or Credit Card.</p>
     {status&&<p className="formStatus" aria-live="polite">{status}</p>}
     {bookings.length?<div className="bookingList">
       {bookings.map(b=><article className="bookingCard" key={b.id}>
@@ -1020,12 +1009,12 @@ function BookingsScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode})
               <>
                 <button
                   type="button"
-                  style={{ background: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)", color: "#000000", fontWeight: 800 }}
+                  style={{ background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)", color: "#ffffff", fontWeight: 800 }}
                   onClick={()=>setActivePaymentBooking(b)}
                 >
                   💳 Pay via PayPal / MoMo / Cards
                 </button>
-                <button type="button" onClick={()=>act("testConfirm",b.id)}>Practice payment</button>
+                <button type="button" onClick={()=>act("testConfirm",b.id)}>Confirm practice payment</button>
                 <button type="button" className="cancelBtn" onClick={()=>act("cancel",b.id)}>Cancel hold</button>
               </>
             )}
@@ -1043,7 +1032,7 @@ function BookingsScreen({viewer,currency}:{viewer:Viewer;currency:CurrencyCode})
           load();
           setStatus("🎉 Payment verified! Your booking is officially confirmed.");
         }}
-        title="Complete Safari Booking Payment"
+        title="Complete PNG Travel Booking Payment"
         itemType="booking"
         itemId={activePaymentBooking.id}
         itemName={activePaymentBooking.listingName}
@@ -1216,7 +1205,7 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
   const whatsappNumber = p.providerWhatsapp ? p.providerWhatsapp.replace(/\D/g, "") : null;
   const email = p.providerEmail || null;
   const website = p.providerWebsite || p.sourceUrl || p.deepLinkUrl || null;
-  const address = p.providerAddress || (p.destination ? `${p.destination}, ${p.province || "Zambia"}` : null);
+  const address = p.providerAddress || (p.destination ? `${p.destination}, ${p.province || "Papua New Guinea"}` : null);
   const hasDirectAction = Boolean(phone || whatsappNumber || email || website);
 
   return <div className="overlay" onClick={close}>
@@ -1237,8 +1226,8 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
 
         {/* Direct Contact & Physical Address Panel */}
         <div className="directContactPanel" style={{
-          background: "linear-gradient(135deg, rgba(3, 47, 43, 0.08) 0%, rgba(200, 134, 10, 0.08) 100%)",
-          border: "1.5px solid rgba(200, 134, 10, 0.35)",
+          background: "linear-gradient(135deg, rgba(3, 47, 43, 0.08) 0%, rgba(234, 88, 12, 0.08) 100%)",
+          border: "1.5px solid rgba(234, 88, 12, 0.35)",
           borderRadius: "14px",
           padding: "16px",
           margin: "18px 0",
@@ -1246,7 +1235,7 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
         }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px", borderBottom: "1px solid rgba(0,0,0,0.08)", paddingBottom: "8px" }}>
             <strong style={{ fontSize: "14px", color: "var(--brand-deep-teal, #032F2B)", display: "flex", alignItems: "center", gap: "6px" }}>
-              <span>📞</span> Direct Facility & Owner Contacts
+              <span>📞</span> Direct Facility & Host Contacts
             </strong>
             <span style={{ fontSize: "11px", fontWeight: 700, color: hasDirectAction ? "#16a34a" : "#64748b", background: hasDirectAction ? "rgba(22, 163, 74, 0.12)" : "rgba(100, 116, 139, 0.12)", padding: "3px 8px", borderRadius: "99px" }}>
               {hasDirectAction ? "✓ Direct Reachable" : "Official Facility"}
@@ -1279,7 +1268,7 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
               )}
               {whatsappNumber && (
                 <a
-                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am contacting you directly regarding ${p.name} on ZamRoam.`)}`}
+                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Hello, I am contacting you directly regarding ${p.name} on VisitPNG.`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -1302,7 +1291,7 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
               )}
               {email && (
                 <a
-                  href={`mailto:${email}?subject=${encodeURIComponent(`Inquiry for ${p.name} (ZamRoam)`)}`}
+                  href={`mailto:${email}?subject=${encodeURIComponent(`Inquiry for ${p.name} (VisitPNG)`)}`}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -1310,12 +1299,12 @@ function Details({listing:p,close,book,review,currency}:{listing:Listing;close:(
                     gap: "6px",
                     padding: "10px 14px",
                     borderRadius: "10px",
-                    background: "#C8860A",
+                    background: "#EA580C",
                     color: "#ffffff",
                     textDecoration: "none",
                     fontWeight: 700,
                     fontSize: "12.5px",
-                    boxShadow: "0 2px 6px rgba(200,134,10,0.25)"
+                    boxShadow: "0 2px 6px rgba(234,88,12,0.25)"
                   }}
                 >
                   <span>✉️ Direct Email</span>

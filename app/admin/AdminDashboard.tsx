@@ -108,7 +108,7 @@ const blankProvider={
 
 export default function AdminDashboard({viewer}:{viewer:{name:string;email:string;signOut:string}}){
   const [data,setData]=useState<Data|null>(null);
-  const selectedCountry = "ZMB";
+  const selectedCountry = "PNG";
   const [listingForm,setListingForm]=useState({...blankListing});
   const [destForm,setDestForm]=useState({...blankDestination});
   const [provForm,setProvForm]=useState({...blankProvince});
@@ -363,7 +363,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const saveListing=async(e:React.FormEvent)=>{
     e.preventDefault();
     setStatus("Saving facility / place…");
-    const targetCountryId = listingForm.countryId || (selectedCountry === "ZMB" ? 2 : selectedCountry === "PNG" ? 1 : undefined);
+    const targetCountryId = listingForm.countryId || (selectedCountry === "PNG" ? 1 : 2);
     const r=await fetch("/api/admin/listings",{
       method:listingForm.id?"PATCH":"POST",
       headers:{"Content-Type":"application/json"},
@@ -385,7 +385,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const saveDestination=async(e:React.FormEvent)=>{
     e.preventDefault();
     setStatus("Saving location / destination…");
-    const targetCountryId = (selectedCountry === "ZMB" ? 2 : selectedCountry === "PNG" ? 1 : undefined);
+    const targetCountryId = (selectedCountry === "PNG" ? 1 : 2);
     const r=await fetch("/api/admin/geography",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
@@ -587,15 +587,15 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
           <form onSubmit={saveListing}>
             <label>Target Country Portal
               <select
-                value="ZMB"
+                value="PNG"
                 disabled
               >
-                <option value="ZMB">🇿🇲 Zambia (ZamRoam / Visit Zambia)</option>
+                <option value="PNG">🇵🇬 Papua New Guinea (VisitPNG)</option>
               </select>
             </label>
 
             <label>Place / Experience Name
-              <input required placeholder={selectedCountry === "ZMB" || listingForm.countryId === 2 ? "e.g. Royal Livingstone Hotel, South Luangwa Safari Camp" : "e.g. Walindi Plantation Resort, Kokoda Trek"} value={listingForm.name} onChange={e=>setListingForm({...listingForm,name:e.target.value,slug:listingForm.id?listingForm.slug:e.target.value.toLowerCase().replace(/[^a-z0-9]+/g,"-")})}/>
+              <input required placeholder={listingForm.countryId === 2 ? "e.g. Royal Livingstone Hotel, South Luangwa Safari Camp" : "e.g. Walindi Plantation Resort, Kokoda Trek"} value={listingForm.name} onChange={e=>setListingForm({...listingForm,name:e.target.value,slug:listingForm.id?listingForm.slug:e.target.value.toLowerCase().replace(/[^a-z0-9]+/g,"-")})}/>
             </label>
             <label>Short web address (slug)
               <input required value={listingForm.slug} onChange={e=>setListingForm({...listingForm,slug:e.target.value})}/>
@@ -608,7 +608,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
             <div className="adminSectionBox">
               <p className="adminSectionBoxTitle">⚡ Location Assignment (Region › Province › District › Destination)</p>
               <SmartLocationCascade
-                countryCode={listingForm.countryId === 2 || selectedCountry === "ZMB" ? "ZMB" : "PNG"}
+                countryCode={listingForm.countryId === 2 ? "ZMB" : "PNG"}
                 destinations={data.destinations}
                 provinces={data.provinces}
                 selectedDestinationId={listingForm.destinationId}
@@ -724,7 +724,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
           </header>
           <div>
             {filteredListings.map(x=>{
-              const itemCurrency = x.currency || "ZMW";
+              const itemCurrency = x.currency || "PGK";
               const isExpanded = expandedCardIds.has(x.id);
               return (
                 <article key={x.id} className={`adminListingCard ${isExpanded ? "expanded" : "collapsed"}`}>
@@ -804,7 +804,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
             <div className="adminSectionBox">
               <p className="adminSectionBoxTitle">⚡ Assign Region, Province & District</p>
               <SmartLocationCascade
-                countryCode="ZMB"
+                countryCode="PNG"
                 destinations={data.destinations}
                 provinces={data.provinces}
                 selectedProvinceId={destForm.provinceId}

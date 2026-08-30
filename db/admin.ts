@@ -16,7 +16,7 @@ export async function requireAdministrator(identity: VisitPngUser) {
     account.role = "super_administrator";
   }
   
-  if (account.role !== "administrator" && account.role !== "super_administrator" || account.status !== "active") {
+  if (account.role!=="administrator" && account.role!=="super_administrator" || account.status!=="active") {
     throw new Error("ADMIN_REQUIRED");
   }
 

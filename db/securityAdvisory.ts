@@ -28,173 +28,188 @@ export interface TravelSafetyGuideline {
   protocols: string[];
 }
 
-export const ZAMBIA_EMERGENCY_CONTACTS: EmergencyContact[] = [
+export const PNG_EMERGENCY_CONTACTS: EmergencyContact[] = [
   {
-    name: "National Emergency Ambulance Dispatch (Zambia)",
+    name: "St John Ambulance Papua New Guinea (National Dispatch)",
     category: "medical",
-    phone: "991",
-    altPhone: "+260 211 252622",
-    location: "National (Lusaka, Ndola, Livingstone, Kitwe, Chipata)",
-    notes: "24/7 National Ministry of Health emergency ambulance dispatch."
+    phone: "111",
+    altPhone: "+675 7111 1234",
+    location: "National Emergency Operations Centre (Port Moresby, Lae, Kokopo, Kundiawa)",
+    notes: "24/7 National emergency paramedic and ambulance dispatch across Papua New Guinea."
   },
   {
-    name: "Zambia Police Service Emergency Operations Control",
+    name: "Royal Papua New Guinea Constabulary (RPNGC Police Emergency)",
     category: "police",
-    phone: "999",
-    altPhone: "+260 211 254280",
-    location: "National Police HQ - Lusaka",
-    notes: "National police response and highway patrol dispatch."
+    phone: "112",
+    altPhone: "1800 100",
+    location: "National Police HQ, Konedobu, Port Moresby",
+    notes: "National police emergency toll-free hotline and provincial commander dispatch."
   },
   {
-    name: "Specialty Emergency Services (SES Zambia Medevac)",
+    name: "Pacific International Hospital (PIH 24/7 Trauma & Emergency)",
     category: "medical",
-    phone: "+260 962 740300",
-    altPhone: "+260 762 740300",
-    location: "Lusaka & Countrywide Aero-Medical Helicopter & Fixed Wing Dispatch",
-    notes: "Premier private 24/7 bush medevac and trauma air evacuation service across all Zambian national parks."
+    phone: "+675 7998 8000",
+    altPhone: "+675 304 0000",
+    location: "3 Mile, Taurama Road, Port Moresby",
+    notes: "Premier private tertiary trauma hospital with 24/7 emergency medicine, CT/MRI, surgery, and hyperbaric medicine support."
   },
   {
-    name: "Zambia Tourism Agency (ZTA Visitor Assistance Desk)",
+    name: "Tropicair PNG Aero-Medical Evacuation & Air Charter",
+    category: "rescue",
+    phone: "+675 311 2800",
+    altPhone: "+675 7090 9200",
+    location: "Jacksons International Airport, Port Moresby (Nationwide Dispatch)",
+    notes: "24/7 fixed-wing air ambulance and medevac aircraft equipped with intensive care life support for emergency airstrip evacuations."
+  },
+  {
+    name: "Papua New Guinea Tourism Promotion Authority (PNGTPA Visitor Desk)",
     category: "tourism",
-    phone: "+260 211 229087",
-    altPhone: "+260 573 506 598",
-    location: "ZTA Head Office, Petroda House, Great East Road, Lusaka",
-    notes: "Official tourist support bureau for travel verification, park access guidance, and operator licensing inquiries."
+    phone: "+675 321 4188",
+    altPhone: "+675 321 4187",
+    location: "Level 5, Pacific MMI Building, Champion Parade, Port Moresby",
+    notes: "Official national tourism authority for travel verification, safety advisories, and accredited operator directory assistance."
   },
   {
-    name: "Department of National Parks & Wildlife (DNPW Ranger HQ)",
+    name: "Kokoda Track Authority (KTA Ranger Operations Command)",
     category: "rescue",
-    phone: "+260 211 278524",
-    altPhone: "+260 977 788901",
-    location: "Chilanga Central Command & Park Field Stations",
-    notes: "Park safety, anti-poaching patrol dispatch, and wilderness tracking assistance across all 20 National Parks."
+    phone: "+675 323 1244",
+    altPhone: "+675 7235 4800",
+    location: "Kokoda Ranger HQ & Field Radio Network (Owers' Corner / Kokoda Station)",
+    notes: "Search, rescue, emergency radio dispatch, and trekker tracking along the 96km Kokoda Track corridor."
   },
   {
-    name: "Livingstone Central Hospital (Victoria Falls Trauma Unit)",
-    category: "medical",
-    phone: "+260 213 321200",
-    location: "Akapelwa Street, Livingstone",
-    notes: "Full tertiary trauma center, rapid response, and cross-border medical stabilization for Victoria Falls visitors."
-  },
-  {
-    name: "Zambia Fire and Rescue Service",
+    name: "Papua New Guinea Fire and Rescue Service",
     category: "rescue",
-    phone: "993",
-    location: "National Municipal Fire Brigades",
-    notes: "Emergency fire response and structural rescue."
+    phone: "110",
+    altPhone: "+675 325 5088",
+    location: "National Fire Service HQ & Provincial Brigades",
+    notes: "National structural fire response and vehicle rescue operations."
   }
 ];
 
-export const ZAMBIA_REGIONAL_ADVISORIES: RegionalSafetyAdvisory[] = [
+export const PNG_REGIONAL_ADVISORIES: RegionalSafetyAdvisory[] = [
   {
-    regionId: "southern-livingstone-kariba",
-    regionName: "Victoria Falls, Livingstone & Lake Kariba",
-    provinces: ["Southern Province"],
+    regionId: "islands-region",
+    regionName: "Islands Region (New Britain, New Ireland, Milne Bay, Manus, Bougainville)",
+    provinces: ["East New Britain", "West New Britain", "New Ireland", "Milne Bay", "Manus", "Bougainville"],
     advisoryLevel: "exercise_normal_caution",
-    summary: "One of Africa's safest and most welcoming tourism gateways. World-class safari lodges, professional helicopter operations, and well-lit resort corridors.",
+    summary: "One of the most tranquil and welcoming tourism regions in the Pacific. Renowned for pristine scuba diving, world-class resort hospitality in Walindi & Tawali, friendly island villages, and historic wartime relics.",
     keySafetyTips: [
-      "Follow licensed guides on Knife-Edge Bridge trails during high water flow spray.",
-      "Do not feed wild baboons or monkeys around Victoria Falls rainforest paths.",
-      "Wear certified lifejackets during white-water rafting or Zambezi boat cruises.",
-      "Use authorized hotel taxis or registered ride-hail operators when traveling at night in Livingstone."
+      "Follow certified divemasters and boat captains when exploring outer coral atolls.",
+      "Check volcano advisory levels before hiking near Mount Tavurvur in Rabaul.",
+      "Respect local marine protected areas (tabu reefs) marked by village elders.",
+      "Enjoy island village homestays with warmth and mutual respect."
     ],
-    recommendedTransport: "Scheduled airport transfers, lodge shuttles, licensed taxis, and Zambezi river cruisers.",
+    recommendedTransport: "Scheduled Air Niugini / PNG Air domestic flights and registered resort water taxis.",
     nightTravelAdvised: true,
     localGuideRequired: false
   },
   {
-    regionId: "eastern-luangwa-valley",
-    regionName: "South Luangwa & Lower Zambezi Valley",
-    provinces: ["Eastern Province", "Lusaka Province"],
+    regionId: "southern-region",
+    regionName: "Southern (Papua) Region & Kokoda Corridor",
+    provinces: ["National Capital District", "Central", "Oro (Northern)", "Western", "Gulf"],
     advisoryLevel: "exercise_normal_caution",
-    summary: "Pristine wilderness with the highest concentration of leopards in Africa. Walking safaris are strictly guided by armed DNPW wildlife scouts.",
+    summary: "Home to the nation's capital Port Moresby, the historic Kokoda Track, and Tufi Fjords. Major hotels (Airways, The Stanley, Loloata) provide world-class security and airport transfers.",
     keySafetyTips: [
-      "Never walk outside safari camp chalets after dark without an armed night escort.",
-      "Maintain a safe distance from elephant corridors and riverbanks populated by hippos and crocodiles.",
-      "Take prescribed malaria prophylaxis (Malarone/Doxycycline) before visiting the river valleys.",
-      "Carry ample drinking water and electrolyte tablets during morning walking safaris."
+      "Use hotel shuttles or registered taxis when moving around Port Moresby at night.",
+      "Trek Kokoda only with a Kokoda Track Authority (KTA) accredited tour operator.",
+      "Keep digital and printed copies of your passport and KTA permit.",
+      "Enjoy the Ela Beach boardwalk and Nature Park during daylight hours."
     ],
-    recommendedTransport: "Open 4x4 safari vehicles, guided river canoes, and scheduled bush flights into Mfuwe (MFU) / Jeki (JEK).",
+    recommendedTransport: "Pre-arranged hotel transfers, accredited tour 4x4s, and licensed domestic aviation.",
     nightTravelAdvised: false,
     localGuideRequired: true
   },
   {
-    regionId: "central-lusaka-kafue",
-    regionName: "Lusaka Capital & Kafue National Park",
-    provinces: ["Lusaka Province", "Central Province"],
-    advisoryLevel: "exercise_normal_caution",
-    summary: "Modern cosmopolitan capital and vast wilderness plains. Excellent communications, private healthcare, and secure residential/commercial zones.",
+    regionId: "highlands-region",
+    regionName: "Highlands Region (Eastern Highlands, Western Highlands, Simbu, Enga, Hela)",
+    provinces: ["Eastern Highlands", "Western Highlands", "Simbu", "Enga", "Hela", "Southern Highlands", "Jiwaka"],
+    advisoryLevel: "exercise_high_caution",
+    summary: "Spectacular mountainous wonderland featuring Mount Wilhelm (4,509m), the famous Goroka & Mount Hagen Cultural Shows, and fertile valleys. Travel with an experienced local guide or tour operator.",
     keySafetyTips: [
-      "Use reputable private taxis or hotel shuttles when visiting Lusaka city nightlife hubs.",
-      "Keep vehicle doors locked and valuables concealed when driving through crowded downtown intersections.",
-      "In Kafue National Park, carry a satellite communicator or GPS navigation kit for remote tracks in Busanga Plains.",
-      "Observe 40 km/h speed limits inside national park boundaries."
+      "Always travel between towns during daylight hours; avoid night driving on the Highlands Highway.",
+      "Hire an accredited local guide from Betty's Lodge when climbing Mount Wilhelm.",
+      "Dress warmly for sub-zero alpine nights at high altitudes above 3,000m.",
+      "Respect local tribal customs and heed community elder advice."
     ],
-    recommendedTransport: "Chauffeured car rental, 4x4 overland vehicles, and domestic scheduled flights from KKIA (LUN).",
-    nightTravelAdvised: true,
-    localGuideRequired: false
+    recommendedTransport: "Private 4x4 tour vehicle with professional driver-guide; domestic flights between regional hubs.",
+    nightTravelAdvised: false,
+    localGuideRequired: true
   },
   {
-    regionId: "northern-lakes-waterfalls",
-    regionName: "Lake Tanganyika, Bangweulu & Luapula Waterfalls",
-    provinces: ["Northern Province", "Luapula Province", "Muchinga Province"],
+    regionId: "momase-region",
+    regionName: "Momase Region (Madang, Morobe, East Sepik, Sandaun)",
+    provinces: ["Morobe", "Madang", "East Sepik", "Sandaun (West Sepik)"],
     advisoryLevel: "exercise_normal_caution",
-    summary: "Off-the-beaten-track adventure frontier with crystal-clear rift valley waters, peaceful fishing villages, and sacred waterfalls.",
+    summary: "The northern mainland coastline offering lush rainforests, surfing at Vanimo, diving in Madang, and adventurous cultural canoe journeys along the mighty Sepik River.",
     keySafetyTips: [
-      "Swim only in designated bilharzia-free zones such as deep open waters of Lake Tanganyika (Ndole Bay).",
-      "Engage local community guides when visiting sacred cultural waterfalls like Chishimba and Lumangwe.",
-      "Carry sufficient cash (ZMW) for park entry fees in remote rural districts where POS terminals may have intermittent mobile network.",
-      "Check 4x4 road conditions during the green rainy season (December to March)."
+      "Arrange Sepik River expeditions through established lodges (Karawari Lodge) or licensed local tour operators.",
+      "Wear high-strength insect repellent (DEET/Picaridin) and sleep under treated mosquito nets along the Sepik River.",
+      "Respect sacred Haus Tambaran (Spirit House) rules and request permission before entering.",
+      "Take precautions against strong ocean currents when swimming or surfing along exposed coastal beaches."
     ],
-    recommendedTransport: "High-clearance 4x4 vehicle with dual spare wheels, lake ferries, or charter flights to Kasama / Mansa.",
+    recommendedTransport: "Scheduled domestic flights, motorized river dugout canoes with lifejackets, and lodge shuttles.",
     nightTravelAdvised: false,
     localGuideRequired: true
   }
 ];
 
-export const ZAMBIA_SAFETY_GUIDELINES: TravelSafetyGuideline[] = [
+export const PNG_SAFETY_GUIDELINES: TravelSafetyGuideline[] = [
   {
-    id: "zambia-safari-etiquette",
-    title: "Walking Safari & Wildlife Protocols",
-    category: "wilderness",
-    icon: "🦁",
-    summary: "Essential wildlife safety rules for walking safaris and open game drives in South Luangwa, Kafue, and Lower Zambezi.",
+    id: "png-wantok-etiquette",
+    title: "Wantok System & Village Customs (Kastom)",
+    category: "cultural",
+    icon: "🤝",
+    summary: "Understanding Papua New Guinea's communal kinship system (Wantok) and traditional village etiquette.",
     protocols: [
-      "Always walk in single file behind your armed DNPW wildlife scout and professional naturalist guide.",
-      "Never run from a wild animal; stop, stay calm, and follow your guide's instructions immediately.",
-      "Wear neutral safari colors (khaki, olive green, brown, tan). Avoid bright neon colors and dark blue/black (which attracts tsetse flies).",
-      "Never stand up or hang limbs outside open 4x4 safari vehicles while in the vicinity of big cats or elephants.",
-      "Do not swim in rivers or lagoons unless explicitly permitted by your lodge guide."
+      "Always greet village elders (Hetman) upon entering rural communities with a warm handshake and 'Gude / Moning'.",
+      "Ask permission before photographing residents, ceremonial sing-sing dancers, or sacred ancestral shrines (Tambu places).",
+      "Respect 'Tambu' signs: these indicate sacred, protected, or taboo customary land.",
+      "Support community artisans by purchasing hand-crafted Bilums, wood carvings, and shell jewelry directly from creators."
     ]
   },
   {
-    id: "zambia-health-prevention",
-    title: "Health, Water & Malaria Prevention",
+    id: "png-trekking-altitude",
+    title: "Kokoda & Mount Wilhelm Trekking Safety",
+    category: "wilderness",
+    icon: "🥾",
+    summary: "Essential preparation protocols for Kokoda Track expeditions and climbing Mount Wilhelm (4,509m).",
+    protocols: [
+      "Trek only with a registered Kokoda Track Authority (KTA) operator or accredited local guide.",
+      "Break in heavy-duty trekking boots well in advance to prevent blisters in wet tropical conditions.",
+      "Carry water purification tablets or a high-grade micro-filter; drink 4–5 litres of electrolytes daily.",
+      "Acclimatize gradually for Mount Wilhelm summit day to prevent Acute Mountain Sickness (AMS).",
+      "Ensure personal travel insurance explicitly covers high-altitude trekking and emergency helicopter evacuation."
+    ]
+  },
+  {
+    id: "png-health-prevention",
+    title: "Tropical Health & Malaria Prevention",
     category: "health",
     icon: "💊",
-    summary: "Medical precautions for a comfortable, healthy journey across Zambia's tropical climates.",
+    summary: "Health guidelines for a safe, comfortable adventure across Papua New Guinea's tropical regions.",
     protocols: [
-      "Malaria is endemic in low-altitude valleys (Luangwa, Zambezi, Kariba); start prophylaxis prior to arrival.",
-      "Sleep under treated mosquito nets and apply DEET or Picaridin repellent from sunset onwards.",
-      "Drink bottled or UV-filtered water provided by certified lodges; avoid untreated tap water in rural zones.",
-      "Carry a comprehensive personal medical kit including antihistamines, rehydration salts, and broad-spectrum antibiotics."
+      "Malaria and dengue are prevalent in lowland coastal and river areas; consult your doctor for prophylaxis (e.g. Doxycycline or Malarone) before arrival.",
+      "Apply DEET or Picaridin mosquito repellent from dusk to dawn and sleep under treated bed nets.",
+      "Drink only bottled, boiled, or UV-filtered water; avoid untreated tap water outside major luxury hotels.",
+      "Carry a personalized first aid kit containing antiseptic cream, rehydration salts, blister pads, and antihistamines."
     ]
   },
   {
-    id: "zambia-cultural-respect",
-    title: "Traditional Ceremony & Community Etiquette",
-    category: "cultural",
-    icon: "👑",
-    summary: "Respectful customs when attending traditional ceremonies and visiting rural royal palaces.",
+    id: "png-marine-safety",
+    title: "Coral Reef & Marine Expeditions",
+    category: "wilderness",
+    icon: "🤿",
+    summary: "Best practices for scuba diving and boat expeditions in Kimbe Bay, Milne Bay, and Tufi Fjords.",
     protocols: [
-      "Dress modestly (covered knees and shoulders) when entering royal palaces, chiefdom courts, and church services.",
-      "Always greet village elders with a respectful slight bow or traditional clapping where customary.",
-      "Ask permission before photographing residents, ceremonial dancers, or sacred shrine groves.",
-      "When shopping for authentic handicrafts in cultural markets, negotiate with warmth and mutual respect."
+      "Always dive with a certified PADI/SSI operator; carry safety sausages (SMB) and dive computers.",
+      "Never touch or step on living corals, sea anemones, or cone shells.",
+      "Wear certified lifejackets on open boat transfers between islands and coastal fjords.",
+      "Stay hydrated in tropical sun and wear rash guards for UV and jellyfish protection."
     ]
   }
 ];
 
-export const EMERGENCY_CONTACTS: EmergencyContact[] = ZAMBIA_EMERGENCY_CONTACTS;
-export const REGIONAL_ADVISORIES: RegionalSafetyAdvisory[] = ZAMBIA_REGIONAL_ADVISORIES;
-export const SAFETY_GUIDELINES: TravelSafetyGuideline[] = ZAMBIA_SAFETY_GUIDELINES;
+export const EMERGENCY_CONTACTS: EmergencyContact[] = PNG_EMERGENCY_CONTACTS;
+export const REGIONAL_ADVISORIES: RegionalSafetyAdvisory[] = PNG_REGIONAL_ADVISORIES;
+export const SAFETY_GUIDELINES: TravelSafetyGuideline[] = PNG_SAFETY_GUIDELINES;

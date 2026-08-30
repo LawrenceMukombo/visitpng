@@ -4,7 +4,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const country = url.searchParams.get("country")?.toLowerCase() || "zmb";
+  const country = url.searchParams.get("country")?.toLowerCase() || "png";
   const id = url.searchParams.get("id")?.toLowerCase();
   const format = url.searchParams.get("format")?.toLowerCase();
 

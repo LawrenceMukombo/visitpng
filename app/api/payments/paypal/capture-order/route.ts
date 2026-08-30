@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { orderId, itemType, itemId, amount, currency = "ZMW" } = body;
+    const { orderId, itemType, itemId, amount, currency = "PGK" } = body;
 
     if (!orderId) {
       return NextResponse.json({ error: "Missing PayPal Order ID" }, { status: 400 });
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
     let transactionId = orderId;
     const token = await getPayPalAccessToken();
 
-    if (token && !String(orderId).startsWith("ORDER-ZAM-")) {
+    if (token && !String(orderId).startsWith("ORDER-")) {
       const captureResponse = await fetch(`${PAYPAL_API_URL}/v2/checkout/orders/${orderId}/capture`, {
         method: "POST",
         headers: {

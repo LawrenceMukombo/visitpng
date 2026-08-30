@@ -11,7 +11,7 @@ export async function GET(request: Request){
   if(!identity)return Response.json({error:"Please sign in."},{status:401});
   try{
     const url = new URL(request.url);
-    const country = url.searchParams.get("country") || "ZMB";
+    const country = url.searchParams.get("country") || "PNG";
     return Response.json(await getAdminCatalogue(identity, country));
   }catch(error){
     return reply(error);

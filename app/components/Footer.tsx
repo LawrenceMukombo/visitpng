@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
-import { ZamRoamLogo } from "./ZamRoamEmblem";
+import { VisitPngLogo } from "./VisitPngEmblem";
 
 export interface FooterProps {
   countryCode?: string;
@@ -20,9 +20,9 @@ export interface FooterProps {
 }
 
 export function Footer({
-  brandName = "ZamRoam",
-  tagline = "Roam Zambia. Experience More.",
-  legalOwner = "Lamton Investments Ltd",
+  brandName = "VisitPNG",
+  tagline = "Discover Papua New Guinea · Land of a Million Journeys",
+  legalOwner = "VisitPNG Tourism Services Ltd",
   onOpenPass,
   onOpenPartnerRegistration,
   onOpenFoundingPartners,
@@ -33,8 +33,8 @@ export function Footer({
   onOpenMap,
   onOpenMembershipHub
 }: FooterProps) {
-  const passLabel = "ZamRoam Pass";
-  const dealsLabel = "ZamRoam Deals";
+  const passLabel = "VisitPNG Pass";
+  const dealsLabel = "VisitPNG Deals";
 
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
@@ -137,7 +137,7 @@ export function Footer({
 
   const highlightLinkStyle: React.CSSProperties = {
     ...linkStyle,
-    color: "#DE7739",
+    color: "#EA580C",
     fontWeight: "700"
   };
 
@@ -162,20 +162,20 @@ export function Footer({
           {/* Brand & Corporate Column */}
           <div>
             <div style={{ marginBottom: "1rem" }}>
-              <ZamRoamLogo size="medium" showTagline={true} />
+              <VisitPngLogo size="medium" showTagline={true} />
             </div>
             <p style={{ fontSize: "0.95rem", color: "#a3cfc9", lineHeight: "1.5", marginBottom: "1rem" }}>
               {tagline}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px", fontSize: "0.85rem", color: "#c2e2dc", marginBottom: "1.25rem" }}>
               <Link href="/" style={{ color: "#c2e2dc", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                🌐 <strong>zamroam.com</strong>
+                🌐 <strong>visitpng.com</strong>
               </Link>
-              <a href="mailto:info@zamroam.com" style={{ color: "#c2e2dc", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                ✉️ <strong>info@zamroam.com</strong>
+              <a href="mailto:info@visitpng.com" style={{ color: "#c2e2dc", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                ✉️ <strong>info@visitpng.com</strong>
               </a>
-              <a href="https://wa.me/260573506598" target="_blank" rel="noopener noreferrer" style={{ color: "#c2e2dc", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                💬 WhatsApp: <strong>+260 573 506 598</strong>
+              <a href="https://wa.me/6753214188" target="_blank" rel="noopener noreferrer" style={{ color: "#c2e2dc", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                💬 Direct: <strong>+675 321 4188</strong>
               </a>
             </div>
             <div style={{
@@ -195,7 +195,7 @@ export function Footer({
           {/* Explore Column */}
           <div>
             <h4 style={{ fontSize: "1.05rem", fontWeight: "700", color: "#ffffff", marginBottom: "1rem" }}>
-              Explore Zambia
+              Explore Papua New Guinea
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               <li>
@@ -204,7 +204,7 @@ export function Footer({
                   onClick={handleDestinationsClick}
                   style={linkStyle}
                 >
-                  Top Destinations & Parks
+                  22 Provinces & Key Destinations
                 </button>
               </li>
               <li>
@@ -213,7 +213,7 @@ export function Footer({
                   onClick={() => handleCategoryClick("stays")}
                   style={linkStyle}
                 >
-                  Safari Lodges & Stays
+                  Eco-Lodges & Island Resorts
                 </button>
               </li>
               <li>
@@ -222,7 +222,7 @@ export function Footer({
                   onClick={() => handleCategoryClick("tours")}
                   style={linkStyle}
                 >
-                  Walking Safaris & Experiences
+                  Kokoda Trekking & Cultural Shows
                 </button>
               </li>
               <li>
@@ -231,7 +231,7 @@ export function Footer({
                   onClick={handleDealsClick}
                   style={highlightLinkStyle}
                 >
-                  {dealsLabel} & Discounts
+                  {dealsLabel} & Member Perks
                 </button>
               </li>
               <li>
@@ -240,7 +240,7 @@ export function Footer({
                   onClick={handleMapClick}
                   style={linkStyle}
                 >
-                  Interactive Zambian Map
+                  Interactive Papua New Guinea Map
                 </button>
               </li>
             </ul>
@@ -249,7 +249,7 @@ export function Footer({
           {/* Membership Column */}
           <div>
             <h4 style={{ fontSize: "1.05rem", fontWeight: "700", color: "#ffffff", marginBottom: "1rem" }}>
-              Membership & Pass
+              Membership & Passes
             </h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
               <li>
@@ -267,7 +267,7 @@ export function Footer({
                   onClick={handlePassClick}
                   style={linkStyle}
                 >
-                  Member Benefits & Savings
+                  Member Privileges & Savings
                 </button>
               </li>
               <li>
@@ -276,7 +276,7 @@ export function Footer({
                   onClick={handlePassClick}
                   style={linkStyle}
                 >
-                  Digital Pass & Instant QR
+                  Digital Pass & Dynamic QR
                 </button>
               </li>
               <li>
@@ -312,7 +312,7 @@ export function Footer({
                   onClick={handleFoundingPartnersClick}
                   style={linkStyle}
                 >
-                  100 Founding ZamRoam Partners
+                  100 Founding VisitPNG Partners
                 </button>
               </li>
               <li>
@@ -358,13 +358,12 @@ export function Footer({
           alignItems: "center",
           gap: "1.25rem"
         }}>
-          {/* Social Links with Crisp Vector Badges */}
+          {/* Social Links */}
           <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-            <span style={{ fontSize: "0.85rem", color: "#a3cfc9", fontWeight: 700, marginRight: "4px" }}>Follow ZamRoam:</span>
+            <span style={{ fontSize: "0.85rem", color: "#a3cfc9", fontWeight: 700, marginRight: "4px" }}>Follow VisitPNG:</span>
             
-            {/* WhatsApp */}
             <a
-              href="https://wa.me/260573506598"
+              href="https://wa.me/6753214188"
               target="_blank"
               rel="noopener noreferrer"
               title="Chat on WhatsApp"
@@ -379,16 +378,14 @@ export function Footer({
                 color: "#ffffff",
                 fontSize: "15px",
                 boxShadow: "0 2px 8px rgba(37, 211, 102, 0.35)",
-                textDecoration: "none",
-                transition: "transform 0.15s ease"
+                textDecoration: "none"
               }}
             >
               💬
             </a>
 
-            {/* Facebook */}
             <a
-              href="https://facebook.com/zamroam"
+              href="https://facebook.com/visitpng"
               target="_blank"
               rel="noopener noreferrer"
               title="Follow on Facebook"
@@ -411,9 +408,8 @@ export function Footer({
               f
             </a>
 
-            {/* Instagram */}
             <a
-              href="https://instagram.com/zamroam"
+              href="https://instagram.com/visitpng"
               target="_blank"
               rel="noopener noreferrer"
               title="Follow on Instagram"
@@ -434,9 +430,8 @@ export function Footer({
               📷
             </a>
 
-            {/* X / Twitter */}
             <a
-              href="https://x.com/zamroam"
+              href="https://x.com/visitpng"
               target="_blank"
               rel="noopener noreferrer"
               title="Follow on X"
@@ -459,53 +454,6 @@ export function Footer({
             >
               𝕏
             </a>
-
-            {/* YouTube */}
-            <a
-              href="https://youtube.com/@zamroam"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Watch on YouTube"
-              style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                background: "#FF0000",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#ffffff",
-                fontSize: "14px",
-                boxShadow: "0 2px 8px rgba(255, 0, 0, 0.35)",
-                textDecoration: "none"
-              }}
-            >
-              ▶
-            </a>
-
-            {/* TikTok */}
-            <a
-              href="https://tiktok.com/@zamroam"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Follow on TikTok"
-              style={{
-                width: "32px",
-                height: "32px",
-                borderRadius: "50%",
-                background: "#010101",
-                border: "1px solid rgba(255, 255, 255, 0.2)",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#ffffff",
-                fontSize: "14px",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.35)",
-                textDecoration: "none"
-              }}
-            >
-              🎵
-            </a>
           </div>
 
           {/* Trust Badges */}
@@ -523,7 +471,7 @@ export function Footer({
               fontWeight: 700
             }}>
               <span>🛡️</span>
-              <span>ZTA Licensed Partner</span>
+              <span>PNGTPA Partner</span>
             </div>
 
             <div style={{
@@ -539,7 +487,7 @@ export function Footer({
               fontWeight: 700
             }}>
               <span>⭐</span>
-              <span>Top Rated Experiences</span>
+              <span>Top Rated PNG Experiences</span>
             </div>
           </div>
         </div>
@@ -562,7 +510,7 @@ export function Footer({
             © {new Date().getFullYear()} {brandName}. Owned and operated by <strong>{legalOwner}</strong>. All rights reserved.
           </div>
           <div style={{ display: "flex", gap: "1.5rem" }}>
-            <span>Lusaka • Livingstone • Ndola • Mfuwe</span>
+            <span>Port Moresby • Kokopo • Goroka • Mount Hagen • Madang</span>
             <span>Commercial Tourism Technology</span>
           </div>
         </div>
@@ -577,13 +525,13 @@ export function Footer({
               <button onClick={() => setShowTermsModal(false)} style={{ background: "#e8f3f1", border: "none", borderRadius: "50%", width: "32px", height: "32px", cursor: "pointer", fontWeight: "700" }}>✕</button>
             </div>
             <div style={{ fontSize: "0.92rem", lineHeight: "1.6", color: "#333", display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <p>Welcome to <strong>{brandName}</strong>, a tourism technology platform operated by <strong>{legalOwner}</strong> (Registered Address: Plot 10444, Great East Road, Rhodes Park, Lusaka, Zambia • Tel: +260573506598 • info@lamtoninvestments.com).</p>
+              <p>Welcome to <strong>{brandName}</strong>, a tourism technology platform operated by <strong>{legalOwner}</strong> (Registered Address: Champion Parade, Downtown Port Moresby, National Capital District, Papua New Guinea • Tel: +675 321 4188 • info@visitpng.com).</p>
               <h4 style={{ margin: 0, color: "#1B6960" }}>1. Commercial Terms & Platform Use</h4>
-              <p>By accessing {brandName} and purchasing any {passLabel} or booking partner experiences, you agree to comply with all applicable tourism regulations, park wildlife policies, and verified provider booking rules.</p>
+              <p>By accessing {brandName} and purchasing any {passLabel} or booking partner experiences, you agree to comply with all applicable tourism regulations, Kokoda Track Authority rules, and verified provider booking policies.</p>
               <h4 style={{ margin: 0, color: "#1B6960" }}>2. Membership Pass & Digital QR Codes</h4>
-              <p>All issued {passLabel} memberships provide authenticated benefits across verified partner lodges, safaris, and transport operators. Dynamic QR code tokens refresh periodically for anti-fraud security and are non-transferable.</p>
+              <p>All issued {passLabel} memberships provide authenticated benefits across verified partner lodges, trekking tours, and dive operators. Dynamic QR code tokens refresh periodically for anti-fraud security and are non-transferable.</p>
               <h4 style={{ margin: 0, color: "#1B6960" }}>3. Invoicing, Payments & Settlement</h4>
-              <p>Commercial transactions and invoices (ZR-INV-...) are administered under {legalOwner}. Refunds and cancellations are governed by individual partner policies and statutory consumer rights.</p>
+              <p>Commercial transactions and invoices (VP-INV-...) are administered under {legalOwner}. Refunds and cancellations are governed by individual partner policies and statutory consumer rights.</p>
             </div>
             <div style={{ marginTop: "2rem", textAlign: "right" }}>
               <button onClick={() => setShowTermsModal(false)} style={{ background: "#1B6960", color: "#ffffff", border: "none", padding: "0.6rem 1.4rem", borderRadius: "8px", fontWeight: "700", cursor: "pointer" }}>I Understand & Agree</button>
@@ -607,7 +555,7 @@ export function Footer({
               <h4 style={{ margin: 0, color: "#1B6960" }}>2. Offline-First Security & Encryption</h4>
               <p>Downloaded offline trail packs and digital passes are stored securely on your local device. We never sell your personal data or share payment credentials with unauthorized third parties.</p>
               <h4 style={{ margin: 0, color: "#1B6960" }}>3. Contact & Inquiries</h4>
-              <p>For any privacy inquiries or account data requests, contact our Data Protection Officer at <strong>info@lamtoninvestments.com</strong> or call <strong>+260573506598</strong>.</p>
+              <p>For any privacy inquiries or account data requests, contact our Data Protection Officer at <strong>info@visitpng.com</strong> or call <strong>+675 321 4188</strong>.</p>
             </div>
             <div style={{ marginTop: "2rem", textAlign: "right" }}>
               <button onClick={() => setShowPrivacyModal(false)} style={{ background: "#1B6960", color: "#ffffff", border: "none", padding: "0.6rem 1.4rem", borderRadius: "8px", fontWeight: "700", cursor: "pointer" }}>Close</button>

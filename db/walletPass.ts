@@ -25,19 +25,18 @@ export function generateAppleWalletPayload(input: {
   validUntil: string;
   qrToken: string;
 }): WalletPassData {
-  const isZambia = (input.countryCode || "ZMB").toUpperCase() === "ZMB";
-  const brandName = isZambia ? "ZamRoam" : "VisitPNG";
+  const brandName = "VisitPNG";
 
   return {
-    passTypeIdentifier: `pass.com.lamtoninvestments.${isZambia ? "zamroam" : "visitpng"}`,
+    passTypeIdentifier: "pass.com.visitpng.pass",
     serialNumber: input.membershipNumber,
-    teamIdentifier: "LAMTON9988",
-    organizationName: "Lamton Investments Ltd",
+    teamIdentifier: "VPNG9988",
+    organizationName: "VisitPNG Tourism Services Ltd",
     description: `${brandName} Digital Pass`,
     logoText: `${brandName} Pass`,
     foregroundColor: "rgb(255, 255, 255)",
-    backgroundColor: isZambia ? "rgb(27, 105, 96)" : "rgb(22, 90, 80)",
-    labelColor: isZambia ? "rgb(222, 119, 57)" : "rgb(231, 117, 34)",
+    backgroundColor: "rgb(27, 105, 96)",
+    labelColor: "rgb(231, 117, 34)",
     member: {
       fullName: input.fullName,
       membershipNumber: input.membershipNumber,
@@ -56,21 +55,20 @@ export function generateGoogleWalletJwtPayload(input: {
   validUntil: string;
   qrToken: string;
 }) {
-  const isZambia = (input.countryCode || "ZMB").toUpperCase() === "ZMB";
-  const brandName = isZambia ? "ZamRoam" : "VisitPNG";
+  const brandName = "VisitPNG";
 
   return {
-    iss: "service-account@lamtoninvestments.iam.gserviceaccount.com",
+    iss: "service-account@visitpng.iam.gserviceaccount.com",
     aud: "google",
     typ: "savetogooglewallet",
     payload: {
       genericObjects: [
         {
           id: `3388000000022211999.${input.membershipNumber}`,
-          classId: `3388000000022211999.${isZambia ? "zamroam_pass" : "visitpng_pass"}`,
+          classId: "3388000000022211999.visitpng_pass",
           logo: {
             sourceUri: {
-              uri: `https://${isZambia ? "zamroam.com" : "visitpng.lamtoninvestments.com"}/icon.png`
+              uri: "https://visitpng.com/icon.png"
             }
           },
           cardTitle: {
@@ -96,7 +94,7 @@ export function generateGoogleWalletJwtPayload(input: {
             value: input.qrToken,
             alternateText: input.membershipNumber
           },
-          hexBackgroundColor: isZambia ? "#1B6960" : "#165A50"
+          hexBackgroundColor: "#1B6960"
         }
       ]
     }

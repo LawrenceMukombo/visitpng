@@ -47,13 +47,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid payment amount" }, { status: 400 });
     }
 
-    // PayPal supports USD, EUR, GBP, AUD, etc. If ZMW, convert approx to USD (approx 1 USD = 28 ZMW)
+    // PayPal supports USD, EUR, GBP, AUD, etc. If PGK, convert approx to USD (1 USD ~ 4.08 PGK)
     const paypalCurrency = ["USD", "EUR", "GBP", "AUD", "CAD"].includes(String(currency).toUpperCase())
       ? String(currency).toUpperCase()
       : "USD";
 
-    const convertedAmount = String(currency).toUpperCase() === "ZMW"
-      ? (Number(amount) / 28).toFixed(2)
+    const convertedAmount = String(currency).toUpperCase() === "PGK" || String(currency).toUpperCase() === "ZMW"
+      ? (Number(amount) / 4.08).toFixed(2)
       : Number(amount).toFixed(2);
 
     const token = await getPayPalAccessToken();
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
     if (!token) {
       return NextResponse.json({
         mock: true,
-        orderId: `ORDER-ZAM-${Date.now()}`,
+        orderId: `ORDER-PNG-${Date.now()}`,
         amount: convertedAmount,
         currency: paypalCurrency,
         originalAmount: amount,

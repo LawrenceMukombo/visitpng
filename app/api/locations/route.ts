@@ -8,7 +8,7 @@ export const dynamic="force-dynamic";
 export async function GET(request:Request){
   await ensureCatalogue();
   const url=new URL(request.url);
-  const country=url.searchParams.get("country")?.trim().toUpperCase()||"ZMB";
+  const country=url.searchParams.get("country")?.trim().toUpperCase()||"PNG";
   const q=url.searchParams.get("q")?.trim().toLowerCase()||"";
   const province=url.searchParams.get("province")?.trim().toLowerCase()||"";
   const region=url.searchParams.get("region")?.trim().toLowerCase()||"";

@@ -37,24 +37,24 @@ export interface PassLandingProps {
 }
 
 export function PassLanding({
-  currency = "ZMW",
+  currency = "PGK",
   onSelectPlan,
   onClose
 }: PassLandingProps) {
-  const brandName = "ZamRoam";
-  const passName = "ZamRoam Pass";
-  const currencySymbol = "ZK";
-  const isZambia = true;
+  const brandName = "VisitPNG";
+  const passName = "VisitPNG Pass";
+  const currencySymbol = "K";
+  const isZambia = false;
 
   const [activeTab, setActiveTab] = useState<"plans" | "card" | "faq">("plans");
   const [selectedPlanForCheckout, setSelectedPlanForCheckout] = useState<PassPlan | null>(null);
   const [issuedPass, setIssuedPass] = useState<IssuedPassRecord | null>(null);
   const [isActivating, setIsActivating] = useState(false);
-  const [memberName, setMemberName] = useState("Lawrence Mukombo");
-  const [memberEmail, setMemberEmail] = useState("info@lamtoninvestments.com");
-  const [memberPhone, setMemberPhone] = useState("+260573506598");
-  const [paymentMethod, setPaymentMethod] = useState<"mobile_money" | "card" | "simulator">("mobile_money");
-  const [mobileProvider, setMobileProvider] = useState<"airtel" | "mtn" | "zamtel">("airtel");
+  const [memberName, setMemberName] = useState("David Alexander Scott");
+  const [memberEmail, setMemberEmail] = useState("info@visitpng.com");
+  const [memberPhone, setMemberPhone] = useState("+675 7123 4567");
+  const [paymentMethod, setPaymentMethod] = useState<"mobile_money" | "card" | "simulator">("card");
+  const [mobileProvider, setMobileProvider] = useState<"cellmoni" | "mpaisa" | "bsppay">("cellmoni");
   const [walletNotice, setWalletNotice] = useState("");
 
   const plans: PassPlan[] = [
@@ -92,17 +92,17 @@ export function PassLanding({
     },
     {
       id: 3,
-      name: isZambia ? "Zambia Plus" : "PNG Plus",
+      name: isZambia ? "Zambia Plus" : "Papua New Guinea Plus",
       tier: "Gold",
       price: isZambia ? 999 : 499,
       duration: "1 Year",
       badgeColor: "#FFD700",
       features: [
         "20% Max Partner Discounts",
-        "Complimentary Safari Welcome Drink",
+        "Complimentary Welcome Drink",
         "Physical NFC Member Card Dispatch",
         "Dedicated Travel Advisor",
-        "National Park Permit Fast-Tracking"
+        "Statutory Permit Fast-Tracking"
       ],
       popular: false
     },
@@ -138,8 +138,8 @@ export function PassLanding({
       const validityDays = selectedPlanForCheckout.duration.includes("Year") ? 365 : selectedPlanForCheckout.duration.includes("90") ? 90 : 30;
       const expiryDate = new Date(Date.now() + validityDays * 86400000).toISOString().slice(0, 10);
       const newPass = {
-        id: `ZV-M-2026-${Math.floor(10000 + Math.random() * 90000)}`,
-        holderName: memberName || "Lawrence Mukombo",
+        id: `VP-M-2026-${Math.floor(10000 + Math.random() * 90000)}`,
+        holderName: memberName || "David Alexander Scott",
         email: memberEmail,
         phone: memberPhone,
         planId: selectedPlanForCheckout.id,
@@ -150,7 +150,7 @@ export function PassLanding({
         validUntil: expiryDate,
         issuedAt: new Date().toISOString(),
         status: "ACTIVE",
-        invoiceNumber: `ZV-INV-2026-${Math.floor(1000 + Math.random() * 9000)}`,
+        invoiceNumber: `VP-INV-2026-${Math.floor(1000 + Math.random() * 9000)}`,
         qrToken: `PASS:${selectedPlanForCheckout.tier.toUpperCase()}:${Date.now()}`
       };
 
@@ -187,7 +187,7 @@ export function PassLanding({
               {passName}
             </h1>
             <p style={{ margin: 0, fontSize: "0.95rem", color: "#52796F" }}>
-              Discover Zambia. Experience More. Save Everywhere.
+              Discover Papua New Guinea. Experience More. Save Everywhere.
             </p>
           </div>
         </div>
@@ -227,7 +227,7 @@ export function PassLanding({
         <div style={{ maxWidth: "600px" }}>
           <div style={{
             display: "inline-block",
-            background: "#DE7739",
+            background: "#EA580C",
             color: "#ffffff",
             padding: "0.3rem 0.8rem",
             borderRadius: "20px",
@@ -239,10 +239,10 @@ export function PassLanding({
             OFFICIAL TOURIST MEMBERSHIP
           </div>
           <h2 style={{ fontSize: "2.2rem", fontWeight: "800", lineHeight: "1.2", margin: "0 0 1rem 0" }}>
-            Explore More. Pay Less Across Zambia.
+            Explore More. Pay Less Across Papua New Guinea.
           </h2>
           <p style={{ fontSize: "1.05rem", lineHeight: "1.6", color: "#e6f4f1", margin: 0 }}>
-            Unlock member-exclusive rates on luxury safari lodges, Victoria Falls adventures, guided walking safaris, car rentals, and dining across 10 provinces.
+            Unlock member-exclusive rates on luxury overwater bungalows, Kokoda Track guided treks, Mount Wilhelm climbs, Coral Triangle diving, and cultural sing-sing festivals across 22 provinces.
           </p>
         </div>
 
@@ -450,7 +450,7 @@ export function PassLanding({
               Who operates the {brandName} platform?
             </h4>
             <p style={{ margin: 0, color: "#555", lineHeight: "1.5", fontSize: "0.95rem" }}>
-              {brandName} is a commercial tourism technology platform owned and operated by <strong>Lamton Investments Ltd</strong> (Address: Plot 10444, Great East Road, Rhodes Park, Lusaka, Zambia • Tel: +260573506598 • info@lamtoninvestments.com).
+              {brandName} is a commercial tourism technology platform owned and operated by <strong>VisitPNG Tourism Services Ltd</strong> (Address: Champion Parade, Downtown Port Moresby, National Capital District, Papua New Guinea • Tel: +675 321 4188 • info@visitpng.com).
             </p>
           </div>
         </div>
@@ -547,34 +547,34 @@ export function PassLanding({
                 </div>
               </div>
 
-              {paymentMethod === "mobile_money" && isZambia && (
+              {paymentMethod === "mobile_money" && (
                 <div style={{ background: "#f0f7f5", padding: "0.8rem", borderRadius: "8px", border: "1px solid #c2d8d3", display: "flex", gap: "0.5rem" }}>
                   <button
                     type="button"
-                    onClick={() => setMobileProvider("airtel")}
-                    style={{ flex: 1, padding: "0.5rem", borderRadius: "6px", border: mobileProvider === "airtel" ? "2px solid #DE7739" : "1px solid #ccc", background: mobileProvider === "airtel" ? "#fff" : "#eee", fontWeight: "700", fontSize: "0.8rem", cursor: "pointer" }}
+                    onClick={() => setMobileProvider("cellmoni")}
+                    style={{ flex: 1, padding: "0.5rem", borderRadius: "6px", border: mobileProvider === "cellmoni" ? "2px solid #EA580C" : "1px solid #ccc", background: mobileProvider === "cellmoni" ? "#fff" : "#eee", fontWeight: "700", fontSize: "0.8rem", cursor: "pointer" }}
                   >
-                    🔴 Airtel Money
+                    🔴 Digicel CellMoni
                   </button>
                   <button
                     type="button"
-                    onClick={() => setMobileProvider("mtn")}
-                    style={{ flex: 1, padding: "0.5rem", borderRadius: "6px", border: mobileProvider === "mtn" ? "2px solid #DE7739" : "1px solid #ccc", background: mobileProvider === "mtn" ? "#fff" : "#eee", fontWeight: "700", fontSize: "0.8rem", cursor: "pointer" }}
+                    onClick={() => setMobileProvider("mpaisa")}
+                    style={{ flex: 1, padding: "0.5rem", borderRadius: "6px", border: mobileProvider === "mpaisa" ? "2px solid #EA580C" : "1px solid #ccc", background: mobileProvider === "mpaisa" ? "#fff" : "#eee", fontWeight: "700", fontSize: "0.8rem", cursor: "pointer" }}
                   >
-                    🟡 MTN MoMo
+                    🔵 Vodafone M-PAiSA
                   </button>
                   <button
                     type="button"
-                    onClick={() => setMobileProvider("zamtel")}
-                    style={{ flex: 1, padding: "0.5rem", borderRadius: "6px", border: mobileProvider === "zamtel" ? "2px solid #DE7739" : "1px solid #ccc", background: mobileProvider === "zamtel" ? "#fff" : "#eee", fontWeight: "700", fontSize: "0.8rem", cursor: "pointer" }}
+                    onClick={() => setMobileProvider("bsppay")}
+                    style={{ flex: 1, padding: "0.5rem", borderRadius: "6px", border: mobileProvider === "bsppay" ? "2px solid #EA580C" : "1px solid #ccc", background: mobileProvider === "bsppay" ? "#fff" : "#eee", fontWeight: "700", fontSize: "0.8rem", cursor: "pointer" }}
                   >
-                    🟢 Zamtel Kwacha
+                    🟢 BSP Pay Direct
                   </button>
                 </div>
               )}
 
               <div style={{ background: "#f8f9fa", padding: "0.8rem", borderRadius: "8px", fontSize: "0.78rem", color: "#666", lineHeight: "1.4" }}>
-                🔒 Official commercial transaction managed under <strong>Lamton Investments Ltd</strong>. Includes Instant Dynamic QR Card & Official Receipt.
+                🔒 Official commercial transaction managed under <strong>VisitPNG Tourism Services Ltd</strong>. Includes Instant Dynamic QR Card & Official Receipt.
               </div>
 
               <button

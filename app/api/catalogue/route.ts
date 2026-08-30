@@ -4,7 +4,7 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const q = url.searchParams.get("q") ?? "";
   const category = url.searchParams.get("category") ?? "all";
-  const country = url.searchParams.get("country") ?? "ZMB";
+  const country = url.searchParams.get("country") ?? "PNG";
 
   try {
     const data = await getCatalogue(q, category, country);

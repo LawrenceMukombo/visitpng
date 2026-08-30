@@ -7,8 +7,8 @@ export interface ItineraryDay {
   activities: string[];
   recommendedStay: string;
   logisticsNotes: string;
-  estimatedCostZmw: number;
-  estimatedCostPgk?: number; // Backward compatibility
+  estimatedCostPgk: number;
+  estimatedCostZmw?: number; // Backward compatibility
 }
 
 export interface GeneratedItinerary {
@@ -18,239 +18,381 @@ export interface GeneratedItinerary {
   travelStyle: "Cultural Immersion" | "Wilderness Expedition" | "Diving & Islands" | "WWII History" | "Family & Nature";
   durationDays: number;
   bestTravelMonths: string;
-  totalEstimatedCostZmw: number;
-  totalEstimatedCostPgk?: number; // Backward compatibility
+  totalEstimatedCostPgk: number;
+  totalEstimatedCostZmw?: number; // Backward compatibility
   provincesCovered: string[];
   days: ItineraryDay[];
   essentialPackingList: string[];
   safetyAndHealthTips: string[];
 }
 
-export const ZAMBIA_CURATED_ITINERARIES: GeneratedItinerary[] = [
+export const PNG_CURATED_ITINERARIES: GeneratedItinerary[] = [
   {
-    id: "zambia-falls-and-luangwa-safari",
-    title: "Victoria Falls & South Luangwa Walking Safari Expedition",
-    subtitle: "Experience the thunder of Victoria Falls, Zambezi river sunsets, and the world's premier walking safaris in the Luangwa Valley",
+    id: "png-kokoda-historic-trek",
+    title: "Kokoda Track Historical Pilgrimage & Rainforest Crossing",
+    subtitle: "Trek the legendary 96km Owen Stanley Range, honoring WWII history, Fuzzy Wuzzy Angel heritage, and pristine mountain villages",
     travelStyle: "Wilderness Expedition",
-    durationDays: 7,
-    bestTravelMonths: "May to November",
-    totalEstimatedCostZmw: 14500,
-    totalEstimatedCostPgk: 14500,
-    provincesCovered: ["Southern Province", "Lusaka Province", "Eastern Province"],
+    durationDays: 8,
+    bestTravelMonths: "April to November (Dry Season)",
+    totalEstimatedCostPgk: 4200,
+    totalEstimatedCostZmw: 4200,
+    provincesCovered: ["National Capital District", "Central Province", "Oro (Northern) Province"],
     days: [
       {
         dayNumber: 1,
-        title: "Arrival in Livingstone & Victoria Falls Sunset",
-        location: "Livingstone",
-        province: "Southern Province",
-        summary: "Arrive at Harry Mwaanga Nkumbula International Airport, transfer to your river lodge, and witness the majesty of Victoria Falls.",
-        activities: ["Guided walk through Victoria Falls rainforest reserve", "Knife-Edge bridge rainbow viewing", "Zambezi Royal sunset cruise with wildlife viewing"],
-        recommendedStay: "The Royal Livingstone Resort or Avani Victoria Falls",
-        logisticsNotes: "Complimentary hotel shuttle from Livingstone Airport (LVI).",
-        estimatedCostZmw: 2200,
-        estimatedCostPgk: 2200
+        title: "Port Moresby to Owers' Corner & Ua-Ule Creek",
+        location: "Owers' Corner to Ua-Ule",
+        province: "Central Province",
+        summary: "Depart Port Moresby by 4x4 up the Sogeri Plateau to Owers' Corner trailhead arches, descending to Goldie River and climbing to Ua-Ule campsite.",
+        activities: ["Owers' Corner Memorial Arches & 25-pounder gun briefing", "Goldie River crossing", "Ua-Ule Creek jungle camp setup"],
+        recommendedStay: "Ua-Ule River Campsite",
+        logisticsNotes: "Mandatory KTA trekking permit check at Owers' Corner ranger station.",
+        estimatedCostPgk: 600,
+        estimatedCostZmw: 600
       },
       {
         dayNumber: 2,
-        title: "Devil's Pool Livingstone Island & Batoka Gorge",
-        location: "Victoria Falls",
-        province: "Southern Province",
-        summary: "Morning boat transfer to Livingstone Island to swim in the world-famous Devil's Pool on the edge of the falls.",
-        activities: ["Livingstone Island guided tour & breakfast", "Devil's Pool natural infinity swim", "Helicopter Flight of Angels over the gorge"],
-        recommendedStay: "The Royal Livingstone Resort",
-        logisticsNotes: "Advance booking required for Devil's Pool seasonal water permits.",
-        estimatedCostZmw: 2800,
-        estimatedCostPgk: 2800
+        title: "Ioribaiwa Ridge to Nauro Village",
+        location: "Ioribaiwa to Nauro",
+        province: "Central Province",
+        summary: "Climb the historic Ioribaiwa Ridge, the southernmost point of the 1942 Japanese advance, before descending into the tranquil Maguli Range.",
+        activities: ["Ioribaiwa defensive ridge history talk", "Ofi Creek refreshing swim and water refill", "Nauro mountain village campsite"],
+        recommendedStay: "Nauro Village Guesthouse",
+        logisticsNotes: "Steep ascents; stay hydrated with electrolyte tablets.",
+        estimatedCostPgk: 500,
+        estimatedCostZmw: 500
       },
       {
         dayNumber: 3,
-        title: "Flight to South Luangwa (Mfuwe)",
-        location: "South Luangwa National Park",
-        province: "Eastern Province",
-        summary: "Direct safari flight from Livingstone/Lusaka into Mfuwe Airport, the gateway to Africa's greatest wildlife valley.",
-        activities: ["Proflight flight into Mfuwe Valley", "Afternoon open 4x4 game drive into the park", "Spotlight night drive searching for hunting leopards"],
-        recommendedStay: "Mfuwe Lodge or Flatdogs Camp",
-        logisticsNotes: "Transfer from Mfuwe Airport to lodge included (approx. 45 mins).",
-        estimatedCostZmw: 2900,
-        estimatedCostPgk: 2900
+        title: "Menari Village & The Ball of Gold",
+        location: "Menari Village",
+        province: "Central Province",
+        summary: "Trek through the ancient moss forest of the Swamp and climb the ridge down into welcoming Menari village with its grassy airstrip.",
+        activities: ["Menari village welcome and fresh fruit garden gifts", "Historical 39th Battalion parade ground inspection", "Koiari cultural songs around the campfire"],
+        recommendedStay: "Menari Village Community Homestay",
+        logisticsNotes: "Support local Koiari women's vegetable cooperative.",
+        estimatedCostPgk: 450,
+        estimatedCostZmw: 450
       },
       {
         dayNumber: 4,
-        title: "Pioneer Walking Safari in Luangwa Valley",
-        location: "South Luangwa National Park",
-        province: "Eastern Province",
-        summary: "Set off on foot at dawn with a master tracking guide and armed DNPW scout following wildlife tracks along the river sandbars.",
-        activities: ["Dawn 4-hour walking safari through ebony groves", "Midday relaxation watching elephants at the lagoon", "Evening bush dinner under the African stars"],
-        recommendedStay: "Chichele Presidential Lodge or Nsefu Bushcamp",
-        logisticsNotes: "Wear neutral khaki/green colors; broken-in walking shoes mandatory.",
-        estimatedCostZmw: 2200,
-        estimatedCostPgk: 2200
+        title: "Brigade Hill Memorial & Efogi Village",
+        location: "Brigade Hill to Efogi",
+        province: "Central Province",
+        summary: "Scale the sacred heights of Brigade Hill (Mission Ridge) for a solemn dawn memorial service honoring fallen Australian and Papuan soldiers.",
+        activities: ["Brigade Hill battlefield dawn memorial service", "Commemorative tree planting", "Descent into Efogi, the largest Koiari village along the track"],
+        recommendedStay: "Efogi Community Lodge",
+        logisticsNotes: "Satellite phone and emergency radio post active at Efogi airstrip.",
+        estimatedCostPgk: 550,
+        estimatedCostZmw: 550
       },
       {
         dayNumber: 5,
-        title: "Deep Game Drives & Carmine Bee-Eater Colonies",
-        location: "Nsefu Game Sector",
-        province: "Eastern Province",
-        summary: "Explore the remote Nsefu sector featuring high lion densities, Thornicroft's giraffes, and nesting carmine bee-eaters.",
-        activities: ["All-day game drive to Pelican Lagoon", "Birding at the carmine bee-eater clay banks", "Sunset drinks overlooking the Luangwa oxbow"],
-        recommendedStay: "Nsefu Bushcamp",
-        logisticsNotes: "4x4 game vehicle with experienced local wildlife guide.",
-        estimatedCostZmw: 2100,
-        estimatedCostPgk: 2100
+        title: "Mount Bellamy (Highest Point) to Templeton's Crossing",
+        location: "Mount Bellamy & Eora Creek",
+        province: "Oro (Northern) Province",
+        summary: "Cross the highest point on the Kokoda Track at Mount Bellamy (2,190m) through enchanting moss-draped cloud rainforest.",
+        activities: ["High-altitude moss forest photography", "Crossing the provincial border into Oro Province", "Templeton's Crossing river camp"],
+        recommendedStay: "Templeton's Crossing Wilderness Hut",
+        logisticsNotes: "Cool temperatures (12°C); thermal fleece required at night.",
+        estimatedCostPgk: 500,
+        estimatedCostZmw: 500
       },
       {
         dayNumber: 6,
-        title: "Tribal Textiles & Community Village Tour",
-        location: "Mfuwe Village",
-        province: "Eastern Province",
-        summary: "Visit Tribal Textiles workshop and the local community clinic and schools supported by tourism levies.",
-        activities: ["Handmade artisan batik textile painting workshop", "Mulberry Mongoose anti-snare jewellery visit", "Farewell bush sundowner"],
-        recommendedStay: "Mfuwe Lodge",
-        logisticsNotes: "Support local women's cooperatives directly.",
-        estimatedCostZmw: 1400,
-        estimatedCostPgk: 1400
+        title: "Eora Creek Battlefields & Alola Village",
+        location: "Eora Creek to Alola",
+        province: "Oro (Northern) Province",
+        summary: "Trek past historical mortar positions and weapon pits overlooking the roaring torrents of Eora Creek gorge.",
+        activities: ["Eora Creek battlefield relic observation", "Alola cliffside panoramic valley view", "Local sugarcane and sweet potato (Kaukau) tasting"],
+        recommendedStay: "Alola Village Guesthouse",
+        logisticsNotes: "Respect all war relics; removing artifacts is strictly prohibited.",
+        estimatedCostPgk: 450,
+        estimatedCostZmw: 450
       },
       {
         dayNumber: 7,
-        title: "Return Flight to Lusaka & Departure",
-        location: "Lusaka",
-        province: "Lusaka Province",
-        summary: "Morning flight from Mfuwe to Kenneth Kaunda International Airport (LUN) for international departure.",
-        activities: ["Morning game drive transfer to Mfuwe airstrip", "Arrival at Lusaka KKIA", "Duty-free Zambian coffee and crafts shopping"],
-        recommendedStay: "Radisson Blu Lusaka (if overnighting)",
-        logisticsNotes: "Proflight domestic flight connects directly with international departures.",
-        estimatedCostZmw: 900,
-        estimatedCostPgk: 900
+        title: "Isurava Battlefield Memorial & Hoi Village",
+        location: "Isurava Memorial to Hoi",
+        province: "Oro (Northern) Province",
+        summary: "Stand before the iconic Four Granite Pillars at Isurava Memorial: Courage, Endurance, Mateship, Sacrifice.",
+        activities: ["Isurava Memorial service and Kingsbury VC site", "Choko tree plantation walks", "Hoi village river camp"],
+        recommendedStay: "Hoi Community Campsite",
+        logisticsNotes: "Gentle descent towards the northern coastal plain.",
+        estimatedCostPgk: 550,
+        estimatedCostZmw: 550
+      },
+      {
+        dayNumber: 8,
+        title: "Triumphant Arrival at Kokoda Station & Port Moresby Return",
+        location: "Kokoda Station & Port Moresby",
+        province: "Oro / NCD",
+        summary: "Walk beneath the Kokoda Station memorial arches, explore the historical museum, receive completion certificates, and fly back to Port Moresby.",
+        activities: ["Kokoda Station memorial parade", "Kokoda Museum and military hospital visit", "Charter / scheduled flight to Jacksons Airport Port Moresby"],
+        recommendedStay: "Airways Hotel Port Moresby or The Stanley",
+        logisticsNotes: "Air Niugini / PNG Air flight from Popondetta (Gurney/Girua) to Port Moresby.",
+        estimatedCostPgk: 600,
+        estimatedCostZmw: 600
       }
     ],
     essentialPackingList: [
-      "Khaki / beige lightweight cotton shirts and trousers",
-      "Sturdy walking boots with thick socks",
-      "Quality binoculars (8x42 or 10x42)",
-      "High SPF sunscreen and wide-brim sunhat",
-      "Insect repellent (DEET/Picaridin)",
-      "Camera with telephoto lens (300mm+)"
+      "Heavy-duty broken-in trekking boots with spare laces",
+      "Electrolyte replacement tabs and water purification micro-filter",
+      "Lightweight rain poncho and waterproof dry-sacks for gear",
+      "Thermal fleece and light sleeping bag",
+      "Blister prevention kit and personal medical supplies",
+      "Headlamp with spare batteries"
     ],
     safetyAndHealthTips: [
-      "Always obey your professional walking guide and armed wildlife scout.",
-      "Take recommended malaria prophylaxis when visiting river valleys.",
-      "Stay hydrated during hot game drives; purified water is always provided."
+      "Always obey your licensed KTA guide and local porter.",
+      "Stay hydrated (4–5 litres daily) to prevent heat exhaustion in humid valleys.",
+      "Take prescribed malaria prophylaxis consistently."
     ]
   },
   {
-    id: "zambia-grand-traditional-ceremonies",
-    title: "Grand Zambian Royal Ceremonies & Cultural Journey",
-    subtitle: "Experience the Kuomboka water pageant in Barotseland, the Nc'wala warrior dance, and the Umutomboko sword conquest",
+    id: "png-highlands-sing-sing-odyssey",
+    title: "Highlands Cultural Sing-Sing & Bird of Paradise Odyssey",
+    subtitle: "Immerse in the world-famous Goroka & Mount Hagen shows, meet the legendary Asaro Mudmen and Huli Wigmen",
     travelStyle: "Cultural Immersion",
-    durationDays: 6,
-    bestTravelMonths: "February to October",
-    totalEstimatedCostZmw: 11800,
-    totalEstimatedCostPgk: 11800,
-    provincesCovered: ["Western Province", "Eastern Province", "Luapula Province"],
+    durationDays: 7,
+    bestTravelMonths: "August to October",
+    totalEstimatedCostPgk: 4800,
+    totalEstimatedCostZmw: 4800,
+    provincesCovered: ["National Capital District", "Eastern Highlands", "Western Highlands", "Hela Province"],
     days: [
       {
         dayNumber: 1,
-        title: "Lusaka to Mongu & Barotse Royal Welcome",
-        location: "Mongu & Limulunga",
-        province: "Western Province",
-        summary: "Fly or travel overland to the Barotseland capital of Mongu to prepare for the sacred Kuomboka royal flotilla.",
-        activities: ["Nayuma Cultural Museum visit", "Lozi royal basketry artisans", "Sunset overlooking the Zambezi floodplains"],
-        recommendedStay: "Country Lodge Mongu",
-        logisticsNotes: "Advance royal protocol registration via Barotse Royal Establishment.",
-        estimatedCostZmw: 2100,
-        estimatedCostPgk: 2100
+        title: "Fly Port Moresby to Goroka in the Eastern Highlands",
+        location: "Goroka",
+        province: "Eastern Highlands Province",
+        summary: "Scenic flight over the central mountain spine to Goroka. Visit the J.K. McCarthy Museum and explore local organic Arabica coffee mills.",
+        activities: ["J.K. McCarthy Museum historical artifacts tour", "Goroka highland coffee tasting", "Sunset over Mount Kiss"],
+        recommendedStay: "Bird of Paradise Hotel Goroka or Pacific Gardens Hotel",
+        logisticsNotes: "Direct Air Niugini flight from Port Moresby to Goroka Airport (GKA).",
+        estimatedCostPgk: 750,
+        estimatedCostZmw: 750
       },
       {
         dayNumber: 2,
-        title: "Kuomboka Royal Flotilla & The Nalikwanda Barge",
-        location: "Lealui to Limulunga",
-        province: "Western Province",
-        summary: "Witness King Litunga in royal regalia board the giant black-and-white Nalikwanda barge propelled by 120 royal paddlers.",
-        activities: ["Kuomboka VIP viewing pavilion", "Traditional Lozi royal drumming and singing", "Highland arrival celebration at Limulunga palace"],
-        recommendedStay: "Country Lodge Mongu",
-        logisticsNotes: "Wear comfortable shoes and sun protection for riverbank viewing.",
-        estimatedCostZmw: 2600,
-        estimatedCostPgk: 2600
+        title: "Asaro Valley & The Legendary Mudmen Village",
+        location: "Asaro Valley",
+        province: "Eastern Highlands Province",
+        summary: "Travel into the misty Asaro Valley to witness the eerie ancestral Mudmen perform their silent, creeping clay-masked war dance.",
+        activities: ["Asaro Mudmen mask-making and secret clay ceremony", "Traditional Mumu earth-oven lunch feast", "Bamboo mouth harp and flute demonstration"],
+        recommendedStay: "Bird of Paradise Hotel Goroka",
+        logisticsNotes: "Private 4x4 transport with local Eastern Highlands guide.",
+        estimatedCostPgk: 800,
+        estimatedCostZmw: 800
       },
       {
         dayNumber: 3,
-        title: "Journey to Chipata for Nc'wala First-Fruits",
-        location: "Chipata & Mutenguleni",
-        province: "Eastern Province",
-        summary: "Travel to Eastern Zambia to witness the Ngoni warriors gathering at Mtenguleni for the ancient Nc'wala celebration.",
-        activities: ["Mutenguleni royal arena setup", "Ngoni impis warrior mock battles in leopard skins", "Paramount Chief Mpezeni royal procession"],
-        recommendedStay: "Protea Hotel Chipata",
-        logisticsNotes: "Proflight connecting flights via Lusaka to Chipata/Mfuwe.",
-        estimatedCostZmw: 2400,
-        estimatedCostPgk: 2400
+        title: "Highlands Highway Scenic Drive to Mount Hagen",
+        location: "Simbu & Western Highlands",
+        province: "Simbu & Western Highlands",
+        summary: "Drive along the spectacular mountain highway past the foothills of Mount Wilhelm and through Simbu Province into the fertile Wahgi Valley.",
+        activities: ["Daulo Pass scenic lookout (2,478m)", "Kundiawa town and Simbu basket weavers", "Arrival in Mount Hagen coffee country"],
+        recommendedStay: "Highlander Hotel Mount Hagen or Rondon Ridge Lodge",
+        logisticsNotes: "Comfortable air-conditioned 4x4 with professional driver.",
+        estimatedCostPgk: 650,
+        estimatedCostZmw: 650
       },
       {
         dayNumber: 4,
-        title: "Nc'wala Sacred Bull Sacrifice & Warrior Singsing",
-        location: "Mutenguleni Arena",
-        province: "Eastern Province",
-        summary: "Experience the peak of Nc'wala as Paramount Chief Mpezeni tastes the fresh first fruits and blesses the harvest.",
-        activities: ["Sacred Ingoma dance competitions", "Tasting of fresh maize harvest", "Traditional craft and beadwork showcase"],
-        recommendedStay: "Protea Hotel Chipata",
-        logisticsNotes: "Respect local protocol regarding ceremonial photography.",
-        estimatedCostZmw: 1900,
-        estimatedCostPgk: 1900
+        title: "Mount Hagen Cultural Sing-Sing Spectacle",
+        location: "Mount Hagen Showgrounds",
+        province: "Western Highlands Province",
+        summary: "Full day VIP access to the Mount Hagen Show, marveling at over 80 tribes in colorful feather bilas, Kundu drumming, and warrior chants.",
+        activities: ["Early morning VIP access for face-painting photography", "Grand Sing-Sing arena parade", "Melpa warrior war-cries and Kundu drum rhythms"],
+        recommendedStay: "Rondon Ridge Luxury Eco-Lodge",
+        logisticsNotes: "VIP enclosure pass with shaded seating and refreshments included.",
+        estimatedCostPgk: 900,
+        estimatedCostZmw: 900
       },
       {
         dayNumber: 5,
-        title: "Mwansabombwe & The Umutomboko Royal Sword Dance",
-        location: "Mwansabombwe",
-        province: "Luapula Province",
-        summary: "Visit the Luapula waterfalls kingdom to witness Mwata Kazembe perform the Mutomboko victory dance with the royal sword.",
-        activities: ["Mwata Kazembe royal palace archives", "Mutomboko victory dance", "Lumangwe waterfall scenic detour"],
-        recommendedStay: "Luapula River Chalets",
-        logisticsNotes: "Overland 4x4 or charter flight to Mansa airstrip.",
-        estimatedCostZmw: 1800,
-        estimatedCostPgk: 1800
+        title: "Tari Valley & The Sacred Huli Wigmen",
+        location: "Tari Valley",
+        province: "Hela Province",
+        summary: "Fly or drive to Tari Valley in Hela Province to meet the Huli Wigmen, who grow their own hair in sacred bachelor schools to create ceremonial wigs.",
+        activities: ["Huli Wigman bachelor school visit and hair-growing rituals", "Yellow & red ochre face-painting demonstration", "Bird of Paradise rainforest canopy walk (King of Saxony & Blue Bird of Paradise)"],
+        recommendedStay: "Ambua Lodge (Trans Niugini Tours)",
+        logisticsNotes: "Stay at Ambua Lodge perched high on the Tari Valley rim.",
+        estimatedCostPgk: 950,
+        estimatedCostZmw: 950
       },
       {
         dayNumber: 6,
-        title: "Luapula Waterfalls & Return to Lusaka",
-        location: "Samfya & Lusaka",
-        province: "Luapula Province",
-        summary: "Relax at the white sand beaches of Lake Bangweulu in Samfya before returning to Lusaka.",
-        activities: ["Samfya white beach stroll", "Fresh bream fish lunch on the lake", "Return flight to Lusaka"],
-        recommendedStay: "Lusaka Grand Hotel",
-        logisticsNotes: "Connect to evening international flights.",
-        estimatedCostZmw: 1000,
-        estimatedCostPgk: 1000
+        title: "Birdwatching in the Ambua Cloud Forest",
+        location: "Tari Cloud Forest",
+        province: "Hela Province",
+        summary: "Morning nature trek with expert local naturalist spotters seeking up to 13 species of Birds of Paradise and endemic alpine orchids.",
+        activities: ["Dawn bird of paradise mating lek observation", "Highland suspension bridge rainforest canopy trail", "Village cultural exchange with Tari clan matriarchs"],
+        recommendedStay: "Ambua Lodge",
+        logisticsNotes: "Quality binoculars (8x42 or 10x42) recommended.",
+        estimatedCostPgk: 500,
+        estimatedCostZmw: 500
+      },
+      {
+        dayNumber: 7,
+        title: "Return to Port Moresby & Cultural Market Shopping",
+        location: "Port Moresby",
+        province: "National Capital District",
+        summary: "Flight from Tari / Mount Hagen back to Port Moresby. Afternoon visit to the National Museum and Art Gallery and Ela Beach craft market.",
+        activities: ["Flight to Port Moresby Jacksons Airport", "National Museum & Art Gallery master collection", "Authentic hand-woven Bilum shopping at Port Moresby Craft Market"],
+        recommendedStay: "Airways Hotel Port Moresby",
+        logisticsNotes: "Connect seamlessly to international departures.",
+        estimatedCostPgk: 250,
+        estimatedCostZmw: 250
       }
     ],
     essentialPackingList: [
-      "Respectful attire for royal palace visits (covered shoulders and knees)",
-      "Sun hat, sunglasses, and high SPF sunscreen",
-      "Sturdy walking sandals or sneakers",
-      "Camera with spare memory cards"
+      "Camera with telephoto lens (200mm–400mm) and extra memory cards",
+      "Warm fleece jacket for chilly highland nights (10°C–14°C)",
+      "Comfortable walking shoes and lightweight rain jacket",
+      "Cash (PGK) for purchasing Bilums and tribal wood carvings directly from makers"
     ],
     safetyAndHealthTips: [
-      "Follow guidance from royal ceremonial marshals at all times.",
-      "Stay hydrated during outdoor ceremonies in sunny weather."
+      "Highland sun is strong; wear a sunhat and sunglasses.",
+      "Stay with your designated tour guide in crowded festival showgrounds."
+    ]
+  },
+  {
+    id: "png-coral-triangle-scuba-marine",
+    title: "Kimbe Bay & Milne Bay Coral Triangle Scuba Odyssey",
+    subtitle: "Dive world-famous coral seamounts, swim with hammerhead sharks, explore WWII wrecks and pristine volcanic fjords",
+    travelStyle: "Diving & Islands",
+    durationDays: 8,
+    bestTravelMonths: "April to December",
+    totalEstimatedCostPgk: 5400,
+    totalEstimatedCostZmw: 5400,
+    provincesCovered: ["West New Britain Province", "Milne Bay Province", "National Capital District"],
+    days: [
+      {
+        dayNumber: 1,
+        title: "Fly to Hoskins & Walindi Plantation Resort in Kimbe Bay",
+        location: "Kimbe Bay",
+        province: "West New Britain Province",
+        summary: "Arrive at Hoskins Airport on New Britain Island. Transfer through oil palm plantations to the world-renowned Walindi Plantation Resort.",
+        activities: ["Hoskins scenic coastal arrival", "Walindi beachfront check-in and dive gear briefing", "Sunset drinks overlooking Kimbe Bay's dormant volcanoes"],
+        recommendedStay: "Walindi Plantation Resort",
+        logisticsNotes: "Air Niugini flight from Port Moresby (POM) to Hoskins (HKN).",
+        estimatedCostPgk: 850,
+        estimatedCostZmw: 850
+      },
+      {
+        dayNumber: 2,
+        title: "Kimbe Bay Coral Seamounts (South Emma & Inglis Shoal)",
+        location: "Kimbe Bay Seamounts",
+        province: "West New Britain Province",
+        summary: "Double boat dive on Kimbe Bay's offshore underwater volcanic pinnacles, teeming with schooling barracuda, trevally, and giant sea fans.",
+        activities: ["Morning dive on South Emma seamount", "Inglis Shoal drift dive with pelagic grey reef sharks", "Visit to Mahonia Na Dari Marine Conservation Center"],
+        recommendedStay: "Walindi Plantation Resort",
+        logisticsNotes: "PADI dive boat with experienced local divemaster.",
+        estimatedCostPgk: 750,
+        estimatedCostZmw: 750
+      },
+      {
+        dayNumber: 3,
+        title: "Restorf Island & Hanging Gardens",
+        location: "Restorf Island",
+        province: "West New Britain Province",
+        summary: "Dive the vibrant soft coral walls of Restorf Island and picnic on a deserted white sand islet surrounded by turquoise lagoons.",
+        activities: ["Hanging Gardens soft coral wall dive", "White sand beach picnic on Restorf Island", "Snorkeling over shallow mandarin fish reef"],
+        recommendedStay: "Walindi Plantation Resort",
+        logisticsNotes: "Marine sanctuary pass included in dive rate.",
+        estimatedCostPgk: 700,
+        estimatedCostZmw: 700
+      },
+      {
+        dayNumber: 4,
+        title: "Fly to Alotau & Tawali Leisure & Dive Resort",
+        location: "Milne Bay",
+        province: "Milne Bay Province",
+        summary: "Fly via Port Moresby to Gurney Airport in Milne Bay. Scenic boat transfer through tranquil coral fjords to the cliffside Tawali Resort.",
+        activities: ["Scenic flight into Milne Bay", "Boat transfer past traditional stilt fishing villages", "Tawali timber cliffside check-in"],
+        recommendedStay: "Tawali Leisure & Dive Resort",
+        logisticsNotes: "Boat transfer from East Cape dock to Tawali Resort.",
+        estimatedCostPgk: 900,
+        estimatedCostZmw: 900
+      },
+      {
+        dayNumber: 5,
+        title: "Muck Diving & Macro Paradise (Dinah's Beach / Lauadi)",
+        location: "Lauadi Coast",
+        province: "Milne Bay Province",
+        summary: "Dive the birthplace of 'muck diving' at Dinah's Beach, searching for rare pygmy seahorses, blue-ringed octopuses, and mimic octopuses.",
+        activities: ["Dinah's Beach black sand macro dive", "Pygmy seahorse and ghost pipefish photography", "Deacon's Reef lush hard coral garden dive"],
+        recommendedStay: "Tawali Leisure & Dive Resort",
+        logisticsNotes: "Macro photography lighting support provided on dive boats.",
+        estimatedCostPgk: 750,
+        estimatedCostZmw: 750
+      },
+      {
+        dayNumber: 6,
+        title: "WWII Black Jack B-17 Bomber Wreck & Coral Walls",
+        location: "Boga Boga & Milne Bay",
+        province: "Milne Bay Province",
+        summary: "Explore historic WWII wartime heritage underwater, diving intact coral-encrusted aircraft and sheer oceanic drop-offs.",
+        activities: ["B-17 Flying Fortress bomber wreck dive", "Oceanic coral wall dive at Tania's Reef", "Milne Bay sunset catamaran cruise"],
+        recommendedStay: "Tawali Leisure & Dive Resort",
+        logisticsNotes: "Advanced open water certification required for deep wreck dive.",
+        estimatedCostPgk: 750,
+        estimatedCostZmw: 750
+      },
+      {
+        dayNumber: 7,
+        title: "Skull Caves & Traditional Village Cultural Visit",
+        location: "East Cape & Tawali",
+        province: "Milne Bay Province",
+        summary: "Trek through the coastal rainforest to visit the ancestral sacred limestone Skull Caves and learn about ancient Milne Bay burial rituals.",
+        activities: ["Guided walk to ancient limestone burial caves", "Village woodcarving demonstration (Ebora bowl artisans)", "Traditional Kundu drum dance performance"],
+        recommendedStay: "Tawali Leisure & Dive Resort",
+        logisticsNotes: "Wear comfortable walking shoes with good grip on limestone paths.",
+        estimatedCostPgk: 400,
+        estimatedCostZmw: 400
+      },
+      {
+        dayNumber: 8,
+        title: "Return to Port Moresby & Loloata Island Relaxation",
+        location: "Port Moresby / Loloata",
+        province: "NCD / Central Province",
+        summary: "Morning flight from Gurney Airport back to Port Moresby. Afternoon relaxation at Loloata Island Marine Resort in Bootless Bay.",
+        activities: ["Flight to Port Moresby", "Loloata Island 20-minute catamaran transfer", "Overwater suite sunset dinner"],
+        recommendedStay: "Loloata Island Marine Resort",
+        logisticsNotes: "Complimentary boat shuttle from Tahira Marina.",
+        estimatedCostPgk: 300,
+        estimatedCostZmw: 300
+      }
+    ],
+    essentialPackingList: [
+      "Dive computer, mask, and safety sausage (SMB)",
+      "Reef-safe biodegradable sunscreen and rash guard",
+      "Underwater camera with strobe lighting",
+      "Logbook and PADI/SSI certification card"
+    ],
+    safetyAndHealthTips: [
+      "Observe minimum 24-hour pre-flight surface interval after diving.",
+      "Stay hydrated in tropical climates; drink plenty of fresh coconut water and electrolytes."
     ]
   }
 ];
 
-export const CURATED_ITINERARIES: GeneratedItinerary[] = ZAMBIA_CURATED_ITINERARIES;
+export const CURATED_ITINERARIES: GeneratedItinerary[] = PNG_CURATED_ITINERARIES;
 
 export function generateCustomItinerary(
   interests: string[],
   durationDays: number,
   travelStyle: string,
   fitnessLevel: string = "moderate",
-  countryCode: string = "ZMB"
+  countryCode: string = "PNG"
 ): GeneratedItinerary {
-  const catalog = ZAMBIA_CURATED_ITINERARIES;
+  const catalog = PNG_CURATED_ITINERARIES;
 
   const matching = catalog.find(it => 
     it.travelStyle.toLowerCase().includes(travelStyle.toLowerCase()) ||
     interests.some(int => it.title.toLowerCase().includes(int.toLowerCase()))
   ) || catalog[0];
 
-  // Tailor duration if custom days requested
   const days: ItineraryDay[] = [];
   const count = Math.min(Math.max(3, durationDays || 7), 14);
 
@@ -263,16 +405,16 @@ export function generateCustomItinerary(
     });
   }
 
-  const costPerDay = Math.round(matching.totalEstimatedCostZmw / matching.durationDays);
+  const costPerDay = Math.round(matching.totalEstimatedCostPgk / matching.durationDays);
 
   return {
     ...matching,
     id: `custom_itinerary_${Date.now()}`,
-    title: `Customized ZamRoam Zambia ${travelStyle || "Safari"} Journey`,
-    subtitle: `Tailored for ${count} days based on your interests in ${interests.join(", ") || "safari & nature"} (${fitnessLevel} pace)`,
+    title: `Customized VisitPNG ${travelStyle || "Adventure"} Journey`,
+    subtitle: `Tailored for ${count} days based on your interests in ${interests.join(", ") || "culture & nature"} (${fitnessLevel} pace)`,
     durationDays: count,
-    totalEstimatedCostZmw: costPerDay * count,
     totalEstimatedCostPgk: costPerDay * count,
+    totalEstimatedCostZmw: costPerDay * count,
     days
   };
 }

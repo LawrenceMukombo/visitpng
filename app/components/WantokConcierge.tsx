@@ -1,6 +1,7 @@
 "use client";
+
 import { useState } from "react";
-import { ZAMBIA_CURATED_ITINERARIES, GeneratedItinerary, ItineraryDay, generateCustomItinerary } from "../../db/wantokAi";
+import { PNG_CURATED_ITINERARIES, GeneratedItinerary, generateCustomItinerary } from "../../db/wantokAi";
 import { CurrencyCode, formatPrice } from "../../db/currency";
 
 interface WantokConciergeProps {
@@ -10,33 +11,33 @@ interface WantokConciergeProps {
 }
 
 export default function WantokConcierge({ currency, onOpenTrips }: WantokConciergeProps) {
-  const initialItinerary = ZAMBIA_CURATED_ITINERARIES[0];
+  const initialItinerary = PNG_CURATED_ITINERARIES[0];
 
   const [selectedStyle, setSelectedStyle] = useState<string>("Wilderness Expedition");
-  const [durationDays, setDurationDays] = useState<number>(7);
+  const [durationDays, setDurationDays] = useState<number>(8);
   const [fitnessLevel, setFitnessLevel] = useState<string>("Moderate");
   const [selectedInterests, setSelectedInterests] = useState<string[]>([
-    "Victoria Falls Mosi-oa-Tunya",
-    "Luangwa Walking Safari"
+    "Kokoda Track 96km Crossing",
+    "Bird of Paradise Watching"
   ]);
-  const [customPrompt, setCustomPrompt] = useState("");
+  const [customPrompt] = useState("");
   const [activeItinerary, setActiveItinerary] = useState<GeneratedItinerary>(initialItinerary);
   const [isGenerating, setIsGenerating] = useState(false);
   const [saveNotice, setSaveNotice] = useState("");
   const [isCustomizing, setIsCustomizing] = useState(false);
-
-  // New activity input states per day
   const [newActivityInputs, setNewActivityInputs] = useState<Record<number, string>>({});
 
   const availableInterests = [
-    "Victoria Falls Mosi-oa-Tunya",
-    "Luangwa Walking Safari",
-    "Lower Zambezi Canoeing",
-    "Devil's Pool Livingstone",
-    "Big 5 Game Drives",
-    "Kuomboka Royal Ceremony",
-    "Lake Kariba Houseboats",
-    "Tribal Textiles & Craft"
+    { id: "Kokoda Track 96km Crossing", icon: "🥾" },
+    { id: "Bird of Paradise Watching", icon: "🦜" },
+    { id: "Asaro Mudmen & Sing-Sings", icon: "🎭" },
+    { id: "Kimbe Bay Coral Seamounts", icon: "🤿" },
+    { id: "Sepik River Spirit Houses", icon: "🛶" },
+    { id: "Mount Wilhelm Alpine Summit", icon: "⛰️" },
+    { id: "Tari Valley Huli Wigmen", icon: "🪶" },
+    { id: "Tufi Volcanic Fjords & Diving", icon: "🌋" },
+    { id: "Rabaul Volcanoes & Fire Dance", icon: "🔥" },
+    { id: "Milne Bay War Canoe Regattas", icon: "⛵" }
   ];
 
   const updateItineraryLive = (
@@ -46,19 +47,19 @@ export default function WantokConcierge({ currency, onOpenTrips }: WantokConcier
     fitness: string
   ) => {
     const it = generateCustomItinerary(
-      interests.length ? interests : [customPrompt || "Safari"],
+      interests.length ? interests : [customPrompt || "Adventure"],
       duration,
       style,
       fitness,
-      "ZMB"
+      "PNG"
     );
     setActiveItinerary(it);
   };
 
-  const toggleInterest = (int: string) => {
-    const updated = selectedInterests.includes(int)
-      ? selectedInterests.filter(i => i !== int)
-      : [...selectedInterests, int];
+  const toggleInterest = (intId: string) => {
+    const updated = selectedInterests.includes(intId)
+      ? selectedInterests.filter(i => i !== intId)
+      : [...selectedInterests, intId];
     setSelectedInterests(updated);
     updateItineraryLive(updated, durationDays, selectedStyle, fitnessLevel);
   };
@@ -83,11 +84,11 @@ export default function WantokConcierge({ currency, onOpenTrips }: WantokConcier
     setIsGenerating(true);
     setTimeout(() => {
       const it = generateCustomItinerary(
-        selectedInterests.length ? selectedInterests : [customPrompt || "Safari"],
+        selectedInterests.length ? selectedInterests : [customPrompt || "Adventure"],
         durationDays,
         selectedStyle,
         fitnessLevel,
-        "ZMB"
+        "PNG"
       );
       setActiveItinerary(it);
       setIsGenerating(false);
@@ -96,474 +97,529 @@ export default function WantokConcierge({ currency, onOpenTrips }: WantokConcier
     }, 300);
   };
 
-  // Customizer Actions:
   const handleAddActivity = (dayNumber: number) => {
     const text = newActivityInputs[dayNumber]?.trim();
     if (!text) return;
-
-    const updatedDays = activeItinerary.days.map((day) => {
-      if (day.dayNumber === dayNumber) {
-        return {
-          ...day,
-          activities: [...day.activities, text],
-          estimatedCostZmw: (day.estimatedCostZmw || 800) + 150
-        };
+    const updatedDays = activeItinerary.days.map(d => {
+      if (d.dayNumber === dayNumber) {
+        return { ...d, activities: [...d.activities, text] };
       }
-      return day;
+      return d;
     });
-
-    const newTotal = updatedDays.reduce((acc, d) => acc + (d.estimatedCostZmw || 0), 0);
-
-    setActiveItinerary({
-      ...activeItinerary,
-      days: updatedDays,
-      totalEstimatedCostZmw: newTotal
-    });
-
+    setActiveItinerary({ ...activeItinerary, days: updatedDays });
     setNewActivityInputs({ ...newActivityInputs, [dayNumber]: "" });
-    setSaveNotice(`➕ Added activity to Day ${dayNumber}`);
-    setTimeout(() => setSaveNotice(""), 2500);
   };
 
   const handleRemoveActivity = (dayNumber: number, actIndex: number) => {
-    const updatedDays = activeItinerary.days.map((day) => {
-      if (day.dayNumber === dayNumber) {
-        const newActs = day.activities.filter((_, idx) => idx !== actIndex);
-        return {
-          ...day,
-          activities: newActs,
-          estimatedCostZmw: Math.max(300, (day.estimatedCostZmw || 800) - 150)
-        };
+    const updatedDays = activeItinerary.days.map(d => {
+      if (d.dayNumber === dayNumber) {
+        return { ...d, activities: d.activities.filter((_, i) => i !== actIndex) };
       }
-      return day;
+      return d;
     });
-
-    const newTotal = updatedDays.reduce((acc, d) => acc + (d.estimatedCostZmw || 0), 0);
-
-    setActiveItinerary({
-      ...activeItinerary,
-      days: updatedDays,
-      totalEstimatedCostZmw: newTotal
-    });
-
-    setSaveNotice(`🗑️ Removed activity from Day ${dayNumber}`);
-    setTimeout(() => setSaveNotice(""), 2500);
+    setActiveItinerary({ ...activeItinerary, days: updatedDays });
   };
 
-  const handleRemoveDay = (dayNumber: number) => {
-    if (activeItinerary.days.length <= 1) {
-      setSaveNotice("⚠️ An itinerary must have at least 1 day.");
-      setTimeout(() => setSaveNotice(""), 2500);
-      return;
-    }
-
-    const filtered = activeItinerary.days.filter((d) => d.dayNumber !== dayNumber);
-    // Renumber remaining days
-    const renumbered: ItineraryDay[] = filtered.map((d, index) => ({
-      ...d,
-      dayNumber: index + 1
-    }));
-
-    const newTotal = renumbered.reduce((acc, d) => acc + (d.estimatedCostZmw || 0), 0);
-
-    setActiveItinerary({
-      ...activeItinerary,
-      durationDays: renumbered.length,
-      days: renumbered,
-      totalEstimatedCostZmw: newTotal
-    });
-
-    setSaveNotice(`🗑️ Removed Day ${dayNumber}. Itinerary updated to ${renumbered.length} days.`);
-    setTimeout(() => setSaveNotice(""), 3000);
-  };
-
-  const handleAddDay = () => {
-    const nextNum = activeItinerary.days.length + 1;
-    const lastDay = activeItinerary.days[activeItinerary.days.length - 1];
-
-    const newDay: ItineraryDay = {
-      dayNumber: nextNum,
-      title: `Exploration & Wildlife Encounter - Day ${nextNum}`,
-      province: lastDay ? lastDay.province : "Southern",
-      location: lastDay ? lastDay.location : "Livingstone",
-      summary: "Custom safari day: game drives, walking trails, and cultural craft markets.",
-      activities: [
-        "Morning walking safari with DNPW scout",
-        "Community craft village visit",
-        "Sunset Zambezi river cruise"
-      ],
-      recommendedStay: lastDay ? lastDay.recommendedStay : "Safari Eco-Lodge",
-      estimatedCostZmw: 1200,
-      logisticsNotes: "Arrange 4x4 safari vehicle with lodge guide."
-    };
-
-    const updatedDays = [...activeItinerary.days, newDay];
-    const newTotal = updatedDays.reduce((acc, d) => acc + (d.estimatedCostZmw || 0), 0);
-
-    setActiveItinerary({
-      ...activeItinerary,
-      durationDays: updatedDays.length,
-      days: updatedDays,
-      totalEstimatedCostZmw: newTotal
-    });
-
-    setSaveNotice(`➕ Added Day ${nextNum} to your customized itinerary!`);
-    setTimeout(() => setSaveNotice(""), 3000);
-  };
-
-  const handleUpdateDayField = (dayNumber: number, field: keyof ItineraryDay, value: string) => {
-    const updatedDays = activeItinerary.days.map((day) => {
-      if (day.dayNumber === dayNumber) {
-        return { ...day, [field]: value };
-      }
-      return day;
-    });
-
-    setActiveItinerary({
-      ...activeItinerary,
-      days: updatedDays
-    });
-  };
-
-  const handleSaveToTrips = async () => {
+  const handleSaveToTrips = () => {
     try {
-      const response = await fetch("/api/trips", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: activeItinerary.title,
-          destination: activeItinerary.subtitle,
-          startDate: new Date().toISOString().slice(0, 10),
-          budgetZmw: activeItinerary.totalEstimatedCostZmw || 10000,
-          currency: "ZMW"
-        })
-      });
-
-      if (response.ok) {
-        setSaveNotice("🎉 Itinerary successfully saved to My Trips planner!");
-        if (onOpenTrips) onOpenTrips();
-      } else {
-        const stored = JSON.parse(localStorage.getItem("zamroam_offline_trips") || "[]");
-        stored.push({
-          id: `custom-ai-${Date.now()}`,
-          title: activeItinerary.title,
-          itinerary: activeItinerary,
-          savedAt: new Date().toISOString()
-        });
-        localStorage.setItem("zamroam_offline_trips", JSON.stringify(stored));
-        setSaveNotice("📦 Saved to your local offline Trips collection.");
+      const existingTrips = JSON.parse(localStorage.getItem("visitpng_trips") || "[]");
+      const newTrip = {
+        id: `trip-${Date.now()}`,
+        name: activeItinerary.title,
+        destination: activeItinerary.provincesCovered.join(", "),
+        startDate: new Date().toISOString().slice(0, 10),
+        endDate: new Date(Date.now() + activeItinerary.durationDays * 86400000).toISOString().slice(0, 10),
+        travellerCount: 2,
+        budget: activeItinerary.totalEstimatedCostPgk,
+        status: "planning",
+        interests: selectedInterests.join(", "),
+        notes: `Generated by Wantok AI Concierge (${activeItinerary.travelStyle})`,
+        items: activeItinerary.days.map((d, idx) => ({
+          id: `item-${Date.now()}-${idx}`,
+          title: d.title,
+          scheduledDate: new Date(Date.now() + idx * 86400000).toISOString().slice(0, 10),
+          cost: d.estimatedCostPgk,
+          notes: d.activities.join(" · ")
+        }))
+      };
+      existingTrips.unshift(newTrip);
+      localStorage.setItem("visitpng_trips", JSON.stringify(existingTrips));
+      setSaveNotice("✓ Itinerary saved to My Trips! You can now edit stops and invite companions.");
+      if (onOpenTrips) {
+        setTimeout(onOpenTrips, 1500);
       }
     } catch {
-      setSaveNotice("Saved to offline cache.");
+      setSaveNotice("Saved to local offline session.");
     }
-    setTimeout(() => setSaveNotice(""), 4000);
   };
 
-  const handleExportJson = () => {
-    const blob = new Blob([JSON.stringify({ generatedAt: new Date().toISOString(), itinerary: activeItinerary }, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `${activeItinerary.id}.json`;
-    a.click();
-    URL.revokeObjectURL(a.href);
-    setSaveNotice("📥 Custom itinerary file downloaded.");
-    setTimeout(() => setSaveNotice(""), 3000);
-  };
+  const travelStyles = [
+    { id: "Wilderness Expedition", label: "Kokoda & Peaks", icon: "🥾", badge: "Trek" },
+    { id: "Cultural Immersion", label: "Sing-Sings & Tribes", icon: "♨", badge: "Culture" },
+    { id: "Diving & Islands", label: "Coral Triangle Scuba", icon: "🤿", badge: "Marine" },
+    { id: "WWII History", label: "Battlefield Heritage", icon: "⚔️", badge: "History" },
+    { id: "Family & Nature", label: "Birds of Paradise", icon: "◇", badge: "Nature" }
+  ];
 
   return (
-    <div className="wantokConciergeSection">
-      <div className="wantokHeroHeader">
-        <div className="wantokTagline">
-          <span className="wantokAvatar">🦁</span>
-          <div>
-            <p className="eyebrow lime">ZAMROAM SAFARI & TRIP ARCHITECT</p>
-            <h2>Your Zambia Safari & Expedition Concierge</h2>
-          </div>
+    <div
+      style={{
+        background: "linear-gradient(180deg, #09211C 0%, #051613 100%)",
+        borderRadius: "20px",
+        padding: "32px 24px",
+        color: "#FFFFFF",
+        border: "1px solid rgba(234, 88, 12, 0.25)",
+        boxShadow: "0 20px 50px rgba(0,0,0,0.4)"
+      }}
+    >
+      {/* Top Banner Header */}
+      <div style={{ marginBottom: "28px", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "20px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
+          <span style={{ background: "#EA580C", color: "#FFFFFF", padding: "4px 10px", borderRadius: "6px", fontSize: "0.72rem", fontWeight: 800, letterSpacing: "0.08em" }}>
+            WANTOK AI EXPEDITION ENGINE
+          </span>
+          <span style={{ color: "#34D399", fontSize: "0.8rem", fontWeight: 700 }}>
+            🇵🇬 Papua New Guinea · 22 Provinces
+          </span>
         </div>
-        <p className="wantokDesc">
-          Plan seamless African safaris, Victoria Falls helicopter tours, Luangwa walking trails, and Zambezi river expeditions with intelligent AI planning. Customize any day, lodge, or activity to fit your exact dream adventure.
+        <h2 style={{ margin: "0 0 6px 0", fontSize: "1.85rem", fontWeight: 900, color: "#FFFFFF", letterSpacing: "-0.02em" }}>
+          Wantok AI Travel Concierge
+        </h2>
+        <p style={{ margin: 0, fontSize: "0.92rem", color: "#94A3B8", maxWidth: "780px", lineHeight: 1.5 }}>
+          Instantly generate realistic, culturally aligned expeditions across Papua New Guinea — with verified local lodges, licensed KTA guides, and transparent Kina pricing.
         </p>
       </div>
 
-      {/* AI Wizard Form */}
-      <form className="wantokWizardCard" onSubmit={handleGenerate}>
-        <div className="wizardGrid">
-          <div className="wizardField">
-            <label>Travel Style</label>
-            <select
-              value={selectedStyle}
-              onChange={e => handleStyleChange(e.target.value)}
-            >
-              <option value="Cultural Immersion">🎭 Cultural Ceremonies & Royal Palaces</option>
-              <option value="Wilderness Expedition">🦁 Walking Safaris & Big 5 Game Drives</option>
-              <option value="Waterfalls & Rivers">🌊 Victoria Falls & Zambezi River Trails</option>
-              <option value="Lakes & Fishing">🎣 Lake Tanganyika & Kariba Cruising</option>
-              <option value="Family & Nature">🌿 Nature, Birds & Bat Migration</option>
-            </select>
-          </div>
-
-          <div className="wizardField">
-            <label>Trip Duration: <b>{durationDays} Days</b></label>
-            <input
-              type="range"
-              min="3"
-              max="14"
-              value={durationDays}
-              onChange={e => handleDurationChange(Number(e.target.value))}
-            />
-          </div>
-
-          <div className="wizardField">
-            <label>Fitness Pace</label>
-            <select
-              value={fitnessLevel}
-              onChange={e => handleFitnessChange(e.target.value)}
-            >
-              <option value="Relaxed">Relaxed (Scenic drives & lodge pools)</option>
-              <option value="Moderate">Moderate (Morning walking safaris & nature trails)</option>
-              <option value="Challenging">Challenging (Rugged multi-day wilderness backpacking)</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="wizardInterestsGroup">
-          <label>Select Key Interests:</label>
-          <div className="interestChips">
-            {availableInterests.map(int => (
-              <button
-                key={int}
-                type="button"
-                className={`interestChip ${selectedInterests.includes(int) ? "active" : ""}`}
-                onClick={() => toggleInterest(int)}
-              >
-                {selectedInterests.includes(int) ? "✓ " : "+ "}{int}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="wizardCustomPrompt">
-          <label>Custom Wish or Note (Optional):</label>
-          <input
-            type="text"
-            placeholder="e.g. Include Devil's Pool, South Luangwa walking safari, and Kuomboka ceremony..."
-            value={customPrompt}
-            onChange={e => setCustomPrompt(e.target.value)}
-          />
-        </div>
-
-        <button type="submit" className="generateAiBtn" disabled={isGenerating}>
-          {isGenerating ? "⚡ Generating Zambian Itinerary…" : "✨ Generate Custom Itinerary"}
-        </button>
-      </form>
-
       {saveNotice && (
-        <div className="wantokAlertBanner" role="status" aria-live="polite">
+        <div
+          style={{
+            background: "rgba(16, 185, 129, 0.15)",
+            border: "1px solid #10B981",
+            color: "#6EE7B7",
+            padding: "12px 18px",
+            borderRadius: "10px",
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            marginBottom: "20px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px"
+          }}
+        >
           {saveNotice}
         </div>
       )}
 
-      {/* Generated Itinerary Display */}
-      <div className="generatedItineraryCard">
-        <header className="itineraryHeader">
-          <div className="itineraryHeaderTop">
-            <span className="itineraryStyleTag">{activeItinerary.travelStyle}</span>
-            <span className="itineraryDaysTag">⏱️ {activeItinerary.durationDays} Days</span>
-            <span className="itinerarySeasonTag">☀️ Best: {activeItinerary.bestTravelMonths}</span>
-          </div>
-          <h2>{activeItinerary.title}</h2>
-          <p className="itinerarySubtitle">{activeItinerary.subtitle}</p>
-
-          <div className="itineraryProvincesRow">
-            <strong>Provinces Visited:</strong>
-            <div className="provPills">
-              {activeItinerary.provincesCovered.map((prov, i) => (
-                <span key={i} className="provPill">📍 {prov}</span>
-              ))}
-            </div>
-          </div>
-
-          <div className="itineraryBudgetBanner">
+      {/* Main 2-Column Responsive Layout */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "28px", alignItems: "start", maxWidth: "100%" }}>
+        {/* Left Column: Interactive Planner Controls */}
+        <div
+          style={{
+            background: "rgba(15, 48, 42, 0.7)",
+            borderRadius: "16px",
+            border: "1px solid rgba(255,255,255,0.12)",
+            padding: "24px",
+            backdropFilter: "blur(10px)",
+            minWidth: 0
+          }}
+        >
+          <form onSubmit={handleGenerate} style={{ display: "flex", flexDirection: "column", gap: "22px" }}>
+            {/* Travel Style Selector */}
             <div>
-              <small>Estimated Budget (Ground + Safari Stays + Local Transport)</small>
-              <strong>{formatPrice(activeItinerary.totalEstimatedCostZmw || 12000, currency)}</strong>
-            </div>
-            <div className="itineraryTopActions">
-              <button
-                type="button"
-                className={`customizeToggleBtn ${isCustomizing ? "active" : ""}`}
-                onClick={() => setIsCustomizing(!isCustomizing)}
-              >
-                {isCustomizing ? "✓ Done Customizing" : "✏️ Customize Days & Activities"}
-              </button>
-              <button type="button" className="saveToTripsBtn" onClick={handleSaveToTrips}>
-                ➕ Save to My Trips Planner
-              </button>
-              <button type="button" className="exportJsonBtn" onClick={handleExportJson}>
-                📥 Export JSON
-              </button>
-            </div>
-          </div>
-        </header>
-
-        {/* Day-by-day Itinerary Timeline */}
-        <div className="itineraryDaysList">
-          <div className="itineraryDaysHeader">
-            <h3>📅 Day-by-Day Journey Breakdown ({activeItinerary.days.length} Days):</h3>
-            {isCustomizing && (
-              <span className="customizingNoticeBadge">
-                ✏️ Customizing Mode Active: Add or remove activities & days below
-              </span>
-            )}
-          </div>
-
-          {activeItinerary.days.map((day) => (
-            <article key={day.dayNumber} className="itineraryDayCard">
-              <div className="dayBadgeCol">
-                <span className="dayNumBadge">Day {day.dayNumber}</span>
-                <small className="dayCostTag">{formatPrice(day.estimatedCostZmw || 1200, currency)}</small>
-                {isCustomizing && (
-                  <button
-                    type="button"
-                    className="deleteDayBtn"
-                    title={`Delete Day ${day.dayNumber}`}
-                    onClick={() => handleRemoveDay(day.dayNumber)}
-                  >
-                    🗑️ Remove Day
-                  </button>
-                )}
+              <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 800, color: "#FDBA74", textTransform: "uppercase", marginBottom: "10px", letterSpacing: "0.05em" }}>
+                1. Choose Your Expedition Style
+              </label>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 130px), 1fr))", gap: "8px" }}>
+                {travelStyles.map(s => {
+                  const isActive = selectedStyle === s.id;
+                  return (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => handleStyleChange(s.id)}
+                      style={{
+                        padding: "10px 12px",
+                        borderRadius: "10px",
+                        border: "1.5px solid",
+                        borderColor: isActive ? "#EA580C" : "rgba(255,255,255,0.12)",
+                        background: isActive ? "linear-gradient(135deg, rgba(234,88,12,0.3) 0%, rgba(234,88,12,0.1) 100%)" : "rgba(0,0,0,0.25)",
+                        color: "#FFFFFF",
+                        fontSize: "0.82rem",
+                        fontWeight: 700,
+                        textAlign: "left",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        transition: "all 0.15s ease"
+                      }}
+                    >
+                      <span style={{ fontSize: "1.1rem" }}>{s.icon}</span>
+                      <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.label}</span>
+                    </button>
+                  );
+                })}
               </div>
-
-              <div className="dayContentCol">
-                {isCustomizing ? (
-                  <div className="editableDayHeader">
-                    <input
-                      type="text"
-                      className="editableDayTitleInput"
-                      value={day.title}
-                      onChange={(e) => handleUpdateDayField(day.dayNumber, "title", e.target.value)}
-                    />
-                    <div className="editableLocationRow">
-                      <span>📍 Location: </span>
-                      <input
-                        type="text"
-                        value={day.location}
-                        onChange={(e) => handleUpdateDayField(day.dayNumber, "location", e.target.value)}
-                      />
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <h4>{day.title}</h4>
-                    <p className="dayLocation">📍 <b>{day.location}</b> ({day.province})</p>
-                  </>
-                )}
-
-                <p className="daySummary">{day.summary}</p>
-
-                {/* Activities List */}
-                <div className="dayActivities">
-                  <strong>Planned Highlights:</strong>
-                  <ul className="activitiesList">
-                    {day.activities.map((act, idx) => (
-                      <li key={idx} className="activityItem">
-                        <span>✓ {act}</span>
-                        {isCustomizing && (
-                          <button
-                            type="button"
-                            className="removeActBtn"
-                            title="Remove this activity"
-                            onClick={() => handleRemoveActivity(day.dayNumber, idx)}
-                          >
-                            ✕
-                          </button>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Add New Activity Form */}
-                  {isCustomizing && (
-                    <div className="addActivityRow">
-                      <input
-                        type="text"
-                        placeholder="Add custom activity (e.g. Sunrise birdwatching, village craft market...)"
-                        value={newActivityInputs[day.dayNumber] || ""}
-                        onChange={(e) =>
-                          setNewActivityInputs({
-                            ...newActivityInputs,
-                            [day.dayNumber]: e.target.value
-                          })
-                        }
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            e.preventDefault();
-                            handleAddActivity(day.dayNumber);
-                          }
-                        }}
-                      />
-                      <button
-                        type="button"
-                        className="addActSubmitBtn"
-                        onClick={() => handleAddActivity(day.dayNumber)}
-                      >
-                        + Add
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                <div className="dayStayAndLogistics">
-                  <div>
-                    <small>Recommended Stay:</small>
-                    {isCustomizing ? (
-                      <input
-                        type="text"
-                        className="editableStayInput"
-                        value={day.recommendedStay}
-                        onChange={(e) => handleUpdateDayField(day.dayNumber, "recommendedStay", e.target.value)}
-                      />
-                    ) : (
-                      <b>🏨 {day.recommendedStay}</b>
-                    )}
-                  </div>
-                  <div>
-                    <small>Logistics & Transport Advice:</small>
-                    <p>✈️ {day.logisticsNotes}</p>
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
-
-          {/* Add Day Button in Customizing Mode */}
-          {isCustomizing && (
-            <div className="addDayActionBox">
-              <button type="button" className="addDayBtn" onClick={handleAddDay}>
-                ➕ Add Another Day to Expedition
-              </button>
             </div>
-          )}
+
+            {/* Duration Slider */}
+            <div>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
+                <label style={{ fontSize: "0.82rem", fontWeight: 800, color: "#FDBA74", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                  2. Trip Duration
+                </label>
+                <span style={{ background: "#EA580C", color: "#FFFFFF", padding: "2px 10px", borderRadius: "20px", fontSize: "0.8rem", fontWeight: 800 }}>
+                  {durationDays} Days
+                </span>
+              </div>
+              <input
+                type="range"
+                min={3}
+                max={14}
+                value={durationDays}
+                onChange={e => handleDurationChange(Number(e.target.value))}
+                style={{ width: "100%", accentColor: "#EA580C", cursor: "pointer" }}
+              />
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.72rem", color: "#94A3B8", marginTop: "4px" }}>
+                <span>3 Days (Short Gateway)</span>
+                <span>8 Days (Classic)</span>
+                <span>14 Days (Grand Circuit)</span>
+              </div>
+            </div>
+
+            {/* Fitness & Pace Selector */}
+            <div>
+              <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 800, color: "#FDBA74", textTransform: "uppercase", marginBottom: "8px", letterSpacing: "0.05em" }}>
+                3. Fitness & Trekking Pace
+              </label>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 120px), 1fr))", gap: "6px" }}>
+                {[
+                  { id: "Gentle", icon: "🌱" },
+                  { id: "Moderate", icon: "🥾" },
+                  { id: "Challenging", icon: "⛰️" },
+                  { id: "Extreme Expedition", icon: "⚡" }
+                ].map(lvl => {
+                  const isActive = fitnessLevel === lvl.id;
+                  return (
+                    <button
+                      key={lvl.id}
+                      type="button"
+                      onClick={() => handleFitnessChange(lvl.id)}
+                      style={{
+                        padding: "8px 10px",
+                        borderRadius: "8px",
+                        border: "1px solid",
+                        borderColor: isActive ? "#34D399" : "rgba(255,255,255,0.12)",
+                        background: isActive ? "rgba(52, 211, 153, 0.2)" : "rgba(0,0,0,0.2)",
+                        color: isActive ? "#6EE7B7" : "#CBD5E1",
+                        fontSize: "0.76rem",
+                        fontWeight: 700,
+                        cursor: "pointer"
+                      }}
+                    >
+                      {lvl.icon} {lvl.id}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Highlight Interest Chips */}
+            <div>
+              <label style={{ display: "block", fontSize: "0.82rem", fontWeight: 800, color: "#FDBA74", textTransform: "uppercase", marginBottom: "8px", letterSpacing: "0.05em" }}>
+                4. Select Highlights & Regions
+              </label>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                {availableInterests.map(item => {
+                  const isSelected = selectedInterests.includes(item.id);
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => toggleInterest(item.id)}
+                      style={{
+                        padding: "5px 10px",
+                        borderRadius: "20px",
+                        border: "1px solid",
+                        borderColor: isSelected ? "#EA580C" : "rgba(255,255,255,0.15)",
+                        background: isSelected ? "#EA580C" : "rgba(0,0,0,0.25)",
+                        color: "#FFFFFF",
+                        fontSize: "0.74rem",
+                        fontWeight: 600,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px"
+                      }}
+                    >
+                      <span>{item.icon}</span>
+                      <span>{item.id}</span>
+                      <span style={{ color: isSelected ? "#FFFFFF" : "#34D399", fontWeight: 800 }}>
+                        {isSelected ? "✓" : "+"}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Generate CTA Button */}
+            <button
+              type="submit"
+              disabled={isGenerating}
+              style={{
+                marginTop: "6px",
+                background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
+                color: "#FFFFFF",
+                border: "none",
+                borderRadius: "10px",
+                padding: "14px",
+                fontSize: "0.92rem",
+                fontWeight: 800,
+                cursor: "pointer",
+                boxShadow: "0 6px 20px rgba(234, 88, 12, 0.4)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px"
+              }}
+            >
+              {isGenerating ? "🧠 Compiling Wantok Itinerary..." : "⚡ Generate Custom Itinerary"}
+            </button>
+          </form>
         </div>
 
-        {/* Packing & Health Advisories */}
-        <div className="itineraryAdvisoriesGrid">
-          <div className="advisoryBox packing">
-            <strong>🎒 Essential Expedition Packing List:</strong>
-            <ul>
-              {activeItinerary.essentialPackingList.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
+        {/* Right Column: Generated Itinerary View */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          {/* Header Summary Card */}
+          <div
+            style={{
+              background: "radial-gradient(ellipse at top left, #164E44 0%, #0D332D 100%)",
+              borderRadius: "16px",
+              border: "1px solid rgba(234, 88, 12, 0.35)",
+              padding: "24px",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.3)"
+            }}
+          >
+            <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginBottom: "16px" }}>
+              <div>
+                <span style={{ background: "rgba(234,88,12,0.25)", color: "#FDBA74", padding: "3px 10px", borderRadius: "6px", fontSize: "0.72rem", fontWeight: 800, textTransform: "uppercase", display: "inline-block", marginBottom: "6px" }}>
+                  {activeItinerary.travelStyle}
+                </span>
+                <h3 style={{ margin: "0 0 4px 0", fontSize: "1.35rem", fontWeight: 900, color: "#FFFFFF", lineHeight: 1.25 }}>
+                  {activeItinerary.title}
+                </h3>
+                <p style={{ margin: 0, fontSize: "0.85rem", color: "#CBD5E1" }}>
+                  {activeItinerary.subtitle}
+                </p>
+              </div>
+
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  onClick={() => setIsCustomizing(!isCustomizing)}
+                  style={{
+                    flex: "1 1 130px",
+                    background: "rgba(255,255,255,0.08)",
+                    border: "1px solid rgba(255,255,255,0.2)",
+                    color: "#FFFFFF",
+                    padding: "10px 14px",
+                    borderRadius: "8px",
+                    fontSize: "0.76rem",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    textAlign: "center"
+                  }}
+                >
+                  {isCustomizing ? "✓ Done Editing" : "✏️ Edit Activities"}
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveToTrips}
+                  style={{
+                    flex: "1 1 150px",
+                    background: "#059669",
+                    border: "none",
+                    color: "#FFFFFF",
+                    padding: "10px 14px",
+                    borderRadius: "8px",
+                    fontSize: "0.76rem",
+                    fontWeight: 800,
+                    cursor: "pointer",
+                    boxShadow: "0 4px 12px rgba(5,150,105,0.4)",
+                    textAlign: "center"
+                  }}
+                >
+                  📋 Save to My Trips
+                </button>
+              </div>
+            </div>
+
+            {/* Key Meta Metrics */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))", gap: "10px", background: "rgba(0,0,0,0.3)", padding: "12px", borderRadius: "10px" }}>
+              <div>
+                <span style={{ fontSize: "0.7rem", color: "#94A3B8", textTransform: "uppercase" }}>Duration</span>
+                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#FFFFFF" }}>{activeItinerary.durationDays} Days</div>
+              </div>
+              <div>
+                <span style={{ fontSize: "0.7rem", color: "#94A3B8", textTransform: "uppercase" }}>Estimated Budget</span>
+                <div style={{ fontSize: "1rem", fontWeight: 800, color: "#FDBA74" }}>
+                  {formatPrice(activeItinerary.totalEstimatedCostPgk, currency)}
+                </div>
+              </div>
+              <div>
+                <span style={{ fontSize: "0.7rem", color: "#94A3B8", textTransform: "uppercase" }}>Best Season</span>
+                <div style={{ fontSize: "0.85rem", fontWeight: 700, color: "#34D399" }}>{activeItinerary.bestTravelMonths}</div>
+              </div>
+              <div>
+                <span style={{ fontSize: "0.7rem", color: "#94A3B8", textTransform: "uppercase" }}>Provinces</span>
+                <div style={{ fontSize: "0.85rem", fontWeight: 700, color: "#E2E8F0" }}>{activeItinerary.provincesCovered.join(", ")}</div>
+              </div>
+            </div>
           </div>
 
-          <div className="advisoryBox safety">
-            <strong>🛡️ Health, Safety & Cultural Protocol:</strong>
-            <ul>
-              {activeItinerary.safetyAndHealthTips.map((tip, idx) => (
-                <li key={idx}>{tip}</li>
-              ))}
-            </ul>
+          {/* Day-by-Day Timeline */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+            {activeItinerary.days.map(day => (
+              <div
+                key={day.dayNumber}
+                style={{
+                  background: "rgba(16, 54, 48, 0.7)",
+                  borderRadius: "14px",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  padding: "18px",
+                  display: "grid",
+                  gridTemplateColumns: "70px 1fr",
+                  gap: "16px"
+                }}
+              >
+                {/* Day Badge */}
+                <div style={{ textAlign: "center" }}>
+                  <div
+                    style={{
+                      background: "#EA580C",
+                      color: "#FFFFFF",
+                      borderRadius: "10px",
+                      padding: "8px 4px",
+                      fontWeight: 900,
+                      fontSize: "0.82rem",
+                      textTransform: "uppercase"
+                    }}
+                  >
+                    Day {day.dayNumber}
+                  </div>
+                  <div style={{ fontSize: "0.68rem", color: "#94A3B8", marginTop: "6px" }}>
+                    {day.province}
+                  </div>
+                </div>
+
+                {/* Day Content */}
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "8px", marginBottom: "6px" }}>
+                    <h4 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800, color: "#FFFFFF" }}>
+                      {day.title}
+                    </h4>
+                    <span style={{ background: "rgba(0,0,0,0.3)", color: "#CBD5E1", padding: "2px 8px", borderRadius: "4px", fontSize: "0.72rem", fontWeight: 600 }}>
+                      📍 {day.location}
+                    </span>
+                  </div>
+
+                  <p style={{ margin: "0 0 10px 0", fontSize: "0.82rem", color: "#CBD5E1", lineHeight: 1.45 }}>
+                    {day.summary}
+                  </p>
+
+                  {/* Planned Activities Checklist */}
+                  <div style={{ background: "rgba(0,0,0,0.25)", borderRadius: "8px", padding: "10px 14px", marginBottom: "10px" }}>
+                    <div style={{ fontSize: "0.72rem", fontWeight: 800, color: "#34D399", textTransform: "uppercase", marginBottom: "6px" }}>
+                      Planned Itinerary Activities:
+                    </div>
+                    <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "0.78rem", color: "#E2E8F0", display: "flex", flexDirection: "column", gap: "4px" }}>
+                      {day.activities.map((act, i) => (
+                        <li key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span>{act}</span>
+                          {isCustomizing && (
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveActivity(day.dayNumber, i)}
+                              style={{ background: "none", border: "none", color: "#EF4444", fontSize: "0.75rem", cursor: "pointer", fontWeight: 800 }}
+                            >
+                              ✕ Remove
+                            </button>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+
+                    {isCustomizing && (
+                      <div style={{ display: "flex", gap: "6px", marginTop: "8px" }}>
+                        <input
+                          type="text"
+                          placeholder="Add custom village visit or trail stop..."
+                          value={newActivityInputs[day.dayNumber] || ""}
+                          onChange={e => setNewActivityInputs({ ...newActivityInputs, [day.dayNumber]: e.target.value })}
+                          style={{
+                            flex: 1,
+                            padding: "4px 8px",
+                            borderRadius: "6px",
+                            border: "1px solid rgba(255,255,255,0.2)",
+                            background: "rgba(0,0,0,0.4)",
+                            color: "#FFFFFF",
+                            fontSize: "0.75rem"
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleAddActivity(day.dayNumber)}
+                          style={{
+                            padding: "4px 10px",
+                            borderRadius: "6px",
+                            background: "#059669",
+                            border: "none",
+                            color: "#FFFFFF",
+                            fontSize: "0.72rem",
+                            fontWeight: 700,
+                            cursor: "pointer"
+                          }}
+                        >
+                          + Add
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Day Footer with Recommended Stay & Cost */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "0.75rem", color: "#94A3B8", flexWrap: "wrap", gap: "8px" }}>
+                    <span>🏡 <strong style={{ color: "#FFFFFF" }}>{day.recommendedStay}</strong></span>
+                    <span>💰 Day Budget: <strong style={{ color: "#FDBA74" }}>{formatPrice(day.estimatedCostPgk, currency)}</strong></span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Packing & Safety Insights Box */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "14px" }}>
+            <div style={{ background: "rgba(16, 54, 48, 0.7)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", padding: "16px" }}>
+              <h4 style={{ margin: "0 0 10px 0", fontSize: "0.88rem", fontWeight: 800, color: "#FDBA74", display: "flex", alignItems: "center", gap: "6px" }}>
+                🎒 Essential PNG Packing Gear
+              </h4>
+              <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "0.76rem", color: "#CBD5E1", display: "flex", flexDirection: "column", gap: "6px" }}>
+                {activeItinerary.essentialPackingList.map((item, i) => (
+                  <li key={i}>{item}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div style={{ background: "rgba(16, 54, 48, 0.7)", borderRadius: "12px", border: "1px solid rgba(255,255,255,0.1)", padding: "16px" }}>
+              <h4 style={{ margin: "0 0 10px 0", fontSize: "0.88rem", fontWeight: 800, color: "#34D399", display: "flex", alignItems: "center", gap: "6px" }}>
+                🛡️ Health & Wantok Safety Protocol
+              </h4>
+              <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "0.76rem", color: "#CBD5E1", display: "flex", flexDirection: "column", gap: "6px" }}>
+                {activeItinerary.safetyAndHealthTips.map((tip, i) => (
+                  <li key={i}>{tip}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>

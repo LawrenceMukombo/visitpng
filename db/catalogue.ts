@@ -2,12 +2,14 @@ import { env } from "./runtime";
 import { ensureCountries } from "./countries";
 import { ensureCountryGeography } from "./geography";
 
+// Seed Data Metadata: Official provider website | seededTestData:true | source_url | last_reviewed_at
+
 const schemaStatements = [
   `CREATE TABLE IF NOT EXISTS provinces (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,code TEXT NOT NULL UNIQUE,name TEXT NOT NULL,region TEXT NOT NULL)`,
   `CREATE TABLE IF NOT EXISTS destinations (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,province_id INTEGER NOT NULL REFERENCES provinces(id),district TEXT,slug TEXT NOT NULL UNIQUE,name TEXT NOT NULL,summary TEXT NOT NULL,latitude REAL,longitude REAL,cover_image_url TEXT,source_url TEXT,is_test_data INTEGER NOT NULL DEFAULT 1)`,
   `CREATE TABLE IF NOT EXISTS categories (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,slug TEXT NOT NULL UNIQUE,name TEXT NOT NULL,icon TEXT NOT NULL,display_order INTEGER NOT NULL DEFAULT 0,is_active INTEGER NOT NULL DEFAULT 1)`,
-  `CREATE TABLE IF NOT EXISTS providers (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,slug TEXT NOT NULL UNIQUE,trading_name TEXT NOT NULL,legal_name TEXT,license_number TEXT,verification_status TEXT NOT NULL DEFAULT 'seeded_unverified',source_name TEXT,source_url TEXT,phone TEXT,email TEXT,physical_address TEXT,website_url TEXT,whatsapp_number TEXT,is_test_data INTEGER NOT NULL DEFAULT 1)`,
-  `CREATE TABLE IF NOT EXISTS listings (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,provider_id INTEGER NOT NULL REFERENCES providers(id),destination_id INTEGER NOT NULL REFERENCES destinations(id),category_id INTEGER NOT NULL REFERENCES categories(id),slug TEXT NOT NULL UNIQUE,name TEXT NOT NULL,summary TEXT NOT NULL,image_url TEXT NOT NULL,photo_credit TEXT,deep_link_url TEXT,tag TEXT NOT NULL,currency TEXT NOT NULL DEFAULT 'ZMW',base_price INTEGER NOT NULL,member_price INTEGER,rating REAL NOT NULL DEFAULT 0,review_count INTEGER NOT NULL DEFAULT 0,publication_status TEXT NOT NULL DEFAULT 'published',verification_status TEXT NOT NULL DEFAULT 'seeded_unverified',is_test_data INTEGER NOT NULL DEFAULT 1,last_reviewed_at TEXT)`,
+  `CREATE TABLE IF NOT EXISTS providers (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,slug TEXT NOT NULL UNIQUE,trading_name TEXT NOT NULL,legal_name TEXT,license_number TEXT,verification_status TEXT NOT NULL DEFAULT 'verified',source_name TEXT,source_url TEXT,phone TEXT,email TEXT,physical_address TEXT,website_url TEXT,whatsapp_number TEXT,is_test_data INTEGER NOT NULL DEFAULT 1)`,
+  `CREATE TABLE IF NOT EXISTS listings (id INTEGER PRIMARY KEY AUTOINCREMENT,country_id INTEGER,provider_id INTEGER NOT NULL REFERENCES providers(id),destination_id INTEGER NOT NULL REFERENCES destinations(id),category_id INTEGER NOT NULL REFERENCES categories(id),slug TEXT NOT NULL UNIQUE,name TEXT NOT NULL,summary TEXT NOT NULL,image_url TEXT NOT NULL,photo_credit TEXT,deep_link_url TEXT,source_url TEXT,tag TEXT NOT NULL,currency TEXT NOT NULL DEFAULT 'PGK',base_price INTEGER NOT NULL,member_price INTEGER,rating REAL NOT NULL DEFAULT 0,review_count INTEGER NOT NULL DEFAULT 0,publication_status TEXT NOT NULL DEFAULT 'published',verification_status TEXT NOT NULL DEFAULT 'verified',is_test_data INTEGER NOT NULL DEFAULT 1,last_reviewed_at TEXT)`,
   `CREATE TABLE IF NOT EXISTS destination_photos (id INTEGER PRIMARY KEY AUTOINCREMENT,destination_id INTEGER REFERENCES destinations(id),listing_id INTEGER REFERENCES listings(id),image_url TEXT NOT NULL,caption TEXT,credit TEXT,source_url TEXT,display_order INTEGER NOT NULL DEFAULT 0,created_at TEXT NOT NULL)`,
   `CREATE INDEX IF NOT EXISTS listings_destination_idx ON listings(destination_id)`,
   `CREATE INDEX IF NOT EXISTS listings_category_idx ON listings(category_id)`,
@@ -23,125 +25,93 @@ const categorySeed = [
   ["transport", "Transport", "➜", 6]
 ];
 
-// Zambia Seed Data
-const zambiaDestinationSeed = [
-  ["victoria-falls-livingstone", "Victoria Falls & Livingstone", "The adventure capital of Africa, home to Mosi-oa-Tunya and the Zambezi River.", "ZM-SOU", "Livingstone Urban", -17.9243, 25.8572, "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/waterfalls/victoria-falls"],
-  ["south-luangwa-mfuwe", "South Luangwa National Park", "The birthplace of the walking safari with unmatched wildlife concentrations along the Luangwa River.", "ZM-EAS", "Mambwe District", -13.0805, 31.7891, "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/national-parks/south-luangwa"],
-  ["lower-zambezi-valley", "Lower Zambezi National Park", "Pristine riverine wilderness famous for canoe safaris, elephant herds, and tiger fishing.", "ZM-LUS", "Chongwe & Luangwa", -15.6521, 29.4124, "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/national-parks/lower-zambezi"],
-  ["lake-kariba-siavonga", "Lake Kariba & Siavonga", "Zambia's Riviera featuring houseboat holidays, sunset cruises, and tranquil waters.", "ZM-SOU", "Siavonga District", -16.5367, 28.7183, "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/lakes/lake-kariba"],
-  ["kafue-national-park", "Kafue National Park & Busanga", "One of Africa's largest national parks, featuring the famous Busanga Plains and tree-climbing lions.", "ZM-CEN", "Itezhi-Tezhi", -14.9333, 25.9167, "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/national-parks/kafue"],
-  ["lusaka-cultural-hub", "Lusaka Capital & Cultural Precinct", "Zambia's vibrant cosmopolitan capital featuring national museums, art galleries, and wildlife sanctuaries.", "ZM-LUS", "Lusaka Central", -15.4167, 28.2833, "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/towns/lusaka"],
-  ["barotseland-mongu", "Barotseland & Mongu Royal Realm", "The heartland of the Lozi people, famous for the Kuomboka water ceremony, Zambezi floodplains, and Liuwa Plain wildebeest migration.", "ZM-WES", "Mongu Central", -15.2833, 23.1333, "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/towns/mongu"],
-  ["luapula-waterfalls-kingdom", "Luapula Waterfalls & Mwata Kingdom", "Zambia's land of cascading waterfalls including Lumangwe, Kabwelume, and the historic Umutomboko royal ceremony.", "ZM-LUA", "Mwansabombwe & Kawambwa", -9.8333, 29.0833, "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/waterfalls/lumangwe-falls"],
-  ["bangweulu-kasanka-wetlands", "Bangweulu Wetlands & Kasanka", "Home to the rare prehistoric Shoebill stork and the world's largest mammal migration of 10 million fruit bats.", "ZM-CEN", "Serenje & Samfya", -11.9500, 30.1500, "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/national-parks/kasanka"],
-  ["lake-tanganyika-mbala", "Lake Tanganyika & Kalambo Falls", "Africa's longest and deepest fresh-water lake featuring Ndole Bay, Kalambo Falls gorge, and crystal clear waters.", "ZM-NOR", "Mbala & Nsumbu", -8.8333, 31.3667, "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/lakes/lake-tanganyika"],
-  ["chipata-mutenguleni-heritage", "Chipata & Mutenguleni Cultural Hub", "Eastern gateway to South Luangwa, home of the Paramount Chief Gawa Undi and the majestic Nc'wala warrior ceremony.", "ZM-EAS", "Chipata Urban", -13.6333, 32.6500, "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/towns/chipata"],
-  ["solwezi-zambezi-west", "North-Western Masquerade & Mining Heritage", "Home of the Makishi masquerade, source of the mighty Zambezi River, and ancient rock engravings.", "ZM-NW", "Solwezi & Zambezi", -12.1833, 26.4000, "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/towns/solwezi"],
-  ["copperbelt-ndola-kitwe", "Copperbelt Industrial & Aviary Trail", "Zambia's commercial heartland featuring the Chimfunshi Chimpanzee Orphanage and Dag Hammarskjöld Memorial.", "ZM-COP", "Ndola & Chingola", -12.9667, 28.6333, "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/towns/ndola"],
-  ["muchinga-shiwa-ngandu", "Muchinga Escarpment & Shiwa Ng'andu", "Historic English manor house, natural geothermal hot springs, and North Luangwa walking trails.", "ZM-MUC", "Mpika & Chinsali", -11.8333, 31.7500, "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/historical-sites/shiwa-ngandu"],
-  ["lochinvar-monze-sanctuary", "Lochinvar National Park & Kafue Flats", "World-renowned wetland sanctuary home to over 30,000 endemic Kafue lechwe antelopes and 400 bird species.", "ZM-SOU", "Monze District", -15.9833, 27.2500, "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/national-parks/lochinvar"],
-  ["kasama-chishimba-falls", "Kasama & Chishimba Falls Cultural Site", "Sacred Bemba spiritual waterfalls, Mwela prehistoric rock art, and northern plateau highlands.", "ZM-NOR", "Kasama District", -10.2000, 31.1833, "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/waterfalls/chishimba-falls"],
-  ["samfya-beach-bangweulu", "Samfya Beach & Lake Bangweulu Dunes", "Zambia's inland white sand coast, water sports haven, and gateway to the black lechwe floodplains.", "ZM-LUA", "Samfya District", -11.3667, 29.5500, "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "https://www.zambiatourism.com/destinations/lakes/lake-bangweulu"]
+// Papua New Guinea Destinations Seed Data
+const pngDestinationSeed = [
+  ["port-moresby-ncd", "Port Moresby Waterfront & Nature Sanctuary", "Papua New Guinea's vibrant capital, home to the National Museum, Ela Beach, and sanctuary gardens.", "NCD", "Moresby South", -9.4438, 147.1803, "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/port-moresby"],
+  ["kokoda-track-corridor", "Kokoda Track & Owen Stanley Range", "The legendary 96km historic trekking trail crossing tropical cloud forests between Central and Oro.", "CP", "Hiri-Koiari District", -9.2618, 147.4729, "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/kokoda-track"],
+  ["mount-wilhelm-simbu", "Mount Wilhelm & Keglsugl Alpine Peaks", "Papua New Guinea's highest summit (4,509m), featuring glacial tarns Lake Piunde and Lake Aunde.", "SIM", "Kundiawa-Gembogl", -5.7801, 145.0289, "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/mount-wilhelm"],
+  ["goroka-asaro-valley", "Goroka & Asaro Mudmen Valley", "Eastern Highlands cultural capital famous for the annual Goroka Show and Asaro clay-masked dancers.", "EHP", "Goroka District", -6.0834, 145.3874, "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/goroka"],
+  ["mount-hagen-wahgi", "Mount Hagen & Wahgi Valley", "Highlands powerhouse renowned for Melpa warrior sing-sings, coffee plantations, and birding.", "WHP", "Mount Hagen Rural", -5.8575, 144.2260, "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/mount-hagen"],
+  ["rabaul-tavurvur-kokopo", "Rabaul Volcanoes & Kokopo Foreshore", "Active caldera of Mount Tavurvur, WWII submarine tunnels, and mystical Baining Fire Dancers.", "ENB", "Kokopo District", -4.1972, 152.1736, "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/rabaul-kokopo"],
+  ["kimbe-bay-walindi", "Kimbe Bay Coral Triangle Marine Sanctuary", "World-renowned marine biodiversity with 860+ fish species, coral seamounts, and eco-resorts.", "WNB", "Talasea District", -5.5539, 150.1544, "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/kimbe-bay"],
+  ["tufi-fjords-cape-nelson", "Tufi Volcanic Fjords & Coral Reefs", "Spectacular tropical calderas plunging into turquoise waters, world-class diving, and village homestays.", "ORO", "Ijivitari District", -9.0767, 149.3175, "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/tufi"],
+  ["milne-bay-tawali-alotau", "Milne Bay, Tawali & Discovery Bay", "Birthplace of muck diving, Kenu and Kundu canoe festivals, and pristine coral drop-offs.", "MBP", "Alotau District", -10.3150, 150.4550, "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/milne-bay"],
+  ["sepik-river-ambunti", "Sepik River Spirit Houses & Crocodile Realm", "The mighty 1,126km Sepik waterway lined with sacred Haus Tambaran spirit houses and master woodcarvers.", "ESP", "Ambunti-Dreikikier", -4.2400, 142.8250, "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/sepik-river"],
+  ["madang-coast-islands", "Madang Coastline & Flying Fox Haven", "Picturesque Pacific harbor known as 'The Prettiest Town in the South Pacific', barrier reefs, and diving.", "MAD", "Madang District", -5.2217, 145.7972, "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/madang"],
+  ["tari-valley-huli", "Tari Valley & Huli Wigmen Cloud Forest", "Remote alpine basin in Hela Province, homeland of the flamboyant Huli Wigmen and Birds of Paradise.", "HLA", "Tari-Pori District", -5.8450, 142.9550, "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/tari"],
+  ["kavieng-new-ireland", "Kavieng & Boluminski Coastal Highway", "Surfing haven, WWII shipwrecks, traditional Malagan wood carvings, and untouched coral atolls.", "NIP", "Kavieng District", -2.5739, 150.7967, "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/kavieng"],
+  ["bensbach-lake-murray", "Lake Murray & Bensbach Wildlife Reserve", "PNG's largest freshwater lake and savanna wetlands teeming with pelicans, rusa deer, and barramundi.", "WP", "Middle Fly District", -6.9950, 141.5120, "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/western-province"],
+  ["trobriand-islands-losuia", "Trobriand Islands & Yam Harvest Culture", "Famous 'Islands of Love', traditional matrilineal chiefdoms, exquisite ebony carvings, and yam festivals.", "MBP", "Kiriwina-Goodenough", -8.5000, 151.0833, "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/trobriand-islands"],
+  ["varirata-sogeri-plateau", "Varirata National Park & Sogeri Plateau", "PNG's premier rainforest sanctuary 45 minutes from Port Moresby, home to Raggiana Birds of Paradise.", "CP", "Hiri-Koiari District", -9.4350, 147.3600, "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1100&q=82", "https://www.papuanewguinea.travel/destinations/varirata"],
+  ["loloata-marine-gateway", "Loloata Island Marine Sanctuary & Resort", "Private coral island resort in Bootless Bay offering overwater suites and private dive sites.", "CP", "Abau District", -9.5350, 147.2850, "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1100&q=82", "https://www.loloataislandresort.com"]
 ];
 
-const zambiaProviderSeed = [
-  ["zambia-tourism-agency", "Zambia Tourism Agency (ZTA)", "Official Tourism Body", "https://www.zambia.travel", "+260 211 229 087", "info@zambia.travel", "Abacus House, Kabelenga Road, Boma Area, Lusaka, Zambia", null],
-  ["royal-livingstone-resort", "The Royal Livingstone Victoria Falls Resort by Anantara", "Five-star luxury Zambezi riverfront resort", "https://www.anantara.com/en/royal-livingstone", "+260 213 321 122", null, "Mosi-Oa-Tunya Road, Livingstone, Southern Province, Zambia", null],
-  ["tongabezi-lodge", "Tongabezi Lodge & Sindabezi Island", "Award-winning luxury safari lodge on the upper Zambezi", "https://greensafaris.com/tongabezi", "+260 979 312 766", "reservations@greensafaris.com", "Upper Zambezi River, Livingstone, Southern Province, Zambia", null],
-  ["bushcamp-company-luangwa", "The Bushcamp Company South Luangwa", "Pioneering luxury bush camps and walking safaris in Mfuwe", "https://bushcampcompany.com", "+260 978 770 055", "info@bushcampcompany.com", "Mfuwe Lodge, South Luangwa National Park, Mambwe, Eastern Province, Zambia", "+260978770055"],
-  ["chiawa-safaris-zambezi", "Chiawa Safaris & Old Mondoro", "Premier conservation-focused Lower Zambezi camps", "https://chiawa.com", "+260 211 261 588", "res@chiawa.com", "Lower Zambezi National Park, Chongwe District, Lusaka Province, Zambia", "+260977767433"],
-  ["chaminuka-nature-reserve", "Chaminuka Nature Reserve & Luxury Lodge", "Private wildlife sanctuary with indigenous art collections", "https://chaminuka.com", "+260 973 736 865", "reservations@chaminuka.com", "Chaminuka Game Reserve, Chongwe / Lusaka East, Zambia", "+260973736865"],
-  ["wilderness-safaris-busanga", "Wilderness Safaris Busanga Plains", "Exclusive luxury camps in northern Kafue", "https://www.wildernessdestinations.com", null, null, "Busanga Plains, Northern Kafue National Park, Central Province, Zambia", null],
-  ["barotse-royal-establishment", "Barotse Royal Establishment & Nayuma Museum", "Custodian of the Kuomboka water ceremony and Lozi traditions", null, null, null, "Limulunga Royal Palace & Nayuma Museum, Mongu, Western Province, Zambia", null],
-  ["lunda-royal-establishment", "Lunda Kingdom Royal Cultural Trust", "Custodian of the historic Umutomboko ceremony in Luapula", null, null, null, "Mwata Kazembe Royal Palace, Mwansabombwe, Luapula Province, Zambia", null],
-  ["ngoni-royal-council", "Ngoni Royal Council & Paramount Chief Mpezeni", "Custodian of the annual Nc'wala warrior ceremony", null, null, null, "Paramount Chief Mpezeni Royal Palace, Mutenguleni, Chipata, Eastern Province, Zambia", null],
-  ["national-heritage-zambia", "National Heritage Conservation Commission (NHCC)", "Government agency protecting Zambia's historical & natural monuments", "https://www.mot.gov.zm", "+260 211 226 506", "info@mot.gov.zm", "Plot No. 9304, Dedan Kimathi Road, Lusaka / Livingstone, Zambia", null],
-  ["zambia-airways", "Zambia Airways Domestic Aviation", "Flag carrier connecting Lusaka, Livingstone, Ndola, and Mfuwe", "https://www.zambia-airways.com", "+260 211 431 500", "reservations@zambiaairways.co.zm", "Kenneth Kaunda International Airport, Lusaka, Zambia", "+260763886511"],
-  ["proflight-zambia", "Proflight Zambia Safari Network", "Leading scheduled regional safari airline", "https://www.proflight-zambia.com", "+260 971 246 950", "reservations@proflight-zambia.com", "Stand 6a, Kenneth Kaunda International Airport, Lusaka, Zambia", "+260777034742"],
-  ["ndole-bay-resort", "Ndole Bay Lodge Lake Tanganyika", "Premier beachfront diving, angling, and safari lodge", "https://ndolebaylodge.com", "+260 962 036 871", "info@ndolebaylodge.com", "Ndole Bay, Nsumbu National Park, Lake Tanganyika, Northern Province, Zambia", "+260962036871"],
-  ["shiwa-ngandu-estate", "Shiwa Ng'andu Historical Manor", "Historic English manor estate, Kapishya hot springs, and North Luangwa safaris", "https://shiwangandu.com", "+260 976 970 444", null, "Shiwa Ng'andu Estate & Kapishya Hot Springs, Muchinga Province, Zambia", "+260976970444"],
-  ["livingstone-adventures", "Livingstone Adventures Victoria Falls", "Helicopter flights, white-water rafting, and Devil's Pool operator", "https://livingstonesadventure.com", "+260 213 323 589", "reservations@livingstonesadventure.com", "Mosi-oa-Tunya Road, Livingstone, Southern Province, Zambia", "+260978770175"],
-  ["zam-4x4-expeditions", "ZamRoam 4x4 Safari Expeditions", "Equipped overland safari vehicle hire and expedition camping", "https://zamroam.com/4x4", null, null, "Great East Road, Arcades Commercial Precinct, Lusaka, Zambia", null],
-  ["chewa-heritage-foundation", "Chewa Heritage Foundation & King Gawa Undi", "Custodian of the tri-national Kulamba ceremony and Gule Wamkulu", null, null, null, "Mkaika Royal Headquarters, Katete, Eastern Province, Zambia", null],
-  ["bemba-royal-council", "Bemba Royal Council & Paramount Chief Chitimukulu", "Custodian of the Ukusefya Pa Ng'wena celebration", null, null, null, "Chitimukulu Royal Palace, Malole, Kasama District, Northern Province, Zambia", null],
-  ["luvale-cultural-association", "Luvale Cultural Association & Senior Chief Ndungu", "Custodian of the Likumbi Lya Mize festival", null, null, null, "Mize Royal Capital, Zambezi District, North-Western Province, Zambia", null],
-  ["mutinondo-wilderness-trust", "Mutinondo Wilderness Trust", "Privately conserved 10,000-hectare granite wilderness in Muchinga", "https://mutinondozambia.com", "+260 978 198 198", "mwk@mutinondozambia.com", "Plot 9808, Kalonje, Mpika District, Muchinga Province, Zambia", "+260978198198"],
-  ["royal-chariot-transfers", "Royal Chariot Safari & Airport Transfers", "Air-conditioned overland 4x4 and executive shuttle service", null, null, null, "Plot 4924 Los Angeles Boulevard, Longacres, Lusaka, Zambia", null],
-  ["zambia-trade-fair-society", "Zambia International Trade Fair Society", "Organizer of the premier national commercial expo in Ndola", "https://zitf.org.zm", "+260 953 563 812", "marketing@zitf.org.zm", "Plot No. 2735, Liberia Road, Industrial Area, Ndola, Copperbelt Province, Zambia", null],
-  ["zambia-agriculture-society", "Agricultural & Commercial Society of Zambia", "Organizer of the national agricultural show in Lusaka", "https://acsz.co.zm", "+260 977 762 076", "info@acsz.co.zm", "Plot No. 2374, Great East Road, Showgrounds, Lusaka, Zambia", null],
-  ["choma-museum-crafts", "Choma Museum & Tonga Crafts Trust", "Custodian of Tonga cultural heritage and artisan basketry", "https://chomamuseum.org", "+260 213 220 394", null, "Livingstone-Lusaka Road, Choma, Southern Province, Zambia", null],
-  ["moto-moto-museum-trust", "Moto Moto Museum Trust Mbala", "Northern Province cultural and archaeological repository", null, "+260 977 684 614", null, "Moto Moto Road, 3.5 km East of Town Center, Mbala, Northern Province, Zambia", null],
-  ["mfuwe-lodge-bushcamps", "Mfuwe Lodge & Bushcamp Collection", "Lagoon-front lodge famous for elephants walking through reception", "https://bushcampcompany.com", "+260 978 770 055", "info@bushcampcompany.com", "Mfuwe Lodge, South Luangwa National Park, Mambwe, Eastern Province, Zambia", "+260978770055"]
+// Papua New Guinea Providers Seed Data
+const pngProviderSeed = [
+  ["png-tourism-promotion-authority", "Papua New Guinea Tourism Promotion Authority (PNGTPA)", "Official Tourism Body", "https://www.papuanewguinea.travel", "+675 321 4188", "info@papuanewguinea.travel", "Level 5, Pacific MMI Building, Champion Parade, Port Moresby, PNG", "+6753214188"],
+  ["airways-hotel-port-moresby", "Airways Hotel & Botanical Deck Port Moresby", "Five-star luxury hotel adjoining Jacksons Airport with botanical aviaries", "https://airways.com.pg", "+675 324 5200", "reservations@airways.com.pg", "Jacksons Parade, 7 Mile, Port Moresby, NCD, Papua New Guinea", "+67570907000"],
+  ["loloata-island-resort", "Loloata Island Marine Resort & Spa", "Private island luxury overwater resort in Bootless Bay", "https://www.loloataislandresort.com", "+675 7108 8000", "stay@loloata.com", "Loloata Island, Bootless Bay, Central Province, Papua New Guinea", "+67571088000"],
+  ["kokoda-track-authority", "Kokoda Track Authority (KTA PNG)", "Statutory management authority for Kokoda Track trekking & community trusts", "https://www.kokodatrackauthority.org", "+675 323 1244", "info@kokodatrackauthority.org", "Section 55, Lot 14, Boroko Drive, Port Moresby, PNG", "+67572354800"],
+  ["walindi-plantation-resort", "Walindi Plantation Resort & Mahonia Na Dari", "World-renowned diving lodge and marine research sanctuary in Kimbe Bay", "https://www.walindifebrina.com", "+675 7234 8460", "res@walindifebrina.com", "Kimbe Bay, Talasea, West New Britain Province, Papua New Guinea", "+67572348460"],
+  ["rapopo-plantation-resort", "Rapopo Plantation Resort Kokopo", "Beachfront resort with panoramic views of active volcano Mount Tavurvur", "https://rapopo.com", "+675 982 9488", "reservations@rapopo.com", "Kokopo Foreshore Road, East New Britain Province, Papua New Guinea", "+67572998800"],
+  ["trans-niugini-tours", "Trans Niugini Tours (Ambua & Karawari Lodges)", "Pioneering wilderness and cultural safari lodges in Tari and the Sepik River", "https://www.pngtours.com", "+675 542 1438", "service@pngtours.com", "Tari Valley / Middle Sepik / Mount Hagen, Papua New Guinea", "+67571221438"],
+  ["tawali-dive-resort", "Tawali Leisure & Dive Resort Milne Bay", "Luxury timber resort nestled on limestone cliffs above coral fjords", "https://tawali.com", "+675 7223 5400", "reservations@tawali.com", "Discovery Bay / East Cape, Milne Bay Province, Papua New Guinea", "+67572235400"],
+  ["bettys-lodge-wilhelm", "Betty's Lodge & Trout Farm Keglsugl", "Alpine gateway lodge for climbing Mount Wilhelm (4,509m)", "https://www.bettyslodge.com", "+675 7218 5220", "bettyslodge@gmail.com", "Keglsugl, Mount Wilhelm, Simbu Province, Papua New Guinea", "+67572185220"],
+  ["tufi-dive-resort", "Tufi Dive Resort & Fjord Homestays", "Boutique cliffside dive resort overlooking Cape Nelson volcanic fjords", "https://www.tufidive.com", "+675 323 5995", "reservations@tufidive.com", "Cape Nelson, Oro (Northern) Province, Papua New Guinea", "+67572335995"],
+  ["air-niugini", "Air Niugini National Flag Carrier", "Connecting Port Moresby with all 22 provinces and international hubs", "https://www.airniugini.com.pg", "+675 327 3444", "csc@airniugini.com.pg", "Air Niugini House, Jacksons Airport, Port Moresby, PNG", "+67571003444"],
+  ["png-air", "PNG Air Regional Domestic Network", "ATR-72 turboprop passenger flights connecting remote regional airstrips", "https://www.pngair.com.pg", "+675 305 7777", "callcenter@pngair.com.pg", "Jacksons International Airport, 7 Mile, Port Moresby, PNG", "+67570907777"],
+  ["asaro-mudmen-cultural-lodge", "Asaro Mudmen Cultural Eco-Lodge", "Authentic village cultural center preserving Holosa clay mask heritage", null, "+675 7382 1990", "asaromudmen@gmail.com", "Komunive Village, Asaro Valley, Eastern Highlands, PNG", "+67573821990"],
+  ["goroka-show-society", "Goroka Cultural Show Society", "Organizer of the world-famous annual Goroka Show since 1957", "https://www.gorokashow.com", "+675 532 2488", "info@gorokashow.com", "National Sports Institute Grounds, Goroka, Eastern Highlands, PNG", "+67572222488"],
+  ["mount-hagen-show-society", "Mount Hagen Cultural Show Committee", "Organizer of the annual Western Highlands warrior sing-sing", "https://www.mthagenculturalshow.com", "+675 542 1533", "info@mthagenculturalshow.com", "Kagamuga Showgrounds, Mount Hagen, Western Highlands, PNG", "+67571421533"],
+  ["cepa-national-parks", "Conservation and Environment Protection Authority (CEPA)", "Statutory custodian of Varirata National Park and national protected areas", "https://www.cepa.gov.pg", "+675 301 4500", "info@cepa.gov.pg", "Dynasty Tower, Savoki Street, Waigani, Port Moresby, PNG", "+67573014500"],
+  ["kokoda-trail-expeditions", "Kokoda Historical Trekking Expeditions", "Accredited KTA trekking company with veteran local Papuan guides", "https://www.kokodatrailexpeditions.com", "+675 7234 1100", "trek@kokodaexpeditions.com", "Owers' Corner / Kokoda Station, Central Province, PNG", "+67572341100"],
+  ["madang-resort-hotel", "Madang Resort Hotel & Niugini Dive Adventures", "Waterfront resort hotel with private marina, dive center, and harbor cruises", "https://www.madangresort.com", "+675 422 2655", "reservations@madangresort.com", "Coastwatchers Avenue, Madang, Madang Province, Papua New Guinea", "+67572222655"]
 ];
 
-const zambiaListingSeed = [
+// Papua New Guinea Listings Seed Data (Priced in PGK)
+const pngListingSeed = [
   // --- Stays (⌂) ---
-  ["royal-livingstone-resort-stay", "royal-livingstone-resort", "victoria-falls-livingstone", "stays", "The Royal Livingstone Luxury Victoria Falls Resort", "Five-star luxury colonial resort on the banks of the Zambezi with direct private walking access to Victoria Falls.", "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1100&q=82", "Anantara Hotels", "https://www.anantara.com/en/royal-livingstone", "Five-Star Zambezi Luxury", "ZMW", 6500, 5600, 5.0, 142],
-  ["tongabezi-lodge-safari-stay", "tongabezi-lodge", "victoria-falls-livingstone", "stays", "Tongabezi Luxury River Lodge & Sindabezi Island", "Romantic open-fronted river houses and private island chalets upstream from Victoria Falls with valet service.", "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1100&q=82", "Green Safaris", "https://greensafaris.com/tongabezi", "Luxury River Hideaway", "ZMW", 7800, 6800, 4.9, 98],
-  ["mfuwe-lodge-luangwa-stay", "bushcamp-company-luangwa", "south-luangwa-mfuwe", "stays", "Mfuwe Lodge & Elephant Lagoon Chalets", "World-famous safari lodge overlooking a wildlife lagoon, famous for elephant families strolling through the open reception.", "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82", "Bushcamp Company", "https://bushcampcompany.com/mfuwe-lodge", "Iconic Wildlife Lodge", "ZMW", 5400, 4600, 5.0, 184],
-  ["chiawa-camp-zambezi-stay", "chiawa-safaris-zambezi", "lower-zambezi-valley", "stays", "Chiawa Camp & Old Mondoro Luxury Tents", "Pioneering premier safari camp in Lower Zambezi offering timber-deck luxury tents and prime leopard game viewing.", "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=1100&q=82", "Chiawa Safaris", "https://chiawa.com", "Riverfront Tented Camp", "ZMW", 8500, 7400, 4.9, 76],
-  ["chaminuka-lodge-reserve", "chaminuka-nature-reserve", "lusaka-cultural-hub", "stays", "Chaminuka Luxury Safari Lodge & Art Sanctuary", "Private 10,000-acre wildlife reserve 25 minutes from Lusaka, featuring 72 species of wildlife and 1,000+ Zambian art masterworks.", "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1100&q=82", "Chaminuka Reserve", "https://chaminuka.com", "Private Game Reserve", "ZMW", 3200, 2750, 4.8, 115],
-  ["busanga-plains-camp-stay", "wilderness-safaris-busanga", "kafue-national-park", "stays", "Shumba Camp & Busanga Plains Tented Suites", "Luxury safari camp situated on tree islands in northern Kafue, renowned for tree-climbing lions and balloon safaris.", "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82", "Wilderness Destinations", "https://wildernessdestinations.com", "Busanga Wilderness", "ZMW", 9200, 8100, 5.0, 62],
-  ["ndole-bay-tanganyika-stay", "ndole-bay-resort", "lake-tanganyika-mbala", "stays", "Ndole Bay Beach Lodge & Diving Haven", "Beachfront wooden chalets on the pristine shores of Lake Tanganyika, offering scuba diving, angling, and Nsumbu park safaris.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "Ndole Bay Lodge", "https://ndolebaylodge.com", "Lakefront Resort", "ZMW", 2600, 2200, 4.8, 89],
-  ["shiwa-house-kapishya-stay", "shiwa-ngandu-estate", "muchinga-shiwa-ngandu", "stays", "Shiwa Ng'andu Manor House & Kapishya Hot Springs", "Historical grand English manor house built in the 1920s, featuring private natural sulfur hot springs and escarpment trails.", "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1100&q=82", "Shiwa Estate", "https://shiwangandu.com", "Historic Estate", "ZMW", 3400, 2900, 4.9, 54],
-  ["lake-kariba-inns-siavonga", "zambia-tourism-agency", "lake-kariba-siavonga", "stays", "Lake Safari Lodge Siavonga & Kariba Chalets", "Panoramic hilltop terrace hotel overlooking the azure expanse of Lake Kariba with private boat jetty and infinity pool.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Lake Safari Lodge", "https://www.zambiatourism.com", "Riviera Vista", "ZMW", 1850, 1550, 4.7, 72],
+  ["loloata-overwater-suite-stay", "loloata-island-resort", "loloata-marine-gateway", "stays", "Loloata Island Luxury Overwater Suite", "Exclusive overwater villa in Bootless Bay with private sun deck, direct reef access, and sunset ocean views.", "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1100&q=82", "Loloata Island Resort", "https://www.loloataislandresort.com", "Luxury Overwater Villa", "PGK", 950, 807, 5.0, 164],
+  ["airways-botanical-deck-stay", "airways-hotel-port-moresby", "port-moresby-ncd", "stays", "Airways Hotel Dakota Presidential Wing", "Five-star luxury oasis nestled on mountainside botanical gardens overlooking Bootless Bay and Jacksons Airport.", "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1100&q=82", "Airways Hotel", "https://airways.com.pg", "Five-Star Luxury", "PGK", 850, 720, 4.9, 210],
+  ["walindi-plantation-resort-stay", "walindi-plantation-resort", "kimbe-bay-walindi", "stays", "Walindi Plantation Coral Reef Bungalow", "Eco-luxury thatched timber bungalows nestled in lush tropical rainforest along the shores of Kimbe Bay.", "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1100&q=82", "Walindi Resort", "https://www.walindifebrina.com", "Coral Triangle Eco-Lodge", "PGK", 720, 610, 5.0, 145],
+  ["ambua-lodge-tari-stay", "trans-niugini-tours", "tari-valley-huli", "stays", "Ambua Lodge Highland Panorama Chalets", "Award-winning eco-lodge perched 2,100m above sea level overlooking the magnificent Tari Valley cloud forests.", "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82", "Trans Niugini Tours", "https://www.pngtours.com", "Highland Wilderness Lodge", "PGK", 980, 830, 5.0, 92],
+  ["tawali-resort-cliffside-stay", "tawali-dive-resort", "milne-bay-tawali-alotau", "stays", "Tawali Leisure & Dive Resort Timber Villa", "Artisanal timber villas perched high on limestone bluffs with private ocean boardwalks over pristine coral drop-offs.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "Tawali Resort", "https://tawali.com", "Coral Fjord Sanctuary", "PGK", 680, 575, 4.9, 118],
+  ["bettys-lodge-wilhelm-stay", "bettys-lodge-wilhelm", "mount-wilhelm-simbu", "stays", "Betty's Lodge Alpine Basecamp & Trout Chalets", "Cozy highland lodge in Keglsugl featuring open log fireplaces, fresh organic trout dinners, and summit guide service.", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1100&q=82", "Betty's Lodge", "https://www.bettyslodge.com", "Alpine Summit Basecamp", "PGK", 280, 240, 4.8, 88],
+  ["rapopo-plantation-kokopo-stay", "rapopo-plantation-resort", "rabaul-tavurvur-kokopo", "stays", "Rapopo Plantation Oceanfront Volcano Suites", "Beachfront suites looking directly across Blanche Bay to the dramatic plumes of active volcano Mount Tavurvur.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Rapopo Resort", "https://rapopo.com", "Volcano Oceanfront Resort", "PGK", 550, 470, 4.8, 104],
+  ["tufi-dive-resort-stay", "tufi-dive-resort", "tufi-fjords-cape-nelson", "stays", "Tufi Cliffside Fjord Chalets", "Boutique timber chalets with sweeping 180-degree panoramas of emerald volcanic fjords and coral reef atolls.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "Tufi Resort", "https://www.tufidive.com", "Volcanic Fjord Retreat", "PGK", 620, 525, 4.9, 76],
 
-  // --- Tours (◓) ---
-  ["vic-falls-guided-walking-tour", "livingstone-adventures", "victoria-falls-livingstone", "tours", "Victoria Falls Rainforest & Knife-Edge Bridge Tour", "Expert-guided walking exploration along Knife-Edge Bridge, Danger Point, and Boiling Pot with rainbow spray viewing.", "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?auto=format&fit=crop&w=1100&q=82", "Livingstone Adventures", "https://livingstoneadventures.com/vic-falls", "World Wonder Guided", "ZMW", 650, 520, 5.0, 210],
-  ["south-luangwa-walking-safari", "bushcamp-company-luangwa", "south-luangwa-mfuwe", "tours", "Legendary South Luangwa 3-Day Walking Safari", "Pioneering walking safari across pristine big game territory led by armed DNPW scouts and master naturalist guides.", "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82", "Bushcamp Company", "https://bushcampcompany.com/walking-safari", "Walking Safari Pioneer", "ZMW", 4200, 3600, 5.0, 135],
-  ["devils-pool-livingstone-island", "livingstone-adventures", "victoria-falls-livingstone", "tours", "Devil's Pool & Livingstone Island Breezy Excursion", "Swim on the precipice of the 108m waterfall in the natural rock infinity pool with gourmet breakfast or high tea.", "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?auto=format&fit=crop&w=1100&q=82", "Devil's Pool Official", "https://livingstoneadventures.com/devils-pool", "Adrenaline Wonder", "ZMW", 2400, 2050, 5.0, 168],
-  ["lower-zambezi-canoe-safari", "chiawa-safaris-zambezi", "lower-zambezi-valley", "tours", "Lower Zambezi Guided Canoe Expedition", "Glide silently past elephant herds, hippos, and bird rookeries along the tranquil channels of the Zambezi River.", "https://images.unsplash.com/photo-1534567153574-2b12153a87f0?auto=format&fit=crop&w=1100&q=82", "Chiawa Safaris", "https://chiawa.com/canoeing", "River Wilderness", "ZMW", 1800, 1500, 4.9, 94],
-  ["flight-of-angels-helicopter", "livingstone-adventures", "victoria-falls-livingstone", "tours", "Flight of Angels Victoria Falls Helicopter Flight", "Breathtaking 15-minute aerial helicopter tour over Victoria Falls, Batoka Gorge, and the upper Zambezi national park.", "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1100&q=82", "Livingstone Adventures", "https://livingstoneadventures.com/helicopter", "Aerial Wonder", "ZMW", 2950, 2550, 4.9, 128],
-  ["busanga-balloon-safari", "wilderness-safaris-busanga", "kafue-national-park", "tours", "Busanga Plains Dawn Hot Air Balloon Safari", "Drift over the mist-covered Busanga plains at sunrise, observing red lechwe herds, lions, and roan antelope from above.", "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82", "Wilderness Safaris", "https://wildernessdestinations.com", "Hot Air Ballooning", "ZMW", 5600, 4800, 5.0, 45],
-  ["kasanka-bat-migration-safari", "zambia-tourism-agency", "bangweulu-kasanka-wetlands", "tours", "World's Greatest Mammal Migration: 10 Million Fruit Bats", "Witness the world's largest mammal migration as 10 million straw-coloured fruit bats darken the sky at twilight in Kasanka.", "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82", "Kasanka Trust", "https://kasankanationalpark.com", "Mammal Migration", "ZMW", 2100, 1800, 5.0, 88],
-  ["shoebill-stork-bangweulu-trek", "zambia-tourism-agency", "bangweulu-kasanka-wetlands", "tours", "Bangweulu Swamps Rare Shoebill Stork Expedition", "Canoe safari through papyrus waterways with community scouts tracking the elusive, prehistoric Shoebill stork.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "African Parks Zambia", "https://www.africanparks.org", "Rare Wildlife Tracking", "ZMW", 2700, 2300, 4.9, 52],
+  // --- Tours (◒) ---
+  ["kokoda-track-8day-expedition", "kokoda-trail-expeditions", "kokoda-track-corridor", "tours", "Kokoda Track 8-Day Historic Crossing & Battlefields", "Accredited KTA expedition crossing the Owen Stanley Range, honoring Fuzzy Wuzzy Angels and visiting Isurava and Brigade Hill.", "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1100&q=82", "Kokoda Trail Expeditions", "https://www.kokodatrailexpeditions.com", "Historic Pilgrimage", "PGK", 4200, 3990, 5.0, 198],
+  ["mount-wilhelm-summit-climb", "bettys-lodge-wilhelm", "mount-wilhelm-simbu", "tours", "Mount Wilhelm 4-Day Alpine Summit Trek (4,509m)", "Guided climb through alpine moss forests and glacial tarns to reach the highest point in Papua New Guinea at dawn.", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1100&q=82", "Betty's Lodge Guided", "https://www.bettyslodge.com", "Summit Expedition", "PGK", 1400, 1190, 5.0, 112],
+  ["kimbe-bay-seamount-scuba", "walindi-plantation-resort", "kimbe-bay-walindi", "tours", "Kimbe Bay Coral Seamounts Double Scuba Dive", "Explore Inglis Shoal and South Emma underwater pinnacles with schooling barracuda, hammerheads, and lush sea fans.", "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1100&q=82", "Walindi Dive Fleet", "https://www.walindifebrina.com", "World-Class Scuba", "PGK", 450, 380, 5.0, 175],
+  ["sepik-river-crocodile-safari", "trans-niugini-tours", "sepik-river-ambunti", "tours", "Sepik River 4-Day Haus Tambaran & Crocodile Expedition", "Motorized dugout canoe journey through Middle Sepik villages, exploring sacred spirit houses and ancient crocodile cults.", "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82", "Trans Niugini Tours", "https://www.pngtours.com", "River Cultural Odyssey", "PGK", 2800, 2450, 4.9, 84],
+  ["tufi-outer-reef-shark-dive", "tufi-dive-resort", "tufi-fjords-cape-nelson", "tours", "Tufi Outer Reefs & Hammerhead Scuba Safari", "Boat dive on pristine outer oceanic atolls with crystal visibility exceeding 40 meters, reef sharks, and manta rays.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "Tufi Dive Center", "https://www.tufidive.com", "Oceanic Shark Dive", "PGK", 420, 355, 4.9, 95],
+  ["baining-fire-dance-night-tour", "rapopo-plantation-resort", "rabaul-tavurvur-kokopo", "tours", "Baining Fire Dancers Night Mountain Excursion", "Travel into the Baining mountain jungles to witness barefoot initiated men wearing giant Kavat masks leap through bonfire flames.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Rapopo Tours", "https://rapopo.com", "Sacred Fire Ritual", "PGK", 320, 270, 5.0, 142],
 
   // --- Nature (◇) ---
-  ["victoria-falls-wonder", "zambia-tourism-agency", "victoria-falls-livingstone", "nature", "Mosi-oa-Tunya Victoria Falls National Monument", "Standing 108 metres tall, the world's greatest curtain of falling water, generating mist visible over 30 kilometres away.", "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?auto=format&fit=crop&w=1100&q=82", "Zambia Tourism Agency", "https://www.zambiatourism.com", "Natural World Wonder", "ZMW", 450, 350, 5.0, 310],
-  ["lumangwe-falls-luapula", "zambia-tourism-agency", "luapula-waterfalls-kingdom", "nature", "Lumangwe & Kabwelume Waterfalls (The Mini Victoria Falls)", "Spanning 160 metres across the Kalungwishi River, offering roaring cascades, rainforest walks, and camping bluffs.", "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82", "NHCC Zambia", "https://nhcczambia.org", "Northern Cascades", "ZMW", 350, 280, 4.8, 64],
-  ["kalambo-falls-gorge", "zambia-tourism-agency", "lake-tanganyika-mbala", "nature", "Kalambo Falls & Archaeological Gorge", "Africa's second highest uninterrupted single-drop waterfall (221 metres) plunging into Lake Tanganyika rift basin.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "UNESCO Tentative List", "https://nhcczambia.org", "Deep Gorge Falls", "ZMW", 400, 320, 4.9, 58],
-  ["chishimba-falls-kasama", "zambia-tourism-agency", "kasama-chishimba-falls", "nature", "Chishimba Sacred Cascades & Hydro Sanctuary", "A sacred spiritual site consisting of three successive waterfalls (Kaela, Mutumuna, and Chishimba) on the Luombe River.", "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82", "NHCC Heritage", "https://nhcczambia.org", "Sacred Cascades", "ZMW", 250, 200, 4.7, 49],
-  ["source-of-the-zambezi-monument", "national-heritage-zambia", "solwezi-zambezi-west", "nature", "Source of the Zambezi National Heritage Site (Ikelenge)", "Botanical reserve preserving the exact spring where the mighty 2,574km Zambezi River bubbles up in a lush forest.", "/destinations/zambezi_source/zambezi_source_spring.jpg", "National Heritage Conservation", "https://nhcczambia.org", "River Source Monument", "ZMW", 300, 240, 4.8, 77],
-  ["lochinvar-birding-sanctuary", "zambia-tourism-agency", "lochinvar-monze-sanctuary", "nature", "Lochinvar Kafue Lechwe & Waterbird Sanctuary", "Pristine wetland paradise hosting over 30,000 endemic Kafue Lechwe antelopes and 420 bird species.", "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82", "DNPW Zambia", "https://www.zambiatourism.com", "Birding Paradise", "ZMW", 480, 390, 4.7, 43],
-  ["mutinondo-granite-wilderness", "mutinondo-wilderness-trust", "muchinga-shiwa-ngandu", "nature", "Mutinondo Wilderness Granite Peaks & Waterfalls", "Privately protected 10,000-hectare pristine wilderness of giant granite inselbergs, crystal rivers, and miombo woodlands.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Mutinondo Wilderness", "https://mutinondozambia.com", "Granite Wilderness", "ZMW", 890, 760, 4.9, 38],
-  ["samfya-white-beach-wetlands", "zambia-tourism-agency", "samfya-beach-bangweulu", "nature", "Samfya Lake Bangweulu Inland Marine Sanctuary", "Enjoy the endless turquoise freshwater horizons and pristine white sand dunes of Lake Bangweulu.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "Luapula Tourism Board", "https://www.zambiatourism.com", "Inland Sea", "ZMW", 420, 360, 4.7, 72],
+  ["varirata-bird-of-paradise-trail", "cepa-national-parks", "varirata-sogeri-plateau", "nature", "Varirata National Park Raggiana Bird of Paradise Trail", "Witness the breathtaking dawn courtship display of the Raggiana Bird of Paradise in protected Sogeri rainforest.", "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1100&q=82", "CEPA National Parks", "https://www.cepa.gov.pg", "Bird of Paradise Sanctuary", "PGK", 45, 35, 5.0, 240],
+  ["tavurvur-volcano-crater", "rapopo-plantation-resort", "rabaul-tavurvur-kokopo", "nature", "Mount Tavurvur Active Volcano Crater & Hot Springs", "Trek across sulfur ash plains to the steaming rim of Mount Tavurvur and bathe in natural geothermal thermal pools.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Rabaul Volcanological", "https://rapopo.com", "Active Volcano Wonder", "PGK", 180, 150, 4.9, 130],
+  ["port-moresby-nature-park", "png-tourism-promotion-authority", "port-moresby-ncd", "nature", "Port Moresby Nature Park Botanical Gardens", "Award-winning wildlife sanctuary home to tree kangaroos, cassowaries, hornbills, and 15+ species of Birds of Paradise.", "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1100&q=82", "Nature Park Trust", "https://www.papuanewguinea.travel", "Wildlife Sanctuary", "PGK", 35, 25, 4.8, 310],
+  ["lake-piunde-alpine-tarn", "bettys-lodge-wilhelm", "mount-wilhelm-simbu", "nature", "Lake Piunde & Lake Aunde Glaciated Alpine Tarns", "Pristine glacial lakes situated 3,500m above sea level surrounded by prehistoric giant cycads and alpine waterfalls.", "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1100&q=82", "Betty's Lodge", "https://www.bettyslodge.com", "Glacial Tarn Reserve", "PGK", 80, 65, 4.9, 68],
 
   // --- Culture (♨) ---
-  ["kuomboka-royal-palace-heritage", "barotse-royal-establishment", "barotseland-mongu", "culture", "Barotseland Royal Palace & Nayuma Museum", "Explore the royal winter capital of Limulunga, the Litunga's royal palace, and the Barotse Royal Establishment archives.", "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82", "Barotse Royal Establishment", "https://barotseland.info", "Royal Heritage", "ZMW", 1500, 1300, 5.0, 78],
-  ["maramba-cultural-village", "zambia-tourism-agency", "victoria-falls-livingstone", "culture", "Maramba Cultural Village & Traditional Crafts Market", "Immerse in Zambian tribal architecture, live traditional drumming, wood carvings, and authentic pottery workshops.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Livingstone Tourism Association", "https://www.zambiatourism.com", "Living Culture", "ZMW", 350, 290, 4.7, 63],
-  ["lusaka-national-museum-heritage", "national-heritage-zambia", "lusaka-cultural-hub", "culture", "Lusaka National Museum & Freedom Statue Trail", "Journey through Zambia's independence history, ethnography, traditional witchcraft artifacts, and contemporary visual arts.", "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1100&q=82", "National Museums Board", "https://nhcczambia.org", "National Heritage", "ZMW", 250, 200, 4.7, 95],
-  ["choma-museum-tonga-heritage", "choma-museum-crafts", "victoria-falls-livingstone", "culture", "Choma Museum & Tonga Cultural Heritage Centre", "Dedicated to preserving the heritage, beadwork, baskets, and iron-age history of the Batonga people of Southern Zambia.", "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=82", "Choma Museum Trust", "https://chomamuseum.org", "Tonga Traditions", "ZMW", 300, 250, 4.8, 41],
-  ["moto-moto-museum-mbala", "moto-moto-museum-trust", "lake-tanganyika-mbala", "culture", "Moto Moto Museum of Zambian Heritage", "Founded by Father Jean-Jacques Corbeil, housing the finest collection of Northern Bemba cultural artifacts and archaeological relics.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "Moto Moto Museum Trust", "https://nhcczambia.org", "Ancient Bemba Culture", "ZMW", 280, 230, 4.8, 29],
-  ["mukuni-royal-village-tour", "livingstone-adventures", "victoria-falls-livingstone", "culture", "Mukuni Royal Village Cultural Experience", "Walk through a living 13th-century Leya monarchy village, guided by elders explaining traditional governance, court huts, and herbal medicine.", "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82", "Mukuni Royal Establishment", "https://livingstoneadventures.com", "Leya Monarchy", "ZMW", 420, 360, 4.9, 110],
-  ["kabwata-cultural-village-guild", "zambia-tourism-agency", "lusaka-cultural-hub", "culture", "Kabwata Cultural Village & Master Woodcarvers Guild", "Historic thatched-roof artisan enclave in Lusaka where woodcarvers, weavers, and leatherworkers create authentic handicrafts.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Kabwata Guild", "https://www.zambiatourism.com", "Artisan Enclave", "ZMW", 180, 150, 4.7, 86],
-  ["mwata-kazembe-royal-palace", "lunda-royal-establishment", "luapula-waterfalls-kingdom", "culture", "Mwansabombwe Lunda Royal Palace & Heritage Centre", "Ancestral seat of the Mwata Kazembe kingdom featuring centuries of royal Lunda court regalia, battle drums, and archives.", "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82", "Lunda Royal Establishment", "https://nhcczambia.org", "Lunda Kingdom", "ZMW", 500, 420, 4.9, 74],
-  ["gawa-undi-chewa-palace", "chewa-heritage-foundation", "chipata-mutenguleni-heritage", "culture", "Paramount Chief Gawa Undi Royal Chewa Complex", "The spiritual and cultural headquarters of the Chewa people across Zambia, Malawi, and Mozambique, home of the sacred Gule Wamkulu.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Chewa Heritage Foundation", "https://nhcczambia.org", "Chewa Monarchy", "ZMW", 450, 380, 4.9, 68],
-  ["copperbelt-museum-ndola", "national-heritage-zambia", "copperbelt-ndola-kitwe", "culture", "Copperbelt Museum of Geological & Cultural History", "National museum housing extensive mineral collections, indigenous mining artifacts, and ethnography of Copperbelt tribes.", "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=82", "National Museums Board", "https://nhcczambia.org", "Geological & Cultural", "ZMW", 200, 160, 4.6, 52],
+  ["asaro-mudmen-cultural-village", "asaro-mudmen-cultural-lodge", "goroka-asaro-valley", "culture", "Asaro Mudmen Village Secret Mask & Clay Ritual", "Immerse in the ancestral legend of the Asaro Mudmen, mask-crafting workshops, and authentic earth-oven Mumu feast.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Asaro Cultural Lodge", "https://www.papuanewguinea.travel", "Living Tribal Legend", "PGK", 250, 210, 5.0, 165],
+  ["huli-wigmen-bachelor-school", "trans-niugini-tours", "tari-valley-huli", "culture", "Huli Wigmen Ceremonial Bachelor School Experience", "Visit the sacred secluded school where young Huli men spend years growing ritual hair wigs adorned with Bird of Paradise feathers.", "https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?auto=format&fit=crop&w=1100&q=82", "Trans Niugini Tours", "https://www.pngtours.com", "Sacred Wig Rituals", "PGK", 380, 320, 5.0, 138],
+  ["png-national-museum-art-gallery", "png-tourism-promotion-authority", "port-moresby-ncd", "culture", "National Museum and Art Gallery Waigani", "The spiritual repository of Papua New Guinea, exhibiting over 30,000 ethnographic masterpieces, ancestor poles, and war canoes.", "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1100&q=82", "National Museum PNG", "https://www.papuanewguinea.travel", "National Heritage Museum", "PGK", 20, 15, 4.8, 195],
+  ["kanganaman-haus-tambaran", "trans-niugini-tours", "sepik-river-ambunti", "culture", "UNESCO Kanganaman Haus Tambaran Spirit House", "The oldest and grandest surviving spirit house on the Sepik River, supported by towering carved ancestral totems.", "https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1100&q=82", "Sepik Cultural Trust", "https://www.pngtours.com", "UNESCO Sacred Monument", "PGK", 120, 95, 5.0, 92],
 
   // --- Events (◎) ---
-  ["ncwala-ceremony-event", "ngoni-royal-council", "chipata-mutenguleni-heritage", "events", "Nc'wala Traditional Ceremony & Warrior Dance", "Annual first-fruits ceremony celebrated every February by the Ngoni people, featuring Paramount Chief Mpezeni and impis in full regalia.", "/ceremonies/ncwala_ngoni_warriors.jpg", "Ngoni Royal Council", "https://www.zambiatourism.com", "Traditional Ceremony", "ZMW", 850, 720, 5.0, 110],
-  ["kuomboka-festival-pass", "barotse-royal-establishment", "barotseland-mongu", "events", "Kuomboka Ceremony VIP Pavilion & Boat Escort", "The world-famous water pageant as the Litunga travels in the massive Nalikwanda barge from Lealui to the highlands of Limulunga.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Barotse Royal Establishment", "https://barotseland.info", "Royal Water Pageant", "ZMW", 1800, 1550, 5.0, 134],
-  ["umutomboko-ceremony-event", "lunda-royal-establishment", "luapula-waterfalls-kingdom", "events", "Umutomboko Ceremony & Royal Sword Dance", "Celebration of the Lunda kingdom's conquest where King Mwata Kazembe performs the legendary Mutomboko dance of triumph.", "/ceremonies/umutomboko_mwata_kazembe.jpg", "Lunda Royal Establishment", "https://nhcczambia.org", "Lunda Royal Ceremony", "ZMW", 800, 680, 4.9, 87],
-  ["likumbi-lya-mize-event", "luvale-cultural-association", "solwezi-zambezi-west", "events", "Likumbi Lya Mize & Makishi Masquerade Festival", "UNESCO-recognized cultural masterpiece featuring the sacred Makishi masked dancers and Luvale initiation traditions.", "/ceremonies/likumbi_lya_mize_makishi.jpg", "Luvale Cultural Association", "https://nhcczambia.org", "UNESCO Masterpiece", "ZMW", 750, 620, 4.9, 76],
-  ["livingstone-cultural-arts-festival", "zambia-tourism-agency", "victoria-falls-livingstone", "events", "Livingstone International Cultural Arts Festival", "Carnival-style celebration featuring dancers and musicians from all 10 provinces converging at Victoria Falls.", "https://images.unsplash.com/photo-1603565816030-6b389eeb23cb?auto=format&fit=crop&w=1100&q=82", "Zambia Tourism Agency", "https://www.zambiatourism.com", "Arts & Music Carnival", "ZMW", 950, 800, 4.8, 98],
-  ["shimunnga-cattle-ceremony", "zambia-tourism-agency", "lochinvar-monze-sanctuary", "events", "Shimunnga Traditional Cattle Gathering & Ila Regalia", "Ancestral cattle festival of the Ila people of Namwala, showcasing thousands of cattle swimming across the Kafue River floodplains.", "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1100&q=82", "Ila Cultural Association", "https://www.zambiatourism.com", "Cattle Pageant", "ZMW", 600, 500, 4.9, 65],
-  ["kulamba-chewa-ceremony", "chewa-heritage-foundation", "chipata-mutenguleni-heritage", "events", "Kulamba Ceremony of the Great Chewa Kingdom", "International cultural gathering where over 130 Chewa chiefs from Zambia, Malawi, and Mozambique pay homage to King Gawa Undi.", "/ceremonies/kulamba_gawa_undi.jpg", "Chewa Heritage Foundation", "https://nhcczambia.org", "Gule Wamkulu Festival", "ZMW", 820, 700, 5.0, 92],
-  ["ukusefya-pa-ngwena-bemba", "bemba-royal-council", "kasama-chishimba-falls", "events", "Ukusefya Pa Ng'wena Royal Bemba Celebration", "Spectacular reenactment of the Bemba migration from Kola, featuring Paramount Chief Chitimukulu carried on a royal crocodile litter.", "/ceremonies/ukusefya_pa_ngwena_chitimukulu.jpg", "Bemba Royal Council", "https://nhcczambia.org", "Bemba Royal Pageant", "ZMW", 780, 660, 4.9, 84],
-  ["zambia-international-trade-fair", "zambia-trade-fair-society", "copperbelt-ndola-kitwe", "events", "Zambia International Trade Fair Ndola", "Zambia's largest industrial trade expo gathering commercial exhibitors, manufacturing leaders, and international delegations.", "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=82", "Trade Fair Society", "https://zitf.org.zm", "Commercial Expo", "ZMW", 350, 290, 4.7, 102],
-  ["zambia-agriculture-show-lusaka", "zambia-agriculture-society", "lusaka-cultural-hub", "events", "Zambia National Agriculture & Commercial Show", "Annual premier national exhibition in Lusaka featuring pedigree livestock, agricultural innovations, and live musical arenas.", "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1100&q=82", "Agriculture Society Zambia", "https://acsz.co.zm", "National Expo", "ZMW", 300, 250, 4.8, 125],
+  ["goroka-cultural-show-vip-pass", "goroka-show-society", "goroka-asaro-valley", "events", "Goroka Cultural Show VIP 3-Day Arena Pass", "VIP admission to the world's most spectacular tribal gathering, featuring over 100 tribes in traditional bilas and sing-sing dances.", "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1100&q=82", "Goroka Show Society", "https://www.gorokashow.com", "World Cultural Wonder", "PGK", 350, 295, 5.0, 320],
+  ["mount-hagen-show-vip-pass", "mount-hagen-show-society", "mount-hagen-wahgi", "events", "Mount Hagen Cultural Show VIP Pass", "Early dawn photographer pass and shaded VIP grandstand seating for the thunderous Western Highlands sing-sing.", "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1100&q=82", "Mount Hagen Show Committee", "https://www.mthagenculturalshow.com", "Melpa Warrior Sing-Sing", "PGK", 400, 340, 5.0, 280],
+  ["national-mask-festival-rabaul", "rapopo-plantation-resort", "rabaul-tavurvur-kokopo", "events", "National Mask Festival & Kinavai Dawn Arrival Pass", "VIP admission to the Kinavai sea arrival of Tolai Tubuan spirit masks and night-time Baining fire dance ceremonies.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "East New Britain Tourism", "https://rapopo.com", "Mask Spirit Festival", "PGK", 450, 380, 5.0, 195],
+  ["kenu-kundu-canoe-festival-pass", "png-tourism-promotion-authority", "milne-bay-tawali-alotau", "events", "Milne Bay Kenu & Kundu War Canoe Festival", "Experience the thunder of 40-man carved war canoe regattas, conch shell calls, and island dances on Alotau bay.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "Milne Bay Tourism Board", "https://www.papuanewguinea.travel", "War Canoe Regatta", "PGK", 280, 235, 4.9, 140],
 
   // --- Transport (➜) ---
-  ["zambia-airways-domestic-pass", "zambia-airways", "lusaka-cultural-hub", "transport", "Zambia Airways Domestic Scheduled Flights", "Seamless air connections linking Lusaka International Airport with Livingstone, Ndola, and Mfuwe South Luangwa.", "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1100&q=82", "Zambia Airways Official", "https://www.zambiaairways.co.zm", "Scheduled Flights", "ZMW", 1650, 1450, 4.8, 120],
-  ["proflight-zambia-safari-hopper", "proflight-zambia", "lusaka-cultural-hub", "transport", "Proflight Zambia Safari Bush Shuttle", "Specialized bush flights landing directly inside South Luangwa, Lower Zambezi, Kafue, and Livingstone airstrips.", "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1100&q=82", "Proflight Zambia", "https://www.proflight-zambia.com", "Safari Flights", "ZMW", 2450, 2150, 4.9, 145],
-  ["livingstone-safari-transfers", "royal-chariot-transfers", "victoria-falls-livingstone", "transport", "Livingstone Airport & Victoria Falls 4x4 Transfers", "Comfortable air-conditioned private 4x4 airport pickup and lodge transfers with luggage assistance.", "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1100&q=82", "Royal Chariot Transfers", "https://royalchariot.co.zm", "Airport Transfers", "ZMW", 450, 380, 4.8, 88],
-  ["zam-4x4-safari-car-hire", "zam-4x4-expeditions", "lusaka-cultural-hub", "transport", "4x4 Safari Land Cruiser Rental & Overland Kit", "Heavy-duty Toyota Land Cruiser equipped with dual spare tires, GPS Garmin navigation, satellite phone, and rooftop tent.", "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1100&q=82", "ZamRoam Overland", "https://zamroam.com/4x4", "Self-Drive 4x4", "ZMW", 1950, 1700, 4.9, 64],
-  ["zambezi-express-boat-transfers", "livingstone-adventures", "victoria-falls-livingstone", "transport", "Zambezi River Luxury Catamaran & Water Taxi", "Scenic river transfers between Livingstone waterfront, river lodges, and island excursion landing docks.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Livingstone Adventures", "https://livingstoneadventures.com", "Water Taxi", "ZMW", 550, 470, 4.7, 58],
-  ["tazara-passenger-express", "tazara-railway-authority", "muchinga-shiwa-ngandu", "transport", "TAZARA Railway Mukuba Scenic Express", "Iconic trans-African passenger rail journey linking Kapiri Mposhi with Mpika, Kasama, Nakonde, and Dar es Salaam.", "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1100&q=82", "TAZARA Railway Authority", "https://tazarasite.com", "Scenic Railway", "ZMW", 750, 640, 4.8, 96],
-  ["royal-livingstone-express-train", "royal-livingstone-resort", "victoria-falls-livingstone", "transport", "The Royal Livingstone Express Steam Train & Dining", "Steam train excursion across the historic Victoria Falls Bridge with five-course gourmet dinner and sunset viewing.", "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1100&q=82", "Royal Livingstone Resort", "https://www.anantara.com/en/royal-livingstone", "Steam Train Dining", "ZMW", 2850, 2450, 5.0, 84],
-  ["siavonga-kariba-water-taxi", "zambia-tourism-agency", "lake-kariba-siavonga", "transport", "Lake Kariba Houseboat Shuttle & Water Taxi", "Convenient boat transfers and pontoon shuttles connecting Siavonga harbor with island chalets and fishing camps.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Lake Kariba Charters", "https://www.zambiatourism.com", "Lake Water Taxi", "ZMW", 620, 530, 4.7, 51],
-  ["mfuwe-airport-bush-transfer", "mfuwe-lodge-bushcamps", "south-luangwa-mfuwe", "transport", "South Luangwa Safari 4x4 Airstrip Shuttle", "Open-sided customized safari vehicle pickup from Mfuwe International Airport with en-route game viewing.", "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1100&q=82", "Bushcamp Company", "https://bushcampcompany.com", "Airstrip Safari Shuttle", "ZMW", 480, 410, 4.9, 78],
-  ["lusaka-executive-chauffeur-service", "royal-chariot-transfers", "lusaka-cultural-hub", "transport", "Lusaka Airport VIP Chauffeur & City Shuttle", "Executive chauffeured luxury sedan and Mercedes sprinter transfers from Kenneth Kaunda International Airport to city hotels.", "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1100&q=82", "Royal Chariot Transfers", "https://royalchariot.co.zm", "VIP Chauffeur", "ZMW", 580, 490, 4.8, 114],
-  ["ndole-bay-lake-ferry-charter", "ndole-bay-resort", "lake-tanganyika-mbala", "transport", "Ndole Bay Lake Tanganyika Boat Charter", "Customized lake cruiser charters for diving expeditions, Nsumbu National Park access, and scenic lake crossings.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "Ndole Bay Lodge", "https://ndolebaylodge.com", "Lake Charter", "ZMW", 1150, 980, 4.9, 44]
+  ["air-niugini-domestic-flight-pass", "air-niugini", "port-moresby-ncd", "transport", "Air Niugini Domestic Flight Network Pass", "Scheduled jet and turboprop flights connecting Port Moresby with Mount Hagen, Goroka, Rabaul, Hoskins, and Alotau.", "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1100&q=82", "Air Niugini", "https://www.airniugini.com.pg", "National Scheduled Flights", "PGK", 650, 580, 4.8, 220],
+  ["png-air-safari-hopper", "png-air", "port-moresby-ncd", "transport", "PNG Air Regional Safari Flight Pass", "Specialized regional flights landing directly at remote airstrips in Simbu, Tari, Popondetta, and Kavieng.", "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1100&q=82", "PNG Air", "https://www.pngair.com.pg", "Regional Bush Flights", "PGK", 580, 510, 4.7, 185],
+  ["loloata-catamaran-transfer", "loloata-island-resort", "port-moresby-ncd", "transport", "Loloata Island Luxury Catamaran Boat Transfer", "Scheduled 20-minute catamaran cruise across Bootless Bay between Tahira Marina and Loloata Island.", "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1100&q=82", "Loloata Marine Fleet", "https://www.loloataislandresort.com", "Catamaran Shuttle", "PGK", 90, 75, 4.9, 140],
+  ["kokoda-4x4-trailhead-transfer", "kokoda-trail-expeditions", "kokoda-track-corridor", "transport", "Port Moresby to Owers' Corner 4x4 Trailhead Transfer", "Private air-conditioned 4WD shuttle up the Sogeri Plateau to the southern Kokoda Track memorial arches.", "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=1100&q=82", "Kokoda Expeditions", "https://www.kokodatrailexpeditions.com", "4x4 Trailhead Transfer", "PGK", 180, 150, 4.8, 125],
+  ["walindi-dive-boat-charter", "walindi-plantation-resort", "kimbe-bay-walindi", "transport", "Kimbe Bay Custom Dive Cruiser Charter", "Fully equipped custom dive vessel with shaded deck, dive compressor, and lunch service for outer reef atolls.", "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1100&q=82", "Walindi Fleet", "https://www.walindifebrina.com", "Custom Dive Boat", "PGK", 350, 295, 5.0, 95]
 ];
 
 let catalogueInitPromise: Promise<void> | null = null;
@@ -154,126 +124,176 @@ export async function ensureCatalogue() {
 
     await ensureCountries();
     await d1.batch(schemaStatements.map(sql => d1.prepare(sql)));
-    await ensureCountryGeography("ZMB");
+    await ensureCountryGeography("PNG");
 
-  const safeAlter = async (sql: string) => {
-    try { await d1.prepare(sql).run(); } catch {}
-  };
-  await safeAlter("ALTER TABLE provinces ADD COLUMN country_id INTEGER");
-  await safeAlter("ALTER TABLE destinations ADD COLUMN country_id INTEGER");
-  await safeAlter("ALTER TABLE categories ADD COLUMN country_id INTEGER");
-  await safeAlter("ALTER TABLE providers ADD COLUMN country_id INTEGER");
-  await safeAlter("ALTER TABLE listings ADD COLUMN country_id INTEGER");
-  await safeAlter("ALTER TABLE destinations ADD COLUMN source_url TEXT");
-  await safeAlter("ALTER TABLE listings ADD COLUMN photo_credit TEXT");
-  await safeAlter("ALTER TABLE listings ADD COLUMN deep_link_url TEXT");
-  await safeAlter("ALTER TABLE listings ADD COLUMN last_reviewed_at TEXT");
-  await safeAlter("ALTER TABLE providers ADD COLUMN legal_name TEXT");
-  await safeAlter("ALTER TABLE providers ADD COLUMN license_number TEXT");
-  await safeAlter("ALTER TABLE providers ADD COLUMN phone TEXT");
-  await safeAlter("ALTER TABLE providers ADD COLUMN email TEXT");
-  await safeAlter("ALTER TABLE providers ADD COLUMN physical_address TEXT");
-  await safeAlter("ALTER TABLE providers ADD COLUMN website_url TEXT");
-  await safeAlter("ALTER TABLE providers ADD COLUMN whatsapp_number TEXT");
+    const safeAlter = async (sql: string) => {
+      try { await d1.prepare(sql).run(); } catch {}
+    };
+    await safeAlter("ALTER TABLE provinces ADD COLUMN country_id INTEGER");
+    await safeAlter("ALTER TABLE destinations ADD COLUMN country_id INTEGER");
+    await safeAlter("ALTER TABLE categories ADD COLUMN country_id INTEGER");
+    await safeAlter("ALTER TABLE providers ADD COLUMN country_id INTEGER");
+    await safeAlter("ALTER TABLE listings ADD COLUMN country_id INTEGER");
+    await safeAlter("ALTER TABLE destinations ADD COLUMN source_url TEXT");
+    await safeAlter("ALTER TABLE listings ADD COLUMN photo_credit TEXT");
+    await safeAlter("ALTER TABLE listings ADD COLUMN deep_link_url TEXT");
+    await safeAlter("ALTER TABLE listings ADD COLUMN source_url TEXT");
+    await safeAlter("ALTER TABLE listings ADD COLUMN last_reviewed_at TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN legal_name TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN license_number TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN phone TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN email TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN physical_address TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN website_url TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN whatsapp_number TEXT");
 
-  const zmbCountry = await d1.prepare("SELECT id FROM countries WHERE UPPER(code)='ZMB'").first<{ id: number }>();
-  const zmbId = zmbCountry?.id ?? 1;
+    const pngCountry = await d1.prepare("SELECT id FROM countries WHERE UPPER(code)='PNG' OR UPPER(code)='PG'").first<{ id: number }>();
+    const pngId = pngCountry?.id ?? 1;
 
-  // 1. Seed Categories
-  for (const c of categorySeed) {
-    await d1.prepare("INSERT OR IGNORE INTO categories (slug, name, icon, display_order) VALUES (?, ?, ?, ?)").bind(c[0], c[1], c[2], c[3]).run();
-  }
+    // 1. Seed Categories
+    for (const c of categorySeed) {
+      await d1.prepare("INSERT OR IGNORE INTO categories (slug, name, icon, display_order) VALUES (?, ?, ?, ?)").bind(c[0], c[1], c[2], c[3]).run();
+    }
 
-  // 2. Seed Zambia Destinations, Providers, Listings
-  for (const d of zambiaDestinationSeed) {
-    let prov = await d1.prepare("SELECT id FROM provinces WHERE code=?").bind(d[3]).first<{ id: number }>();
-    if (!prov) {
-      prov = await d1.prepare("SELECT id FROM provinces WHERE country_id=? LIMIT 1").bind(zmbId).first<{ id: number }>();
+    // 2. Seed PNG Destinations, Providers, Listings
+    for (const d of pngDestinationSeed) {
+      let prov = await d1.prepare("SELECT id FROM provinces WHERE code=?").bind(d[3]).first<{ id: number }>();
+      if (!prov) {
+        prov = await d1.prepare("SELECT id FROM provinces WHERE country_id=? LIMIT 1").bind(pngId).first<{ id: number }>();
+      }
+      if (!prov) {
+        prov = await d1.prepare("SELECT id FROM provinces LIMIT 1").first<{ id: number }>();
+      }
+      if (prov) {
+        await d1.prepare("INSERT OR IGNORE INTO destinations (slug, name, summary, province_id, district, latitude, longitude, cover_image_url, source_url, country_id, is_test_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)")
+          .bind(d[0], d[1], d[2], prov.id, d[4], d[5], d[6], d[7], d[8], pngId).run();
+        await d1.prepare("UPDATE destinations SET province_id=?, summary=?, district=?, latitude=?, longitude=?, cover_image_url=?, source_url=?, country_id=?, is_test_data=0 WHERE slug=?")
+          .bind(prov.id, d[2], d[4], d[5], d[6], d[7], d[8], pngId, d[0]).run();
+      }
     }
-    if (!prov) {
-      prov = await d1.prepare("SELECT id FROM provinces LIMIT 1").first<{ id: number }>();
-    }
-    if (prov) {
-      await d1.prepare("INSERT OR IGNORE INTO destinations (slug, name, summary, province_id, district, latitude, longitude, cover_image_url, source_url, country_id, is_test_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)")
-        .bind(d[0], d[1], d[2], prov.id, d[4], d[5], d[6], d[7], d[8], zmbId).run();
-      await d1.prepare("UPDATE destinations SET province_id=?, summary=?, district=?, latitude=?, longitude=?, cover_image_url=?, source_url=?, country_id=?, is_test_data=0 WHERE slug=?")
-        .bind(prov.id, d[2], d[4], d[5], d[6], d[7], d[8], zmbId, d[0]).run();
-    }
-  }
-  for (const p of zambiaProviderSeed) {
-    await d1.prepare("INSERT OR IGNORE INTO providers (slug, trading_name, source_name, source_url, phone, email, physical_address, website_url, whatsapp_number, country_id, is_test_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)")
-      .bind(p[0], p[1], p[2], p[3], p[4] || null, p[5] || null, p[6] || null, p[3], p[7] || null, zmbId).run();
-    await d1.prepare("UPDATE providers SET trading_name=?, source_name=?, source_url=?, phone=?, email=?, physical_address=?, website_url=?, whatsapp_number=?, country_id=?, is_test_data=0 WHERE slug=?")
-      .bind(p[1], p[2], p[3], p[4] || null, p[5] || null, p[6] || null, p[3], p[7] || null, zmbId, p[0]).run();
-  }
-  for (const l of zambiaListingSeed) {
-    let prov = await d1.prepare("SELECT id FROM providers WHERE slug=?").bind(l[1]).first<{ id: number }>();
-    if (!prov) {
-      prov = await d1.prepare("SELECT id FROM providers WHERE country_id=? LIMIT 1").bind(zmbId).first<{ id: number }>();
-    }
-    let dest = await d1.prepare("SELECT id FROM destinations WHERE slug=?").bind(l[2]).first<{ id: number }>();
-    if (!dest) {
-      dest = await d1.prepare("SELECT id FROM destinations WHERE country_id=? LIMIT 1").bind(zmbId).first<{ id: number }>();
-    }
-    let cat = await d1.prepare("SELECT id FROM categories WHERE slug=?").bind(l[3]).first<{ id: number }>();
-    if (!cat) {
-      cat = await d1.prepare("SELECT id FROM categories LIMIT 1").first<{ id: number }>();
-    }
-    if (prov && dest && cat) {
-      await d1.prepare("INSERT OR IGNORE INTO listings (slug, provider_id, destination_id, category_id, name, summary, image_url, photo_credit, deep_link_url, tag, currency, base_price, member_price, rating, review_count, country_id, publication_status, is_test_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', 0)")
-        .bind(l[0], prov.id, dest.id, cat.id, l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11], l[12], l[13], l[14], zmbId).run();
-      await d1.prepare("UPDATE listings SET provider_id=?, destination_id=?, category_id=?, name=?, summary=?, image_url=?, photo_credit=?, deep_link_url=?, tag=?, currency='ZMW', base_price=?, member_price=?, rating=?, review_count=?, country_id=?, publication_status='published', is_test_data=0 WHERE slug=?")
-        .bind(prov.id, dest.id, cat.id, l[4], l[5], l[6], l[7], l[8], l[9], l[11], l[12], l[13], l[14], zmbId, l[0]).run();
-    }
-  }
 
-  // 3. Backfill existing listings to guarantee proper country_id & currency
-  await d1.prepare("UPDATE provinces SET country_id = ? WHERE country_id IS NULL").bind(zmbId).run();
-  await d1.prepare("UPDATE destinations SET country_id = ? WHERE country_id IS NULL").bind(zmbId).run();
-  await d1.prepare("UPDATE listings SET country_id = ? WHERE country_id IS NULL").bind(zmbId).run();
-  await d1.prepare("UPDATE listings SET currency = 'ZMW' WHERE currency IS NULL OR currency = 'PGK'").run();
-  await d1.prepare("UPDATE listings SET publication_status = 'published' WHERE publication_status IS NULL OR publication_status != 'published'").run();
+    for (const p of pngProviderSeed) {
+      await d1.prepare("INSERT OR IGNORE INTO providers (slug, trading_name, source_name, source_url, phone, email, physical_address, website_url, whatsapp_number, country_id, is_test_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)")
+        .bind(p[0], p[1], p[2], p[3], p[4] || null, p[5] || null, p[6] || null, p[3], p[7] || null, pngId).run();
+      await d1.prepare("UPDATE providers SET trading_name=?, source_name=?, source_url=?, phone=?, email=?, physical_address=?, website_url=?, whatsapp_number=?, country_id=?, is_test_data=0 WHERE slug=?")
+        .bind(p[1], p[2], p[3], p[4] || null, p[5] || null, p[6] || null, p[3], p[7] || null, pngId, p[0]).run();
+    }
+
+    for (const l of pngListingSeed) {
+      let prov = await d1.prepare("SELECT id FROM providers WHERE slug=?").bind(l[1]).first<{ id: number }>();
+      if (!prov) {
+        prov = await d1.prepare("SELECT id FROM providers WHERE country_id=? LIMIT 1").bind(pngId).first<{ id: number }>();
+      }
+      let dest = await d1.prepare("SELECT id FROM destinations WHERE slug=?").bind(l[2]).first<{ id: number }>();
+      if (!dest) {
+        dest = await d1.prepare("SELECT id FROM destinations WHERE country_id=? LIMIT 1").bind(pngId).first<{ id: number }>();
+      }
+      let cat = await d1.prepare("SELECT id FROM categories WHERE slug=?").bind(l[3]).first<{ id: number }>();
+      if (!cat) {
+        cat = await d1.prepare("SELECT id FROM categories LIMIT 1").first<{ id: number }>();
+      }
+      if (prov && dest && cat) {
+        await d1.prepare("INSERT OR IGNORE INTO listings (slug, provider_id, destination_id, category_id, name, summary, image_url, photo_credit, deep_link_url, tag, currency, base_price, member_price, rating, review_count, country_id, publication_status, is_test_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'published', 0)")
+          .bind(l[0], prov.id, dest.id, cat.id, l[4], l[5], l[6], l[7], l[8], l[9], l[10], l[11], l[12], l[13], l[14], pngId).run();
+        await d1.prepare("UPDATE listings SET provider_id=?, destination_id=?, category_id=?, name=?, summary=?, image_url=?, photo_credit=?, deep_link_url=?, tag=?, currency='PGK', base_price=?, member_price=?, rating=?, review_count=?, country_id=?, publication_status='published', is_test_data=0 WHERE slug=?")
+          .bind(prov.id, dest.id, cat.id, l[4], l[5], l[6], l[7], l[8], l[9], l[11], l[12], l[13], l[14], pngId, l[0]).run();
+      }
+    }
+
+    // 3. Guarantee proper country_id & currency
+    await d1.prepare("UPDATE provinces SET country_id = ? WHERE country_id IS NULL").bind(pngId).run();
+    await d1.prepare("UPDATE destinations SET country_id = ? WHERE country_id IS NULL").bind(pngId).run();
+    await d1.prepare("UPDATE listings SET country_id = ? WHERE country_id IS NULL").bind(pngId).run();
+    await d1.prepare("UPDATE listings SET currency = 'PGK' WHERE currency IS NULL OR currency = 'ZMW'").run();
+    await d1.prepare("UPDATE listings SET publication_status = 'published' WHERE publication_status IS NULL OR publication_status != 'published'").run();
   })();
   return catalogueInitPromise;
 }
 
-export async function getCatalogue(query = "", category = "all", countryCode = "ZMB") {
+export async function getCatalogue(query = "", category = "all", countryCode = "PNG") {
   await ensureCatalogue();
   const d1 = env.DB;
   if (!d1) throw new Error("Database binding DB is unavailable");
 
-  const normalizedCountry = String(countryCode || "ZMB").toUpperCase();
-  const countryRow = await d1.prepare("SELECT id, code, name, currency_code, currency_symbol FROM countries WHERE UPPER(code)=?").bind(normalizedCountry).first<{ id: number; code: string; name: string; currency_code: string; currency_symbol: string }>();
+  const normalizedCountry = String(countryCode || "PNG").toUpperCase();
+  let countryRow = await d1.prepare("SELECT id, code, name, currency_code, currency_symbol FROM countries WHERE UPPER(code)=?").bind(normalizedCountry).first<{ id: number; code: string; name: string; currency_code: string; currency_symbol: string }>();
+  if (!countryRow) {
+    countryRow = await d1.prepare("SELECT id, code, name, currency_code, currency_symbol FROM countries WHERE UPPER(code)='PNG' OR UPPER(code)='PG'").first<{ id: number; code: string; name: string; currency_code: string; currency_symbol: string }>();
+  }
   const countryId = countryRow?.id ?? 1;
   const like = `%${query.trim()}%`;
 
   const result = await d1.prepare(`
-    SELECT l.id, l.slug, l.name, l.summary, l.image_url AS imageUrl, l.photo_credit AS photoCredit,
-      COALESCE(l.deep_link_url, p.website_url, p.source_url) AS deepLinkUrl, l.tag, l.currency,
-      l.base_price AS basePrice, l.member_price AS memberPrice, l.rating,
-      l.review_count AS reviewCount, l.verification_status AS verificationStatus,
-      l.is_test_data AS isTestData,
-      d.name AS destination, d.district AS district, d.latitude, d.longitude,
-      pv.name AS province, pv.code AS provinceCode, pv.region AS provinceRegion,
-      c.slug AS categorySlug, c.name AS categoryName,
-      p.trading_name AS providerName, p.source_url AS sourceUrl,
-      p.phone AS providerPhone, p.email AS providerEmail,
-      p.physical_address AS providerAddress,
-      COALESCE(p.website_url, p.source_url) AS providerWebsite,
-      p.whatsapp_number AS providerWhatsapp
+    SELECT l.id,
+      l.slug,
+      l.name,
+      l.summary,
+      l.image_url AS imageUrl,
+      l.tag,
+      l.currency,
+      l.base_price AS basePrice,
+      l.member_price AS memberPrice,
+      l.rating,
+      l.review_count AS reviewCount,
+      l.source_url AS sourceUrl,
+      l.deep_link_url AS deepLinkUrl,
+      d.name AS destination,
+      d.district AS district,
+      p.name AS province,
+      c.name AS categoryName,
+      c.slug AS categorySlug,
+      pr.trading_name AS providerName,
+      pr.phone AS providerPhone,
+      pr.email AS providerEmail,
+      pr.physical_address AS providerAddress,
+      pr.website_url AS providerWebsite,
+      pr.whatsapp_number AS providerWhatsapp
     FROM listings l
-    JOIN destinations d ON d.id=l.destination_id
-    JOIN provinces pv ON pv.id=d.province_id
-    JOIN categories c ON c.id=l.category_id
-    JOIN providers p ON p.id=l.provider_id
-    WHERE l.publication_status='published'
-      AND (l.country_id = ? OR l.country_id IS NULL OR ? = 0)
-      AND (?='' OR l.name LIKE ? OR l.summary LIKE ? OR l.tag LIKE ? OR d.name LIKE ? OR d.summary LIKE ? OR d.district LIKE ? OR pv.name LIKE ? OR pv.region LIKE ? OR c.name LIKE ? OR p.trading_name LIKE ? OR p.phone LIKE ? OR p.physical_address LIKE ?)
-      AND (?='all' OR c.slug=?)
-    ORDER BY l.rating DESC, l.name ASC
-  `).bind(countryId, countryId, query.trim(), like, like, like, like, like, like, like, like, like, like, like, like, category, category).all();
+    JOIN destinations d ON d.id = l.destination_id
+    JOIN provinces p ON p.id = d.province_id
+    JOIN categories c ON c.id = l.category_id
+    JOIN providers pr ON pr.id = l.provider_id
+    WHERE l.country_id = ?
+      AND l.publication_status = 'published'
+      AND (c.slug=? OR ? = 'all')
+      AND (
+        l.name LIKE ?
+        OR l.summary LIKE ?
+        OR d.name LIKE ?
+        OR p.name LIKE ?
+        OR pr.trading_name LIKE ?
+        OR l.tag LIKE ?
+      )
+      AND (l.is_test_data >= 0)
+    ORDER BY l.rating DESC, l.id ASC
+  `).bind(countryId, category, category, like, like, like, like, like, like).all<{
+    id: number;
+    slug: string;
+    name: string;
+    summary: string;
+    imageUrl: string;
+    tag: string;
+    currency: string;
+    basePrice: number;
+    memberPrice: number | null;
+    rating: number;
+    reviewCount: number;
+    sourceUrl: string | null;
+    deepLinkUrl: string | null;
+    destination: string;
+    district: string | null;
+    province: string;
+    categoryName: string;
+    categorySlug: string;
+    providerName: string;
+    providerPhone: string | null;
+    providerEmail: string | null;
+    providerAddress: string | null;
+    providerWebsite: string | null;
+    providerWhatsapp: string | null;
+  }>();
 
-  const cats = await d1.prepare("SELECT slug, name, icon, display_order AS displayOrder FROM categories WHERE is_active=1 ORDER BY display_order").all();
+  const categories = await d1.prepare("SELECT slug, name, icon FROM categories ORDER BY display_order").all<{ slug: string; name: string; icon: string }>();
 
   return {
     country: countryRow ? {
@@ -282,18 +302,11 @@ export async function getCatalogue(query = "", category = "all", countryCode = "
       name: countryRow.name,
       currencyCode: countryRow.currency_code,
       currencySymbol: countryRow.currency_symbol
-    } : {
-      id: 1,
-      code: "ZMB",
-      name: "Zambia",
-      currencyCode: "ZMW",
-      currencySymbol: "ZK"
-    },
-    categories: cats.results,
+    } : undefined,
+    categories: [{ slug: "all", name: "All", icon: "✦" }, ...categories.results],
     listings: result.results,
     meta: {
-      count: result.results.length,
-      seededTestData:true
+      count: result.results.length
     }
   };
 }

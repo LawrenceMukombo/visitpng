@@ -9,8 +9,8 @@ export interface AboutPageProps {
 export function AboutPage({
   onClose
 }: AboutPageProps) {
-  const brandName = "ZamRoam";
-  const legalOwner = "Lamton Investments Ltd";
+  const brandName = "VisitPNG";
+  const legalOwner = "VisitPNG Tourism Services Ltd";
 
   return (
     <div style={{
@@ -23,13 +23,13 @@ export function AboutPage({
       {/* Header Bar */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2.5rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <span style={{ fontSize: "2rem" }}>🇿🇲</span>
+          <span style={{ fontSize: "2rem" }}>🇵🇬</span>
           <div>
             <h1 style={{ margin: 0, fontSize: "1.8rem", fontWeight: "800", color: "#1B6960" }}>
               About {brandName}
             </h1>
             <p style={{ margin: 0, fontSize: "0.95rem", color: "#52796F" }}>
-              Roam Zambia. Experience More.
+              Discover Papua New Guinea · Land of a Million Journeys
             </p>
           </div>
         </div>
@@ -66,10 +66,10 @@ export function AboutPage({
           Our Mission & Tourism Vision
         </h2>
         <p style={{ fontSize: "1.05rem", color: "#333", marginBottom: "1.5rem" }}>
-          <strong>{brandName}</strong> is Zambia's dedicated digital tourism platform designed to help travellers discover, experience, and book the finest of Zambia while connecting verified local lodges, safari guides, and transport providers directly with global and domestic travelers.
+          <strong>{brandName}</strong> is Papua New Guinea&apos;s dedicated digital tourism platform designed to help travellers discover, experience, and book the finest of Papua New Guinea while connecting verified local lodges, trekking operators, dive masters, and cultural hosts directly with global and domestic travelers.
         </p>
         <p style={{ fontSize: "0.95rem", color: "#555" }}>
-          From the roaring thunder of Victoria Falls in Livingstone to world-renowned walking safaris in South Luangwa, canoe expeditions on the Lower Zambezi, and celebrated traditional ceremonies across all 10 provinces, {brandName} brings the authentic warmth and splendour of Zambia directly to your smartphone.
+          From the historic pilgrimage of the Kokoda Track in Central and Oro provinces, to alpine summits on Mount Wilhelm, world-class Coral Triangle scuba diving in Kimbe Bay, sacred Haus Tambaran spirit houses along the Sepik River, and legendary sing-sing cultural shows across all 22 provinces, {brandName} brings the authentic spirit and biodiversity of Papua New Guinea directly to your fingertips.
         </p>
       </div>
 
@@ -91,7 +91,7 @@ export function AboutPage({
             Authentic Discovery
           </h3>
           <p style={{ fontSize: "0.9rem", color: "#444", margin: 0, lineHeight: "1.5" }}>
-            Curated national parks, GPS trails, offline maps, and verified listings with zero fake reviews.
+            Curated 22 provinces, Kokoda Track GPS routes, Coral Triangle dive spots, and verified listings with zero fake reviews.
           </p>
         </div>
 
@@ -106,7 +106,7 @@ export function AboutPage({
             Member Privileges
           </h3>
           <p style={{ fontSize: "0.9rem", color: "#444", margin: 0, lineHeight: "1.5" }}>
-            The ZamRoam Pass unlocks exclusive rates and instant dynamic QR discounts across verified Zambian lodges and operators.
+            The VisitPNG Pass unlocks exclusive rates and instant dynamic QR discounts across verified PNG eco-lodges and tour operators.
           </p>
         </div>
 
@@ -121,7 +121,7 @@ export function AboutPage({
             Partner Empowerment
           </h3>
           <p style={{ fontSize: "0.9rem", color: "#444", margin: 0, lineHeight: "1.5" }}>
-            Empowering Zambian lodge owners, tour guides, and transport providers with direct digital bookings and performance analytics.
+            Empowering Papua New Guinean lodge owners, trekking guides, and transport providers with direct digital bookings and performance analytics.
           </p>
         </div>
       </div>
@@ -143,9 +143,9 @@ export function AboutPage({
           {brandName} is a commercial tourism technology platform owned and operated by <strong>{legalOwner}</strong>. All contractual agreements, partner subscriptions, payment processing, taxation compliance, and platform operations are administered directly under {legalOwner}.
         </p>
         <div style={{ fontSize: "0.85rem", color: "#a3cfc9", borderTop: "1px solid rgba(255,255,255,0.15)", paddingTop: "0.75rem", display: "flex", flexWrap: "wrap", gap: "0.75rem 1.5rem", alignItems: "center" }}>
-          <span>Headquarters: Plot 10444, Great East Road, Rhodes Park, Lusaka, Zambia</span>
-          <span>Phone: +260573506598</span>
-          <span>Email: <a href="mailto:info@zamroam.com" style={{ color: "#ffffff", textDecoration: "underline", fontWeight: "600" }}>info@zamroam.com</a></span>
+          <span>Headquarters: Champion Parade, Downtown Port Moresby, National Capital District, Papua New Guinea</span>
+          <span>Phone: +675 321 4188</span>
+          <span>Email: <a href="mailto:info@visitpng.com" style={{ color: "#ffffff", textDecoration: "underline", fontWeight: "600" }}>info@visitpng.com</a></span>
         </div>
       </div>
     </div>

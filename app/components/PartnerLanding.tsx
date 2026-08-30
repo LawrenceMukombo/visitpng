@@ -9,22 +9,22 @@ export interface PartnerLandingProps {
 }
 
 export function PartnerLanding({
-  currency = "ZMW",
+  currency = "PGK",
   onOpenRegister,
   onClose
 }: PartnerLandingProps) {
-  const brandName = "ZamRoam";
-  const partnerProgram = "ZamRoam Partners";
-  const verifiedBadge = "ZamRoam Verified";
-  const dealsName = "ZamRoam Deals";
-  const currencySymbol = "ZK";
+  const brandName = "VisitPNG";
+  const partnerProgram = "VisitPNG Partners";
+  const verifiedBadge = "VisitPNG Verified";
+  const dealsName = "VisitPNG Perks";
+  const currencySymbol = "K";
 
   const [campaignSlots] = useState({
     total: 100,
     allocated: 63,
     remaining: 37,
-    promoPrice: 1499,
-    regularPrice: 2999
+    promoPrice: 350,
+    regularPrice: 700
   });
 
   const tiers = [
@@ -43,7 +43,7 @@ export function PartnerLanding({
     },
     {
       name: "Verified Partner",
-      price: 899,
+      price: 220,
       period: "/ year",
       features: [
         `Official ${verifiedBadge} Trust Badge`,
@@ -56,14 +56,14 @@ export function PartnerLanding({
       highlight: true
     },
     {
-      name: "Premium Safari Partner",
-      price: 1899,
+      name: "Premium Operator Partner",
+      price: 480,
       period: "/ year",
       features: [
         "All Verified Partner Features",
         "Featured Hero Banner Placement",
         "Priority Search Ranking across Province",
-        "Commission Settlement Dashboard (5% + VAT)",
+        "Commission Settlement Dashboard (5% + GST)",
         "Social Media & Newsletter Spotlight"
       ],
       cta: "Join Premium",
@@ -82,13 +82,13 @@ export function PartnerLanding({
       {/* Header Bar */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-          <span style={{ fontSize: "2rem" }}>🇿🇲</span>
+          <span style={{ fontSize: "2rem" }}>🇵🇬</span>
           <div>
             <h1 style={{ margin: 0, fontSize: "1.8rem", fontWeight: "800", color: "#1B6960" }}>
               {partnerProgram}
             </h1>
             <p style={{ margin: 0, fontSize: "0.95rem", color: "#52796F" }}>
-              Grow Your Tourism Business with {brandName} & Lamton Investments Ltd.
+              Grow Your Tourism Business with {brandName} & VisitPNG Tourism Services Ltd.
             </p>
           </div>
         </div>
@@ -277,7 +277,7 @@ export function PartnerLanding({
           Commercial & Contracting Terms
         </h4>
         <p style={{ margin: 0 }}>
-          The {partnerProgram} ecosystem is operated by <strong>Lamton Investments Ltd</strong>. Subscribed providers agree to transparent commission processing (standard 5% platform commission + statutory VAT) only on verified completed member bookings, with full automated receipting and monthly settlement ledgers.
+          The {partnerProgram} ecosystem is operated by <strong>VisitPNG Tourism Services Ltd</strong>. Subscribed providers agree to transparent commission processing (standard 5% platform commission + statutory GST) only on verified completed member bookings, with full automated receipting and monthly settlement ledgers.
         </p>
       </div>
     </div>

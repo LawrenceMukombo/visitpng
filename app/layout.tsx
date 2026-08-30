@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import "./theme.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "ZamRoam | Roam Zambia — Experience More",
-  description: "Experience the majesty of Victoria Falls, world-class safaris in South Luangwa & Lower Zambezi, traditional ceremonies across 10 provinces, and verified Zambian hospitality.",
+  title: "VisitPNG — Land of a Million Journeys | Official Tourism Platform",
+  description: "Experience the historic Kokoda Track, Mount Wilhelm summits, Coral Triangle diving in Kimbe Bay, Goroka & Hagen Sing-Sings across 22 provinces, and verified Papua New Guinea hospitality.",
   manifest: "/manifest.json",
   icons: { icon: "/favicon.svg" }
 };
@@ -17,23 +18,23 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <meta name="theme-color" content="#0D2B27" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="apple-mobile-web-app-title" content="ZamRoam" />
+        <meta name="apple-mobile-web-app-title" content="VisitPNG" />
       </head>
       <body>
         {children}
-        <script
+        <Script
+          id="sw-register"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {
                 window.addEventListener('load', function() {
                   navigator.serviceWorker.register('/sw.js').then(function(reg) {
-                    // Automatically check for updates
                     reg.onupdatefound = function() {
                       var installingWorker = reg.installing;
                       if (installingWorker) {
                         installingWorker.onstatechange = function() {
                           if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            // New version available, take control
                             installingWorker.postMessage({ action: 'skipWaiting' });
                           }
                         };

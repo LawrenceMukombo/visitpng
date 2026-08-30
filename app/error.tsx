@@ -9,7 +9,7 @@ export default function ErrorBoundary({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error("ZamRoam runtime error caught:", error);
+    console.error("VisitPNG runtime error caught:", error);
   }, [error]);
 
   return (
@@ -33,18 +33,18 @@ export default function ErrorBoundary({
         textAlign: "center",
         boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)"
       }}>
-        <div style={{ fontSize: "42px", marginBottom: "16px" }}>🇿🇲</div>
+        <div style={{ fontSize: "42px", marginBottom: "16px" }}>🇵🇬</div>
         <h2 style={{ fontSize: "20px", fontWeight: 700, margin: "0 0 8px", color: "#ffffff" }}>
-          Welcome to ZamRoam
+          Welcome to VisitPNG
         </h2>
         <p style={{ fontSize: "14px", color: "#a3cfc9", lineHeight: 1.5, margin: "0 0 24px" }}>
-          Explore Zambia's national parks, safari lodges, and verified local tourism providers.
+          Explore Papua New Guinea&apos;s 22 provinces, Kokoda trekking expeditions, dive sanctuaries, and verified local tourism providers.
         </p>
         <button
           onClick={() => reset()}
           style={{
             width: "100%",
-            background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+            background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
             color: "#ffffff",
             border: "none",
             borderRadius: "10px",
@@ -52,10 +52,10 @@ export default function ErrorBoundary({
             fontSize: "14px",
             fontWeight: 700,
             cursor: "pointer",
-            boxShadow: "0 4px 12px rgba(16, 185, 129, 0.3)"
+            boxShadow: "0 4px 12px rgba(234, 88, 12, 0.3)"
           }}
         >
-          Explore Places
+          Explore Destinations
         </button>
       </div>
     </div>

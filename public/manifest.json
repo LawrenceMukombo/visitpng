@@ -1,7 +1,7 @@
 {
-  "name": "ZamRoam - Zambia Travel & Safaris",
-  "short_name": "ZamRoam",
-  "description": "Discover Zambia's national parks, safari lodges, traditional ceremonies, 116 districts, and verified local tourism providers.",
+  "name": "VisitPNG - Papua New Guinea Travel & Expeditions",
+  "short_name": "VisitPNG",
+  "description": "Discover Papua New Guinea's 22 provinces, Kokoda Track, Mount Wilhelm summits, Coral Triangle diving, and 800+ indigenous cultural festivals.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

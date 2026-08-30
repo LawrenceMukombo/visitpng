@@ -39,17 +39,16 @@ export default function CountrySelector({ currentCountry, onCountryChange }: Cou
   }, [isOpen]);
 
   const current = countries.find(c => c.code.toUpperCase() === currentCountry.toUpperCase()) || {
-    code: "ZMB",
-    name: "Zambia (ZamRoam)",
-    currencyCode: "ZMW"
+    code: "PNG",
+    name: "Papua New Guinea (VisitPNG)",
+    currencyCode: "PGK"
   };
 
   const getCountryFlag = (code: string) => {
+    if (code.toUpperCase() === "PNG") return "🇵🇬";
     if (code.toUpperCase() === "ZMB") return "🇿🇲";
-    return "🇿🇲";
+    return "🇵🇬";
   };
-
-  const isZambia = true;
 
   return (
     <div ref={containerRef} className="countrySelectorDropdown">
@@ -58,47 +57,50 @@ export default function CountrySelector({ currentCountry, onCountryChange }: Cou
         className="countryTriggerBtn"
         onClick={() => setIsOpen(!isOpen)}
         aria-label="Switch destination country"
-        aria-expanded={isOpen}
       >
-        <span style={{ fontSize: "12px", lineHeight: 1 }}>{getCountryFlag(current.code)}</span>
-        <span>Zambia</span>
-        <span style={{ fontSize: "7px", opacity: 0.8, marginLeft: "1px" }}>▼</span>
+        <span className="flagIcon">{getCountryFlag(current.code)}</span>
+        <span className="countryName">{current.name.split(" ")[0]}</span>
+        <span className="dropdownArrow">▾</span>
       </button>
 
       {isOpen && (
-        <div className="countryMenuCard">
-          <div style={{ padding: "4px 8px 6px", fontSize: "9px", color: "var(--text-secondary)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.5px", borderBottom: "1px solid var(--border-default)", marginBottom: "3px" }}>
-            Select Tourism Portal
+        <div className="countryMenu">
+          <div className="menuHeader">
+            <small>Active Destination Hub</small>
           </div>
-          {(countries.length ? countries : [
-            { code: "ZMB", name: "Zambia (ZamRoam)", currencyCode: "ZMW" }
-          ]).map(c => {
-            const isSelected = c.code.toUpperCase() === currentCountry.toUpperCase();
-            return (
+          {countries.length > 0 ? (
+            countries.map(c => (
               <button
                 key={c.code}
                 type="button"
-                className={isSelected ? "selected" : ""}
+                className={`countryOption ${c.code.toUpperCase() === currentCountry.toUpperCase() ? "active" : ""}`}
                 onClick={() => {
                   onCountryChange(c.code);
                   setIsOpen(false);
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "15px" }}>{getCountryFlag(c.code)}</span>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: "11px", color: isSelected ? "var(--brand-deep-teal)" : "var(--text-primary)" }}>
-                      {c.code === "ZMB" ? "Zambia (ZamRoam)" : c.name}
-                    </div>
-                    <small style={{ color: "var(--text-secondary)", fontSize: "9px", display: "block" }}>
-                      {c.currencyCode} Currency
-                    </small>
-                  </div>
+                <span className="flagIcon">{getCountryFlag(c.code)}</span>
+                <div className="optionText">
+                  <strong>{c.name}</strong>
+                  <small>{c.currencyCode} · Official Tourism Hub</small>
                 </div>
-                {isSelected && <span style={{ color: "var(--brand-deep-teal)", fontWeight: 800, fontSize: "12px" }}>✓</span>}
+                {c.code.toUpperCase() === currentCountry.toUpperCase() && <span className="checkMark">✓</span>}
               </button>
-            );
-          })}
+            ))
+          ) : (
+            <button
+              type="button"
+              className="countryOption active"
+              onClick={() => setIsOpen(false)}
+            >
+              <span className="flagIcon">🇵🇬</span>
+              <div className="optionText">
+                <strong>Papua New Guinea</strong>
+                <small>PGK · VisitPNG Official Hub</small>
+              </div>
+              <span className="checkMark">✓</span>
+            </button>
+          )}
         </div>
       )}
     </div>

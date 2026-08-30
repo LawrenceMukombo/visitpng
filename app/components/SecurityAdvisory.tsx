@@ -2,19 +2,19 @@
 
 import React, { useState } from "react";
 import {
-  ZAMBIA_EMERGENCY_CONTACTS,
-  ZAMBIA_REGIONAL_ADVISORIES,
-  ZAMBIA_SAFETY_GUIDELINES
+  PNG_EMERGENCY_CONTACTS,
+  PNG_REGIONAL_ADVISORIES,
+  PNG_SAFETY_GUIDELINES
 } from "@/db/securityAdvisory";
 
-export function SecurityAdvisory({ countryCode = "ZMB" }: { countryCode?: string } = {}) {
+export function SecurityAdvisory({ countryCode = "PNG" }: { countryCode?: string } = {}) {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [copiedPhone, setCopiedPhone] = useState<string | null>(null);
 
-  const contacts = ZAMBIA_EMERGENCY_CONTACTS;
-  const advisories = ZAMBIA_REGIONAL_ADVISORIES;
-  const guidelines = ZAMBIA_SAFETY_GUIDELINES;
+  const contacts = PNG_EMERGENCY_CONTACTS;
+  const advisories = PNG_REGIONAL_ADVISORIES;
+  const guidelines = PNG_SAFETY_GUIDELINES;
 
   const filteredAdvisories =
     selectedRegion === "all"
@@ -24,7 +24,7 @@ export function SecurityAdvisory({ countryCode = "ZMB" }: { countryCode?: string
   const filteredContacts =
     selectedCategory === "all"
       ? contacts
-      : contacts.filter((c) => c.category === selectedCategory);
+      : contacts.filter((c) => c.category.toLowerCase() === selectedCategory.toLowerCase());
 
   const handleCopy = (phone: string) => {
     navigator.clipboard.writeText(phone);
@@ -32,169 +32,260 @@ export function SecurityAdvisory({ countryCode = "ZMB" }: { countryCode?: string
     setTimeout(() => setCopiedPhone(null), 2500);
   };
 
-  const primaryAmbulance = { label: "🚑 National Ambulance Service", phone: "991" };
-  const primaryPolice = { label: "🚓 Zambia Police Emergency", phone: "999" };
-  const primaryMedevac = { label: "🏥 SES Zambia Medevac", phone: "+260962740300", display: "+260 962 740300" };
-  const primaryTourism = { label: "🌴 Zambia Tourism Agency (ZTA)", phone: "+260211229087", display: "+260 211 229087" };
+  const quickDials = [
+    { label: "St John Ambulance", sub: "National Paramedic", phone: "111", icon: "🚑", bg: "linear-gradient(135deg, #DC2626 0%, #991B1B 100%)", border: "#EF4444" },
+    { label: "RPNGC Police", sub: "National Emergency", phone: "112", icon: "🚓", bg: "linear-gradient(135deg, #2563EB 0%, #1E40AF 100%)", border: "#3B82F6" },
+    { label: "PIH Trauma Center", sub: "24/7 Medevac Hospital", phone: "+675 7998 8000", rawPhone: "+67579988000", icon: "🏥", bg: "linear-gradient(135deg, #0D9488 0%, #115E59 100%)", border: "#14B8A6" },
+    { label: "PNGTPA Tourist Desk", sub: "Official Visitor Link", phone: "+675 321 4188", rawPhone: "+6753214188", icon: "🌴", bg: "linear-gradient(135deg, #059669 0%, #065F46 100%)", border: "#10B981" }
+  ];
 
   return (
-    <section className="securityAdvisorySection">
-      {/* Hero Header */}
-      <div className="securityHero">
-        <div className="securityBadgeRow">
-          <span className="securityStatusPill">🛡️ Zambia SafeTravel Advisory Matrix</span>
-          <span className="lastUpdatedBadge">Verified August 2026</span>
+    <section
+      style={{
+        background: "linear-gradient(180deg, #09211C 0%, #051613 100%)",
+        borderRadius: "20px",
+        padding: "32px 24px",
+        color: "#FFFFFF",
+        border: "1px solid rgba(234, 88, 12, 0.25)",
+        boxShadow: "0 20px 50px rgba(0,0,0,0.4)",
+        maxWidth: "100%",
+        overflowX: "hidden"
+      }}
+    >
+      {/* Hero Header Banner */}
+      <div style={{ marginBottom: "28px", borderBottom: "1px solid rgba(255,255,255,0.1)", paddingBottom: "22px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px", flexWrap: "wrap" }}>
+          <span
+            style={{
+              background: "#EA580C",
+              color: "#FFFFFF",
+              padding: "4px 12px",
+              borderRadius: "6px",
+              fontSize: "0.72rem",
+              fontWeight: 800,
+              letterSpacing: "0.08em",
+              textTransform: "uppercase"
+            }}
+          >
+            🛡️ SafeTravel & Wantok Advisory Matrix ({countryCode})
+          </span>
+          <span style={{ color: "#34D399", fontSize: "0.76rem", fontWeight: 700 }}>
+            ✓ Verified August 2026 · Official Tourism Security Posture
+          </span>
         </div>
-        <h2>Travel With Confidence in Zambia</h2>
-        <p>
-          Zambia is renowned as one of Africa&apos;s most peaceful, welcoming, and secure safari destinations. Professional guiding standards, armed wildlife scouts, and well-maintained tourism infrastructure ensure a safe, world-class journey.
+        <h2 style={{ margin: "0 0 8px 0", fontSize: "1.85rem", fontWeight: 900, color: "#FFFFFF", letterSpacing: "-0.02em" }}>
+          Travel With Confidence Across Papua New Guinea
+        </h2>
+        <p style={{ margin: 0, fontSize: "0.92rem", color: "#CBD5E1", maxWidth: "850px", lineHeight: 1.55 }}>
+          Papua New Guinea offers extraordinary cultural warmth, ancient traditions, and breathtaking landscapes. Following Wantok community protocols, trekking with accredited operators, and utilizing licensed logistics guarantees an unforgettable, secure expedition across all 22 provinces.
         </p>
       </div>
 
-      {/* Emergency Quick Dial Bar */}
-      <div className="emergencyQuickDialBar">
-        <div className="quickDialItem emergencyRed">
-          <div className="quickDialInfo">
-            <span className="quickDialLabel">{primaryAmbulance.label}</span>
-            <strong>{primaryAmbulance.phone}</strong>
-          </div>
-          <a href={`tel:${primaryAmbulance.phone}`} className="quickCallBtn">📞 Call {primaryAmbulance.phone}</a>
+      {/* Emergency Quick Dial Tiles */}
+      <div style={{ marginBottom: "32px" }}>
+        <div style={{ fontSize: "0.74rem", fontWeight: 800, color: "#FDBA74", textTransform: "uppercase", marginBottom: "10px", letterSpacing: "0.06em" }}>
+          24/7 National Emergency & Rapid Dispatch Hotline
         </div>
-
-        <div className="quickDialItem emergencyBlue">
-          <div className="quickDialInfo">
-            <span className="quickDialLabel">{primaryPolice.label}</span>
-            <strong>{primaryPolice.phone}</strong>
-          </div>
-          <a href={`tel:${primaryPolice.phone}`} className="quickCallBtn">📞 Call {primaryPolice.phone}</a>
-        </div>
-
-        <div className="quickDialItem emergencyTeal">
-          <div className="quickDialInfo">
-            <span className="quickDialLabel">{primaryMedevac.label}</span>
-            <strong>{primaryMedevac.display}</strong>
-          </div>
-          <a href={`tel:${primaryMedevac.phone}`} className="quickCallBtn">📞 Call Medevac</a>
-        </div>
-
-        <div className="quickDialItem emergencyGold">
-          <div className="quickDialInfo">
-            <span className="quickDialLabel">{primaryTourism.label}</span>
-            <strong>{primaryTourism.display}</strong>
-          </div>
-          <a href={`tel:${primaryTourism.phone}`} className="quickCallBtn">📞 Tourist Help</a>
-        </div>
-      </div>
-
-      {/* Regional Advisories Breakdown */}
-      <div className="advisorySectionBlock">
-        <div className="blockHeader">
-          <h3>🗺️ Zambia Regional Safety Assessments</h3>
-          <p>Select a region to view specific security tips, transport guidelines, and village protocols.</p>
-        </div>
-
-        {/* Region Filter Chips */}
-        <div className="regionFilterPills">
-          <button
-            className={selectedRegion === "all" ? "active" : ""}
-            onClick={() => setSelectedRegion("all")}
-          >
-            All Regions ({advisories.length})
-          </button>
-          {advisories.map((reg) => (
-            <button
-              key={reg.regionId}
-              className={selectedRegion === reg.regionId ? "active" : ""}
-              onClick={() => setSelectedRegion(reg.regionId)}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 220px), 1fr))", gap: "12px" }}>
+          {quickDials.map((qd, i) => (
+            <div
+              key={i}
+              style={{
+                background: "rgba(15, 48, 42, 0.7)",
+                borderRadius: "14px",
+                border: `1px solid ${qd.border}44`,
+                padding: "16px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "10px",
+                boxShadow: "0 8px 20px rgba(0,0,0,0.25)"
+              }}
             >
-              {reg.regionName}
-            </button>
-          ))}
-        </div>
-
-        {/* Advisory Cards Grid */}
-        <div className="regionalCardsGrid">
-          {filteredAdvisories.map((reg) => (
-            <div key={reg.regionId} className="regionalAdvisoryCard">
-              <div className="cardTopRow">
-                <h4>{reg.regionName}</h4>
-                <span
-                  className={`advisoryLevelTag ${
-                    reg.advisoryLevel === "exercise_normal_caution"
-                      ? "levelNormal"
-                      : "levelCaution"
-                  }`}
-                >
-                  {reg.advisoryLevel === "exercise_normal_caution"
-                    ? "🟢 Normal Caution"
-                    : "🟡 High Caution"}
-                </span>
-              </div>
-
-              <div className="provincesCovered">
-                <strong>Provinces: </strong>
-                <span>{reg.provinces.join(" • ")}</span>
-              </div>
-
-              <p className="regSummary">{reg.summary}</p>
-
-              <div className="keyTipsBox">
-                <strong>Essential Safety Practices:</strong>
-                <ul>
-                  {reg.keySafetyTips.map((tip, idx) => (
-                    <li key={idx}>{tip}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="regLogisticsMeta">
-                <div className="metaRow">
-                  <span className="metaLabel">Recommended Transport:</span>
-                  <span className="metaVal">{reg.recommendedTransport}</span>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "2px" }}>
+                  <span style={{ fontSize: "1.1rem" }}>{qd.icon}</span>
+                  <strong style={{ fontSize: "0.85rem", color: "#FFFFFF", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {qd.label}
+                  </strong>
                 </div>
-                <div className="metaRow">
-                  <span className="metaLabel">Night Travel Advised:</span>
-                  <span className={`metaVal ${reg.nightTravelAdvised ? "ok" : "warn"}`}>
-                    {reg.nightTravelAdvised ? "✅ Daylight & Evening Resorts" : "⚠️ Daylight Only"}
-                  </span>
-                </div>
-                <div className="metaRow">
-                  <span className="metaLabel">Local Guide Recommendation:</span>
-                  <span className="metaVal">
-                    {reg.localGuideRequired
-                      ? "🤝 Certified Local Guide Strongly Recommended"
-                      : "ℹ️ Optional for Resort/Island Tours"}
-                  </span>
+                <div style={{ fontSize: "0.72rem", color: "#94A3B8" }}>{qd.sub}</div>
+                <div style={{ fontSize: "1.05rem", fontWeight: 900, color: "#FDBA74", marginTop: "4px" }}>
+                  {qd.phone}
                 </div>
               </div>
+
+              <a
+                href={`tel:${qd.rawPhone || qd.phone}`}
+                style={{
+                  background: qd.bg,
+                  color: "#FFFFFF",
+                  padding: "10px 14px",
+                  borderRadius: "8px",
+                  textDecoration: "none",
+                  fontSize: "0.78rem",
+                  fontWeight: 800,
+                  whiteSpace: "nowrap",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
+                }}
+              >
+                📞 Call
+              </a>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Practical Travel Safety Guidelines */}
-      <div className="advisorySectionBlock">
-        <div className="blockHeader">
-          <h3>🧭 Golden Rules for Zambia Safari Travelers</h3>
-          <p>
-            Practical advice for unforgettable game drives, walking safaris, and city exploration.
-          </p>
+      {/* Regional Safety Matrix Section */}
+      <div style={{ marginBottom: "36px" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "14px", marginBottom: "18px" }}>
+          <div>
+            <h3 style={{ margin: "0 0 4px 0", fontSize: "1.4rem", fontWeight: 900, color: "#FFFFFF" }}>
+              Regional Safety & Travel Advisories
+            </h3>
+            <p style={{ margin: 0, fontSize: "0.85rem", color: "#94A3B8" }}>
+              Real-time security posture and travel guidance across PNG&apos;s 4 geographic regions.
+            </p>
+          </div>
+
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            {[
+              { id: "all", label: "All Regions" },
+              { id: "southern", label: "Southern (Papua)" },
+              { id: "highlands", label: "Highlands" },
+              { id: "islands", label: "Islands" },
+              { id: "momase", label: "Momase (Sepik)" }
+            ].map(r => {
+              const isActive = selectedRegion === r.id;
+              return (
+                <button
+                  key={r.id}
+                  onClick={() => setSelectedRegion(r.id)}
+                  style={{
+                    padding: "6px 14px",
+                    borderRadius: "20px",
+                    border: "1px solid",
+                    borderColor: isActive ? "#34D399" : "rgba(255,255,255,0.15)",
+                    background: isActive ? "rgba(52, 211, 153, 0.2)" : "rgba(0,0,0,0.25)",
+                    color: isActive ? "#6EE7B7" : "#CBD5E1",
+                    fontSize: "0.76rem",
+                    fontWeight: 700,
+                    cursor: "pointer"
+                  }}
+                >
+                  {r.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="guidelinesGrid">
-          {guidelines.map((guide) => (
-            <div key={guide.id} className="safetyGuideCard">
-              <div className="guideHeader">
-                <span className="guideIcon">{guide.icon}</span>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 360px), 1fr))", gap: "20px" }}>
+          {filteredAdvisories.map((adv) => {
+            const isNormal = adv.advisoryLevel === "exercise_normal_caution";
+            return (
+              <div
+                key={adv.regionId}
+                style={{
+                  background: "rgba(15, 48, 42, 0.75)",
+                  borderRadius: "16px",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  padding: "22px",
+                  boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "14px"
+                }}
+              >
                 <div>
-                  <h4>{guide.title}</h4>
-                  <span className="guideCatTag">{guide.category}</span>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "10px", marginBottom: "6px" }}>
+                    <span style={{ fontSize: "0.72rem", color: "#94A3B8", fontWeight: 700 }}>
+                      📍 {adv.provinces.join(", ")}
+                    </span>
+                    <span
+                      style={{
+                        padding: "3px 10px",
+                        borderRadius: "6px",
+                        fontSize: "0.68rem",
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        whiteSpace: "nowrap",
+                        background: isNormal ? "rgba(16,185,129,0.2)" : "rgba(234,88,12,0.2)",
+                        border: `1px solid ${isNormal ? "#10B981" : "#EA580C"}`,
+                        color: isNormal ? "#6EE7B7" : "#FDBA74"
+                      }}
+                    >
+                      {adv.advisoryLevel.replaceAll("_", " ").toUpperCase()}
+                    </span>
+                  </div>
+
+                  <h4 style={{ margin: "4px 0 0 0", fontSize: "1.25rem", fontWeight: 800, color: "#FFFFFF" }}>
+                    {adv.regionName}
+                  </h4>
+                </div>
+
+                <p style={{ margin: 0, fontSize: "0.85rem", color: "#CBD5E1", lineHeight: 1.5 }}>
+                  {adv.summary}
+                </p>
+
+                <div style={{ background: "rgba(0,0,0,0.25)", padding: "12px", borderRadius: "10px", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <strong style={{ fontSize: "0.72rem", color: "#34D399", textTransform: "uppercase", display: "block", marginBottom: "4px" }}>
+                    🚗 Recommended Transport:
+                  </strong>
+                  <p style={{ margin: 0, fontSize: "0.8rem", color: "#E2E8F0", lineHeight: 1.45 }}>
+                    {adv.recommendedTransport}
+                  </p>
+                </div>
+
+                <div style={{ background: "rgba(0,0,0,0.2)", padding: "12px", borderRadius: "10px" }}>
+                  <strong style={{ fontSize: "0.72rem", color: "#FDBA74", textTransform: "uppercase", display: "block", marginBottom: "6px" }}>
+                    🛡️ Key Safety & Community Protocols:
+                  </strong>
+                  <ul style={{ margin: 0, paddingLeft: "16px", fontSize: "0.76rem", color: "#CBD5E1", display: "flex", flexDirection: "column", gap: "4px" }}>
+                    {adv.keySafetyTips.map((tip, i) => (
+                      <li key={i}>{tip}</li>
+                    ))}
+                  </ul>
                 </div>
               </div>
-              <p className="guideSummary">{guide.summary}</p>
-              <ul className="guideProtocols">
-                {guide.protocols.map((p, i) => (
-                  <li key={i}>{p}</li>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Wantok Protocols & Cultural Guidelines Grid */}
+      <div style={{ marginBottom: "36px" }}>
+        <h3 style={{ margin: "0 0 6px 0", fontSize: "1.4rem", fontWeight: 900, color: "#FFFFFF" }}>
+          Essential Papua New Guinea Safety & Cultural Etiquette
+        </h3>
+        <p style={{ margin: "0 0 18px 0", fontSize: "0.85rem", color: "#94A3B8" }}>
+          Local customary knowledge (Kastom), trekking precautions, and health guidelines for traveling respectfully.
+        </p>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 260px), 1fr))", gap: "18px" }}>
+          {guidelines.map((g) => (
+            <div
+              key={g.id}
+              style={{
+                background: "rgba(15, 48, 42, 0.65)",
+                borderRadius: "16px",
+                border: "1px solid rgba(255,255,255,0.1)",
+                padding: "20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "10px"
+              }}
+            >
+              <div style={{ fontSize: "2rem" }}>{g.icon}</div>
+              <h4 style={{ margin: 0, fontSize: "1.1rem", fontWeight: 800, color: "#FFFFFF" }}>
+                {g.title}
+              </h4>
+              <p style={{ margin: 0, fontSize: "0.8rem", color: "#FDBA74", lineHeight: 1.45, fontWeight: 600 }}>
+                {g.summary}
+              </p>
+              <ul style={{ margin: "6px 0 0 0", paddingLeft: "16px", fontSize: "0.75rem", color: "#CBD5E1", display: "flex", flexDirection: "column", gap: "5px" }}>
+                {g.protocols.map((tip: string, i: number) => (
+                  <li key={i}>{tip}</li>
                 ))}
               </ul>
             </div>
@@ -202,71 +293,120 @@ export function SecurityAdvisory({ countryCode = "ZMB" }: { countryCode?: string
         </div>
       </div>
 
-      {/* Full Emergency Contact Directory */}
-      <div className="advisorySectionBlock emergencyDirectoryBlock">
-        <div className="blockHeader">
-          <h3>📞 National Emergency & Consular Directory</h3>
-          <p>Keep these numbers handy or copy them to your device before departing.</p>
+      {/* Emergency & Medical Directory */}
+      <div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "14px", marginBottom: "18px" }}>
+          <div>
+            <h3 style={{ margin: "0 0 4px 0", fontSize: "1.4rem", fontWeight: 900, color: "#FFFFFF" }}>
+              Emergency, Medevac & Tourism Directory
+            </h3>
+            <p style={{ margin: 0, fontSize: "0.85rem", color: "#94A3B8" }}>
+              Verified direct dispatch contact numbers for accredited trauma hospitals, police commands, air rescue, and tourism authorities.
+            </p>
+          </div>
+
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            {[
+              { id: "all", label: "All Contacts" },
+              { id: "medical", label: "Hospitals & Medevac" },
+              { id: "police", label: "Police & Security" },
+              { id: "rescue", label: "Air Rescue" },
+              { id: "tourism", label: "Tourism Authorities" }
+            ].map(c => {
+              const isActive = selectedCategory === c.id;
+              return (
+                <button
+                  key={c.id}
+                  onClick={() => setSelectedCategory(c.id)}
+                  style={{
+                    padding: "6px 14px",
+                    borderRadius: "20px",
+                    border: "1px solid",
+                    borderColor: isActive ? "#EA580C" : "rgba(255,255,255,0.15)",
+                    background: isActive ? "rgba(234, 88, 12, 0.25)" : "rgba(0,0,0,0.25)",
+                    color: isActive ? "#FDBA74" : "#CBD5E1",
+                    fontSize: "0.76rem",
+                    fontWeight: 700,
+                    cursor: "pointer"
+                  }}
+                >
+                  {c.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        <div className="contactCategoryTabs">
-          <button
-            className={selectedCategory === "all" ? "active" : ""}
-            onClick={() => setSelectedCategory("all")}
-          >
-            All Contacts
-          </button>
-          <button
-            className={selectedCategory === "medical" ? "active" : ""}
-            onClick={() => setSelectedCategory("medical")}
-          >
-            🏥 Medical & Medevac
-          </button>
-          <button
-            className={selectedCategory === "police" ? "active" : ""}
-            onClick={() => setSelectedCategory("police")}
-          >
-            🚓 Police & Security
-          </button>
-          <button
-            className={selectedCategory === "tourism" ? "active" : ""}
-            onClick={() => setSelectedCategory("tourism")}
-          >
-            🌴 Tourism Support
-          </button>
-          <button
-            className={selectedCategory === "rescue" ? "active" : ""}
-            onClick={() => setSelectedCategory("rescue")}
-          >
-            🚒 Parks & Rescue
-          </button>
-        </div>
-
-        <div className="contactsList">
-          {filteredContacts.map((contact, i) => (
-            <div key={i} className="contactRowCard">
-              <div className="contactDetails">
-                <div className="contactNameRow">
-                  <h4>{contact.name}</h4>
-                  <span className="contactCatPill">{contact.category}</span>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 300px), 1fr))", gap: "16px" }}>
+          {filteredContacts.map((c, i) => (
+            <div
+              key={i}
+              style={{
+                background: "rgba(15, 48, 42, 0.7)",
+                borderRadius: "14px",
+                border: "1px solid rgba(255,255,255,0.1)",
+                padding: "18px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                gap: "12px"
+              }}
+            >
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                  <span style={{ background: "rgba(234,88,12,0.2)", border: "1px solid rgba(234,88,12,0.3)", color: "#FED7AA", padding: "2px 8px", borderRadius: "4px", fontSize: "0.68rem", fontWeight: 800, textTransform: "uppercase" }}>
+                    {c.category}
+                  </span>
+                  <span style={{ fontSize: "0.72rem", color: "#34D399", fontWeight: 700 }}>
+                    📍 {c.location}
+                  </span>
                 </div>
-                <p className="contactLoc">📍 {contact.location}</p>
-                <p className="contactNotes">{contact.notes}</p>
+
+                <h4 style={{ margin: "4px 0 6px 0", fontSize: "1.05rem", fontWeight: 800, color: "#FFFFFF" }}>
+                  {c.name}
+                </h4>
+                <p style={{ margin: 0, fontSize: "0.78rem", color: "#CBD5E1", lineHeight: 1.45 }}>
+                  {c.notes}
+                </p>
               </div>
 
-              <div className="contactActions">
-                <a href={`tel:${contact.phone}`} className="callLink">
-                  📞 {contact.phone}
-                </a>
-                <button
-                  className="copyBtn"
-                  onClick={() => handleCopy(contact.phone)}
-                >
-                  {copiedPhone === contact.phone ? "✓ Copied" : "📋 Copy"}
-                </button>
-                {contact.altPhone && (
-                  <small className="altPhone">Alt: {contact.altPhone}</small>
-                )}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "12px" }}>
+                <strong style={{ fontSize: "1rem", color: "#FDBA74", fontFamily: "monospace" }}>
+                  {c.phone}
+                </strong>
+
+                <div style={{ display: "flex", gap: "6px" }}>
+                  <button
+                    type="button"
+                    onClick={() => handleCopy(c.phone)}
+                    style={{
+                      padding: "6px 12px",
+                      borderRadius: "6px",
+                      background: copiedPhone === c.phone ? "#059669" : "rgba(255,255,255,0.1)",
+                      border: "1px solid rgba(255,255,255,0.2)",
+                      color: "#FFFFFF",
+                      fontSize: "0.74rem",
+                      fontWeight: 700,
+                      cursor: "pointer"
+                    }}
+                  >
+                    {copiedPhone === c.phone ? "✓ Copied" : "📋 Copy"}
+                  </button>
+                  <a
+                    href={`tel:${c.phone}`}
+                    style={{
+                      padding: "6px 14px",
+                      borderRadius: "6px",
+                      background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
+                      color: "#FFFFFF",
+                      textDecoration: "none",
+                      fontSize: "0.74rem",
+                      fontWeight: 800
+                    }}
+                  >
+                    📞 Call
+                  </a>
+                </div>
               </div>
             </div>
           ))}

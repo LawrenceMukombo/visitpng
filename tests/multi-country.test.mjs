@@ -30,10 +30,9 @@ test("Phase 1: Countries & Country Settings Database Schema & Types", async () =
   assert.match(countriesSource, /tablesToScope/);
 });
 
-test("Phase 1: Multi-Country Geography - Papua New Guinea (22) & Zambia (10)", async () => {
-  const [pngGeo, zambiaGeo, unifiedGeo] = await Promise.all([
+test("Phase 1: Papua New Guinea Geography (22 Provinces across 4 Regions)", async () => {
+  const [pngGeo, unifiedGeo] = await Promise.all([
     read("db/pngGeography.ts"),
-    read("db/zambiaGeography.ts"),
     read("db/geography.ts")
   ]);
 
@@ -42,15 +41,9 @@ test("Phase 1: Multi-Country Geography - Papua New Guinea (22) & Zambia (10)", a
   assert.match(pngGeo, /National Capital District/);
   assert.match(pngGeo, /Eastern Highlands/);
   assert.match(pngGeo, /Milne Bay Province/);
-
-  // Zambia Provinces (10 provinces)
-  assert.match(zambiaGeo, /ZAMBIA_PROVINCES/);
-  assert.match(zambiaGeo, /Southern Province/);
-  assert.match(zambiaGeo, /Lusaka Province/);
-  assert.match(zambiaGeo, /Copperbelt Province/);
-  assert.match(zambiaGeo, /Eastern Province/);
-  assert.match(zambiaGeo, /Victoria Falls/);
-  assert.match(zambiaGeo, /South Luangwa/);
+  assert.match(pngGeo, /Western Highlands/);
+  assert.match(pngGeo, /East New Britain/);
+  assert.match(pngGeo, /West New Britain/);
 
   // Unified Geography Engine
   assert.match(unifiedGeo, /ensureCountryGeography/);
@@ -64,11 +57,11 @@ test("Phase 1: Country-Scoped Catalogue Engine & Tenant Isolation", async () => 
     read("app/api/catalogue/route.ts")
   ]);
 
-  // Zambia Seed Listings
-  assert.match(catalogueSource, /zambiaListingSeed/);
-  assert.match(catalogueSource, /victoria-falls-livingstone/);
-  assert.match(catalogueSource, /south-luangwa-mfuwe/);
-  assert.match(catalogueSource, /The Royal Livingstone/);
+  // PNG Seed Listings
+  assert.match(catalogueSource, /pngListingSeed/);
+  assert.match(catalogueSource, /kokoda-track-8day-expedition/);
+  assert.match(catalogueSource, /walindi-plantation-resort/);
+  assert.match(catalogueSource, /mount-wilhelm-summit-climb/);
 
   // Country scoped query parameter
   assert.match(catalogueApi, /url\.searchParams\.get\("country"\)/);
@@ -94,8 +87,8 @@ test("Phase 1: Frontend Dynamic Country Switching & Header Brand", async () => {
   assert.match(selectorUi, /countrySelectorDropdown/);
   assert.match(selectorUi, /currentCountry/);
   assert.match(selectorUi, /onCountryChange/);
-  assert.match(selectorUi, /Zambia/);
-  assert.match(selectorUi, /ZamRoam/);
+  assert.match(selectorUi, /Papua New Guinea/);
+  assert.match(selectorUi, /VisitPNG/);
 });
 
 test("Phase 1: Country-Scoped Administrator Authorization & Tenant Security", async () => {
@@ -112,3 +105,21 @@ test("Phase 1: Country-Scoped Administrator Authorization & Tenant Security", as
   assert.match(accountsSource, /country_administrator/);
   assert.match(accountsSource, /super_administrator/);
 });
+
+test("Phase 1: GIS Shapefiles Engine (Country, 22 Provinces & Districts)", async () => {
+  const [shapefilesSource, boundaryApi] = await Promise.all([
+    read("db/pngShapefiles.ts"),
+    read("app/api/gis/boundaries/route.ts")
+  ]);
+
+  assert.match(shapefilesSource, /PNG_PROVINCES_GEOJSON/);
+  assert.match(shapefilesSource, /PNG_DISTRICTS_GEOJSON/);
+  assert.match(shapefilesSource, /projectLngLatToSvg/);
+  assert.match(shapefilesSource, /coordinatesToSvgPath/);
+  assert.match(shapefilesSource, /PNG_MAP_BOUNDS/);
+
+  assert.match(boundaryApi, /level === "adm0"/);
+  assert.match(boundaryApi, /level === "adm2"/);
+  assert.match(boundaryApi, /PNG_PROVINCES_GEOJSON/);
+});
+

@@ -44,7 +44,7 @@ interface SmartLocationCascadeProps {
 }
 
 export default function SmartLocationCascade({
-  countryCode = "ZMB",
+  countryCode = "PNG",
   destinations,
   provinces,
   selectedDestinationId = 0,
