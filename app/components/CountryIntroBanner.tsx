@@ -9,10 +9,30 @@ export function CountryIntroBanner({ countryCode = "PNG" }: { countryCode?: stri
     <div className="countryShowcaseBanner" style={{ borderLeft: "4px solid #EA580C" }}>
       {/* Intro Top Pill & Title */}
       <div className="showcaseHeader">
-        <span className="destinationPill" style={{ background: "#EA580C", color: "#fff" }}>
-          🇵🇬 Welcome to Papua New Guinea ({countryCode}) — Land of a Million Journeys
-        </span>
-        <h2>The Home of the Kokoda Track, Coral Triangle Diving & 800+ Living Cultures</h2>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", alignItems: "center", marginBottom: "12px", maxWidth: "100%" }}>
+          <span
+            className="destinationPill"
+            style={{
+              background: "#EA580C",
+              color: "#fff",
+              whiteSpace: "normal",
+              wordBreak: "break-word",
+              maxWidth: "100%",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              lineHeight: 1.4,
+              padding: "6px 12px",
+              borderRadius: "99px",
+              boxShadow: "0 2px 8px rgba(234, 88, 12, 0.25)"
+            }}
+          >
+            🇵🇬 Welcome to Papua New Guinea ({countryCode}) — Land of a Million Journeys
+          </span>
+        </div>
+        <h2 style={{ wordBreak: "break-word", overflowWrap: "break-word", lineHeight: 1.3 }}>
+          The Home of the Kokoda Track, Coral Triangle Diving & 800+ Living Cultures
+        </h2>
         <p className="showcaseLead">
           Positioned in the vibrant heart of the South Pacific, Papua New Guinea is one of Earth&apos;s last great frontiers.
           Home to the historic 96km Kokoda Track, alpine summits of Mount Wilhelm, world-class Coral Triangle scuba diving,
