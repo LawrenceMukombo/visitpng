@@ -408,10 +408,10 @@ export default function PngInteractiveMap({
 
   const handleProvinceClick = useCallback((props: ProvinceBoundaryProps) => {
     setSelectedProvince(props);
+    setSelectedDistrict(null);
     setCenter({ lat: props.centroid[1], lng: props.centroid[0] });
     setZoom(8);
-    if (onSelectProvince) onSelectProvince(props.code);
-  }, [onSelectProvince]);
+  }, []);
 
   const handleDistrictClick = useCallback((dist: DistrictBoundaryProps) => {
     setSelectedDistrict(dist);
@@ -423,8 +423,7 @@ export default function PngInteractiveMap({
     setActivePin(pin);
     setCenter({ lat: pin.lat, lng: pin.lng });
     setZoom(10);
-    if (onSelectDestination) onSelectDestination(pin.id);
-  }, [onSelectDestination]);
+  }, []);
 
   // Regional styling helpers
   const getRegionTheme = (region: PngRegion) => {
@@ -928,13 +927,35 @@ export default function PngInteractiveMap({
                   <span style={{ fontSize: "0.7rem", color: "#94A3B8", textTransform: "uppercase", fontWeight: 800, display: "block", marginBottom: "4px" }}>
                     Key Tourism Hotspots:
                   </span>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginBottom: "12px" }}>
                     {selectedProvince.keyHotspots.map((h, i) => (
                       <span key={i} style={{ background: "rgba(52, 211, 153, 0.15)", border: "1px solid rgba(52, 211, 153, 0.3)", color: "#6EE7B7", padding: "2px 8px", borderRadius: "4px", fontSize: "0.72rem", fontWeight: 700 }}>
                         {h}
                       </span>
                     ))}
                   </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (onSelectProvince) onSelectProvince(selectedProvince.code);
+                      else if (onSelectDestination) onSelectDestination(selectedProvince.name);
+                    }}
+                    style={{
+                      width: "100%",
+                      background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
+                      color: "#FFFFFF",
+                      border: "none",
+                      borderRadius: "8px",
+                      padding: "8px 16px",
+                      fontSize: "0.8rem",
+                      fontWeight: 800,
+                      cursor: "pointer",
+                      boxShadow: "0 4px 12px rgba(234, 88, 12, 0.4)"
+                    }}
+                  >
+                    Browse Stays & Tours in {selectedProvince.name} ➔
+                  </button>
                 </div>
               </div>
             ) : selectedDistrict ? (
@@ -948,9 +969,29 @@ export default function PngInteractiveMap({
                 <p style={{ margin: "0 0 10px 0", fontSize: "0.8rem", color: "#34D399" }}>
                   HQ: {selectedDistrict.headquarters} · {selectedDistrict.provinceName}
                 </p>
-                <div style={{ fontSize: "0.78rem", color: "#CBD5E1" }}>
+                <div style={{ fontSize: "0.78rem", color: "#CBD5E1", marginBottom: "12px" }}>
                   Primary Focus: <strong style={{ color: "#FDBA74", textTransform: "capitalize" }}>{selectedDistrict.category}</strong>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onSelectDestination) onSelectDestination(selectedDistrict.name);
+                  }}
+                  style={{
+                    width: "100%",
+                    background: "rgba(5, 150, 105, 0.85)",
+                    color: "#FFFFFF",
+                    border: "1px solid #10B981",
+                    borderRadius: "8px",
+                    padding: "8px 16px",
+                    fontSize: "0.8rem",
+                    fontWeight: 800,
+                    cursor: "pointer"
+                  }}
+                >
+                  Explore {selectedDistrict.name} Experiences ➔
+                </button>
               </div>
             ) : (
               <div>
