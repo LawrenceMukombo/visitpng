@@ -1,0 +1,35 @@
+zone_code,category,english,local_text,phonetic,syllables,literal_meaning,cultural_note
+tok_pisin,greetings,How are you? / Greetings,Yu stap gut?,yoo stahp goot,Yu stap gut,You stay good?,Standard friendly greeting across all 22 provinces.
+tok_pisin,greetings,Good morning,Moning / Moning tru,moh-ning troo,Mo-ning tru,Good morning truly,Standard morning greeting in Tok Pisin.
+tok_pisin,greetings,Good afternoon,Apinun / Apinun tru,ah-pee-noon troo,A-pi-noon tru,Good afternoon truly,Common daytime greeting.
+tok_pisin,greetings,Good night / Sleep well,Gutnait / Slip gut,goot-night / sleep goot,Gut-nait,Good night,Used when parting in the evening.
+tok_pisin,greetings,I am fine / Everything is peaceful,Mi stap gut tru,mee stahp goot troo,Mi stap gut tru,I stay very good,Standard polite response.
+tok_pisin,greetings,Thank you,Tenkyu,ten-kyoo,Ten-kyu,Thank you,Standard expression of gratitude.
+tok_pisin,greetings,Thank you very much,Tenkyu tru / Tenkyu tumas,ten-kyoo troo / ten-kyoo too-mahs,Ten-kyu tu-mas,Thank you very much,Heartfelt appreciation.
+tok_pisin,greetings,Welcome / Come inside,Welkam / Kam insait,well-kahm / kahm in-sight,Wel-kam,Welcome to our village/home.
+tok_pisin,greetings,Goodbye (to person staying / Stay well),Stap gut wantok,stahp goot wahn-tok,Stap gut wan-tok,Stay well friend/kinsman,Said by the traveler departing.
+tok_pisin,greetings,Goodbye (to person leaving / Go safely),Go gut wantok,goh goot wahn-tok,Go gut wan-tok,Go safely friend,Said to the traveler embarking.
+tok_pisin,trekking,The mountain / track is magnificent,Bikpela maunten i naispela tru,beek-peh-lah mown-ten ee nice-peh-lah troo,Bik-pe-la maun-ten i nais-pe-la tru,The big mountain is very beautiful,Compliment for Owen Stanley & Wilhelm landscapes.
+tok_pisin,trekking,Bird of Paradise / Tree Kangaroo,Kumul / Kapul,koo-mool / kah-pool,Ku-mul / Ka-pul,Bird of Paradise / Tree Kangaroo,PNG national emblems.
+tok_pisin,navigation,Where is the track to...?,Weples rot i go long...?,weh-plehs roht ee goh long,We-ples rot i go long,Where is the path leading to...?,Useful trail direction question.
+tok_pisin,market,How much is this bilum / carving?,Hamas long dispela bilum?,hah-mahs long dees-peh-lah bee-loom,Ha-mas long dis-pe-la bi-lum,How much for this woven bag?,Standard market inquiry.
+tok_pisin,market,Fresh coconut / Drinking water,Kulao / Wara bilong dring,koo-lah-oh / wah-rah bee-long dring,Ku-lao / Wa-ra bi-long dring,Fresh young coconut water,Kulao is the refreshing coastal staple.
+tok_pisin,emergency,Please help me wantok,Plis halivim mi wantok,plees hah-lee-veem mee wahn-tok,Plis ha-li-vim mi wan-tok,Please help me friend,Emergency assistance request.
+tok_pisin,emergency,I need an aid post / doctor,Mi laik go long hausik / dokta,mee like goh long hows-eek / dohk-tah,Mi laik go long hau-sik,I need to go to hospital/clinic,Medical emergency phrase.
+hiri_motu,greetings,How are you? / Greetings,Oi namo?,oy nah-moh,O-i na-mo,Are you well?,Official lingua franca of Southern Region & Papuan coast.
+hiri_motu,greetings,Good morning,Daba namona,dah-bah nah-moh-nah,Da-ba na-mo-na,Good morning,Standard morning greeting in Hiri Motu.
+hiri_motu,greetings,Good afternoon,Adorahi namona,ah-doh-rah-hee nah-moh-nah,A-do-ra-hi na-mo-na,Good afternoon,Polite daytime greeting.
+hiri_motu,greetings,I am fine,Lau namo,lah-oo nah-moh,Lau na-mo,I am well,Standard response.
+hiri_motu,greetings,Thank you,Tanikiu bada,tah-nee-kyoo bah-dah,Ta-ni-kiu ba-da,Thank you very much,Traditional gratitude in Motu.
+hiri_motu,greetings,Welcome / Come ashore,Mai / Vasiro,mah-ee / vah-see-roh,Ma-i,Come here / welcome,Coastal welcome to travelers.
+hiri_motu,greetings,Goodbye (Go well),Lao namo,lah-oh nah-moh,La-o na-mo,Go well,Farewell to departing guest.
+hiri_motu,market,How much is this?,Inai be hida?,ee-nah-ee beh hee-dah,I-na-i be hi-da,How much is this?,Market pricing inquiry.
+hiri_motu,emergency,Please help me,Lau durua,lah-oo doo-roo-ah,Lau du-ru-a,Help me,Emergency assistance.
+kuanua,greetings,Greetings / Peace,Io / Miau,ee-oh / mee-ow,I-o,Greetings,Tolai language of East New Britain & Rabaul.
+kuanua,greetings,Good morning,Malana vakak,mah-lah-nah vah-kahk,Ma-la-na va-kak,Good morning,Morning greeting in Kokopo & Gazelle.
+kuanua,greetings,Thank you,Malo vakak,mah-loh vah-kahk,Ma-lo va-kak,Thank you very much,Tolai expression of gratitude.
+kuanua,culture,Sacred Fire Dance,Baining Alungu,bye-ning ah-loon-goo,Bai-ning A-lun-gu,Sacred fire spirit dance,Traditional cultural ceremony.
+enga,greetings,How are you?,Akali namo?,ah-kah-lee nah-moh,A-ka-li na-mo,How are you?,Enga language of Western Highlands & Wabag.
+enga,greetings,Thank you,Kandi mupwa,kahn-dee moo-pwah,Kan-di mu-pwa,Thank you very much,Enga gratitude.
+melpa,greetings,Greetings / Welcome,Ya morom?,yah moh-rohm,Ya mo-rom,Are you there / greetings?,Melpa language of Mount Hagen & Wahgi Valley.
+melpa,greetings,Thank you,Anga wote,ahn-gah woh-teh,An-ga wo-te,Thank you kinsman,Melpa expression of gratitude.
