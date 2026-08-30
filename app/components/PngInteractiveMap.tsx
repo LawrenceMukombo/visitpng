@@ -56,7 +56,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "35m",
     highlightTag: "Capital Gateway",
     priceEstimate: "K 35 Nature Park Entry",
-    imageUrl: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/airways_hotel_pom.jpg",
     highlights: [
       "Port Moresby Nature Park native bird sanctuary & tree kangaroos",
       "National Parliament House traditional Haus Tambaran architecture",
@@ -81,7 +81,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "2,190m (Mount Bellamy Summit)",
     highlightTag: "Historic 96km Memorial Trail",
     priceEstimate: "K 650 KTA Trek Permit",
-    imageUrl: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/kokoda_track_memorial.jpg",
     highlights: [
       "96km historical Owen Stanley mountain crossing",
       "Isurava Memorial & Kingsbury VC Rock pilgrimage",
@@ -106,7 +106,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "4,509m (Highest Peak in PNG)",
     highlightTag: "Highest Summit in Oceania",
     priceEstimate: "K 220 Climb Clearance",
-    imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/bettys_lodge_wilhelm.jpg",
     highlights: [
       "Summit sunrise over Bismarck Range and both coasts on clear dawn",
       "Glacial tarns Lake Piunde and Lake Aunde alpine camps",
@@ -131,7 +131,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "1,546m",
     highlightTag: "Goroka Show & Asaro Mudmen",
     priceEstimate: "K 100 Show Entry",
-    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/asaro_mudmen_goroka.jpg",
     highlights: [
       "World-famous Asaro Mudmen ghost warrior dance performances",
       "Goroka Cultural Show with 100+ tribal sing-sing groups",
@@ -156,7 +156,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "1,677m",
     highlightTag: "Mount Hagen Sing-Sing",
     priceEstimate: "K 150 Cultural Pass",
-    imageUrl: "https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/ambua_lodge_tari.jpg",
     highlights: [
       "Melpa warrior headdresses with Raggiana Bird of Paradise plumes",
       "Mount Hagen Cultural Show arena & traditional exchanges",
@@ -181,7 +181,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "Sea level",
     highlightTag: "World's Best Coral Seamounts",
     priceEstimate: "K 450 Scuba 2-Tank Dive",
-    imageUrl: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/walindi_resort_kimbe.jpg",
     highlights: [
       "Over 900 reef fish species and 400+ hard coral varieties",
       "South Emma & Inglis volcanic deepwater seamount dives",
@@ -206,7 +206,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "Sea level to 688m",
     highlightTag: "Baining Fire Dance & Volcanoes",
     priceEstimate: "K 180 Fire Dance Pass",
-    imageUrl: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/rapopo_resort_kokopo.jpg",
     highlights: [
       "Baining spirit dancers leaping barefoot across blazing bonfires",
       "Mount Tavurvur steaming volcanic crater climbs & hot springs",
@@ -231,7 +231,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "Sea level",
     highlightTag: "Tropical Volcanic Fjords",
     priceEstimate: "K 320 Fjord Kayak Tour",
-    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/tufi_resort_fjords.jpg",
     highlights: [
       "Traditional outrigger canoe safaris into vertical mossy fjords",
       "Outer reef hammerhead shark and manta ray scuba diving",
@@ -256,7 +256,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "20m - 100m",
     highlightTag: "Crocodile Spirit Houses",
     priceEstimate: "K 280 River Canoe Safari",
-    imageUrl: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/sepik_haus_tambaran.jpg",
     highlights: [
       "Kanganaman & Palembei soaring Spirit Houses (UNESCO Tentative)",
       "Iatmul crocodile initiation rites and sacred wood carvings",
@@ -281,7 +281,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "Sea level",
     highlightTag: "Kula Ring Maritime Culture",
     priceEstimate: "K 120 Festival Pass",
-    imageUrl: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/tawali_resort_milne.jpg",
     highlights: [
       "National Canoe & Kundu Festival with 40-warrior paddling regattas",
       "Tawali Resort liveaboard dive drop-offs & manta cleaning stations",
@@ -306,7 +306,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "Sea level",
     highlightTag: "Flying Foxes & Scuba Reefs",
     priceEstimate: "K 380 Harbor Tour",
-    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/walindi_resort_kimbe.jpg",
     highlights: [
       "Kalibobo Coast Guard memorial lighthouse and harbor gardens",
       "Pig Island and Kranket Island protected snorkeling lagoons",
@@ -331,7 +331,7 @@ export const PNG_DESTINATION_PINS: DestinationPin[] = [
     elevation: "1,700m - 2,800m",
     highlightTag: "Huli Wigmen Bachelor Schools",
     priceEstimate: "K 150 Cultural Tour",
-    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/facilities/ambua_lodge_tari.jpg",
     highlights: [
       "Traditional Huli Wigmen bachelor initiation schools & hair growing",
       "Red & yellow ochre facial paint ceremonial sing-sing demonstrations",
