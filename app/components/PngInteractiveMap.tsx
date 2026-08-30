@@ -730,7 +730,7 @@ export default function PngInteractiveMap({
               pointerEvents: "auto"
             }}
           >
-            {/* Province Boundary Polygons */}
+            {/* Province Boundary Polygons - Clean Boundary Lines without Obscuring Fill */}
             {provinceFeatures.map(f => {
               const p = f.properties;
               const theme = getRegionTheme(p.region);
@@ -742,10 +742,11 @@ export default function PngInteractiveMap({
                 <path
                   key={p.code}
                   d={pathData}
-                  fill={isSelected ? "rgba(234, 88, 12, 0.38)" : isHovered ? theme.glow : theme.fill}
+                  fill={isSelected ? "rgba(234, 88, 12, 0.12)" : isHovered ? "rgba(255, 255, 255, 0.08)" : "none"}
                   stroke={isSelected ? "#EA580C" : isHovered ? "#FFFFFF" : theme.stroke}
-                  strokeWidth={isSelected ? 3 : isHovered ? 2.5 : 1.4}
-                  strokeOpacity={isSelected ? 1 : isHovered ? 1 : 0.85}
+                  strokeWidth={isSelected ? 2.5 : isHovered ? 2 : 1.2}
+                  strokeDasharray={isSelected ? undefined : "5 3"}
+                  strokeOpacity={isSelected ? 1 : isHovered ? 1 : 0.75}
                   style={{ cursor: "pointer", transition: "all 0.15s ease" }}
                   onMouseEnter={() => setHoveredProvince(p)}
                   onMouseLeave={() => setHoveredProvince(null)}
@@ -759,13 +760,55 @@ export default function PngInteractiveMap({
               );
             })}
 
+            {/* Province Centroid Badge Markers */}
+            {zoom <= 8 && provinceFeatures.map(f => {
+              const p = f.properties;
+              const [px, py] = latLngToTilePixel(p.centroid[1], p.centroid[0], zoom, center.lat, center.lng, dimensions.width, dimensions.height);
+              if (px < -40 || px > dimensions.width + 40 || py < -40 || py > dimensions.height + 40) return null;
+              const isSelected = selectedProvince?.code === p.code;
+              const isHovered = hoveredProvince?.code === p.code;
+
+              return (
+                <g
+                  key={`lbl-${p.code}`}
+                  transform={`translate(${px}, ${py})`}
+                  onClick={(e) => { e.stopPropagation(); handleProvinceClick(p); }}
+                  onMouseEnter={() => setHoveredProvince(p)}
+                  onMouseLeave={() => setHoveredProvince(null)}
+                  style={{ cursor: "pointer" }}
+                >
+                  <rect
+                    x={-24}
+                    y={-10}
+                    width={48}
+                    height={20}
+                    rx={10}
+                    fill={isSelected ? "#EA580C" : isHovered ? "#0D9488" : "rgba(3, 47, 43, 0.85)"}
+                    stroke={isSelected ? "#FFFFFF" : isHovered ? "#5EEAD4" : "rgba(255,255,255,0.4)"}
+                    strokeWidth={isSelected ? 1.5 : 1}
+                    style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.5))" }}
+                  />
+                  <text
+                    y={3.5}
+                    textAnchor="middle"
+                    fill="#FFFFFF"
+                    fontSize="9px"
+                    fontWeight="800"
+                    letterSpacing="0.04em"
+                  >
+                    {p.code}
+                  </text>
+                </g>
+              );
+            })}
+
             {/* Kokoda Track GPS Line (96km) */}
             {showKokodaRoute && (
               <path
                 d={renderGeoJsonToSvgPath(KOKODA_TRACK_ROUTE_GEOJSON.geometry)}
                 fill="none"
                 stroke="#DC2626"
-                strokeWidth={4}
+                strokeWidth={3.5}
                 strokeDasharray="6 3"
                 style={{ filter: "drop-shadow(0 0 6px rgba(220, 38, 38, 0.8))" }}
               >
