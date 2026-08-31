@@ -248,7 +248,7 @@ export default function SignInForm({ returnTo }: SignInFormProps) {
           }}
         >
           {mode === "signin"
-            ? "New to ZamRoam? Create an account"
+            ? "New to VisitPNG? Create an account"
             : "Already have an account? Sign in"}
         </button>
       </section>
