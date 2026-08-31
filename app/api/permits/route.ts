@@ -1,16 +1,15 @@
-import {ZAMBIA_PERMIT_TYPES, PNG_PERMIT_TYPES, createPermit, IssuedPermit} from "../../../db/permits";
+import { PNG_PERMIT_TYPES, createPermit, IssuedPermit } from "../../../db/permits";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const country = url.searchParams.get("country")?.toLowerCase() || "zmb";
   const typeId = url.searchParams.get("typeId");
 
-  const allTypes = country === "png" ? PNG_PERMIT_TYPES : ZAMBIA_PERMIT_TYPES;
+  const allTypes = PNG_PERMIT_TYPES;
 
   if (typeId) {
-    const type = allTypes.find(p => p.id === typeId) || ZAMBIA_PERMIT_TYPES.find(p => p.id === typeId) || PNG_PERMIT_TYPES.find(p => p.id === typeId);
+    const type = allTypes.find(p => p.id === typeId);
     if (!type) {
       return Response.json({ success: false, error: "Permit type not found" }, { status: 404 });
     }
@@ -38,11 +37,11 @@ export async function POST(request: Request) {
     const permit: IssuedPermit = createPermit(
       permitTypeId,
       holderName,
-      passportOrId || "PASSPORT-ZMB",
-      visitorTier || "International",
-      countryOfOrigin || "Zambia",
-      startDate || new Date().toISOString().slice(0, 10),
-      currencyPaid || "ZMW"
+      passportOrId || "PNG-PASS-PENDING",
+      visitorTier || "international",
+      countryOfOrigin || "International",
+      startDate || new Date().toISOString().split("T")[0],
+      currencyPaid || "PGK"
     );
 
     return Response.json({
@@ -50,8 +49,7 @@ export async function POST(request: Request) {
       message: "Digital permit issued successfully",
       permit
     });
-  } catch (err) {
-    const errorMsg = err instanceof Error ? err.message : "Failed to issue permit";
-    return Response.json({ success: false, error: errorMsg }, { status: 400 });
+  } catch (error) {
+    return Response.json({ success: false, error: `Failed to issue permit: ${String(error)}` }, { status: 500 });
   }
 }

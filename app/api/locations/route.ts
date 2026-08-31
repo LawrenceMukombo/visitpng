@@ -1,29 +1,27 @@
-import {env} from "../../../db/runtime";
-import {ensureCatalogue} from "../../../db/catalogue";
-import {ZAMBIA_REGIONS, ZAMBIA_PROVINCES, findZambiaSmartHierarchy} from "../../../db/zambiaGeography";
-import {PNG_REGIONS, PNG_PROVINCES, findLocationSmartHierarchy as findPngSmartHierarchy} from "../../../db/pngGeography";
+import { env } from "../../../db/runtime";
+import { ensureCatalogue } from "../../../db/catalogue";
+import { PNG_REGIONS, PNG_PROVINCES, findLocationSmartHierarchy as findPngSmartHierarchy } from "../../../db/pngGeography";
 
-export const dynamic="force-dynamic";
+export const dynamic = "force-dynamic";
 
-export async function GET(request:Request){
+export async function GET(request: Request) {
   await ensureCatalogue();
-  const url=new URL(request.url);
-  const country=url.searchParams.get("country")?.trim().toUpperCase()||"PNG";
-  const q=url.searchParams.get("q")?.trim().toLowerCase()||"";
-  const province=url.searchParams.get("province")?.trim().toLowerCase()||"";
-  const region=url.searchParams.get("region")?.trim().toLowerCase()||"";
-  const format=url.searchParams.get("format")?.trim().toLowerCase()||"";
+  const url = new URL(request.url);
+  const q = url.searchParams.get("q")?.trim().toLowerCase() || "";
+  const province = url.searchParams.get("province")?.trim().toLowerCase() || "";
+  const region = url.searchParams.get("region")?.trim().toLowerCase() || "";
+  const format = url.searchParams.get("format")?.trim().toLowerCase() || "";
 
   if (q && format === "smart") {
-    const match = country === "PNG" ? findPngSmartHierarchy(q) : findZambiaSmartHierarchy(q);
+    const match = findPngSmartHierarchy(q);
     return Response.json({ success: true, match });
   }
 
-  const likeQ=`%${q}%`;
-  const likeProv=`%${province}%`;
-  const likeReg=`%${region}%`;
+  const likeQ = `%${q}%`;
+  const likeProv = `%${province}%`;
+  const likeReg = `%${region}%`;
 
-  const rows=await env.DB.prepare(`
+  const rows = await env.DB.prepare(`
     SELECT 
       d.id AS id,
       d.slug AS slug,
@@ -47,9 +45,9 @@ export async function GET(request:Request){
       AND (?='' OR LOWER(pv.region)=? OR LOWER(pv.region) LIKE ?)
     GROUP BY d.id
     ORDER BY pv.region, pv.name, d.name
-  `).bind(q,likeQ,likeQ,likeQ,province,province,likeProv,region,region,likeReg).all();
+  `).bind(q, likeQ, likeQ, likeQ, province, province, likeProv, region, region, likeReg).all();
 
-  const provinces=await env.DB.prepare(`
+  const provinces = await env.DB.prepare(`
     SELECT pv.id, pv.code, pv.name, pv.region, COUNT(d.id) AS destinationCount
     FROM provinces pv
     LEFT JOIN destinations d ON d.province_id=pv.id
@@ -57,14 +55,11 @@ export async function GET(request:Request){
     ORDER BY pv.region, pv.name
   `).all();
 
-  const activeRegions = country === "PNG" ? PNG_REGIONS : ZAMBIA_REGIONS;
-  const activeProvinces = country === "PNG" ? PNG_PROVINCES : ZAMBIA_PROVINCES;
-
-  const cascadeTree = activeRegions.map(reg => ({
+  const cascadeTree = PNG_REGIONS.map(reg => ({
     region: reg.name,
     label: reg.label,
     description: reg.description,
-    provinces: activeProvinces.filter(p => p.region === reg.name).map(prov => {
+    provinces: PNG_PROVINCES.filter(p => p.region === reg.name).map(prov => {
       const dbDestinations = (rows.results as { provinceCode: string; name: string; slug: string; district: string | null }[])
         .filter(r => r.provinceCode === prov.code);
       return {

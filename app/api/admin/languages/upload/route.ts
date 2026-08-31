@@ -1,4 +1,4 @@
-import { ZAMBIAN_LANGUAGE_ZONES, ZambianPhrase } from "../../../../../db/zambianLanguages";
+import { PNG_LANGUAGE_ZONES, PngPhrase } from "../../../../../db/pngLanguages";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +10,6 @@ function parseCsv(csvText: string): Array<Record<string, string>> {
   const rows: Array<Record<string, string>> = [];
 
   for (let i = 1; i < lines.length; i++) {
-    // Regex for CSV with quoted fields support
     const regex = /(?:,|\n|^)("(?:(?:"")*[^"]*)*"|[^",\n]*|(?:\n|$))/g;
     const matches: string[] = [];
     let match;
@@ -59,39 +58,33 @@ export async function POST(request: Request) {
     let insertedCount = 0;
     let updatedCount = 0;
 
-    for (const row of rows) {
-      const zoneCode = (row["zone_code"] || row["zone"] || row["language"] || "").toLowerCase().trim();
-      const english = (row["english"] || row["english_meaning"] || "").trim();
-      const localText = (row["local_text"] || row["local"] || row["phrase"] || "").trim();
+    for (const r of rows) {
+      const zoneCode = (r.zonecode || r.zone_code || r.language || r.zone || "").trim().toLowerCase();
+      const english = (r.english || r.phrase_english || "").trim();
+      const localText = (r.localtext || r.local_text || r.tokpisin || r.tok_pisin || r.translation || "").trim();
 
       if (!zoneCode || !english || !localText) continue;
 
-      const targetZone = ZAMBIAN_LANGUAGE_ZONES.find(
-        z => z.code.toLowerCase() === zoneCode || z.name.toLowerCase().includes(zoneCode)
+      const targetZone = PNG_LANGUAGE_ZONES.find(
+        z => z.code === zoneCode || z.name.toLowerCase() === zoneCode
       );
 
       if (!targetZone) continue;
 
-      const rawCategory = (row["category"] || "greetings").toLowerCase().trim();
-      const validCategories: Array<"greetings" | "safari" | "market" | "navigation" | "emergency" | "culture"> = [
-        "greetings", "safari", "market", "navigation", "emergency", "culture"
-      ];
-      const category: "greetings" | "safari" | "market" | "navigation" | "emergency" | "culture" =
-        validCategories.find(c => c === rawCategory) || "greetings";
-      const phonetic = (row["phonetic"] || localText).trim();
-      const syllables = (row["syllables"] || localText).trim();
-      const literalMeaning = (row["literal_meaning"] || row["literal"] || "").trim();
-      const culturalNote = (row["cultural_note"] || row["note"] || "").trim();
+      const category = (r.category || "greetings").trim().toLowerCase() as PngPhrase["category"];
+      const phonetic = (r.phonetic || localText).trim();
+      const syllables = (r.syllables || phonetic).trim();
+      const literalMeaning = (r.literalmeaning || r.literal_meaning || "").trim();
+      const culturalNote = (r.culturalnote || r.cultural_note || "").trim();
 
       const existingIndex = targetZone.phrases.findIndex(
-        p => p.localText.toLowerCase() === localText.toLowerCase() || p.english.toLowerCase() === english.toLowerCase()
+        p => p.english.toLowerCase() === english.toLowerCase()
       );
 
       if (existingIndex >= 0) {
         targetZone.phrases[existingIndex] = {
           ...targetZone.phrases[existingIndex],
-          category: ["greetings", "safari", "market", "navigation", "emergency", "culture"].includes(category) ? category : "greetings",
-          english,
+          category,
           localText,
           phonetic,
           syllables,
@@ -100,30 +93,28 @@ export async function POST(request: Request) {
         };
         updatedCount++;
       } else {
-        const newPhrase: ZambianPhrase = {
+        targetZone.phrases.push({
           id: `${zoneCode.slice(0, 2)}-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-          category: ["greetings", "safari", "market", "navigation", "emergency", "culture"].includes(category) ? category : "greetings",
+          category,
           english,
           localText,
           phonetic,
           syllables,
           literalMeaning,
           culturalNote
-        };
-        targetZone.phrases.push(newPhrase);
+        });
         insertedCount++;
       }
     }
 
     return Response.json({
       success: true,
-      message: `Successfully processed CSV: ${insertedCount} phrases added, ${updatedCount} phrases updated.`,
+      message: `CSV import completed: ${insertedCount} phrases added, ${updatedCount} updated.`,
       insertedCount,
       updatedCount,
-      zones: ZAMBIAN_LANGUAGE_ZONES
+      zones: PNG_LANGUAGE_ZONES
     });
   } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : "Failed to parse CSV upload.";
-    return Response.json({ success: false, error: errorMsg }, { status: 400 });
+    return Response.json({ success: false, error: `Failed to process CSV: ${String(error)}` }, { status: 500 });
   }
 }

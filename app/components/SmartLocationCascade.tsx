@@ -1,7 +1,6 @@
 "use client";
-import {useState, useMemo} from "react";
-import {PNG_REGIONS, PNG_PROVINCES, findLocationSmartHierarchy as findPngSmartHierarchy} from "../../db/pngGeography";
-import {ZAMBIA_REGIONS, ZAMBIA_PROVINCES} from "../../db/zambiaGeography";
+import { useState, useMemo } from "react";
+import { PNG_REGIONS, PNG_PROVINCES, findLocationSmartHierarchy as findPngSmartHierarchy } from "../../db/pngGeography";
 
 export interface CascadeSelection {
   region: string;
@@ -44,7 +43,6 @@ interface SmartLocationCascadeProps {
 }
 
 export default function SmartLocationCascade({
-  countryCode = "PNG",
   destinations,
   provinces,
   selectedDestinationId = 0,
@@ -53,25 +51,12 @@ export default function SmartLocationCascade({
   onSelect,
   mode = "destination-picker"
 }: SmartLocationCascadeProps) {
-  const isZambia = (countryCode || "").toUpperCase() === "ZMB";
-
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedProvinceCode, setSelectedProvinceCode] = useState<string>("");
   const [districtValue, setDistrictValue] = useState<string>(selectedDistrict);
   const [selectedDestId, setSelectedDestId] = useState<number>(selectedDestinationId);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [smartMatchHint, setSmartMatchHint] = useState<string>("");
-
-  const [prevCountry, setPrevCountry] = useState(countryCode);
-  if (prevCountry !== countryCode) {
-    setPrevCountry(countryCode);
-    setSelectedRegion("");
-    setSelectedProvinceCode("");
-    setDistrictValue("");
-    setSelectedDestId(0);
-    setSearchQuery("");
-    setSmartMatchHint("");
-  }
 
   const [prevDestId, setPrevDestId] = useState(selectedDestinationId);
   if (prevDestId !== selectedDestinationId) {
@@ -100,19 +85,17 @@ export default function SmartLocationCascade({
   }
 
   const activeRegionsList = useMemo(() => {
-    return isZambia ? ZAMBIA_REGIONS.map(r => r.name) : PNG_REGIONS.map(r => r.name);
-  }, [isZambia]);
+    return PNG_REGIONS.map(r => r.name);
+  }, []);
 
   const activeProvincesList = useMemo(() => {
-    return isZambia ? ZAMBIA_PROVINCES : PNG_PROVINCES;
-  }, [isZambia]);
+    return PNG_PROVINCES;
+  }, []);
 
-  // Available provinces based on selected region
   const availableProvinces = useMemo(() => {
     return activeProvincesList.filter(p => !selectedRegion || p.region === selectedRegion);
   }, [activeProvincesList, selectedRegion]);
 
-  // Available districts based on selected province
   const availableDistricts = useMemo(() => {
     if (!selectedProvinceCode) return [];
     const prov = activeProvincesList.find(p => p.code === selectedProvinceCode);
@@ -120,7 +103,6 @@ export default function SmartLocationCascade({
     return prov.districts.map(d => typeof d === "string" ? d : d.name);
   }, [activeProvincesList, selectedProvinceCode]);
 
-  // Available destinations filtered by cascade
   const availableDestinations = useMemo(() => {
     return destinations.filter(d => {
       if (selectedProvinceCode && d.provinceCode !== selectedProvinceCode) return false;
@@ -130,7 +112,6 @@ export default function SmartLocationCascade({
     });
   }, [destinations, selectedRegion, selectedProvinceCode, districtValue]);
 
-  // Smart Search
   const handleSmartSearch = (text: string) => {
     setSearchQuery(text);
     if (!text.trim()) {
@@ -138,84 +119,30 @@ export default function SmartLocationCascade({
       return;
     }
 
-    const queryLower = text.toLowerCase();
+    const smart = findPngSmartHierarchy(text);
+    if (smart) {
+      setSelectedRegion(smart.region);
+      setSelectedProvinceCode(smart.provinceCode);
+      setDistrictValue(smart.districtName);
+      setSmartMatchHint(`Auto-detected: ${smart.destinationName || smart.districtName} in ${smart.provinceName} (${smart.region} Region)`);
 
-    if (isZambia) {
-      // Find in Zambian hierarchy
-      let matchedProv = ZAMBIA_PROVINCES.find(p => p.name.toLowerCase().includes(queryLower) || p.capital.toLowerCase().includes(queryLower));
-      let matchedDistName = "";
-      let matchedDestName = "";
+      const destMatch = destinations.find(d => 
+        d.name.toLowerCase().includes(text.toLowerCase()) || 
+        (smart.destinationName && d.name.toLowerCase().includes(smart.destinationName.toLowerCase()))
+      );
+      const provMatch = provinces.find(p => p.code === smart.provinceCode);
 
-      if (!matchedProv) {
-        for (const prov of ZAMBIA_PROVINCES) {
-          for (const dist of prov.districts) {
-            if (dist.name.toLowerCase().includes(queryLower)) {
-              matchedProv = prov;
-              matchedDistName = dist.name;
-              break;
-            }
-            const keyDest = dist.keyDestinations.find(k => k.toLowerCase().includes(queryLower));
-            if (keyDest) {
-              matchedProv = prov;
-              matchedDistName = dist.name;
-              matchedDestName = keyDest;
-              break;
-            }
-          }
-          if (matchedProv) break;
-        }
-      }
-
-      if (matchedProv) {
-        setSelectedRegion(matchedProv.region);
-        setSelectedProvinceCode(matchedProv.code);
-        if (matchedDistName) setDistrictValue(matchedDistName);
-        setSmartMatchHint(`Auto-detected: ${matchedDestName || matchedDistName || matchedProv.name} in ${matchedProv.name} (${matchedProv.region})`);
-
-        const destMatch = destinations.find(d => 
-          d.name.toLowerCase().includes(queryLower) || 
-          (matchedDestName && d.name.toLowerCase().includes(matchedDestName.toLowerCase()))
-        );
-        const provMatch = provinces.find(p => p.code === matchedProv!.code);
-
-        onSelect({
-          region: matchedProv.region,
-          provinceCode: matchedProv.code,
-          provinceName: matchedProv.name,
-          provinceId: provMatch?.id,
-          district: matchedDistName,
-          destinationId: destMatch?.id,
-          destinationName: destMatch?.name || matchedDestName,
-          destinationSlug: destMatch?.slug
-        });
-        return;
-      }
-    } else {
-      const smart = findPngSmartHierarchy(text);
-      if (smart) {
-        setSelectedRegion(smart.region);
-        setSelectedProvinceCode(smart.provinceCode);
-        setDistrictValue(smart.districtName);
-        setSmartMatchHint(`Auto-detected: ${smart.destinationName || smart.districtName} in ${smart.provinceName} (${smart.region} Region)`);
-
-        const destMatch = destinations.find(d => 
-          d.name.toLowerCase().includes(text.toLowerCase()) || 
-          (smart.destinationName && d.name.toLowerCase().includes(smart.destinationName.toLowerCase()))
-        );
-        const provMatch = provinces.find(p => p.code === smart.provinceCode);
-
-        onSelect({
-          region: smart.region,
-          provinceCode: smart.provinceCode,
-          provinceName: smart.provinceName,
-          provinceId: provMatch?.id,
-          district: smart.districtName,
-          destinationId: destMatch?.id,
-          destinationName: destMatch?.name || smart.destinationName,
-          destinationSlug: destMatch?.slug
-        });
-        return;
-      }
+      onSelect({
+        region: smart.region,
+        provinceCode: smart.provinceCode,
+        provinceName: smart.provinceName,
+        provinceId: provMatch?.id,
+        district: smart.districtName,
+        destinationId: destMatch?.id,
+        destinationName: destMatch?.name || smart.destinationName,
+        destinationSlug: destMatch?.slug
+      });
+      return;
     }
 
     setSmartMatchHint("");
@@ -305,7 +232,7 @@ export default function SmartLocationCascade({
           <input
             type="text"
             className="smartSearchInput"
-            placeholder={isZambia ? "Type anywhere in Zambia (e.g. Livingstone, Mfuwe, Lower Zambezi, Kafue, Kariba...)" : "Type anywhere in PNG (e.g. Kokoda, Tufi, Sepik, Rabaul, Kimbe, Goroka...)"}
+            placeholder="Type anywhere in PNG (e.g. Kokoda, Tufi, Sepik, Rabaul, Kimbe, Goroka, Mount Wilhelm...)"
             value={searchQuery}
             onChange={e => handleSmartSearch(e.target.value)}
           />
@@ -327,7 +254,7 @@ export default function SmartLocationCascade({
         <div className="cascadeStep">
           <label>1. Region ({activeRegionsList.length})</label>
           <select value={selectedRegion} onChange={e => handleRegionChange(e.target.value)}>
-            <option value="">{isZambia ? "All Zambia Regions" : "All PNG Regions"}</option>
+            <option value="">All PNG Regions</option>
             {activeRegionsList.map(r => (
               <option key={r} value={r}>
                 {r}
@@ -397,7 +324,7 @@ export default function SmartLocationCascade({
       {/* Selected location breadcrumb summary */}
       {(selectedProvName || selectedDestObj) && (
         <div className="cascadeBreadcrumbs">
-          <span className="breadcrumbPill regionPill">🌐 {selectedRegion || (isZambia ? "Zambia" : "PNG")}</span>
+          <span className="breadcrumbPill regionPill">🌐 {selectedRegion || "Papua New Guinea"}</span>
           {selectedProvName && <span className="breadcrumbPill provPill">📍 {selectedProvName}</span>}
           {districtValue && <span className="breadcrumbPill distPill">🏘️ {districtValue}</span>}
           {selectedDestObj && <span className="breadcrumbPill destPill">⭐ {selectedDestObj.name}</span>}

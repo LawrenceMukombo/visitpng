@@ -149,7 +149,7 @@ export default function PrivacyPolicyPage() {
               If you have any questions, concerns, or data requests regarding this Privacy Policy, please contact us:
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "4px", fontSize: "0.92rem", color: "#334155" }}>
-              <span>🏢 <strong>VisitPNG Tourism Services Ltd</strong></span>
+              <span>🏢 <strong>VisitPNG (Developed by LanFrame)</strong></span>
               <span>📍 National Capital District, Port Moresby, Papua New Guinea</span>
               <span>✉️ Email: <a href="mailto:privacy@visitpng.com" style={{ color: "#EA580C", fontWeight: "600" }}>privacy@visitpng.com</a> / <a href="mailto:info@visitpng.com" style={{ color: "#EA580C", fontWeight: "600" }}>info@visitpng.com</a></span>
               <span>📞 Hotline: <strong>+675 321 4188</strong></span>

@@ -120,7 +120,7 @@ def build_presentation(output_path="ZamRoam_Tourism_Platform_Presentation.pptx")
     p3.space_before = Pt(18)
 
     p4 = tf.add_paragraph()
-    p4.text = "🇿🇲 Commercial Tourism Platform Owned & Operated by Lamton Investments Ltd\n📍 Lusaka • Livingstone • Ndola • Mfuwe  |  🌐 zamroam.com  |  💬 WhatsApp: +260 573 506 598"
+    p4.text = "🇵🇬 Commercial Tourism Platform Developed by LanFrame\n📍 Port Moresby • Kokopo • Mount Hagen • Alotau  |  🌐 visitpng.com  |  ✉️ info@visitpng.com"
     p4.font.size = Pt(11)
     p4.font.color.rgb = C_EMERALD
     p4.space_before = Pt(24)
@@ -337,7 +337,7 @@ def build_presentation(output_path="ZamRoam_Tourism_Platform_Presentation.pptx")
     p_c2.space_before = Pt(4)
 
     p_c3 = tf10.add_paragraph()
-    p_c3.text = "ZamRoam is ready to partner with lodge operators, safari guides, transport providers, cultural institutions, and government stakeholders to showcase the best of Zambia to the world."
+    p_c3.text = "VisitPNG is ready to partner with lodge operators, trekking guides, transport providers, cultural institutions, and government stakeholders to showcase the best of Papua New Guinea to the world."
     p_c3.font.size = Pt(13)
     p_c3.font.color.rgb = C_MUTED
     p_c3.space_before = Pt(16)
@@ -350,7 +350,7 @@ def build_presentation(output_path="ZamRoam_Tourism_Platform_Presentation.pptx")
     p_c4.space_before = Pt(22)
 
     p_c5 = tf10.add_paragraph()
-    p_c5.text = "🏢 Legal Entity: Lamton Investments Ltd\n📍 Registered Office: Plot 10444, Great East Road, Rhodes Park, Lusaka, Zambia\n🌐 Official Website: https://zamroam.com\n✉️ General Inquiries: info@zamroam.com  |  info@lamtoninvestments.com\n💬 WhatsApp Business Hotline: +260 573 506 598"
+    p_c5.text = "🏢 Developed By: LanFrame\n📍 Port Moresby, Papua New Guinea\n🌐 Official Website: https://visitpng.lamtoninvestments.com\n✉️ General Inquiries: info@visitpng.com  |  contact@lanframe.com"
     p_c5.font.size = Pt(12)
     p_c5.font.color.rgb = C_WHITE
     p_c5.space_before = Pt(6)

@@ -1,17 +1,16 @@
-import {ZAMBIA_TRAIL_PACKS, PNG_TRAIL_PACKS, generateGpx} from "../../../db/trailPacks";
+import { PNG_TRAIL_PACKS, generateGpx } from "../../../db/trailPacks";
 
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const country = url.searchParams.get("country")?.toLowerCase() || "png";
   const id = url.searchParams.get("id")?.toLowerCase();
   const format = url.searchParams.get("format")?.toLowerCase();
 
-  const allTrails = country === "png" ? PNG_TRAIL_PACKS : ZAMBIA_TRAIL_PACKS;
+  const allTrails = PNG_TRAIL_PACKS;
 
   if (id) {
-    const trail = allTrails.find(t => t.id === id) || ZAMBIA_TRAIL_PACKS.find(t => t.id === id) || PNG_TRAIL_PACKS.find(t => t.id === id);
+    const trail = allTrails.find(t => t.id === id);
     if (!trail) {
       return Response.json({ success: false, error: "Trail pack not found" }, { status: 404 });
     }
