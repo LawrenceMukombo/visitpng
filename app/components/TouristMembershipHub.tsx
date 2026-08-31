@@ -657,7 +657,7 @@ export default function TouristMembershipHub({ countryCode = "PNG", viewer, curr
           <div className="familyIntroCard">
             <p className="eyebrow">HOUSEHOLD PRIVILEGES</p>
             <h3>Family & Group Linked Passes</h3>
-            <p>With a ZamRoam Family Pass, your spouse, children, or travelling companions each receive their own verified digital card and membership number linked to your shared account.</p>
+            <p>With a VisitPNG Family Pass, your spouse, children, or travelling companions each receive their own verified digital card and membership number linked to your shared account.</p>
           </div>
 
           <div className="familyMembersGrid">
@@ -791,7 +791,7 @@ export default function TouristMembershipHub({ countryCode = "PNG", viewer, curr
           title={`Activate ${activePaymentPlan.name}`}
           itemType="membership"
           itemId={Number(activePaymentPlan.subscriptionId || sub?.id || activePaymentPlan.id)}
-          itemName={`ZamRoam ${activePaymentPlan.name}`}
+          itemName={`VisitPNG ${activePaymentPlan.name}`}
           amount={activePaymentPlan.price}
           currency={currency}
           customerName={typeof data?.memberName === "string" ? data.memberName : "Explorer"}

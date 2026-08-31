@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
         purchase_units: [
           {
             reference_id: `REF-${itemType}-${itemId}-${Date.now()}`,
-            description: description || `ZamRoam Official Reservation (${itemType})`,
+            description: description || `VisitPNG Official Reservation (${itemType})`,
             amount: {
               currency_code: paypalCurrency,
               value: convertedAmount
@@ -90,11 +90,11 @@ export async function POST(req: NextRequest) {
           }
         ],
         application_context: {
-          brand_name: "ZamRoam Zambia",
+          brand_name: "VisitPNG Papua New Guinea",
           landing_page: "NO_PREFERENCE",
           user_action: "PAY_NOW",
-          return_url: "https://zamroam.com/payments/success",
-          cancel_url: "https://zamroam.com/payments/cancel"
+          return_url: "https://visitpng.lamtoninvestments.com/payments/success",
+          cancel_url: "https://visitpng.lamtoninvestments.com/payments/cancel"
         }
       })
     });

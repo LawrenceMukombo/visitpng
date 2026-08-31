@@ -123,7 +123,7 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
       {/* Top Banner & KPI Stat Counters */}
       <div className="sectionHeaderRow">
         <div>
-          <p className="eyebrow lime">ZAMROAM NATIONAL ECOSYSTEM</p>
+          <p className="eyebrow lime">VISITPNG NATIONAL ECOSYSTEM</p>
           <h2>Membership, Partner Rewards & Benefits Administration</h2>
           <p className="subtext">Configure plans, moderate partner offers, manage physical cards, and audit national redemptions.</p>
         </div>

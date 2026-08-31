@@ -7,7 +7,7 @@ import { getAllCountries, ensureCountries } from "./countries";
 export async function requireAdministrator(identity: VisitPngUser) {
   await ensureAccounts();
   const account = await getOrCreateAccount(identity);
-  const defaultAdmins = ["lawrencemukombo2@gmail.com", "info@zamroam.com"];
+  const defaultAdmins = ["lawrencemukombo2@gmail.com", "admin@visitpng.com", "info@visitpng.com"];
   const envAdmins = (process.env.ADMIN_EMAIL || "").split(",").map(x => x.trim().toLowerCase()).filter(Boolean);
   const allowed = Array.from(new Set([...defaultAdmins, ...envAdmins]));
   
@@ -23,7 +23,7 @@ export async function requireAdministrator(identity: VisitPngUser) {
   return account;
 }
 
-export async function getAdminCatalogue(identity: VisitPngUser, countryFilter: string = "ZMB") {
+export async function getAdminCatalogue(identity: VisitPngUser, countryFilter: string = "PNG") {
   const admin = await requireAdministrator(identity);
   await ensureCatalogue();
   await ensureCountries();
@@ -62,8 +62,8 @@ export async function getAdminCatalogue(identity: VisitPngUser, countryFilter: s
 
   const categories = await env.DB.prepare("SELECT id,name,display_order AS displayOrder FROM categories WHERE is_active=1 ORDER BY display_order").all();
   const providersQuery = countryId
-    ? "SELECT id,trading_name AS name,contact_name AS contactName,contact_email AS contactEmail,contact_phone AS contactPhone,physical_address AS physicalAddress,source_url AS sourceUrl,license_number AS licenseNumber FROM providers WHERE (country_id = ? OR country_id IS NULL) ORDER BY trading_name"
-    : "SELECT id,trading_name AS name,contact_name AS contactName,contact_email AS contactEmail,contact_phone AS contactPhone,physical_address AS physicalAddress,source_url AS sourceUrl,license_number AS licenseNumber FROM providers ORDER BY trading_name";
+    ? "SELECT id,trading_name AS name,COALESCE(contact_name,trading_name) AS contactName,COALESCE(contact_email,email) AS contactEmail,COALESCE(contact_phone,phone) AS contactPhone,physical_address AS physicalAddress,source_url AS sourceUrl,license_number AS licenseNumber FROM providers WHERE (country_id = ? OR country_id IS NULL) ORDER BY trading_name"
+    : "SELECT id,trading_name AS name,COALESCE(contact_name,trading_name) AS contactName,COALESCE(contact_email,email) AS contactEmail,COALESCE(contact_phone,phone) AS contactPhone,physical_address AS physicalAddress,source_url AS sourceUrl,license_number AS licenseNumber FROM providers ORDER BY trading_name";
   const providers = countryId
     ? await env.DB.prepare(providersQuery).bind(countryId).all()
     : await env.DB.prepare(providersQuery).all();

@@ -138,8 +138,11 @@ export async function ensureCatalogue() {
     await safeAlter("ALTER TABLE listings ADD COLUMN photo_credit TEXT");
     await safeAlter("ALTER TABLE listings ADD COLUMN deep_link_url TEXT");
     await safeAlter("ALTER TABLE listings ADD COLUMN source_url TEXT");
-    await safeAlter("ALTER TABLE listings ADD COLUMN last_reviewed_at TEXT");
     await safeAlter("ALTER TABLE providers ADD COLUMN legal_name TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN contact_name TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN contact_email TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN contact_phone TEXT");
+    await safeAlter("ALTER TABLE providers ADD COLUMN source_url TEXT");
     await safeAlter("ALTER TABLE providers ADD COLUMN license_number TEXT");
     await safeAlter("ALTER TABLE providers ADD COLUMN phone TEXT");
     await safeAlter("ALTER TABLE providers ADD COLUMN email TEXT");

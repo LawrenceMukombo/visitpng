@@ -493,14 +493,14 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
     return (
       <main className="adminShell">
         <div className="adminAccess" style={{maxWidth:"480px",margin:"60px auto",padding:"32px",background:"#fff",borderRadius:"16px",boxShadow:"0 8px 30px rgba(0,0,0,0.08)",textAlign:"center"}}>
-          <div className="adminLogo" style={{fontSize:"36px",marginBottom:"12px"}}>🇿🇲</div>
-          <h1 style={{fontSize:"22px",fontWeight:800,color:"#0A4D3C",marginBottom:"8px"}}>ZAMROAM ADMINISTRATION</h1>
+          <div className="adminLogo" style={{fontSize:"36px",marginBottom:"12px"}}>🇵🇬</div>
+          <h1 style={{fontSize:"22px",fontWeight:800,color:"#0D2B27",marginBottom:"8px"}}>VISITPNG ADMINISTRATION</h1>
           <p style={{color:"#555",fontSize:"14px",lineHeight:"1.6",marginBottom:"20px"}}>{status}</p>
           <div style={{display:"flex",gap:"10px",justifyContent:"center",flexWrap:"wrap"}}>
             <button
               type="button"
               onClick={() => load(selectedCountry)}
-              style={{padding:"10px 18px",background:"#D96B27",color:"#fff",border:"none",borderRadius:"8px",fontWeight:700,cursor:"pointer"}}
+              style={{padding:"10px 18px",background:"#EA580C",color:"#fff",border:"none",borderRadius:"8px",fontWeight:700,cursor:"pointer"}}
             >
               🔄 Retry Loading
             </button>
@@ -508,7 +508,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
               href="/"
               style={{padding:"10px 18px",background:"#f1f5f9",color:"#334155",borderRadius:"8px",fontWeight:600,textDecoration:"none",display:"inline-block"}}
             >
-              Return to ZamRoam
+              Return to VisitPNG
             </Link>
             <a
               href={viewer.signOut}
@@ -540,16 +540,16 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   return <main className="adminShell">
     <header className="adminHeader">
       <Link href="/" className="adminBrand">
-        <b>🇿🇲</b>
+        <b>🇵🇬</b>
         <span>
-          ZAMROAM / VISIT ZAMBIA
+          VISITPNG / PAPUA NEW GUINEA
           <br/>
-          <small>Administration Control Center (Lamton Investments Ltd)</small>
+          <small>Administration Control Center (VisitPNG Tourism Services Ltd)</small>
         </span>
       </Link>
       <div style={{display:"flex",alignItems:"center",gap:"12px",flexWrap:"wrap"}}>
         <span className="destinationPill" style={{background:"rgba(255,255,255,0.15)",color:"var(--text-on-dark)",padding:"5px 12px",borderRadius:"6px",fontSize:"12px",fontWeight:700}}>
-          🇿🇲 Zambia Tourism Portal
+          🇵🇬 Papua New Guinea Portal
         </span>
         <span>{viewer.name} ({viewer.email})</span>
         <a href={viewer.signOut}>Sign out</a>
@@ -1222,8 +1222,8 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
                       onChange={handleCsvUpload}
                     />
                     <a
-                      href="/templates/zamroam_languages_template.csv"
-                      download="zamroam_languages_template.csv"
+                      href="/templates/visitpng_languages_template.csv"
+                      download="visitpng_languages_template.csv"
                       style={{
                         background:"var(--surface-subtle)",
                         border:"1px solid var(--border-default)",

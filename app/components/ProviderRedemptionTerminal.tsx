@@ -233,7 +233,7 @@ export default function ProviderRedemptionTerminal({ countryCode = "PNG", onClos
                         <strong>{formatPrice(original, currency)}</strong>
                       </div>
                       <div className="summaryLine discount">
-                        <span>ZamRoam Member Privilege:</span>
+                        <span>VisitPNG Member Privilege:</span>
                         <strong>-{formatPrice(estimatedDiscount, currency)}</strong>
                       </div>
                       <div className="summaryLine totalFinal">
@@ -269,7 +269,7 @@ export default function ProviderRedemptionTerminal({ countryCode = "PNG", onClos
           <div className="receiptSuccessView">
             <div className="receiptIconBadge">✓</div>
             <h3>Redemption Completed Successfully!</h3>
-            <p>The member discount has been recorded in the ZamRoam national partner ledger.</p>
+            <p>The member discount has been recorded in the VisitPNG national partner ledger.</p>
 
             <div className="receiptCard">
               <div className="receiptTopRow">

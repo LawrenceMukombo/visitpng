@@ -36,9 +36,9 @@ export default function AdminErrorBoundary({
           textAlign: "center",
         }}
       >
-        <div style={{ fontSize: "42px", marginBottom: "12px" }}>🇿🇲</div>
-        <h2 style={{ fontSize: "22px", fontWeight: 800, color: "#0A4D3C", margin: "0 0 8px 0" }}>
-          ZAMROAM ADMINISTRATION
+        <div style={{ fontSize: "42px", marginBottom: "12px" }}>🇵🇬</div>
+        <h2 style={{ fontSize: "22px", fontWeight: 800, color: "#0D2B27", margin: "0 0 8px 0" }}>
+          VISITPNG ADMINISTRATION
         </h2>
         <p style={{ fontSize: "14px", color: "#64748b", margin: "0 0 20px 0" }}>
           The administration portal encountered a temporary connection or session issue.

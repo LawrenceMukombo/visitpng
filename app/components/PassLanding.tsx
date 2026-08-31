@@ -431,10 +431,10 @@ export function PassLanding({
         }}>
           <div>
             <h4 style={{ margin: "0 0 0.5rem 0", fontSize: "1.1rem", color: "#1B6960" }}>
-              How do I redeem ZamRoam Deals with my ZamRoam Pass?
+              How do I redeem VisitPNG Deals with my VisitPNG Pass?
             </h4>
             <p style={{ margin: 0, color: "#555", lineHeight: "1.5", fontSize: "0.95rem" }}>
-              Simply open your ZamRoam app or digital wallet on your phone, navigate to your Pass, and show your rolling QR code to the cashier or guide upon arrival or payment.
+              Simply open your VisitPNG app or digital wallet on your phone, navigate to your Pass, and show your rolling QR code to the cashier or guide upon arrival or payment.
             </p>
           </div>
           <div>

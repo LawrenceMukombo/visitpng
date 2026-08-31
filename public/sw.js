@@ -1,5 +1,5 @@
-// ZamRoam Enterprise Service Worker
-const CACHE_NAME = "zamroam-v1.0.2";
+// VisitPNG Enterprise Service Worker
+const CACHE_NAME = "visitpng-v1.0.0";
 const STATIC_ASSETS = [
   "/",
   "/manifest.json",
