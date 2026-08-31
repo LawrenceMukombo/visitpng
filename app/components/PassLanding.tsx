@@ -166,7 +166,7 @@ export function PassLanding({
   };
 
   const handleAddToWallet = (walletType: "Apple" | "Google") => {
-    setWalletNotice(`📲 Pass successfully configured for ${walletType} Wallet! Pass payload securely linked to Lamton Investments Ltd.`);
+    setWalletNotice(`📲 Pass successfully configured for ${walletType} Wallet! Pass payload securely linked to LanFrame.`);
     setTimeout(() => setWalletNotice(""), 4500);
   };
 

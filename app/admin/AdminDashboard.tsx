@@ -6,8 +6,8 @@ import AdminProviderVetting from "../components/AdminProviderVetting";
 import AdminMembershipConsole from "../components/AdminMembershipConsole";
 import AdminOperationsConsole from "../components/AdminOperationsConsole";
 import type { ProviderApplicationRecord } from "../../db/providers";
-import {ZAMBIA_REGIONS, ZAMBIA_PROVINCES} from "../../db/zambiaGeography";
-import {ZAMBIAN_LANGUAGE_ZONES, ZambianLanguageZone} from "../../db/zambianLanguages";
+import {PNG_REGIONS, PNG_PROVINCES} from "../../db/pngGeography";
+import {PNG_LANGUAGE_ZONES, PngLanguageZone} from "../../db/pngLanguages";
 
 type Choice={id:number;name:string;displayOrder?:number;contactName?:string;contactEmail?:string;contactPhone?:string;physicalAddress?:string;sourceUrl?:string;licenseNumber?:string};
 type Province={id:number;code:string;name:string;region:string};
@@ -124,13 +124,13 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const [apiPreview,setApiPreview]=useState<string>("Click 'Test API' below to see live JSON response.");
   const [apiLoading,setApiLoading]=useState(false);
   const [uploadingImage,setUploadingImage]=useState(false);
-  const [expandedRegion,setExpandedRegion]=useState<string>("Southern & Lusaka");
+  const [expandedRegion,setExpandedRegion]=useState<string>("Southern");
   const [expandedCardIds,setExpandedCardIds]=useState<Set<number>>(new Set());
   const [allExpanded,setAllExpanded]=useState(false);
 
-  // Zambian Languages & Phrasebook Admin CRUD State
-  const [languageZones, setLanguageZones] = useState<ZambianLanguageZone[]>(ZAMBIAN_LANGUAGE_ZONES);
-  const [selectedAdminLangZone, setSelectedAdminLangZone] = useState<string>("bemba");
+  // Papua New Guinea Languages & Phrasebook Admin CRUD State
+  const [languageZones, setLanguageZones] = useState<PngLanguageZone[]>(PNG_LANGUAGE_ZONES);
+  const [selectedAdminLangZone, setSelectedAdminLangZone] = useState<string>("tok-pisin");
   const [phraseForm, setPhraseForm] = useState<{
     id: string;
     category: "greetings" | "safari" | "market" | "navigation" | "emergency" | "culture";
@@ -544,7 +544,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
         <span>
           VISITPNG / PAPUA NEW GUINEA
           <br/>
-          <small>Administration Control Center (VisitPNG Tourism Services Ltd)</small>
+          <small>Administration Control Center (LanFrame)</small>
         </span>
       </Link>
       <div style={{display:"flex",alignItems:"center",gap:"12px",flexWrap:"wrap"}}>
@@ -560,7 +560,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
       <button className={section==="places"?"active":""} onClick={()=>setSection("places")}>Facilities & Places</button>
       <button className={section==="locations"?"active":""} onClick={()=>setSection("locations")}>Locations & Districts</button>
       <button className={section==="provinces"?"active":""} onClick={()=>setSection("provinces")}>Provinces</button>
-      <button className={section==="hierarchy"?"active":""} onClick={()=>setSection("hierarchy")}>Smart Cascade Hierarchy (116 Districts)</button>
+      <button className={section==="hierarchy"?"active":""} onClick={()=>setSection("hierarchy")}>Smart Cascade Hierarchy (89 Districts & 22 Provinces)</button>
       <button className={section==="languages"?"active":""} onClick={()=>setSection("languages")}>🗣️ Languages & Phrasebook</button>
       <button className={section==="membership_ecosystem"?"active":""} onClick={()=>setSection("membership_ecosystem")}>
         👑 Memberships & Partner Ecosystem
@@ -969,16 +969,16 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
       <section className="adminHierarchySection">
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",flexWrap:"wrap",gap:"12px",marginBottom:"12px"}}>
           <div>
-            <p className="eyebrow" style={{color:"#C86428",fontWeight:800}}>COMPLETE ZAMBIA GEOGRAPHY REGISTRY</p>
-            <h1 style={{margin:"4px 0"}}>Smart Cascade Location Tree (5 Regions · 10 Provinces · 116 Districts)</h1>
+            <p className="eyebrow" style={{color:"#EA580C",fontWeight:800}}>COMPLETE PAPUA NEW GUINEA GEOGRAPHY REGISTRY</p>
+            <h1 style={{margin:"4px 0"}}>Smart Cascade Location Tree (4 Regions · 22 Provinces · 89 Districts)</h1>
             <p style={{color:"var(--text-secondary)",fontSize:"13px",margin:0}}>
-              Showing all 116 official administrative districts across the 10 provinces of Zambia with provincial capitals and tourism hotspots:
+              Showing all 89 official administrative districts across the 22 provinces of Papua New Guinea with provincial capitals and tourism hotspots:
             </p>
           </div>
           <div style={{minWidth:"260px"}}>
             <input
               type="search"
-              placeholder="🔍 Search all 116 districts or capitals..."
+              placeholder="🔍 Search all 89 districts or capitals..."
               value={districtFilterSearch}
               onChange={(e)=>setDistrictFilterSearch(e.target.value)}
               style={{
@@ -994,7 +994,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
         </div>
 
         <div className="hierarchyRegionTabs">
-          {ZAMBIA_REGIONS.map(r=>(
+          {PNG_REGIONS.map(r=>(
             <button
               key={r.name}
               className={expandedRegion===r.name?"active":""}
@@ -1002,14 +1002,14 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
             >
               <b>{r.label}</b>
               <small>
-                {ZAMBIA_PROVINCES.filter(p=>p.region===r.name).length} Provinces · {ZAMBIA_PROVINCES.filter(p=>p.region===r.name).reduce((acc,p)=>acc+p.districts.length,0)} Districts
+                {PNG_PROVINCES.filter(p=>p.region===r.name).length} Provinces · {PNG_PROVINCES.filter(p=>p.region===r.name).reduce((acc,p)=>acc+p.districts.length,0)} Districts
               </small>
             </button>
           ))}
         </div>
 
         <div className="hierarchyProvinceList">
-          {ZAMBIA_PROVINCES.filter(p=>districtFilterSearch ? true : p.region===expandedRegion).map(prov=>{
+          {PNG_PROVINCES.filter(p=>districtFilterSearch ? true : p.region===expandedRegion).map(prov=>{
             const filteredDistricts = prov.districts.filter(d =>
               !districtFilterSearch ||
               d.name.toLowerCase().includes(districtFilterSearch.toLowerCase()) ||
