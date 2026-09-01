@@ -37,9 +37,24 @@ export default function ErrorBoundary({
         <h2 style={{ fontSize: "20px", fontWeight: 700, margin: "0 0 8px", color: "#ffffff" }}>
           Welcome to VisitPNG
         </h2>
-        <p style={{ fontSize: "14px", color: "#a3cfc9", lineHeight: 1.5, margin: "0 0 24px" }}>
+        <p style={{ fontSize: "14px", color: "#a3cfc9", lineHeight: 1.5, margin: "0 0 16px" }}>
           Explore Papua New Guinea&apos;s 22 provinces, Kokoda trekking expeditions, dive sanctuaries, and verified local tourism providers.
         </p>
+        {error?.message && (
+          <div style={{
+            background: "rgba(0,0,0,0.3)",
+            border: "1px solid rgba(255,255,255,0.2)",
+            borderRadius: "8px",
+            padding: "10px 14px",
+            fontSize: "12px",
+            color: "#fca5a5",
+            textAlign: "left",
+            wordBreak: "break-word",
+            marginBottom: "20px"
+          }}>
+            <strong>Notice:</strong> {error.message}
+          </div>
+        )}
         <button
           onClick={() => reset()}
           style={{
