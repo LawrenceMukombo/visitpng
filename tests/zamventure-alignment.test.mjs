@@ -58,8 +58,8 @@ test("P2: About VisitPNG & Commercial Invoices & Receipts", async () => {
 
   // About Page
   assert.match(aboutSource, /About/);
-  assert.match(aboutSource, /VisitPNG Tourism Services Ltd/);
-  assert.match(aboutSource, /Our Mission & Tourism Vision/);
+  assert.match(aboutSource, /LanFrame/);
+  assert.match(aboutSource, /Connecting People to/);
 
   // Invoices & Receipts
   assert.match(invoiceDb, /CREATE TABLE IF NOT EXISTS invoices/);
