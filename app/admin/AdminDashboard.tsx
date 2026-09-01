@@ -9,10 +9,10 @@ import type { ProviderApplicationRecord } from "../../db/providers";
 import {PNG_REGIONS, PNG_PROVINCES} from "../../db/pngGeography";
 import {PNG_LANGUAGE_ZONES, PngLanguageZone} from "../../db/pngLanguages";
 
-type Choice={id:number;name:string;displayOrder?:number;contactName?:string;contactEmail?:string;contactPhone?:string;physicalAddress?:string;sourceUrl?:string;licenseNumber?:string};
-type Province={id:number;code:string;name:string;region:string};
-type Destination={id:number;provinceId:number;district:string|null;slug:string;name:string;summary:string;latitude:number|null;longitude:number|null;coverImageUrl:string|null;sourceUrl:string|null;provinceName:string;provinceCode:string;provinceRegion:string};
-type Listing={
+export type Choice={id:number;name:string;displayOrder?:number;contactName?:string;contactEmail?:string;contactPhone?:string;physicalAddress?:string;sourceUrl?:string;licenseNumber?:string};
+export type Province={id:number;code:string;name:string;region:string};
+export type Destination={id:number;provinceId:number;district:string|null;slug:string;name:string;summary:string;latitude:number|null;longitude:number|null;coverImageUrl:string|null;sourceUrl:string|null;provinceName:string;provinceCode:string;provinceRegion:string};
+export type Listing={
   id:number;
   slug:string;
   name:string;
@@ -39,7 +39,7 @@ type Listing={
   lastReviewedAt:string|null;
 };
 
-type Data={
+export type AdminDashboardData={
   admin:{preferredName:string|null;email:string};
   listings:Listing[];
   destinations:Destination[];
@@ -106,8 +106,18 @@ const blankProvider={
   licenseNumber:""
 };
 
-export default function AdminDashboard({viewer}:{viewer:{name:string;email:string;signOut:string}}){
-  const [data,setData]=useState<Data|null>(null);
+export default function AdminDashboard({
+  viewer,
+  initialData = null,
+  initialProviderApps = [],
+  initialMembershipData = null
+}:{
+  viewer:{name:string;email:string;signOut:string};
+  initialData?: AdminDashboardData | null;
+  initialProviderApps?: ProviderApplicationRecord[];
+  initialMembershipData?: Parameters<typeof AdminMembershipConsole>[0]["data"];
+}){
+  const [data,setData]=useState<AdminDashboardData|null>(initialData || null);
   const selectedCountry = "PNG";
   const [listingForm,setListingForm]=useState({...blankListing});
   const [destForm,setDestForm]=useState({...blankDestination});
@@ -115,10 +125,10 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const [categoryForm,setCategoryForm]=useState({...blankCategory});
   const [providerForm,setProviderForm]=useState({...blankProvider});
 
-  const [status,setStatus]=useState("Loading information…");
+  const [status,setStatus]=useState(initialData ? "" : "Loading information…");
   const [section,setSection]=useState<"places"|"locations"|"provinces"|"hierarchy"|"languages"|"membership_ecosystem"|"providers_vetting"|"operations"|"categories"|"api"|"activity">("places");
-  const [providerApps,setProviderApps]=useState<ProviderApplicationRecord[]>([]);
-  const [membershipData,setMembershipData]=useState<Parameters<typeof AdminMembershipConsole>[0]["data"]>(null);
+  const [providerApps,setProviderApps]=useState<ProviderApplicationRecord[]>(initialProviderApps);
+  const [membershipData,setMembershipData]=useState<Parameters<typeof AdminMembershipConsole>[0]["data"]>(initialMembershipData);
   const [search,setSearch]=useState("");
   const [categoryFilter,setCategoryFilter]=useState<string>("all");
   const [apiPreview,setApiPreview]=useState<string>("Click 'Test API' below to see live JSON response.");
@@ -133,7 +143,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   const [selectedAdminLangZone, setSelectedAdminLangZone] = useState<string>("tok-pisin");
   const [phraseForm, setPhraseForm] = useState<{
     id: string;
-    category: "greetings" | "safari" | "market" | "navigation" | "emergency" | "culture";
+    category: "greetings" | "market" | "trekking" | "emergency" | "custom" | "safari" | "culture" | "navigation";
     english: string;
     localText: string;
     phonetic: string;
@@ -202,7 +212,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
   };
 
   const load=useCallback((countryFilter = selectedCountry)=>{
-    const url = countryFilter && countryFilter !== "all" ? `/api/admin/listings?country=${countryFilter}` : "/api/admin/listings?country=ZMB";
+    const url = countryFilter && countryFilter !== "all" ? `/api/admin/listings?country=${countryFilter}` : "/api/admin/listings?country=PNG";
     fetch(url).then(async r=>{
       const x=await r.json();
       if(!r.ok)throw new Error(x.error);
@@ -221,7 +231,11 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
     }).catch(()=>{});
   },[selectedCountry]);
 
-  useEffect(()=>{load(selectedCountry)},[load,selectedCountry]);
+  useEffect(()=>{
+    if (!data) {
+      load(selectedCountry);
+    }
+  },[load,selectedCountry,data]);
 
   // Direct File Upload Handler
   const handleFileUpload = async (file: File, target: "listing" | "destination") => {
@@ -1095,7 +1109,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
               >
                 {languageZones.map((z) => (
                   <option key={z.code} value={z.code}>
-                    {z.name} ({z.nativeName}) — {z.primaryProvinces.join(", ")}
+                    {z.name} ({z.greeting}) — {z.primaryProvinces.join(", ")}
                   </option>
                 ))}
               </select>
@@ -1104,14 +1118,16 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
             <label>Category
               <select
                 value={phraseForm.category}
-                onChange={(e) => setPhraseForm({ ...phraseForm, category: e.target.value as "greetings" | "safari" | "market" | "navigation" | "emergency" | "culture" })}
+                onChange={(e) => setPhraseForm({ ...phraseForm, category: e.target.value as "greetings" | "market" | "trekking" | "emergency" | "custom" | "safari" | "culture" | "navigation" })}
               >
                 <option value="greetings">👋 Essential Greetings</option>
-                <option value="safari">🦁 Safari & Wildlife</option>
+                <option value="trekking">🥾 Trekking & Trail</option>
+                <option value="safari">🦁 Wildlife & Nature</option>
                 <option value="market">🛍️ Market & Dining</option>
                 <option value="navigation">🧭 Directions & Travel</option>
                 <option value="emergency">🚨 Emergency & Help</option>
-                <option value="culture">👑 Cultural Respect & Royal Protocols</option>
+                <option value="culture">👑 Cultural Respect & Protocols</option>
+                <option value="custom">💬 Everyday Custom</option>
               </select>
             </label>
 
@@ -1124,10 +1140,10 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
               />
             </label>
 
-            <label>Local Zambian Text
+            <label>Local Papua New Guinea Text
               <input
                 required
-                placeholder="e.g. Mwashibukeni / Mulibwanji"
+                placeholder="e.g. Gutpela moning / Yu stap gut?"
                 value={phraseForm.localText}
                 onChange={(e) => setPhraseForm({ ...phraseForm, localText: e.target.value })}
               />
@@ -1136,7 +1152,7 @@ export default function AdminDashboard({viewer}:{viewer:{name:string;email:strin
             <div className="adminFields">
               <label>Phonetic Pronunciation
                 <input
-                  placeholder="e.g. mwah-shee-boo-KEH-nee"
+                  placeholder="e.g. goot-pehl-ah moh-ning"
                   value={phraseForm.phonetic}
                   onChange={(e) => setPhraseForm({ ...phraseForm, phonetic: e.target.value })}
                 />
