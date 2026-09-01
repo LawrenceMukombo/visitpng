@@ -36,7 +36,13 @@ export default function AdminErrorBoundary({
           textAlign: "center",
         }}
       >
-        <div style={{ fontSize: "42px", marginBottom: "12px" }}>🇵🇬</div>
+        <div style={{ marginBottom: "16px", display: "flex", justifyContent: "center" }}>
+          <img
+            src="/branding/visitpng_logo.png"
+            alt="VisitPNG Logo"
+            style={{ height: "64px", width: "auto", objectFit: "contain", borderRadius: "8px" }}
+          />
+        </div>
         <h2 style={{ fontSize: "22px", fontWeight: 800, color: "#0D2B27", margin: "0 0 8px 0" }}>
           VISITPNG ADMINISTRATION
         </h2>

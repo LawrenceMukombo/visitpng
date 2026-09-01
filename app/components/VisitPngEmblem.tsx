@@ -14,123 +14,49 @@ export function VisitPngLogo({
   showTagline?: boolean;
   variant?: "light" | "dark";
 }) {
-  const pinSize = size === "small" ? 34 : size === "large" ? 58 : 44;
-  const fontSize = size === "small" ? "19px" : size === "large" ? "32px" : "24px";
-  const taglineSize = size === "small" ? "8.5px" : size === "large" ? "11px" : "9.5px";
+  const imgHeight = size === "small" ? 38 : size === "large" ? 64 : 48;
 
   return (
     <div style={{ display: "inline-flex", alignItems: "center", gap: size === "small" ? "8px" : "12px", textDecoration: "none" }}>
-      {/* Official VisitPNG Kumul SVG Icon */}
-      <svg
-        width={pinSize}
-        height={pinSize * 1.15}
-        viewBox="0 0 100 115"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        style={{ filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.35))", flexShrink: 0 }}
-      >
-        <defs>
-          <linearGradient id="pngOrangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#EA580C" />
-            <stop offset="100%" stopColor="#F97316" />
-          </linearGradient>
-          <linearGradient id="pngTealGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#0E3D35" />
-            <stop offset="100%" stopColor="#1B6960" />
-          </linearGradient>
-          <linearGradient id="kumulGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#FBBF24" />
-            <stop offset="100%" stopColor="#F59E0B" />
-          </linearGradient>
-          <linearGradient id="coralRedGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#DC2626" />
-            <stop offset="100%" stopColor="#991B1B" />
-          </linearGradient>
-        </defs>
-
-        {/* Outer Shield / Pin Contour */}
-        <path
-          d="M50 4C24.595 4 4 24.595 4 50c0 14.2 6.5 27 16.8 35.3L50 112l29.2-26.7C89.5 77 96 64.2 96 50 96 24.595 75.405 4 50 4z"
-          fill="#103630"
-          stroke="#EA580C"
-          strokeWidth="6"
-        />
-
-        {/* Kumul Sun Halo */}
-        <path
-          d="M20 38C26 22 37 14 50 14s24 8 30 24"
-          stroke="url(#pngOrangeGrad)"
-          strokeWidth="4"
-          strokeLinecap="round"
-        />
-
-        {/* Golden Sun / Kundu Emblem */}
-        <circle cx="50" cy="38" r="12" fill="url(#kumulGoldGrad)" />
-
-        {/* Kumul Bird of Paradise Flight Plumes */}
-        <path
-          d="M32 58 C 42 46, 58 46, 68 58 C 60 70, 40 70, 32 58 Z"
-          fill="#FFFFFF"
-          opacity="0.9"
-        />
-        <path
-          d="M50 50 L 50 82"
-          stroke="#FBBF24"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-        />
-        <path
-          d="M40 64 L 50 74 L 60 64"
-          stroke="#F97316"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-
-      {/* Typography */}
-      <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.1 }}>
-        <div style={{ display: "flex", alignItems: "baseline" }}>
+      <img
+        src="/branding/visitpng_logo.png"
+        alt="Visit PNG Official Logo"
+        style={{
+          height: `${imgHeight}px`,
+          width: "auto",
+          objectFit: "contain",
+          filter: "drop-shadow(0 4px 10px rgba(0,0,0,0.35))",
+          borderRadius: "6px",
+          display: "block"
+        }}
+      />
+      {showTagline && (
+        <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.15 }}>
           <span
             style={{
               fontFamily: "'Ubuntu', sans-serif",
-              fontSize: fontSize,
+              fontSize: size === "small" ? "11px" : size === "large" ? "14px" : "12px",
               fontWeight: 800,
-              color: variant === "dark" ? "#1B6960" : "#FFFFFF",
-              letterSpacing: "-0.5px"
+              color: variant === "dark" ? "#1B6960" : "#FDBA74",
+              letterSpacing: "1px",
+              textTransform: "uppercase"
             }}
           >
-            Visit
+            PAPUA NEW GUINEA
           </span>
           <span
             style={{
               fontFamily: "'Ubuntu', sans-serif",
-              fontSize: fontSize,
-              fontWeight: 800,
-              color: "#F97316",
-              letterSpacing: "-0.5px"
+              fontSize: size === "small" ? "8.5px" : size === "large" ? "10.5px" : "9.5px",
+              fontWeight: 600,
+              color: variant === "dark" ? "#64748B" : "#CBD5E1",
+              letterSpacing: "0.5px"
             }}
           >
-            PNG
+            Land of a Million Journeys
           </span>
         </div>
-
-        {showTagline && (
-          <span
-            style={{
-              fontFamily: "'Ubuntu', sans-serif",
-              fontSize: taglineSize,
-              fontWeight: 600,
-              color: variant === "dark" ? "#64748B" : "#FDBA74",
-              letterSpacing: "1px",
-              textTransform: "uppercase",
-              marginTop: "2px"
-            }}
-          >
-            LAND OF A MILLION JOURNEYS
-          </span>
-        )}
-      </div>
+      )}
     </div>
   );
 }

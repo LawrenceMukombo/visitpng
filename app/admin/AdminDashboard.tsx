@@ -507,7 +507,13 @@ export default function AdminDashboard({
     return (
       <main className="adminShell">
         <div className="adminAccess" style={{maxWidth:"480px",margin:"60px auto",padding:"32px",background:"#fff",borderRadius:"16px",boxShadow:"0 8px 30px rgba(0,0,0,0.08)",textAlign:"center"}}>
-          <div className="adminLogo" style={{fontSize:"36px",marginBottom:"12px"}}>🇵🇬</div>
+          <div className="adminLogo" style={{marginBottom:"16px",display:"flex",justifyContent:"center"}}>
+            <img
+              src="/branding/visitpng_logo.png"
+              alt="VisitPNG Logo"
+              style={{ height: "64px", width: "auto", objectFit: "contain", borderRadius: "8px" }}
+            />
+          </div>
           <h1 style={{fontSize:"22px",fontWeight:800,color:"#0D2B27",marginBottom:"8px"}}>VISITPNG ADMINISTRATION</h1>
           <p style={{color:"#555",fontSize:"14px",lineHeight:"1.6",marginBottom:"20px"}}>{status}</p>
           <div style={{display:"flex",gap:"10px",justifyContent:"center",flexWrap:"wrap"}}>
@@ -554,7 +560,11 @@ export default function AdminDashboard({
   return <main className="adminShell">
     <header className="adminHeader">
       <Link href="/" className="adminBrand">
-        <b>🇵🇬</b>
+        <img
+          src="/branding/visitpng_logo.png"
+          alt="VisitPNG Logo"
+          style={{ height: "42px", width: "auto", objectFit: "contain", borderRadius: "6px" }}
+        />
         <span>
           VISITPNG / PAPUA NEW GUINEA
           <br/>

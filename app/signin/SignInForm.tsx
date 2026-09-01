@@ -103,9 +103,13 @@ export default function SignInForm({ returnTo }: SignInFormProps) {
   return (
     <main className="nativeAuth">
       <section className="authContainer">
-        <Link href="/" className="authBrand">
-          <i>P</i>
-          <span>VISITPNG · DISCOVER PAPUA NEW GUINEA</span>
+        <Link href="/" className="authBrand" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", textDecoration: "none" }}>
+          <img
+            src="/branding/visitpng_logo.png"
+            alt="VisitPNG Official Logo"
+            style={{ height: "68px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.25))", borderRadius: "8px" }}
+          />
+          <span style={{ fontSize: "12px", fontWeight: 700, letterSpacing: "1px", color: "var(--brand-deep-teal)" }}>VISITPNG · DISCOVER PAPUA NEW GUINEA</span>
         </Link>
 
         {isAdminDestination && (

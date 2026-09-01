@@ -33,7 +33,13 @@ export default function ErrorBoundary({
         textAlign: "center",
         boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)"
       }}>
-        <div style={{ fontSize: "42px", marginBottom: "16px" }}>🇵🇬</div>
+        <div style={{ marginBottom: "18px", display: "flex", justifyContent: "center" }}>
+          <img
+            src="/branding/visitpng_logo.png"
+            alt="VisitPNG Logo"
+            style={{ height: "64px", width: "auto", objectFit: "contain", filter: "drop-shadow(0 4px 12px rgba(0,0,0,0.3))", borderRadius: "8px" }}
+          />
+        </div>
         <h2 style={{ fontSize: "20px", fontWeight: 700, margin: "0 0 8px", color: "#ffffff" }}>
           Welcome to VisitPNG
         </h2>
