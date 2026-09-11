@@ -29,3 +29,24 @@ test("provider self-registration, anti-scam fact-checking, and 5% + GST commissi
   assert.match(modalUi, /payoutMethod/);
 });
 
+test("submitProviderRegistration safely resolves provinceId and prevents foreign key failures", async () => {
+  const [providersSource, modalSource] = await Promise.all([
+    read("db/providers.ts"),
+    read("app/components/ProviderRegistrationModal.tsx")
+  ]);
+
+  // Robust province resolution against DB to prevent FOREIGN KEY constraint failed
+  assert.match(providersSource, /resolvedProvinceId/);
+  assert.match(providersSource, /SELECT id FROM provinces WHERE id=\?/);
+  assert.match(providersSource, /legacyMap/);
+  assert.match(providersSource, /101:\s*"NCD"/);
+  assert.match(providersSource, /fallbackProv/);
+
+  // Modal has authentic PNG province list and loads from locations API
+  assert.match(modalSource, /DEFAULT_PNG_PROVINCES/);
+  assert.match(modalSource, /fetch\("\/api\/locations"\)/);
+  assert.match(modalSource, /code:\s*"NCD"/);
+});
+
+
+

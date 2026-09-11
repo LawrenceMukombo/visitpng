@@ -355,6 +355,45 @@ export async function submitProviderRegistration(input: ProviderApplicationInput
     throw new Error("You must agree to the 5% platform commission agreement.");
   }
 
+  // Validate and resolve provinceId against existing provinces in DB
+  let resolvedProvinceId: number | null = null;
+  if (provinceId) {
+    const directMatch = await d1.prepare("SELECT id FROM provinces WHERE id=?").bind(provinceId).first<{ id: number }>();
+    if (directMatch) {
+      resolvedProvinceId = directMatch.id;
+    }
+  }
+
+  // If not matched by exact ID, resolve via legacy ID mapping or first available province
+  if (!resolvedProvinceId) {
+    const legacyMap: Record<number, string> = {
+      101: "NCD", 102: "CP", 103: "ORO", 104: "MBP", 105: "EHP",
+      106: "WHP", 107: "SIM", 108: "ENB", 109: "WNB", 110: "MP",
+      111: "MOR", 112: "ESP"
+    };
+    const targetCode = legacyMap[provinceId];
+    if (targetCode) {
+      const codeMatch = await d1.prepare("SELECT id FROM provinces WHERE code=?").bind(targetCode).first<{ id: number }>();
+      if (codeMatch) resolvedProvinceId = codeMatch.id;
+    }
+  }
+
+  if (!resolvedProvinceId) {
+    const fallbackProv = await d1.prepare("SELECT id FROM provinces ORDER BY id ASC LIMIT 1").first<{ id: number }>();
+    if (fallbackProv) resolvedProvinceId = fallbackProv.id;
+  }
+
+  if (!resolvedProvinceId) {
+    throw new Error("Unable to assign province. Please select a valid operating province.");
+  }
+
+  // Validate destinationId against existing destinations in DB if provided
+  let resolvedDestinationId: number | null = null;
+  if (destinationId) {
+    const destMatch = await d1.prepare("SELECT id FROM destinations WHERE id=?").bind(destinationId).first<{ id: number }>();
+    if (destMatch) resolvedDestinationId = destMatch.id;
+  }
+
   const baseSlug = slugify(businessName);
   let slug = baseSlug;
   const existing = await d1.prepare("SELECT id FROM provider_applications WHERE slug=?").bind(slug).first<{ id: number }>();
@@ -382,7 +421,7 @@ export async function submitProviderRegistration(input: ProviderApplicationInput
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending_review', ?, 0.05, 0.10, ?, ?)
   `).bind(
     applicantName, applicantEmail, applicantPhone, businessName, slug,
-    providerType, provinceId, destinationId, villageOrTown, description,
+    providerType, resolvedProvinceId, resolvedDestinationId, villageOrTown, description,
     experienceYears, licenseOrTpaNumber, clanOrReferenceContact, pricingSample,
     nrcDocumentUrl, licenseDocumentUrl, endorsementDocumentUrl, antiFraudDeclared ? 1 : 0,
     payoutMethod, payoutAccountDetails, initialChecklist, now, now

@@ -7,7 +7,10 @@ export async function POST(request: Request) {
     const result = await submitProviderRegistration(body);
     return NextResponse.json(result);
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Registration could not be processed.";
+    let message = err instanceof Error ? err.message : "Registration could not be processed.";
+    if (message.toLowerCase().includes("foreign key")) {
+      message = "Invalid province or location selection. Please select a valid operating province and try again.";
+    }
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { calculateCommissionBreakdown } from "../../db/commission";
 
 interface ProvinceOption {
@@ -28,25 +28,72 @@ const PNG_PROVIDER_CATEGORIES = [
 ];
 
 const DEFAULT_PNG_PROVINCES: ProvinceOption[] = [
-  { id: 101, code: "NCD", name: "National Capital District", region: "Southern" },
-  { id: 102, code: "CEN", name: "Central Province", region: "Southern" },
-  { id: 103, code: "ORO", name: "Oro (Northern) Province", region: "Southern" },
-  { id: 104, code: "MBA", name: "Milne Bay Province", region: "Southern" },
-  { id: 105, code: "EHP", name: "Eastern Highlands Province", region: "Highlands" },
-  { id: 106, code: "WHP", name: "Western Highlands Province", region: "Highlands" },
-  { id: 107, code: "CHM", name: "Simbu (Chimbu) Province", region: "Highlands" },
-  { id: 108, code: "ENB", name: "East New Britain Province", region: "Islands" },
-  { id: 109, code: "WNB", name: "West New Britain Province", region: "Islands" },
-  { id: 110, code: "MAD", name: "Madang Province", region: "Momase" },
-  { id: 111, code: "MOR", name: "Morobe Province", region: "Momase" },
-  { id: 112, code: "ESP", name: "East Sepik Province", region: "Momase" }
+  { id: 1, code: "NCD", name: "National Capital District", region: "Southern" },
+  { id: 2, code: "CP", name: "Central Province", region: "Southern" },
+  { id: 3, code: "ORO", name: "Oro (Northern) Province", region: "Southern" },
+  { id: 4, code: "MBP", name: "Milne Bay Province", region: "Southern" },
+  { id: 5, code: "WP", name: "Western (Fly River) Province", region: "Southern" },
+  { id: 6, code: "GP", name: "Gulf Province", region: "Southern" },
+  { id: 7, code: "MOR", name: "Morobe Province", region: "Momase" },
+  { id: 8, code: "MP", name: "Madang Province", region: "Momase" },
+  { id: 9, code: "ESP", name: "East Sepik", region: "Momase" },
+  { id: 10, code: "WSP", name: "West Sepik (Sandaun)", region: "Momase" },
+  { id: 11, code: "EHP", name: "Eastern Highlands", region: "Highlands" },
+  { id: 12, code: "WHP", name: "Western Highlands", region: "Highlands" },
+  { id: 13, code: "SIM", name: "Simbu (Chimbu)", region: "Highlands" },
+  { id: 14, code: "SHP", name: "Southern Highlands", region: "Highlands" },
+  { id: 15, code: "ENG", name: "Enga", region: "Highlands" },
+  { id: 16, code: "HEL", name: "Hela", region: "Highlands" },
+  { id: 17, code: "JIK", name: "Jiwaka", region: "Highlands" },
+  { id: 18, code: "ENB", name: "East New Britain", region: "Islands" },
+  { id: 19, code: "WNB", name: "West New Britain", region: "Islands" },
+  { id: 20, code: "NIP", name: "New Ireland", region: "Islands" },
+  { id: 21, code: "MAN", name: "Manus", region: "Islands" },
+  { id: 22, code: "AROB", name: "Bougainville", region: "Islands" }
 ];
 
 export default function ProviderRegistrationModal({
   provinces,
   onClose
 }: ProviderRegistrationModalProps) {
-  const activeProvinces = provinces || DEFAULT_PNG_PROVINCES;
+  const [activeProvinces, setActiveProvinces] = useState<ProvinceOption[]>(
+    provinces && provinces.length > 0 ? provinces : DEFAULT_PNG_PROVINCES
+  );
+
+  useEffect(() => {
+    if (provinces && provinces.length > 0) {
+      setActiveProvinces(provinces);
+      return;
+    }
+    let isMounted = true;
+    fetch("/api/locations")
+      .then((res) => res.json())
+      .then((json) => {
+        if (
+          isMounted &&
+          json?.data?.provinces &&
+          Array.isArray(json.data.provinces) &&
+          json.data.provinces.length > 0
+        ) {
+          const loaded: ProvinceOption[] = json.data.provinces.map((p: Record<string, unknown>) => ({
+            id: Number(p.id),
+            code: String(p.code || ""),
+            name: String(p.name || ""),
+            region: String(p.region || "")
+          }));
+          setActiveProvinces(loaded);
+          setForm((prev) => {
+            const hasMatch = loaded.some((p) => p.id === prev.provinceId);
+            return hasMatch ? prev : { ...prev, provinceId: loaded[0].id };
+          });
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, [provinces]);
+
   const categories = PNG_PROVIDER_CATEGORIES;
   const currencyCode = "PGK";
 
@@ -57,7 +104,7 @@ export default function ProviderRegistrationModal({
     applicantPhone: "",
     businessName: "",
     providerType: "tour_guide",
-    provinceId: activeProvinces[0]?.id || 101,
+    provinceId: (provinces && provinces[0]?.id) || DEFAULT_PNG_PROVINCES[0]?.id || 1,
     villageOrTown: "",
     description: "",
     experienceYears: 2,
