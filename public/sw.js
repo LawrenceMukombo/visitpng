@@ -1,15 +1,12 @@
 // VisitPNG Enterprise Service Worker
-const CACHE_NAME = "visitpng-v1.0.0";
+const CACHE_NAME = "visitpng-v1.0.2";
 const STATIC_ASSETS = [
-  "/",
   "/manifest.json",
   "/favicon.svg",
-  "/icons/mobile_app.png",
-  "/privacy",
-  "/terms"
+  "/icons/mobile_app.png"
 ];
 
-// Install: Pre-cache core app shell & activate immediately
+// Install: Pre-cache core icons & activate immediately
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
@@ -34,6 +31,13 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+// Allow immediate activation when requested
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.action === "skipWaiting") {
+    self.skipWaiting();
+  }
+});
+
 // Fetch: Smart caching strategy (Network-first with offline fallback)
 self.addEventListener("fetch", (event) => {
   const { request } = event;
@@ -42,43 +46,35 @@ self.addEventListener("fetch", (event) => {
   // Only handle http/https requests within our domain or CDN images
   if (!request.url.startsWith("http")) return;
 
-  // 1. Navigation requests (HTML pages): Network-First
+  // 1. Navigation requests (HTML pages): Always Network-First to guarantee latest build chunks
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request)
-        .then((response) => {
-          if (response && response.status === 200) {
-            const responseClone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, responseClone));
-          }
-          return response;
-        })
+        .then((response) => response)
         .catch(() => {
-          return caches.match(request).then((cached) => {
-            return cached || caches.match("/");
-          });
+          return caches.match(request);
         })
     );
     return;
   }
 
-  // 2. API requests: Network-First with cache fallback
+  // 2. Next.js chunks & static bundles: Always fetch fresh from network
+  if (url.pathname.startsWith("/_next/")) {
+    event.respondWith(
+      fetch(request).catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // 3. API requests: Network-First with cache fallback
   if (url.pathname.startsWith("/api/")) {
     event.respondWith(
-      fetch(request)
-        .then((response) => {
-          if (response && response.status === 200) {
-            const responseClone = response.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(request, responseClone));
-          }
-          return response;
-        })
-        .catch(() => caches.match(request))
+      fetch(request).catch(() => caches.match(request))
     );
     return;
   }
 
-  // 3. Static assets, fonts, scripts & images: Stale-While-Revalidate
+  // 4. Static media, manifest, icons: Stale-While-Revalidate
   event.respondWith(
     caches.match(request).then((cachedResponse) => {
       const fetchPromise = fetch(request)
