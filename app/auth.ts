@@ -1,5 +1,6 @@
 import {cookies} from "next/headers";import {redirect} from "next/navigation";import {createHash,randomBytes,scryptSync,timingSafeEqual} from "node:crypto";import {env} from "../db/runtime";
-export type VisitPngUser={displayName:string;email:string;fullName:string|null};const COOKIE_NAME="visitpng_session";
+export type VisitPngUser={displayName:string;email:string;fullName:string|null};
+export const COOKIE_NAME="visitpng_session";
 let authInitPromise: Promise<void> | null = null;
 
 export async function ensureAuth() {
@@ -65,7 +66,18 @@ export function passwordMatches(password: string, stored: string, email?: string
   const actual = scryptSync(password, salt, 64);
   return expected.length === actual.length && timingSafeEqual(expected, actual);
 }
-export async function createSession(accountId:number,secure=false){await ensureAuth();const token=randomBytes(32).toString("base64url"),tokenHash=createHash("sha256").update(token).digest("hex"),expires=new Date(Date.now()+30*24*60*60*1000);await env.DB.prepare("INSERT INTO auth_sessions (account_id,token_hash,expires_at,created_at) VALUES (?,?,?,?)").bind(accountId,tokenHash,expires.toISOString(),new Date().toISOString()).run();const jar=await cookies();jar.set(COOKIE_NAME,token,{httpOnly:true,sameSite:"lax",secure,path:"/",expires})}
+export async function createSession(accountId:number,secure=false){
+  await ensureAuth();
+  const token=randomBytes(32).toString("base64url"),
+  tokenHash=createHash("sha256").update(token).digest("hex"),
+  expires=new Date(Date.now()+30*24*60*60*1000);
+  await env.DB.prepare("INSERT INTO auth_sessions (account_id,token_hash,expires_at,created_at) VALUES (?,?,?,?)").bind(accountId,tokenHash,expires.toISOString(),new Date().toISOString()).run();
+  try {
+    const jar=await cookies();
+    jar.set(COOKIE_NAME,token,{httpOnly:true,sameSite:"lax",secure,path:"/",expires});
+  } catch {}
+  return {token,tokenHash,expires,cookieName:COOKIE_NAME};
+}
 export async function getVisitPngUser():Promise<VisitPngUser|null>{
   try {
     await ensureAuth();
