@@ -118,6 +118,27 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
     return filteredTourists.slice(start, start + pageSize);
   }, [filteredTourists, currentPage, pageSize]);
 
+  if (!data) {
+    return (
+      <section className="adminMembershipConsoleSection">
+        <div className="sectionHeaderRow">
+          <div>
+            <p className="eyebrow lime">VISITPNG NATIONAL ECOSYSTEM</p>
+            <h2>Membership, Partner Rewards & Benefits Administration</h2>
+            <p className="subtext">Configure plans, moderate partner offers, manage physical cards, and audit national redemptions.</p>
+          </div>
+          <button className="refreshBtn" onClick={onRefresh}>Refresh Data ⟳</button>
+        </div>
+        <div style={{ padding: "40px 20px", textAlign: "center", background: "#f8fafc", borderRadius: "12px", border: "1px dashed #cbd5e1", margin: "20px 0" }}>
+          <p style={{ color: "#64748b", fontSize: "14px", margin: "0 0 12px 0" }}>Membership and partner rewards data is loading…</p>
+          <button onClick={onRefresh} style={{ padding: "8px 16px", background: "#0A4D3C", color: "#fff", border: "none", borderRadius: "6px", cursor: "pointer", fontSize: "13px", fontWeight: 600 }}>
+            Load Data ⟳
+          </button>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="adminMembershipConsoleSection">
       {/* Top Banner & KPI Stat Counters */}
@@ -136,32 +157,32 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
       <div className="adminMembershipKpiGrid">
         <div className="adminKpiCard">
           <small>Active Tourist Members</small>
-          <strong>{data?.stats.activeTourists || 0}</strong>
+          <strong>{data?.stats?.activeTourists ?? 0}</strong>
           <span>Across all tiers</span>
         </div>
         <div className="adminKpiCard">
           <small>Partner Providers</small>
-          <strong>{data?.stats.activeProviders || 0}</strong>
+          <strong>{data?.stats?.activeProviders ?? 0}</strong>
           <span>Listed to Platinum</span>
         </div>
         <div className="adminKpiCard highlight">
           <small>Total Tourist Savings</small>
-          <strong>ZMW {data?.stats.totalMemberSavings.toLocaleString() || 0}</strong>
+          <strong>ZMW {data?.stats?.totalMemberSavings ? data.stats.totalMemberSavings.toLocaleString() : "0"}</strong>
           <span>Verified Redemptions</span>
         </div>
         <div className="adminKpiCard">
           <small>Associated Guest Spend</small>
-          <strong>ZMW {data?.stats.totalAssociatedSpend.toLocaleString() || 0}</strong>
+          <strong>ZMW {data?.stats?.totalAssociatedSpend ? data.stats.totalAssociatedSpend.toLocaleString() : "0"}</strong>
           <span>Partner Gross Revenue</span>
         </div>
         <div className="adminKpiCard">
           <small>Pending Card Queue</small>
-          <strong>{data?.stats.pendingCards || 0}</strong>
+          <strong>{data?.stats?.pendingCards ?? 0}</strong>
           <span>Orders to fulfill</span>
         </div>
         <div className="adminKpiCard">
           <small>Pending Offers Queue</small>
-          <strong>{data?.stats.pendingOffers || 0}</strong>
+          <strong>{data?.stats?.pendingOffers ?? 0}</strong>
           <span>Awaiting moderation</span>
         </div>
       </div>
@@ -172,19 +193,19 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
           📊 Ecosystem Overview
         </button>
         <button className={activeSection === "tourists" ? "active" : ""} onClick={() => { setActiveSection("tourists"); setCurrentPage(1); }}>
-          👥 Tourist Memberships ({data?.touristSubs.length || 0})
+          👥 Tourist Memberships ({data?.touristSubs?.length ?? 0})
         </button>
         <button className={activeSection === "providers" ? "active" : ""} onClick={() => setActiveSection("providers")}>
-          🏢 Partner Providers ({data?.providerSubs.length || 0})
+          🏢 Partner Providers ({data?.providerSubs?.length ?? 0})
         </button>
         <button className={activeSection === "offers" ? "active" : ""} onClick={() => setActiveSection("offers")}>
-          🎁 Offer Moderation {data?.stats.pendingOffers ? `(${data.stats.pendingOffers} New)` : ""}
+          🎁 Offer Moderation {data?.stats?.pendingOffers ? `(${data.stats.pendingOffers} New)` : ""}
         </button>
         <button className={activeSection === "cards" ? "active" : ""} onClick={() => setActiveSection("cards")}>
-          📬 Physical Cards Pipeline {data?.stats.pendingCards ? `(${data.stats.pendingCards} Req)` : ""}
+          📬 Physical Cards Pipeline {data?.stats?.pendingCards ? `(${data.stats.pendingCards} Req)` : ""}
         </button>
         <button className={activeSection === "redemptions" ? "active" : ""} onClick={() => setActiveSection("redemptions")}>
-          🧾 Redemptions Audit ({data?.redemptions.length || 0})
+          🧾 Redemptions Audit ({data?.redemptions?.length ?? 0})
         </button>
       </div>
 
@@ -197,19 +218,19 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
             <div className="tierDistributionList">
               <div className="tierDistRow">
                 <span>Platinum Partners (15%+ VIP)</span>
-                <strong>{data?.providerSubs.filter(p => String(p.tierName).includes("Platinum")).length || 0}</strong>
+                <strong>{(data?.providerSubs || []).filter(p => String(p.tierName).includes("Platinum")).length}</strong>
               </div>
               <div className="tierDistRow">
                 <span>Gold Partners (10-15%)</span>
-                <strong>{data?.providerSubs.filter(p => String(p.tierName).includes("Gold")).length || 0}</strong>
+                <strong>{(data?.providerSubs || []).filter(p => String(p.tierName).includes("Gold")).length}</strong>
               </div>
               <div className="tierDistRow">
                 <span>Silver Partners (5-10%)</span>
-                <strong>{data?.providerSubs.filter(p => String(p.tierName).includes("Silver")).length || 0}</strong>
+                <strong>{(data?.providerSubs || []).filter(p => String(p.tierName).includes("Silver")).length}</strong>
               </div>
               <div className="tierDistRow">
                 <span>Listed Partners (Verified Base)</span>
-                <strong>{data?.providerSubs.filter(p => String(p.tierName).includes("Listed")).length || 0}</strong>
+                <strong>{(data?.providerSubs || []).filter(p => String(p.tierName).includes("Listed")).length}</strong>
               </div>
             </div>
           </div>
@@ -218,7 +239,7 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
             <h3>Recent High-Value Redemptions</h3>
             <p className="cardSubtext">Real-time spend and savings transactions logged across Zambia.</p>
             <div className="recentTransactionsFeed">
-              {data?.redemptions.slice(0, 5).map((r, idx) => (
+              {(data?.redemptions || []).slice(0, 5).map((r, idx) => (
                 <div key={idx} className="feedItem">
                   <div>
                     <strong>{r.providerName as string}</strong>
@@ -330,7 +351,7 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
                 </tr>
               </thead>
               <tbody>
-                {data?.providerSubs.map((p, idx) => (
+                {(data?.providerSubs || []).map((p, idx) => (
                   <tr key={idx}>
                     <td><strong>{p.providerName as string}</strong></td>
                     <td><span className="catPill">{p.tierName as string}</span></td>
@@ -365,7 +386,7 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
                 </tr>
               </thead>
               <tbody>
-                {data?.offersQueue.map((o, idx) => (
+                {(data?.offersQueue || []).map((o, idx) => (
                   <tr key={idx}>
                     <td><strong>{o.providerName as string}</strong></td>
                     <td>
@@ -421,7 +442,7 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
                 </tr>
               </thead>
               <tbody>
-                {data?.cardQueue.map((c, idx) => (
+                {(data?.cardQueue || []).map((c, idx) => (
                   <tr key={idx}>
                     <td><strong>{c.memberName as string}</strong></td>
                     <td><code>{c.memberNumber as string}</code></td>
@@ -496,7 +517,7 @@ export default function AdminMembershipConsole({ data, onRefresh }: AdminMembers
                 </tr>
               </thead>
               <tbody>
-                {data?.redemptions.map((r, idx) => (
+                {(data?.redemptions || []).map((r, idx) => (
                   <tr key={idx}>
                     <td><code>{r.redemptionRef as string}</code></td>
                     <td>{new Date(r.createdAt as string).toLocaleString()}</td>

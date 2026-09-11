@@ -74,13 +74,19 @@ export default function AdminErrorBoundary({
           <strong>Notice:</strong>{" "}
           {error.message && !error.message.includes("Server Components render")
             ? error.message
-            : "Your administrator session has expired or requires authentication. Please click 'Sign In Again' below to log into the VisitPNG Control Center."}
+            : "The administrative portal encountered an unexpected render or connection issue. Click 'Reload Portal' below to refresh, or 'Sign In Again' if your session has timed out."}
         </div>
 
         <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
           <button
             type="button"
-            onClick={() => reset()}
+            onClick={() => {
+              if (typeof window !== "undefined") {
+                window.location.reload();
+              } else {
+                reset();
+              }
+            }}
             style={{
               padding: "12px 20px",
               background: "#D96B27",

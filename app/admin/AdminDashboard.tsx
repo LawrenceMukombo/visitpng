@@ -206,7 +206,7 @@ export default function AdminDashboard({
       setExpandedCardIds(new Set());
       setAllExpanded(false);
     }else{
-      setExpandedCardIds(new Set(data?.listings.map(l=>l.id)||[]));
+      setExpandedCardIds(new Set((data?.listings || []).map(l=>l.id)));
       setAllExpanded(true);
     }
   };
