@@ -8,9 +8,25 @@ export default function ErrorBoundary({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  const isChunkError = Boolean(
+    error?.message &&
+    (error.message.includes("Loading chunk") ||
+     error.message.includes("ChunkLoadError") ||
+     error.message.includes("Failed to fetch dynamically imported module"))
+  );
+
   useEffect(() => {
     console.error("VisitPNG runtime error caught:", error);
-  }, [error]);
+    if (isChunkError && typeof window !== "undefined") {
+      const reloadKey = "visitpng_chunk_reload_timestamp";
+      const lastReload = sessionStorage.getItem(reloadKey);
+      const now = Date.now();
+      if (!lastReload || now - Number(lastReload) > 15000) {
+        sessionStorage.setItem(reloadKey, String(now));
+        window.location.reload();
+      }
+    }
+  }, [error, isChunkError]);
 
   return (
     <div style={{
@@ -58,11 +74,17 @@ export default function ErrorBoundary({
             wordBreak: "break-word",
             marginBottom: "20px"
           }}>
-            <strong>Notice:</strong> {error.message}
+            <strong>Notice:</strong> {isChunkError ? "A new release of VisitPNG has been published. Refreshing to load the latest update..." : error.message}
           </div>
         )}
         <button
-          onClick={() => reset()}
+          onClick={() => {
+            if (isChunkError && typeof window !== "undefined") {
+              window.location.href = "/";
+            } else {
+              reset();
+            }
+          }}
           style={{
             width: "100%",
             background: "linear-gradient(135deg, #EA580C 0%, #F97316 100%)",
@@ -76,7 +98,7 @@ export default function ErrorBoundary({
             boxShadow: "0 4px 12px rgba(234, 88, 12, 0.3)"
           }}
         >
-          Explore Destinations
+          {isChunkError ? "Refresh to Latest Version" : "Explore Destinations"}
         </button>
       </div>
     </div>
