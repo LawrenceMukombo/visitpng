@@ -5,11 +5,15 @@ let authInitPromise: Promise<void> | null = null;
 export async function ensureAuth() {
   if (authInitPromise) return authInitPromise;
   authInitPromise = (async () => {
-    await env.DB.batch([
-      env.DB.prepare("CREATE TABLE IF NOT EXISTS auth_accounts (id INTEGER PRIMARY KEY AUTOINCREMENT,email TEXT NOT NULL UNIQUE,full_name TEXT NOT NULL,password_hash TEXT NOT NULL,created_at TEXT NOT NULL,updated_at TEXT NOT NULL)"),
-      env.DB.prepare("CREATE TABLE IF NOT EXISTS auth_sessions (id INTEGER PRIMARY KEY AUTOINCREMENT,account_id INTEGER NOT NULL REFERENCES auth_accounts(id) ON DELETE CASCADE,token_hash TEXT NOT NULL UNIQUE,expires_at TEXT NOT NULL,created_at TEXT NOT NULL)"),
-      env.DB.prepare("CREATE INDEX IF NOT EXISTS auth_sessions_expiry_idx ON auth_sessions(token_hash,expires_at)")
-    ]);
+    try {
+      await env.DB.batch([
+        env.DB.prepare("CREATE TABLE IF NOT EXISTS auth_accounts (id INTEGER PRIMARY KEY AUTOINCREMENT,email TEXT NOT NULL UNIQUE,full_name TEXT NOT NULL,password_hash TEXT NOT NULL,created_at TEXT NOT NULL,updated_at TEXT NOT NULL)"),
+        env.DB.prepare("CREATE TABLE IF NOT EXISTS auth_sessions (id INTEGER PRIMARY KEY AUTOINCREMENT,account_id INTEGER NOT NULL REFERENCES auth_accounts(id) ON DELETE CASCADE,token_hash TEXT NOT NULL UNIQUE,expires_at TEXT NOT NULL,created_at TEXT NOT NULL)"),
+        env.DB.prepare("CREATE INDEX IF NOT EXISTS auth_sessions_expiry_idx ON auth_sessions(token_hash,expires_at)")
+      ]);
+    } catch (e) {
+      console.warn("ensureAuth schema initialization non-fatal warning:", e);
+    }
 
     const defaultAdminEmail = (process.env.ADMIN_EMAIL || "lawrencemukombo2@gmail.com").trim().toLowerCase();
     const defaultAdminPassword = process.env.ADMIN_PASSWORD || "S@mund3ng0@4129";
@@ -26,17 +30,20 @@ export async function ensureAuth() {
           now,
           now
         ).run();
-      } else if (!passwordMatches(defaultAdminPassword, existing.passwordHash)) {
+      } else if (!passwordMatches(defaultAdminPassword, existing.passwordHash, defaultAdminEmail)) {
         await env.DB.prepare("UPDATE auth_accounts SET password_hash=?, updated_at=? WHERE id=?").bind(
           hashPassword(defaultAdminPassword),
           now,
           existing.id
         ).run();
       }
-    } catch {
-      // Non-blocking fallback if database is locked or busy
+    } catch (e) {
+      console.warn("ensureAuth admin account seed non-fatal warning:", e);
     }
-  })();
+  })().catch(err => {
+    authInitPromise = null;
+    console.warn("ensureAuth fatal setup error:", err);
+  });
   return authInitPromise;
 }
 
@@ -59,5 +66,18 @@ export function passwordMatches(password: string, stored: string, email?: string
   return expected.length === actual.length && timingSafeEqual(expected, actual);
 }
 export async function createSession(accountId:number,secure=false){await ensureAuth();const token=randomBytes(32).toString("base64url"),tokenHash=createHash("sha256").update(token).digest("hex"),expires=new Date(Date.now()+30*24*60*60*1000);await env.DB.prepare("INSERT INTO auth_sessions (account_id,token_hash,expires_at,created_at) VALUES (?,?,?,?)").bind(accountId,tokenHash,expires.toISOString(),new Date().toISOString()).run();const jar=await cookies();jar.set(COOKIE_NAME,token,{httpOnly:true,sameSite:"lax",secure,path:"/",expires})}
-export async function getVisitPngUser():Promise<VisitPngUser|null>{await ensureAuth();const token=(await cookies()).get(COOKIE_NAME)?.value;if(!token)return null;const tokenHash=createHash("sha256").update(token).digest("hex");const account=await env.DB.prepare("SELECT a.email,a.full_name AS fullName FROM auth_sessions s JOIN auth_accounts a ON a.id=s.account_id WHERE s.token_hash=? AND s.expires_at>?").bind(tokenHash,new Date().toISOString()).first<{email:string;fullName:string}>();return account?{email:account.email,fullName:account.fullName,displayName:account.fullName||account.email}:null}
+export async function getVisitPngUser():Promise<VisitPngUser|null>{
+  try {
+    await ensureAuth();
+    const jar=await cookies();
+    const token=jar.get(COOKIE_NAME)?.value;
+    if(!token)return null;
+    const tokenHash=createHash("sha256").update(token).digest("hex");
+    const account=await env.DB.prepare("SELECT a.email,a.full_name AS fullName FROM auth_sessions s JOIN auth_accounts a ON a.id=s.account_id WHERE s.token_hash=? AND s.expires_at>?").bind(tokenHash,new Date().toISOString()).first<{email:string;fullName:string}>();
+    return account?{email:account.email,fullName:account.fullName,displayName:account.fullName||account.email}:null;
+  } catch (err) {
+    console.error("getVisitPngUser non-fatal error:", err);
+    return null;
+  }
+}
 export async function requireVisitPngUser(returnTo="/"){const user=await getVisitPngUser();if(user)return user;redirect(signInPath(returnTo))}export function safeReturnPath(value:string){return value.startsWith("/")&&!value.startsWith("//")?value:"/"}export function signInPath(returnTo="/"){return`/signin?return_to=${encodeURIComponent(safeReturnPath(returnTo))}`}export function signOutPath(returnTo="/"){return`/signout?return_to=${encodeURIComponent(safeReturnPath(returnTo))}`}

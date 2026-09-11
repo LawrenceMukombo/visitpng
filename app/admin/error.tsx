@@ -9,8 +9,15 @@ export default function AdminErrorBoundary({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  if (error.digest?.startsWith("NEXT_REDIRECT") || error.message === "NEXT_REDIRECT") {
+    throw error;
+  }
+
   useEffect(() => {
     console.error("Admin Portal Error:", error);
+    if (error.digest?.startsWith("NEXT_REDIRECT") || error.message === "NEXT_REDIRECT") {
+      window.location.href = "/signin?return_to=%2Fadmin";
+    }
   }, [error]);
 
   return (
@@ -55,15 +62,19 @@ export default function AdminErrorBoundary({
             background: "#f8fafc",
             border: "1px solid #e2e8f0",
             borderRadius: "8px",
-            padding: "12px",
-            fontSize: "12px",
+            padding: "14px",
+            fontSize: "13px",
             color: "#475569",
             textAlign: "left",
             wordBreak: "break-word",
             marginBottom: "24px",
+            lineHeight: "1.5",
           }}
         >
-          <strong>Notice:</strong> {error.message || "An unexpected error occurred while loading the control center."}
+          <strong>Notice:</strong>{" "}
+          {error.message && !error.message.includes("Server Components render")
+            ? error.message
+            : "Your administrator session has expired or requires authentication. Please click 'Sign In Again' below to log into the VisitPNG Control Center."}
         </div>
 
         <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
